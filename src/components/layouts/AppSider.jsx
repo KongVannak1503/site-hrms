@@ -2,6 +2,7 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
+    AppstoreOutlined,
 } from '@ant-design/icons'
 import { Menu } from 'antd'
 import { useContext, useEffect, useState } from 'react'
@@ -17,7 +18,7 @@ const AppSider = ({ collapsed }) => {
     const menuItems = [
         {
             key: '/dashboard',
-            icon: <UserOutlined />,
+            icon: <AppstoreOutlined />,
             label: content['dashboard'],
         },
         {
@@ -29,6 +30,11 @@ const AppSider = ({ collapsed }) => {
             key: '/table',
             icon: <UploadOutlined />,
             label: 'Table',
+        },
+        {
+            key: '/users',
+            icon: <UserOutlined />,
+            label: 'User',
         },
     ]
 

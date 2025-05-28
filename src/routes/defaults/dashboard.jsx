@@ -12,6 +12,14 @@ const Dashboard = () => {
     const { content } = useContext(LanguageContext)
     const { theme, setTheme } = useContext(LanguageContext)
 
+    const showDrawer = () => setOpen(true);
+    const closeDrawer = () => setOpen(false);
+
+    const handleSubmit = (values) => {
+        console.log('Form values:', values);
+        closeDrawer();
+    };
+
 
     useEffect(() => {
         document.title = content['dashboard'];
@@ -46,8 +54,11 @@ const Dashboard = () => {
                 }}
             >
 
+                <Button type="primary" className="mr-2" onClick={() => setOpen(true)}>
+                    In use I want modal right
+                </Button>
                 <Button type="primary" onClick={() => setOpen(true)}>
-                    Open Modal
+                    Open Modal Center
                 </Button>
                 <p>
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo atque temporibus dolorum sit cum non dolor a, provident facilis, aut reprehenderit sunt quo accusamus inventore voluptate maiores alias laboriosam fuga.
@@ -62,6 +73,7 @@ const Dashboard = () => {
                     <TableSample /> {/* Nested component */}
                     <p>This is the content inside the modal!</p>
                 </ModalLgCenter>
+
             </Content>
         </>
     );

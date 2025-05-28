@@ -4,6 +4,7 @@ import Dashboard from './routes/defaults/dashboard'
 import Test from './routes/defaults/Test'
 import { LanguageProvider } from './components/Translate/LanguageContext'
 import TableSample from './routes/defaults/TableSample'
+import Users from './routes/settings/user/Users'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
+            <Route path="/users" element={<Users />} />
           </Route>
         </Routes>
       </Router>
