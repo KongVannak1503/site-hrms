@@ -1,0 +1,12 @@
+{
+    "english":{
+        "dashboard":"Dashboard",
+        "users":"Users",
+        "user":"User"
+    },
+    "khmer":{
+        "dashboard":"ផ្ទាំងដើម",
+        "users":"អ្នកប្រើប្រាស់",
+        "user":"អ្នកប្រើប្រាស់"
+    }
+}
