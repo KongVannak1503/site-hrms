@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import UserCreate from './UserCreate'
 import { Breadcrumb, Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
+import { LanguageContext } from '../../../components/Translate/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
     const [open, setOpen] = useState(false);
+    const { content } = useContext(LanguageContext)
+    const navigate = useNavigate();
     const [form] = Form.useForm();
 
     const showDrawer = () => setOpen(true);
@@ -15,27 +19,34 @@ const Users = () => {
         form.resetFields();
         setOpen(false);
     };
-    const handleSubmit = (values) => {
-        console.log('Form values:', values);
-        closeDrawer();
-    };
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['users'] }
+    ];
+
 
     return (
         <div>
             <Breadcrumb
-                className="text-gray-700 dark:text-gray-400"
                 separator={<span className="text-gray-700 dark:text-gray-400">/</span>}
-                itemRender={(route, params, routes, paths) => (
-                    <span className="text-gray-700 dark:text-gray-400 hover:text-black dark:hover:text-white/90">
-                        {route.breadcrumbName}
-                    </span>
-                )}
-                items={[
-                    { breadcrumbName: 'Home' },
-                    { breadcrumbName: 'Application Center' },
-                    { breadcrumbName: 'Application List' },
-                    { breadcrumbName: 'App' },
-                ]}
+                itemRender={(route) => {
+                    const isClickable = !!route.path;
+
+                    return (
+                        <span
+                            className={`${isClickable
+                                ? 'text-gray-700 dark:text-gray-400 hover:text-black dark:hover:text-white/90 cursor-pointer'
+                                : 'text-gray-500 dark:text-gray-600'
+                                }`}
+                            onClick={() => {
+                                if (isClickable) navigate(route.path);
+                            }}
+                        >
+                            {route.breadcrumbName}
+                        </span>
+                    );
+                }}
+                items={breadcrumbItems}
             />
 
             <Content
@@ -60,7 +71,7 @@ const Users = () => {
                     visible={open}
                     onClose={closeDrawer}
                 >
-                    <UserCreate form={form} />
+                    <UserCreate form={form} onCancel={closeDrawer} />
                 </ModalLgRight>
             </Content>
         </div>

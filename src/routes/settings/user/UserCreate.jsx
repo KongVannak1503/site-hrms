@@ -1,37 +1,49 @@
 import React from 'react';
-import { Form, Input, Select, DatePicker, Row, Col } from 'antd';
+import { Form, Input, Row, Col } from 'antd';
+import { Styles } from '../../../components/utils/CsStyle';
 
-const { Option } = Select;
-
-const UserCreate = ({ form }) => {
+const UserCreate = ({ form, onCancel }) => {
     return (
-        <Form form={form} layout="vertical" name="userForm">
+        <Form
+            form={form}
+            layout="vertical"
+            name="userForm"
+            autoComplete="off"
+        >
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="name"
+                        name="username"
                         label="Username"
-                        rules={[{ required: true, message: 'Please enter user name' }]}
+                        rules={[{ required: true, message: 'Please enter username' }]}
                     >
-                        <Input size="large" placeholder="Please enter user username" />
+                        <Input size="large" placeholder="Enter username" />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
                     <Form.Item
                         name="url"
-                        label="URL"
-                        rules={[{ required: true, message: 'Please enter url' }]}
+                        label="Website URL"
+                        rules={[{ required: true, message: 'Please enter URL' }]}
                     >
                         <Input
-                            size='large'
+                            size="large"
                             addonBefore="http://"
                             addonAfter=".com"
-                            placeholder="Please enter url"
+                            placeholder="Enter website URL"
                         />
                     </Form.Item>
                 </Col>
             </Row>
-            {/* Add more fields as needed */}
+
+            <div className="text-end">
+                <button type="button" onClick={onCancel} className={Styles.btnCancel}>
+                    Cancel
+                </button>
+                <button type="submit" className={Styles.btnCreate} >
+                    Submit
+                </button>
+            </div>
         </Form>
     );
 };

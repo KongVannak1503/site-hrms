@@ -1,12 +1,18 @@
 {
     "english":{
         "dashboard":"Dashboard",
+        "home":"Home",
         "users":"Users",
-        "user":"User"
+        "user":"User",
+        "enter": "Enter",
+        "new": "New"
     },
     "khmer":{
         "dashboard":"ផ្ទាំងដើម",
+        "home":"ផ្ទាំងដើម",
         "users":"អ្នកប្រើប្រាស់",
-        "user":"អ្នកប្រើប្រាស់"
+        "user":"អ្នកប្រើប្រាស់",
+        "enter": "បញ្ចូល",
+        "new": "ថ្មី"
     }
 }

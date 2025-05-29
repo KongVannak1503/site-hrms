@@ -3,19 +3,20 @@ import {
     UserOutlined,
     VideoCameraOutlined,
     AppstoreOutlined,
+    SettingOutlined,
 } from '@ant-design/icons'
 import { Menu } from 'antd'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { LanguageContext } from '../Translate/LanguageContext'
 
 const AppSider = ({ collapsed }) => {
     const { content } = useContext(LanguageContext)
-    const { theme, setTheme } = useContext(LanguageContext)
+    const { theme } = useContext(LanguageContext)
     const navigate = useNavigate()
     const location = useLocation()
 
-    const menuItems = [
+    const employeeItems = [
         {
             key: '/dashboard',
             icon: <AppstoreOutlined />,
@@ -38,9 +39,34 @@ const AppSider = ({ collapsed }) => {
         },
     ]
 
+    const recruitmentItems = [
+        {
+            key: '/job',
+            icon: <SettingOutlined />,
+            label: content['job'] || 'Job',
+        },
+        {
+            key: '/job-application',
+            icon: <SettingOutlined />,
+            label: content['jobApplication'] || 'Job Application',
+        },
+    ]
+
+    const settingsMenuItem = [
+        {
+            key: '/settings',
+            icon: <SettingOutlined />,
+            label: content['settings'] || 'Settings',
+        },
+    ]
+
     return (
         <>
-            <div className='!bg-white !border-r !border-gray-200 dark:!border-r dark:!border-gray-800 dark:!bg-gray-900' style={{ textAlign: 'center', padding: '10px 16px 16px' }}>
+            {/* Logo section */}
+            <div
+                className='!bg-white !border-r !border-gray-200 dark:!border-gray-800 dark:!bg-gray-900'
+                style={{ textAlign: 'center', padding: '10px 16px 16px' }}
+            >
                 <img
                     src={
                         collapsed
@@ -59,13 +85,33 @@ const AppSider = ({ collapsed }) => {
                 />
             </div>
 
+            {/* Main menu */}
             <Menu
                 theme={theme}
-                className='!border-r !border-gray-200 dark:!border-r dark:!border-gray-800'
+                className='!border-r !border-gray-200 dark:!border-gray-800'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}
-                items={menuItems}
+                items={employeeItems}
+            />
+
+            <Menu
+                theme={theme}
+                className='!border-t !border-gray-200 dark:!border-gray-800 !border-r !border-l-0 !border-b-0'
+                mode="inline"
+                selectedKeys={[location.pathname]}
+                onClick={(e) => navigate(e.key)}
+                items={recruitmentItems}
+            />
+
+            {/* Settings menu with top border */}
+            <Menu
+                theme={theme}
+                className='!border-t !border-gray-200 dark:!border-gray-800 !border-r !border-l-0 !border-b-0'
+                mode="inline"
+                selectedKeys={[location.pathname]}
+                onClick={(e) => navigate(e.key)}
+                items={settingsMenuItem}
             />
         </>
     )
