@@ -4,15 +4,48 @@
         "home":"Home",
         "users":"Users",
         "user":"User",
-        "enter": "Enter",
-        "new": "New"
+        "username": "Username ",
+        "email": "Email ",
+        "password": "Password ",
+        "confirm": "Confirm ",
+
+        "name": "Name ",
+        "role": "Role ",
+        "roles": "Roles ",
+        "status": "Status ",
+
+        "employee": "Employee ",
+        "employees": "Employees ",
+
+        "enter": "Enter ",
+        "new": "New ",
+        "select": "Select ",
+        "selectA": "Select a ",
+        "please": "Please ",
+        "settings": "Settings",
+        "setting": "Setting"
     },
     "khmer":{
         "dashboard":"ផ្ទាំងដើម",
         "home":"ផ្ទាំងដើម",
         "users":"អ្នកប្រើប្រាស់",
         "user":"អ្នកប្រើប្រាស់",
+        "username": "ឈ្មោះអ្នកប្រើប្រាស់",
+        "email": "អ៊ីមែល",
+        "password": "លេខសម្ងាត់",
+        "confirm": "បញ្ជាក់",
+
+        "name": "ឈ្មោះ",
+        "role": "តួនាទី",
+        "roles": "តួនាទី",
+        "status": "ស្ដានភាព",
+
         "enter": "បញ្ចូល",
-        "new": "ថ្មី"
+        "new": "ថ្មី",
+        "select": "ជ្រើសរើស",
+        "selectA": "ជ្រើសរើស",
+        "please": "សូម",
+        "settings": "ការកំណត់",
+        "setting": "ការកំណត់"
     }
 }

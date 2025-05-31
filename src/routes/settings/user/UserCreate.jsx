@@ -1,8 +1,24 @@
-import React from 'react';
-import { Form, Input, Row, Col } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Styles } from '../../../components/utils/CsStyle';
+import { LanguageContext } from '../../../components/Translate/LanguageContext';
 
 const UserCreate = ({ form, onCancel }) => {
+    const { content } = useContext(LanguageContext)
+    const [roles, setRoles] = useState([]);
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const response = await getRoleApi();
+                setRoles(response.data);
+            } catch (error) {
+                message.error('Failed to fetch roles');
+            }
+        };
+        fetchRoles();
+    }, []);
+
     return (
         <Form
             form={form}
@@ -10,31 +26,120 @@ const UserCreate = ({ form, onCancel }) => {
             name="userForm"
             autoComplete="off"
         >
-            <Row gutter={16}>
-                <Col span={12}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Form.Item
+                    name="email"
+                    label={content['email']}
+                    rules={[{
+                        required: true,
+                        message: `${content['please']}${content['enter']}${content['email']}`
+                            .toLowerCase()
+                            .replace(/^./, str => str.toUpperCase())
+                    }]}
+                >
+                    <Input size="large" />
+                </Form.Item>
+
+                <Form.Item
+                    name="username"
+                    label={content['username']}
+                    rules={[{
+                        required: true,
+                        message: `${content['please']}${content['enter']}${content['username']}`
+                            .toLowerCase()
+                            .replace(/^./, str => str.toUpperCase())
+                    }]}
+                >
+                    <Input size="large" />
+                </Form.Item>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Form.Item
+                    name="employeeId"
+                    label={content['employee']}
+                    rules={[{
+                        required: true,
+                        message: `${content['selectA']}${content['employee']}`
+                            .toLowerCase()
+                            .replace(/^./, str => str.toUpperCase())
+                    }]}
+                >
+                    <Select
+                        defaultValue="lucy"
+                        size="large"
+                        options={[
+                            {
+                                label: <span>manager</span>,
+                                title: 'manager',
+                                options: [
+                                    { label: <span>Jack</span>, value: 'Jack' },
+                                    { label: <span>Lucy</span>, value: 'Lucy' },
+                                ],
+                            },
+
+                        ]}
+                    />
+                </Form.Item>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Form.Item
+                    name="password"
+                    label={content['password']}
+                    rules={[{
+                        required: true,
+                        message: `${content['please']}${content['enter']}${content['password']}`
+                            .toLowerCase()
+                            .replace(/^./, str => str.toUpperCase())
+                    }]}
+                >
+                    <Input size="large" type="password" />
+                </Form.Item>
+                <Form.Item
+                    name="confirm"
+                    label={content['confirm']}
+                    rules={[{
+                        required: true,
+                        message: `${content['confirm']}${content['password']}`
+                            .toLowerCase()
+                            .replace(/^./, str => str.toUpperCase())
+                    }]}
+                >
+                    <Input size="large" type="password" />
+                </Form.Item>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className='border-yellow-500'>
                     <Form.Item
-                        name="username"
-                        label="Username"
-                        rules={[{ required: true, message: 'Please enter username' }]}
+                        name="role"
+                        label={content['role']}
+                        rules={[{
+                            required: true,
+                            message: `${content['selectA']}${content['role']}`
+                                .toLowerCase()
+                                .replace(/^./, str => str.toUpperCase())
+                        }]}
                     >
-                        <Input size="large" placeholder="Enter username" />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        name="url"
-                        label="Website URL"
-                        rules={[{ required: true, message: 'Please enter URL' }]}
-                    >
-                        <Input
+                        <Select
+                            defaultValue="lucy"
                             size="large"
-                            addonBefore="http://"
-                            addonAfter=".com"
-                            placeholder="Enter website URL"
+                            options={[
+                                {
+                                    label: <span>manager</span>,
+                                    title: 'manager',
+                                    options: [
+                                        { label: <span>Jack</span>, value: 'Jack' },
+                                        { label: <span>Lucy</span>, value: 'Lucy' },
+                                    ],
+                                },
+
+                            ]}
                         />
                     </Form.Item>
-                </Col>
-            </Row>
+                    <Form.Item label={content['status']} name="isActive" valuePropName="checked" initialValue={true}>
+                        <Switch />
+                    </Form.Item>
+                </Card>
+            </div>
 
             <div className="text-end">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>

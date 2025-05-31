@@ -7,10 +7,12 @@ import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
 import { LanguageContext } from '../../../components/Translate/LanguageContext';
 import { useNavigate } from 'react-router-dom';
+import ModalMdCenter from '../../../components/modals/ModalMdCenter';
+import hasPermission from '../../../components/hooks/hasPermission';
 
 const Users = () => {
     const [open, setOpen] = useState(false);
-    const { content } = useContext(LanguageContext)
+    const { content, accessToken } = useContext(LanguageContext)
     const navigate = useNavigate();
     const [form] = Form.useForm();
 
@@ -23,7 +25,6 @@ const Users = () => {
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: content['users'] }
     ];
-
 
     return (
         <div>
@@ -59,20 +60,26 @@ const Users = () => {
                     marginTop: 10,
                 }}
             >
-                <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+                {/* <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
                     New Account
-                </Button>
+                </Button> */}
+                {hasPermission(accessToken, '/api/users', 'update') && (
+                    <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+                        New Account
+                    </Button>
+                )}
                 <p>
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo atque temporibus dolorum sit cum non dolor a, provident facilis, aut reprehenderit sunt quo accusamus inventore voluptate maiores alias laboriosam fuga.
                 </p>
 
-                <ModalLgRight
-                    title="Create a new account"
-                    visible={open}
-                    onClose={closeDrawer}
+                <ModalMdCenter
+                    open={open}
+                    onOk={() => setOpen(false)}
+                    onCancel={() => setOpen(false)}
+                    title="My Custom Modal"
                 >
                     <UserCreate form={form} onCancel={closeDrawer} />
-                </ModalLgRight>
+                </ModalMdCenter>
             </Content>
         </div>
     )

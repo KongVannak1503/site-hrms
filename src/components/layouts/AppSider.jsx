@@ -4,15 +4,21 @@ import {
     VideoCameraOutlined,
     AppstoreOutlined,
     SettingOutlined,
+    SearchOutlined,
+    AudioOutlined,
 } from '@ant-design/icons'
-import { Menu } from 'antd'
-import { useContext } from 'react'
+import { AutoComplete, Input, Menu } from 'antd'
+import { useContext, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { LanguageContext } from '../Translate/LanguageContext'
+const { Search } = Input;
 
 const AppSider = ({ collapsed }) => {
     const { content } = useContext(LanguageContext)
     const { theme } = useContext(LanguageContext)
+    const [options, setOptions] = useState([]);
+    const [searchText, setSearchText] = useState('');
+
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -23,9 +29,12 @@ const AppSider = ({ collapsed }) => {
             label: content['dashboard'],
         },
         {
-            key: '/test',
+            key: 'test',
             icon: <VideoCameraOutlined />,
             label: 'Test',
+            children: [
+                { key: '/test', label: 'Test 1', },
+            ],
         },
         {
             key: '/table',
@@ -54,11 +63,54 @@ const AppSider = ({ collapsed }) => {
 
     const settingsMenuItem = [
         {
-            key: '/settings',
+            key: 'settings',
             icon: <SettingOutlined />,
-            label: content['settings'] || 'Settings',
+            label: content['settings'], children: [
+                { key: '/setting/users', label: content['user'], },
+            ],
+
         },
     ]
+
+    // 🔍 Flatten all route items to search through
+    const allRoutes = [
+        ...employeeItems.flatMap(item => item.children || [item]),
+        ...recruitmentItems,
+        ...settingsMenuItem.flatMap(item => item.children || [item])
+    ];
+
+    const handleSearch = (value) => {
+        const searchValue = value.toLowerCase().trim();
+
+        if (!searchValue) {
+            setOptions([]);
+            return;
+        }
+
+        const matched = allRoutes
+            .filter(route => route.label.toLowerCase().includes(searchValue))
+            .map(route => ({
+                value: route.key,
+                label: route.label,
+            }));
+
+        setOptions(matched);
+    };
+
+    const handleSelect = (key) => {
+        navigate(key);
+        setSearchText(''); // ✅ This clears the input
+        setOptions([]);
+    };
+
+    const suffix = (
+        <AudioOutlined
+            style={{
+                fontSize: 16,
+                // color: '#1677ff',
+            }}
+        />
+    );
 
     return (
         <>
@@ -83,6 +135,25 @@ const AppSider = ({ collapsed }) => {
                     }}
                     onClick={() => navigate("/dashboard")}
                 />
+                <AutoComplete
+                    options={options}
+                    onSearch={(value) => {
+                        setSearchText(value);  // keep input value in sync
+                        handleSearch(value);
+                    }}
+                    onSelect={(value) => {
+                        handleSelect(value);
+                    }}
+                    value={searchText}  // control AutoComplete value here
+                    style={{ width: '100%', marginTop: 8 }}
+                >
+                    <Input.Search
+                        placeholder="Search pages..."
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                    />
+                </AutoComplete>
+
             </div>
 
             {/* Main menu */}
