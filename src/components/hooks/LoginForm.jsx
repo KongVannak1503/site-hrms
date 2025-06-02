@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Input, Button, Form, message } from 'antd';
 import { loginUser } from '../../apis/authApi';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LanguageContext } from '../Translate/LanguageContext';
 
 const LoginForm = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
+    const { content } = useContext(LanguageContext)
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -23,28 +26,23 @@ const LoginForm = ({ onSuccess }) => {
 
     return (
         <Form layout="vertical" onFinish={onFinish}>
-            <div className='border border-gray-300 rounded shadow-lg p-7'>
-                <div className="flex justify-center">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScrmJyV86m97sc2Pahu8bd8Kbw9-hRQoFSpQ&s" width={180} alt="" />
-                </div>
+            <div className=' border border-gray-100 bg-white rounded-md shadow-md p-7'>
                 <Form.Item
-                    label="Username"
                     name="username"
-                    className='!mb-2'
+                    className=' '
                     rules={[
                         { required: true, message: 'Please enter your username' },
                         { type: 'username', message: 'Please enter a valid username' },
                     ]}
                 >
-                    <Input size='large' />
+                    <Input prefix={<UserOutlined />} size='large' placeholder={content['username']} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Password"
                     name="password"
                     rules={[{ required: true, message: 'Please enter your password' }]}
                 >
-                    <Input.Password size='large' />
+                    <Input.Password prefix={<LockOutlined />} size='large' placeholder={content['password']} />
                 </Form.Item>
 
                 <Form.Item>

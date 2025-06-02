@@ -23,7 +23,11 @@
         "selectA": "Select a ",
         "please": "Please ",
         "settings": "Settings",
-        "setting": "Setting"
+        "setting": "Setting",
+        "delete": "Delete",
+        "edit": "Edit",
+        "action": "Action",
+        "createdAt": "Created at"
     },
     "khmer":{
         "dashboard":"ផ្ទាំងដើម",
@@ -46,6 +50,8 @@
         "selectA": "ជ្រើសរើស",
         "please": "សូម",
         "settings": "ការកំណត់",
-        "setting": "ការកំណត់"
+        "setting": "ការកំណត់",
+        "createdAt": "កាលបរិច្ឆេទបង្កើត"
+
     }
 }

@@ -6,14 +6,13 @@ import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
 import { LanguageContext } from '../../../components/Translate/LanguageContext';
-import { useNavigate } from 'react-router-dom';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import hasPermission from '../../../components/hooks/hasPermission';
+import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
 
 const Users = () => {
     const [open, setOpen] = useState(false);
     const { content, accessToken } = useContext(LanguageContext)
-    const navigate = useNavigate();
     const [form] = Form.useForm();
 
     const showDrawer = () => setOpen(true);
@@ -28,34 +27,13 @@ const Users = () => {
 
     return (
         <div>
-            <Breadcrumb
-                separator={<span className="text-gray-700 dark:text-gray-400">/</span>}
-                itemRender={(route) => {
-                    const isClickable = !!route.path;
-
-                    return (
-                        <span
-                            className={`${isClickable
-                                ? 'text-gray-700 dark:text-gray-400 hover:text-black dark:hover:text-white/90 cursor-pointer'
-                                : 'text-gray-500 dark:text-gray-600'
-                                }`}
-                            onClick={() => {
-                                if (isClickable) navigate(route.path);
-                            }}
-                        >
-                            {route.breadcrumbName}
-                        </span>
-                    );
-                }}
-                items={breadcrumbItems}
-            />
+            <CustomBreadcrumb items={breadcrumbItems} />
 
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
                     padding: 24,
                     minHeight: 800,
-                    // backgroundColor: theme == "light" ? Styles.lightMode : Styles.darkMode,
                     borderRadius: 8,
                     marginTop: 10,
                 }}

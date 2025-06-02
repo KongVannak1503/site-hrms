@@ -10,7 +10,7 @@ const Dashboard = () => {
     const [open, setOpen] = useState(false);
     const [responsiveOpen, setResponsiveOpen] = useState(false);
     const { content } = useContext(LanguageContext)
-    const { theme, setTheme } = useContext(LanguageContext)
+    // const { theme, setTheme } = useContext(LanguageContext)
 
     const showDrawer = () => setOpen(true);
     const closeDrawer = () => setOpen(false);

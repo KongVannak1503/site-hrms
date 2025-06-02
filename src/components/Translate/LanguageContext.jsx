@@ -77,9 +77,6 @@ export const LanguageProvider = ({ children }) => {
             } catch (err) {
                 console.error('Token validation failed:', err);
                 localStorage.removeItem('token');
-                if (currentPath !== '/login') {
-                    window.location.href = '/login';
-                }
             } finally {
                 setLoading(false);
             }

@@ -8,6 +8,7 @@ import LoginPage from './routes/defaults/LoginPage'
 import ProtectedRoute from './components/hooks/ProtectedRoute'
 import NotFound from './components/hooks/NotFound'
 import Authorized from './components/hooks/Authorized'
+import RolesPage from './routes/settings/role/RolesPage'
 
 function App() {
   return (
@@ -30,6 +31,13 @@ function App() {
             element={
               <ProtectedRoute requiredRoute="/api/users" requiredAction="view">
                 <Users />
+              </ProtectedRoute>
+            } />
+          <Route
+            path="/setting/roles"
+            element={
+              <ProtectedRoute requiredRoute="/api/roles" requiredAction="view">
+                <RolesPage />
               </ProtectedRoute>
             } />
         </Route>

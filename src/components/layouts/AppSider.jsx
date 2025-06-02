@@ -24,7 +24,7 @@ const AppSider = ({ collapsed }) => {
 
     const employeeItems = [
         {
-            key: '/dashboard',
+            key: '/',
             icon: <AppstoreOutlined />,
             label: content['dashboard'],
         },
@@ -66,9 +66,10 @@ const AppSider = ({ collapsed }) => {
             key: 'settings',
             icon: <SettingOutlined />,
             label: content['settings'], children: [
-                { key: '/setting/users', label: content['user'], },
-            ],
+                { key: '/setting/users', label: content['user'] },
+                { key: '/setting/roles', label: content['roles'] },
 
+            ],
         },
     ]
 
@@ -133,26 +134,31 @@ const AppSider = ({ collapsed }) => {
                         transition: 'all 0.3s ease',
                         cursor: 'pointer',
                     }}
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => navigate("/")}
                 />
-                <AutoComplete
-                    options={options}
-                    onSearch={(value) => {
-                        setSearchText(value);  // keep input value in sync
-                        handleSearch(value);
-                    }}
-                    onSelect={(value) => {
-                        handleSelect(value);
-                    }}
-                    value={searchText}  // control AutoComplete value here
-                    style={{ width: '100%', marginTop: 8 }}
-                >
-                    <Input.Search
-                        placeholder="Search pages..."
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                    />
-                </AutoComplete>
+                {
+                    collapsed ? '' :
+
+                        <AutoComplete
+                            options={options}
+                            onSearch={(value) => {
+                                setSearchText(value);  // keep input value in sync
+                                handleSearch(value);
+                            }}
+                            onSelect={(value) => {
+                                handleSelect(value);
+                            }}
+                            value={searchText}  // control AutoComplete value here
+                            style={{ width: '100%', marginTop: 8 }}
+                        >
+                            <Input.Search
+                                placeholder="Search pages..."
+                                value={searchText}
+                                onChange={(e) => setSearchText(e.target.value)}
+                            />
+                        </AutoComplete>
+
+                }
 
             </div>
 
