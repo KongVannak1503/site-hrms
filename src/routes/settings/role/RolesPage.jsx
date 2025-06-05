@@ -2,22 +2,31 @@ import { Content } from 'antd/es/layout/layout'
 import React, { useContext, useEffect, useState } from 'react'
 import { LanguageContext } from '../../../components/Translate/LanguageContext'
 import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { getRolesApi } from '../../../apis/roleApi';
-import { Form, Space, Table, Tooltip } from 'antd';
+import { deleteRoleApi, getRolesApi } from '../../../apis/roleApi';
+import { Form, Input, message, Space, Table, Tooltip } from 'antd';
 import { Styles } from '../../../components/utils/CsStyle';
 import {
     SearchOutlined,
     FormOutlined,
     DeleteOutlined,
+    FileAddFilled,
+    PlusOutlined,
 } from "@ant-design/icons";
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import RoleCreatePage from './RoleCreatePage';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
+import { formatDateTime } from '../../../components/utils/utils';
+import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
+import RoleUpdatePage from './RoleUpdatePage';
 
 function RolesPage() {
-    const { content, accessToken } = useContext(LanguageContext)
+    const { content } = useContext(LanguageContext)
     const [roles, setRoles] = useState([]);
     const [open, setOpen] = useState(false);
+    const [filteredRoles, setFilteredRoles] = useState([]);
+    const [actionForm, setActionForm] = useState('create'); // 'create' or 'update'
+    const [selectedRoleId, setSelectedRoleId] = useState(null);
+
     const [form] = Form.useForm();
 
     const showDrawer = () => setOpen(true);
@@ -30,6 +39,19 @@ function RolesPage() {
         // console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     }
+
+    const showCreateDrawer = () => {
+        setActionForm('create');
+        setSelectedRoleId(null);
+        setOpen(true);
+    };
+
+    const showUpdateDrawer = (roleId) => {
+        setActionForm('update');
+        setSelectedRoleId(roleId);
+        setOpen(true);
+    };
+
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: content['roles'] }
@@ -42,16 +64,45 @@ function RolesPage() {
                 const response = await getRolesApi();
                 if (Array.isArray(response)) {
                     setRoles(response);
+                    setFilteredRoles(response);
                 } else {
-                    console.error("Data is not an array:", response);
+                    console.error('Data is not an array:', response);
                     setRoles([]);
+                    setFilteredRoles([]);
                 }
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error('Error fetching data:', error);
             }
         };
         fetchData();
-    }, []);
+    }, [content]);
+
+    const handleSearch = (value) => {
+        const term = value.trim().toLowerCase();
+        if (!term) {
+            setFilteredRoles(roles);
+        } else {
+            const filtered = roles.filter((role) =>
+                role.name.toLowerCase().includes(term)
+            );
+            setFilteredRoles(filtered);
+        }
+    };
+
+
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteRoleApi(id); // call the API
+            const updatedRoles = roles.filter(role => role._id !== id);
+            setRoles(updatedRoles);
+            setFilteredRoles(updatedRoles);
+            message.success('Role deleted successfully');
+        } catch (error) {
+            console.error('Delete failed:', error);
+            message.error('Failed to delete role');
+        }
+    };
 
     const columns = [
         {
@@ -64,7 +115,10 @@ function RolesPage() {
             title: content['createdAt'],
             dataIndex: "createdAt",
             key: "createdAt",
-            render: (text) => <span>{text}</span>,
+            render: (text, record) => <div>
+                <span>{formatDateTime(text)}</span>
+                <p>{record.createdBy || ''}</p>
+            </div>,
         },
 
         {
@@ -78,21 +132,21 @@ function RolesPage() {
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
                     <Tooltip title={content['edit']}>
                         <button
-                            onClick={showDrawer}
                             className={Styles.btnEdit}
                             shape="circle"
+                            onClick={() => showUpdateDrawer(record._id)}
                         >
                             <FormOutlined />
                         </button>
                     </Tooltip>
-                    <Tooltip title={content['delete']}>
-                        <button
-                            className={`${Styles.btnDelete}  'cursor-pointer'}`}
-                            shape="circle"
-                        >
-                            <DeleteOutlined />
-                        </button>
-                    </Tooltip>
+                    {ConfirmDeleteButton({
+                        onConfirm: () => handleDelete(record._id),
+                        tooltip: content['delete'],
+                        title: content['confirmDelete'],
+                        okText: content['yes'],
+                        cancelText: content['no'],
+                        description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
+                    })}
                 </Space>
             ),
         },
@@ -147,18 +201,47 @@ function RolesPage() {
                     marginTop: 10,
                 }}
             >
-                <Table rowSelection={rowSelection} columns={columns} dataSource={roles} rowKey="_id" />
+                <div className='block sm:flex justify-between items-center mb-4'>
+                    <div className='mb-3 sm:mb-1'>
+                        <h5 className='text-lg font-semibold'>{content['roles']}</h5>
+                    </div>
+                    <div className='flex items-center gap-3'>
+                        <div>
+                            <Input
+                                size="large"
+                                placeholder={content['searchAction']}
+                                onChange={(e) => handleSearch(e.target.value)}
+                            />
+                        </div>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
+                    </div>
+                </div>
+                <Table
+                    scroll={{ x: 'max-content' }}
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={filteredRoles}
+                    rowKey="_id" />
 
                 <ModalLgCenter
                     open={open}
                     onOk={() => setOpen(false)}
-                    onCancel={() => setOpen(false)}
-                    title="My Custom Modal"
+                    onCancel={closeDrawer}
+                    title={
+                        actionForm === 'create'
+                            ? `${content['create']} ${content['new']} ${content['role']}`
+                            : `${content['update']} ${content['role']}`
+                    }
                 >
-                    <RoleCreatePage form={form} onCancel={closeDrawer} />
+                    {actionForm === 'create' ? (
+                        <RoleCreatePage form={form} onCancel={closeDrawer} />
+                    ) : (
+                        <RoleUpdatePage roleId={selectedRoleId} onCancel={closeDrawer} />
+                    )}
                 </ModalLgCenter>
-            </Content>
-        </div>
+
+            </Content >
+        </div >
     );
 }
 

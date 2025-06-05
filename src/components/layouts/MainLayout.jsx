@@ -11,8 +11,6 @@ import { useBreakpoint } from '../hooks/useBreakpoint';
 const { Header, Sider, Content, Footer } = Layout;
 
 const MainLayout = () => {
-    // const [collapsed, setCollapsed] = useState(false);
-    const { theme, setTheme } = useContext(LanguageContext)
     const siderWidth = 250;
     const headerHeight = 64;
     const isMobile = useBreakpoint(768);
@@ -24,7 +22,7 @@ const MainLayout = () => {
     }, [isMobile]);
 
     return (
-        <Layout style={{ minHeight: '100vh', backgroundColor: theme == "light" ? '#f5f5f5' : Styles.darkMode, }}>
+        <Layout style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
             <Sider
                 width={siderWidth}
                 collapsible
@@ -40,7 +38,7 @@ const MainLayout = () => {
                     left: 0,
                     height: '100vh',
                     zIndex: 1000,
-                    background: theme == 'light' ? '#fff' : '',
+                    background: '#fff',
                     overflow: 'auto',
                 }}
             >
@@ -85,7 +83,7 @@ const MainLayout = () => {
                 <Content
                     style={{
                         padding: 24,
-                        backgroundColor: theme == "light" ? '#f5f5f5' : Styles.darkMode,
+                        backgroundColor: '#f5f5f5',
                     }}
                 >
                     <Outlet />

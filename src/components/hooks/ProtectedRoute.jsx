@@ -10,9 +10,6 @@ const ProtectedRoute = ({ requiredRoute, requiredAction, children }) => {
         return <div>Loading...</div>;
     }
 
-    if (!accessToken) {
-        return <Navigate to="/login" replace />;
-    }
 
     if (!hasPermission(accessToken, requiredRoute, requiredAction)) {
         return <Navigate to="/unauthorized" replace />;

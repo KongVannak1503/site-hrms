@@ -25,8 +25,16 @@
         "settings": "Settings",
         "setting": "Setting",
         "delete": "Delete",
+        "create": "Create",
+        "update": "Update",
         "edit": "Edit",
+        "confirmDelete": "Confirm Delete",
+        "areYouSureToDelete": "Are you sure to delete ",
         "action": "Action",
+        "yes": "Yes",
+        "no": "No",
+        "addNew": "Add New",
+        "searchAction": "Search...",
         "createdAt": "Created at"
     },
     "khmer":{
@@ -48,9 +56,20 @@
         "new": "ថ្មី",
         "select": "ជ្រើសរើស",
         "selectA": "ជ្រើសរើស",
+        "delete": "លុប",
+        "create": "បង្កើត",
+        "update": "ធ្វើបច្ចុប្បន្នភាព",
+        "edit": "កែប្រែ",
         "please": "សូម",
         "settings": "ការកំណត់",
         "setting": "ការកំណត់",
+        "confirmDelete": "បញ្ជាក់ក្នុងការលុប",
+        "areYouSureToDelete": "តើអ្នកប្រាកដក្នុងការលុប",
+        "action": "Action",
+        "yes": "យលព្រម",
+        "no": "ទេ",
+        "addNew": "Add New",
+        "searchAction": "ស្វែងរក...",
         "createdAt": "កាលបរិច្ឆេទបង្កើត"
 
     }

@@ -28,38 +28,33 @@ const AppSider = ({ collapsed }) => {
             icon: <AppstoreOutlined />,
             label: content['dashboard'],
         },
-        {
-            key: 'test',
-            icon: <VideoCameraOutlined />,
-            label: 'Test',
-            children: [
-                { key: '/test', label: 'Test 1', },
-            ],
-        },
-        {
-            key: '/table',
-            icon: <UploadOutlined />,
-            label: 'Table',
-        },
-        {
-            key: '/users',
-            icon: <UserOutlined />,
-            label: 'User',
-        },
+        // {
+        //     key: 'test',
+        //     icon: <VideoCameraOutlined />,
+        //     label: 'Test',
+        //     children: [
+        //         { key: '/test', label: 'Test 1', },
+        //     ],
+        // },
+        // {
+        //     key: '/table',
+        //     icon: <UploadOutlined />,
+        //     label: 'Table',
+        // },
     ]
 
-    const recruitmentItems = [
-        {
-            key: '/job',
-            icon: <SettingOutlined />,
-            label: content['job'] || 'Job',
-        },
-        {
-            key: '/job-application',
-            icon: <SettingOutlined />,
-            label: content['jobApplication'] || 'Job Application',
-        },
-    ]
+    // const recruitmentItems = [
+    //     {
+    //         key: '/job',
+    //         icon: <SettingOutlined />,
+    //         label: content['job'] || 'Job',
+    //     },
+    //     {
+    //         key: '/job-application',
+    //         icon: <SettingOutlined />,
+    //         label: content['jobApplication'] || 'Job Application',
+    //     },
+    // ]
 
     const settingsMenuItem = [
         {
@@ -76,7 +71,7 @@ const AppSider = ({ collapsed }) => {
     // 🔍 Flatten all route items to search through
     const allRoutes = [
         ...employeeItems.flatMap(item => item.children || [item]),
-        ...recruitmentItems,
+        // ...recruitmentItems,
         ...settingsMenuItem.flatMap(item => item.children || [item])
     ];
 
@@ -164,7 +159,7 @@ const AppSider = ({ collapsed }) => {
 
             {/* Main menu */}
             <Menu
-                theme={theme}
+                theme='light'
                 className='!border-r !border-gray-200 dark:!border-gray-800'
                 mode="inline"
                 selectedKeys={[location.pathname]}
@@ -172,18 +167,18 @@ const AppSider = ({ collapsed }) => {
                 items={employeeItems}
             />
 
-            <Menu
-                theme={theme}
+            {/* <Menu
+                theme='light'
                 className='!border-t !border-gray-200 dark:!border-gray-800 !border-r !border-l-0 !border-b-0'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}
                 items={recruitmentItems}
-            />
+            /> */}
 
             {/* Settings menu with top border */}
             <Menu
-                theme={theme}
+                theme='light'
                 className='!border-t !border-gray-200 dark:!border-gray-800 !border-r !border-l-0 !border-b-0'
                 mode="inline"
                 selectedKeys={[location.pathname]}

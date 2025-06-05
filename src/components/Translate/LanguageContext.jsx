@@ -11,15 +11,9 @@ const getInitialLanguage = () => {
     return saved && dataTranslate[saved] ? saved : 'english'
 }
 
-const getInitialTheme = () => {
-    const saved = localStorage.getItem('theme')
-    return saved === 'dark' ? 'dark' : 'light'
-}
-
 export const LanguageProvider = ({ children }) => {
     const [language, setLanguage] = useState(getInitialLanguage)
     const [content, setContent] = useState(dataTranslate[getInitialLanguage()])
-    const [theme, setTheme] = useState(getInitialTheme)
     const [accessToken, setAccessToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -29,11 +23,6 @@ export const LanguageProvider = ({ children }) => {
             localStorage.setItem('appLanguage', language)
         }
     }, [language])
-
-    useEffect(() => {
-        localStorage.setItem('theme', theme) // <-- renamed here
-        document.documentElement.setAttribute('data-theme', theme)
-    }, [theme])
 
 
     useEffect(() => {
@@ -62,6 +51,10 @@ export const LanguageProvider = ({ children }) => {
                     window.location.href = '/login';
                 }
                 return;
+            } else {
+                if (currentPath === '/login') {
+                    window.location.href = '/';
+                }
             }
 
             try {
@@ -89,7 +82,7 @@ export const LanguageProvider = ({ children }) => {
 
 
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, content, theme, setTheme, accessToken, loading }}>
+        <LanguageContext.Provider value={{ language, setLanguage, content, accessToken, loading }}>
             {children}
         </LanguageContext.Provider>
     )

@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { Input, Button, Form, message } from 'antd';
+import { Input, Button, Form, message, Checkbox } from 'antd';
 import { loginUser } from '../../apis/authApi';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LanguageContext } from '../Translate/LanguageContext';
 
 const LoginForm = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const { content } = useContext(LanguageContext)
+    const Logo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScrmJyV86m97sc2Pahu8bd8Kbw9-hRQoFSpQ&s';
+
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -25,33 +27,62 @@ const LoginForm = ({ onSuccess }) => {
     };
 
     return (
-        <Form layout="vertical" onFinish={onFinish}>
-            <div className=' border border-gray-100 bg-white rounded-md shadow-md p-7'>
-                <Form.Item
-                    name="username"
-                    className=' '
-                    rules={[
-                        { required: true, message: 'Please enter your username' },
-                        { type: 'username', message: 'Please enter a valid username' },
-                    ]}
-                >
-                    <Input prefix={<UserOutlined />} size='large' placeholder={content['username']} />
-                </Form.Item>
-
-                <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: 'Please enter your password' }]}
-                >
-                    <Input.Password prefix={<LockOutlined />} size='large' placeholder={content['password']} />
-                </Form.Item>
-
-                <Form.Item>
-                    <Button size='large' type="primary" htmlType="submit" loading={loading}>
-                        Login
-                    </Button>
-                </Form.Item>
+        <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 px-4'>
+            <div className='mb-6'>
+                <img
+                    src={Logo}
+                    alt='Logo'
+                    className='w-30 h-30 object-contain sm:w-34 sm:h-34 md:w-38 md:h-38'
+                />
             </div>
-        </Form>
+            <div className='bg-white p-6 rounded w-full max-w-md shadow sm:p-8'>
+
+                <h2 className='text-xl sm:text-2xl font-semibold text-center mb-6 flex items-center justify-center gap-2'>
+                    ចូលប្រើប្រាស់ប្រព័ន្ធគ្រប់គ្រង
+                </h2>
+                <Form
+                    name='login'
+                    layout='vertical'
+                    onFinish={onFinish}
+                >
+                    <Form.Item
+                        name='username'
+                    >
+                        <Input
+                            prefix={<UserOutlined className="site-form-item-icon" />}
+                            placeholder='ឈ្មោះ'
+                            size='large'
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='password'
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined className='site-form-item-icon' />}
+                            placeholder='លេខសម្ងាត់'
+                            size='large'
+                            iconRender={visible => visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                        />
+                    </Form.Item>
+
+                    <Form.Item name='remember' valuePropName='checked'>
+                        <Checkbox>ចងចាំខ្ញុំ</Checkbox>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button
+                            type='primary'
+                            className='w-full'
+                            size='large'
+                            htmlType="submit" loading={loading}
+                        >
+                            ចូលប្រើប្រាស់
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
+        </div>
     );
 };
 
