@@ -1,5 +1,7 @@
 // utils/auth.js
 import { jwtDecode } from 'jwt-decode';
+import { logoutUser } from '../../apis/authApi';
+import { Navigate } from 'react-router-dom';
 
 
 export const getToken = () => {
@@ -18,7 +20,12 @@ export const decodeToken = () => {
     }
 };
 
-export const logout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+export const logout = async () => {
+    try {
+        await logoutUser();
+        sessionStorage.removeItem('token');
+        return window.location.href = '/login';
+    } catch (err) {
+        console.error('Logout failed', err);
+    }
 };

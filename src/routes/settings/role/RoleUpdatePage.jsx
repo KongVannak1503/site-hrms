@@ -1,13 +1,14 @@
 import { Checkbox, Form, Input, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { LanguageContext } from '../../../components/Translate/LanguageContext';
 import { getPermissionsApi } from '../../../apis/permissionApi';
 import { Styles } from '../../../components/utils/CsStyle';
 import { decodeToken } from '../../../components/utils/auth';
 import { getRoleApi, updateRoleApi } from '../../../apis/roleApi';
+import { useAuth } from '../../../components/contexts/AuthContext';
+import FullScreenLoader from '../../../components/utils/FullScreenLoader';
 
-const RoleUpdatePage = ({ roleId, onCancel }) => {
-    const { content } = useContext(LanguageContext);
+const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
+    const { content, decoded } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [form] = Form.useForm();
@@ -32,24 +33,22 @@ const RoleUpdatePage = ({ roleId, onCancel }) => {
                     initialValues[key] = rolePerm.actions;
                 });
 
-                console.log("✅ Initial Values Set:", initialValues);
                 form.setFieldsValue(initialValues);
                 setLoading(false);
             } catch (error) {
-                console.error('❌ Error fetching initial data:', error);
+                console.error('Error fetching initial data:', error);
                 message.error('Failed to load role data');
             }
         };
 
         fetchInitialData();
-    }, [roleId]);
 
-    const decoded = decodeToken();
+    }, [roleId, form]);
 
     const handleFinish = async (values) => {
         try {
             const roleName = values.role;
-            const updatedBy = decoded.id;
+            const updatedBy = decoded?.id;
 
             const permissionsData = permissions
                 .map((perm) => {
@@ -70,9 +69,9 @@ const RoleUpdatePage = ({ roleId, onCancel }) => {
                 permissions: permissionsData
             };
 
-            await updateRoleApi(roleId, formData);
+            const response = await updateRoleApi(roleId, formData);
             message.success('✅ Role updated successfully!');
-            form.resetFields();
+            onUserUpdated(response.data);
         } catch (error) {
             console.error('❌ Error updating role:', error);
             message.error('Failed to update role');
@@ -80,7 +79,7 @@ const RoleUpdatePage = ({ roleId, onCancel }) => {
     };
 
     // ✅ Don't render form until loading is complete
-    if (loading) return <div>Loading role data...</div>;
+    if (loading) return <FullScreenLoader />;
 
     return (
         <Form

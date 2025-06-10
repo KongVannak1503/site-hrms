@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Styles } from '../../../components/utils/CsStyle';
-import { LanguageContext } from '../../../components/Translate/LanguageContext';
+import { useAuth } from '../../../components/contexts/AuthContext';
+import { getRoleApi } from '../../../apis/roleApi';
 
 const UserCreate = ({ form, onCancel }) => {
-    const { content } = useContext(LanguageContext)
+    const { content } = useAuth();
     const [roles, setRoles] = useState([]);
 
     useEffect(() => {

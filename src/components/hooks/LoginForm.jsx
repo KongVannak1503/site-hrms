@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { Input, Button, Form, message, Checkbox } from 'antd';
 import { loginUser } from '../../apis/authApi';
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LanguageContext } from '../Translate/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginForm = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
-    const { content } = useContext(LanguageContext)
+    const { content } = useAuth();
     const Logo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScrmJyV86m97sc2Pahu8bd8Kbw9-hRQoFSpQ&s';
 
 

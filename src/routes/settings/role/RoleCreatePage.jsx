@@ -1,17 +1,18 @@
 import { Checkbox, Form, Input, message } from 'antd'
-import React, { useContext, useEffect, useState } from 'react'
-import { LanguageContext } from '../../../components/Translate/LanguageContext'
+import React, { useEffect, useState } from 'react'
 import { getPermissionsApi } from '../../../apis/permissionApi'
 import { Styles } from '../../../components/utils/CsStyle'
 import { decodeToken } from '../../../components/utils/auth'
-import { createRoleApi } from '../../../apis/roleApi'
+import { createRoleApi, existNameRoleApi } from '../../../apis/roleApi'
+import { useAuth } from '../../../components/contexts/AuthContext'
 
-const RoleCreatePage = ({ onCancel, form }) => {
-    const { content, accessToken } = useContext(LanguageContext)
+const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
+    const { decoded, content } = useAuth();
     const [permissions, setPermissions] = useState([]);
+    const [roleNameError, setRoleNameError] = useState('');
 
     useEffect(() => {
-        form.resetFields(); // <- This ensures form is clean before setting new values
+        form.resetFields();
 
         const fetchData = async () => {
             try {
@@ -33,13 +34,31 @@ const RoleCreatePage = ({ onCancel, form }) => {
         fetchData();
     }, [content]);
 
-    const decoded = decodeToken();
-    console.log(decoded.id);
+
+    const handleRoleNameChange = async (e) => {
+        const roleName = e.target.value;
+        if (roleName) {
+            try {
+                const response = await existNameRoleApi(roleName);
+                if (response.exists) {
+                    setRoleNameError('This role name already exists');
+                } else {
+                    setRoleNameError('');
+                }
+            } catch (error) {
+                setRoleNameError('Error checking role name');
+                console.error('Error:', error);
+            }
+        } else {
+            setRoleNameError('');
+        }
+    };
 
     const handleFinish = async (values) => {
         try {
             const roleName = values.role;
-            const createdBy = decoded.id;
+
+            const createdBy = decoded?.id;
 
             const permissionsData = permissions
                 .map((perm) => {
@@ -63,7 +82,7 @@ const RoleCreatePage = ({ onCancel, form }) => {
 
             const response = await createRoleApi(formData);
             message.success('Role created successfully!');
-            console.log('Final Submitted Data:', formData);
+            onUserCreated(response.data);
 
             // Optional: Reset form or navigate after success
             form.resetFields();
@@ -90,6 +109,8 @@ const RoleCreatePage = ({ onCancel, form }) => {
                 <Form.Item
                     name="role"
                     label={content['role']}
+
+                    validateStatus={roleNameError ? 'error' : ''}
                     rules={[{
                         required: true,
                         message: `${content['please']}${content['enter']}${content['role']}`
@@ -97,7 +118,7 @@ const RoleCreatePage = ({ onCancel, form }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input size="large" />
+                    <Input onChange={handleRoleNameChange} size="large" />
                 </Form.Item>
             </div>
 

@@ -3,46 +3,43 @@ import MainLayout from './components/layouts/MainLayout'
 import Dashboard from './routes/defaults/dashboard'
 import Test from './routes/defaults/Test'
 import TableSample from './routes/defaults/TableSample'
-import Users from './routes/settings/user/Users'
 import LoginPage from './routes/defaults/LoginPage'
 import ProtectedRoute from './components/hooks/ProtectedRoute'
 import NotFound from './components/hooks/NotFound'
 import Authorized from './components/hooks/Authorized'
 import RolesPage from './routes/settings/role/RolesPage'
+import UsersPage from './routes/settings/user/UsersPage'
 
 function App() {
   return (
     <Router>
       <Routes>
+
         <Route path="/login" element={<LoginPage />} />
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route ProtectedRoute
-            path="/dashboard" element={
-              <ProtectedRoute requiredRoute="/api/dashboard" requiredAction="view">
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+
+            <Route path="/" element={<Dashboard />} />
+            <Route
+              path="/dashboard" element={
                 <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/test" element={<Test />} />
-          <Route path="/table" element={<TableSample />} />
-          <Route
-            path="/setting/users"
-            element={
-              <ProtectedRoute requiredRoute="/api/users" requiredAction="view">
-                <Users />
-              </ProtectedRoute>
-            } />
-          <Route
-            path="/setting/roles"
-            element={
-              <ProtectedRoute requiredRoute="/api/roles" requiredAction="view">
+              }
+            />
+            <Route path="/test" element={<Test />} />
+            <Route path="/table" element={<TableSample />} />
+            <Route
+              path="/setting/users"
+              element={
+                <UsersPage />
+              } />
+            <Route
+              path="/setting/roles"
+              element={
                 <RolesPage />
-              </ProtectedRoute>
-            } />
+              } />
+          </Route>
         </Route>
         <Route path="/unauthorized" element={<Authorized />} />
-        {/* Catch-all route for unmatched URLs */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

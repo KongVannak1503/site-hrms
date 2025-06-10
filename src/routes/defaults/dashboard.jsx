@@ -1,81 +1,52 @@
-import { Breadcrumb, Button, Flex } from "antd";
-import { useContext, useEffect, useState } from "react";
-import ModalLgCenter from "../../components/modals/ModalLgCenter";
-import { LanguageContext } from "../../components/Translate/LanguageContext";
-import TableSample from "./TableSample";
-import { Content } from "antd/es/layout/layout";
-import { Styles } from "../../components/utils/CsStyle";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../../apis/api';
+import { useAuth } from '../../components/contexts/AuthContext';
+import { Content } from 'antd/es/layout/layout';
+import { Spin } from 'antd';
+import FullScreenLoader from '../../components/utils/FullScreenLoader';
 
 const Dashboard = () => {
-    const [open, setOpen] = useState(false);
-    const [responsiveOpen, setResponsiveOpen] = useState(false);
-    const { content } = useContext(LanguageContext)
-    // const { theme, setTheme } = useContext(LanguageContext)
-
-    const showDrawer = () => setOpen(true);
-    const closeDrawer = () => setOpen(false);
-
-    const handleSubmit = (values) => {
-        console.log('Form values:', values);
-        closeDrawer();
-    };
-
+    const { isLoading, token } = useAuth();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        document.title = content['dashboard'];
-    }, [content]);
+        const fetchUser = async () => {
+            try {
+                const res = await api.get('/users/users');
+                setLoading(false); // Permission okay, show dashboard
+            } catch (err) {
+                const status = err.response?.status;
+                if (status === 401) {
+                    navigate('/login', { replace: true });
+                } else if (status === 403) {
+                    navigate('/unauthorized', { replace: true });
+                } else {
+                    console.error('Unexpected error:', err);
+                }
+            }
+        };
 
-    return (
-        <>
-            <Breadcrumb
-                className="text-gray-700 dark:text-gray-400"
-                separator={<span className="text-gray-700 dark:text-gray-400">/</span>}
-                itemRender={(route, params, routes, paths) => (
-                    <span className="text-gray-700 dark:text-gray-400 hover:text-black dark:hover:text-white/90">
-                        {route.breadcrumbName}
-                    </span>
-                )}
-                items={[
-                    { breadcrumbName: 'Home' },
-                    { breadcrumbName: 'Application Center' },
-                    { breadcrumbName: 'Application List' },
-                    { breadcrumbName: 'App' },
-                ]}
-            />
+        fetchUser();
+    }, [token, navigate]);
 
-            <Content
-                className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
-                style={{
-                    padding: 24,
-                    minHeight: 800,
-                    // backgroundColor: theme == "light" ? Styles.lightMode : Styles.darkMode,
-                    borderRadius: 8,
-                    marginTop: 10,
-                }}
-            >
 
-                <Button type="primary" className="mr-2" onClick={() => setOpen(true)}>
-                    In use I want modal right
-                </Button>
-                <Button type="primary" onClick={() => setOpen(true)}>
-                    Open Modal Center
-                </Button>
-                <p>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo atque temporibus dolorum sit cum non dolor a, provident facilis, aut reprehenderit sunt quo accusamus inventore voluptate maiores alias laboriosam fuga.
-                </p>
+    if (isLoading) {
+        return <FullScreenLoader />;
+    }
 
-                <ModalLgCenter
-                    open={open}
-                    onOk={() => setOpen(false)}
-                    onCancel={() => setOpen(false)}
-                    title="My Custom Modal"
-                >
-                    <TableSample /> {/* Nested component */}
-                    <p>This is the content inside the modal!</p>
-                </ModalLgCenter>
-
-            </Content>
-        </>
-    );
+    return <Content
+        className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
+        style={{
+            padding: 24,
+            minHeight: 800,
+            borderRadius: 8,
+            marginTop: 10,
+        }}
+    >
+        Dashboard
+    </Content>;
 };
-export default Dashboard
+
+export default Dashboard;

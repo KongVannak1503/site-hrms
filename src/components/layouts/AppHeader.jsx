@@ -1,17 +1,13 @@
 import { BulbOutlined, DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, Layout, Select, Space } from 'antd'
-import { LanguageContext } from '../Translate/LanguageContext'
 import { useContext } from 'react'
 import { logout } from '../utils/auth'
+import { useAuth } from '../contexts/AuthContext'
 
 const { Header } = Layout
 
 const AppHeader = ({ collapsed, toggle, isMobile }) => {
-    const { language, setLanguage } = useContext(LanguageContext)
-    // const { theme, setTheme } = useContext(LanguageContext)
-    // const {
-    //     token: { colorBgContainer },
-    // } = theme.useToken()
+    const { language, setLanguage } = useAuth();
 
     const items = [
         {
@@ -71,6 +67,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
             key: '3',
         },
     ];
+
 
     return (
         <Header className='flex justify-between !bg-white !border-b !border-gray-200 dark:!border-gray-800 dark:!bg-gray-900' style={{ padding: 0, paddingRight: 10 }}>

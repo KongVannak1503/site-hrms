@@ -1,21 +1,23 @@
-import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
-import { LanguageContext } from '../Translate/LanguageContext';
-import hasPermission from './hasPermission';
+// src/components/ProtectedRoute.jsx
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
-const ProtectedRoute = ({ requiredRoute, requiredAction, children }) => {
-    const { accessToken, loading } = useContext(LanguageContext);
+const ProtectedRoute = ({ allowedRoles }) => {
+    const { token, user } = useAuth();
 
-    if (loading) {
-        return <div>Loading...</div>;
+    if (!token) {
+        // Not logged in
+        return <Navigate to="/login" replace />;
     }
 
-
-    if (!hasPermission(accessToken, requiredRoute, requiredAction)) {
+    if (allowedRoles && !allowedRoles.includes(user?.role)) {
+        // Logged in, but role is not allowed
         return <Navigate to="/unauthorized" replace />;
     }
 
-    return children;
+    // Everything is okay, render the route
+    return <Outlet />;
 };
 
 export default ProtectedRoute;

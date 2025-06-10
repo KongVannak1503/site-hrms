@@ -4,7 +4,6 @@ import AppHeader from './AppHeader';
 import AppSider from './AppSider';
 import AppFooter from './AppFooter';
 import { Outlet } from 'react-router-dom';
-import { LanguageContext } from '../Translate/LanguageContext';
 import { Styles } from '../utils/CsStyle';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 

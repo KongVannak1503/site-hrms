@@ -1,6 +1,5 @@
 import { Content } from 'antd/es/layout/layout'
 import React, { useContext, useEffect, useState } from 'react'
-import { LanguageContext } from '../../../components/Translate/LanguageContext'
 import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
 import { deleteRoleApi, getRolesApi } from '../../../apis/roleApi';
 import { Form, Input, message, Space, Table, Tooltip } from 'antd';
@@ -18,9 +17,11 @@ import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import { formatDateTime } from '../../../components/utils/utils';
 import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
 import RoleUpdatePage from './RoleUpdatePage';
+import { useAuth } from '../../../components/contexts/AuthContext';
+import FullScreenLoader from '../../../components/utils/FullScreenLoader';
 
 function RolesPage() {
-    const { content } = useContext(LanguageContext)
+    const { isLoading, content, token } = useAuth();
     const [roles, setRoles] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredRoles, setFilteredRoles] = useState([]);
@@ -28,6 +29,7 @@ function RolesPage() {
     const [selectedRoleId, setSelectedRoleId] = useState(null);
 
     const [form] = Form.useForm();
+
 
     const showDrawer = () => setOpen(true);
     const closeDrawer = () => {
@@ -188,7 +190,39 @@ function RolesPage() {
             },
         ],
     };
+    const handleAddCreated = async (newUser) => {
+        try {
+            if (!newUser || !newUser._id) {
+                console.error("New user object does not contain _id:", newUser);
+                return;
+            }
+            setFilteredRoles((prevData) => [newUser, ...prevData]);
+            setRoles((prevData) => [newUser, ...prevData]);
 
+            setOpen(false);
+        } catch (error) {
+            console.error("Error adding user:", error);
+        }
+    };
+    const handleUpdate = (updatedRole) => {
+        if (!updatedRole || !updatedRole._id) {
+            console.error("Updated role object does not contain _id:", updatedRole);
+            return;
+        }
+        setRoles((prevRoles) =>
+            prevRoles.map(role => (role._id === updatedRole._id ? updatedRole : role))
+        );
+        setFilteredRoles((prevFiltered) =>
+            prevFiltered.map(role => (role._id === updatedRole._id ? updatedRole : role))
+        );
+
+        setOpen(false);
+    };
+
+
+    if (isLoading) {
+        return <FullScreenLoader />;
+    }
     return (
         <div>
             <CustomBreadcrumb items={breadcrumbItems} />
@@ -234,9 +268,9 @@ function RolesPage() {
                     }
                 >
                     {actionForm === 'create' ? (
-                        <RoleCreatePage form={form} onCancel={closeDrawer} />
+                        <RoleCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <RoleUpdatePage roleId={selectedRoleId} onCancel={closeDrawer} />
+                        <RoleUpdatePage onUserUpdated={handleUpdate} roleId={selectedRoleId} onCancel={closeDrawer} />
                     )}
                 </ModalLgCenter>
 

@@ -3,7 +3,7 @@ export const Styles = {
     lightMode: '#fff',
     classDarkMode: '',
     classLightMode: '',
-    btnCreate: "px-4 py-2.5 cursor-pointer rounded text-white bg-[#003369] hover:bg-[#004690] transition duration-200",
+    btnCreate: "px-4 py-2.5 cursor-pointer rounded text-white bg-[#003369] hover:bg-[#004690] transition duration-200 whitespace-nowrap",
     btnQuick: "px-4 py-1.5 cursor-pointer rounded text-white bg-[#FF5733] hover:bg-[#FF7043] transition duration-200",
     btnUpdate: "px-4 py-2.5 cursor-pointer rounded text-white bg-yellow-400 hover:bg-yellow-500 transition duration-200",
     btnCancel: "mr-2 px-4 py-2.5 cursor-pointer rounded text-white bg-gray-500 hover:bg-gray-600 transition duration-200",

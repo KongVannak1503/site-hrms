@@ -5,15 +5,19 @@ import { PlusOutlined } from '@ant-design/icons';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
-import { LanguageContext } from '../../../components/Translate/LanguageContext';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import hasPermission from '../../../components/hooks/hasPermission';
 import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
+import { useAuth } from '../../../components/contexts/AuthContext';
+import { useEffect } from 'react';
+import api from '../../../apis/api';
+import { getUsersApi } from '../../../apis/userApi';
 
-const Users = () => {
+const UsersPage = () => {
     const [open, setOpen] = useState(false);
-    const { content, accessToken } = useContext(LanguageContext)
+    const { content, accessToken } = useAuth();
     const [form] = Form.useForm();
+    const [users, setUsers] = useState([]);
 
     const showDrawer = () => setOpen(true);
     const closeDrawer = () => {
@@ -24,6 +28,20 @@ const Users = () => {
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: content['users'] }
     ];
+    useEffect(() => {
+        document.title = content['roles'];
+        const fetchData = async () => {
+            try {
+                const response = await getUsersApi();
+                console.log(response);
+
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, [content]);
 
     return (
         <div>
@@ -63,4 +81,4 @@ const Users = () => {
     )
 }
 
-export default Users
+export default UsersPage

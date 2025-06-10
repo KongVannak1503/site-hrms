@@ -8,14 +8,13 @@ import {
     AudioOutlined,
 } from '@ant-design/icons'
 import { AutoComplete, Input, Menu } from 'antd'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { LanguageContext } from '../Translate/LanguageContext'
+import { useAuth } from '../contexts/AuthContext';
 const { Search } = Input;
 
 const AppSider = ({ collapsed }) => {
-    const { content } = useContext(LanguageContext)
-    const { theme } = useContext(LanguageContext)
+    const { content } = useAuth();
     const [options, setOptions] = useState([]);
     const [searchText, setSearchText] = useState('');
 
