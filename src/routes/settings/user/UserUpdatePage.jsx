@@ -2,44 +2,50 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Styles } from '../../../components/utils/CsStyle';
 import { useAuth } from '../../../components/contexts/AuthContext';
-import { createUserApi } from '../../../apis/userApi';
+import { createUserApi, getUserApi, updateUserApi } from '../../../apis/userApi';
 import { getRolesApi } from '../../../apis/roleApi';
 
-const UserCreate = ({ form, onCancel, onUserCreated }) => {
+const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
     const { content } = useAuth();
     const [roles, setRoles] = useState([]);
-
+    const [form] = Form.useForm();
     useEffect(() => {
-        form.resetFields();
 
         const fetchData = async () => {
             try {
+                const user = await getUserApi(userId);
+
                 const resRoles = await getRolesApi();
                 setRoles(resRoles);
+
+                form.setFieldsValue({
+                    username: user.username,
+                    email: user.email,
+                    role: user.role ? user.role._id : undefined,
+                    isActive: user.isActive,
+                });
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, [content]);
+    }, [userId, content]);
+
 
     const handleFinish = async (values) => {
         try {
-            const { username, password, email, role, isActive } = values;
             const formData = {
-                username,
-                password,
-                email,
-                role,
-                isActive,
+                username: values.username,
+                employeeId: values.employeeIdData,
+                role: values.role,
+                password: values.password
             };
 
-            const response = await createUserApi(formData);
-            message.success('User created successfully!');
-
-            onUserCreated(response.data);
-            form.resetFields();
+            const response = await updateUserApi(userId, formData);
+            message.success('User updated successfully!');
+            onUserUpdated(response.data);
         } catch (error) {
             console.error('Error creating User:', error);
             message.error('Failed to create User');
@@ -52,11 +58,7 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
             form={form}
             onFinish={handleFinish}
             layout="vertical"
-            name="userForm"
             autoComplete="off"
-            initialValues={{
-                isActive: true
-            }}
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Form.Item
@@ -88,12 +90,6 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                 <Form.Item
                     name="employeeId"
                     label={content['employee']}
-                    rules={[{
-                        required: true,
-                        message: `${content['selectA']}${content['employee']}`
-                            .toLowerCase()
-                            .replace(/^./, str => str.toUpperCase())
-                    }]}
                 >
                     <Select
                         defaultValue="lucy"
@@ -116,16 +112,22 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                 <Form.Item
                     name="password"
                     label={content['password']}
-                    rules={[{
-                        required: true,
-                        message: `${content['please']}${content['enter']}${content['password']}`
-                            .toLowerCase()
-                            .replace(/^./, str => str.toUpperCase())
-                    }]}
                 >
                     <Input size="large" type="password" />
                 </Form.Item>
-                <Form.Item
+                <Form.Item name="confirm" label={`${`${content['confirm']}${content['password']}`}`} dependencies={['password']} rules={[{
+                    required: true,
+                    message: 'Confirm Password is required',
+                    validator: (_, value) => {
+                        const passwordValue = form.getFieldValue('password');
+                        if (passwordValue && !value) return Promise.reject(new Error('Confirm Password is required'));
+                        if (passwordValue && passwordValue !== value) return Promise.reject(new Error('Passwords do not match!'));
+                        return Promise.resolve();
+                    }
+                }]}>
+                    <Input.Password size='large' />
+                </Form.Item>
+                {/* <Form.Item
                     name="confirm"
                     dependencies={['password']}
                     rules={[
@@ -146,11 +148,11 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                     label={content['confirm']}
                 >
                     <Input size="large" type="password" />
-                </Form.Item>
+                </Form.Item> */}
 
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className='border-yellow-500'>
+                <Card className='!border-yellow-500'>
                     <Form.Item
                         name="role"
                         label={content['role']}
@@ -187,4 +189,4 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
     );
 };
 
-export default UserCreate;
+export default UserUpdatePage;

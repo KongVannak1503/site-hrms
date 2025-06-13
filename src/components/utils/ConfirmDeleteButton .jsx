@@ -1,5 +1,6 @@
 import { Popconfirm, Button, Tooltip } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
+import { Styles } from './CsStyle'
 
 export const ConfirmDeleteButton = ({
     onConfirm,
@@ -18,7 +19,9 @@ export const ConfirmDeleteButton = ({
             cancelText={cancelText}
         >
             <Tooltip title={tooltip}>
-                <Button danger icon={<DeleteOutlined />} shape="circle" />
+                <button className={Styles.btnDelete} >
+                    <DeleteOutlined />
+                </button>
             </Tooltip>
         </Popconfirm>
     )

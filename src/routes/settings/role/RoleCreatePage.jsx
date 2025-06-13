@@ -2,12 +2,11 @@ import { Checkbox, Form, Input, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getPermissionsApi } from '../../../apis/permissionApi'
 import { Styles } from '../../../components/utils/CsStyle'
-import { decodeToken } from '../../../components/utils/auth'
 import { createRoleApi, existNameRoleApi } from '../../../apis/roleApi'
 import { useAuth } from '../../../components/contexts/AuthContext'
 
 const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
-    const { decoded, content } = useAuth();
+    const { content } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [roleNameError, setRoleNameError] = useState('');
 
@@ -58,8 +57,6 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
         try {
             const roleName = values.role;
 
-            const createdBy = decoded?.id;
-
             const permissionsData = permissions
                 .map((perm) => {
                     const selectedActions = values[`actions-${perm.name}`] || [];
@@ -76,7 +73,6 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
             const formData = {
                 name: roleName,
                 permissions: permissionsData,
-                createdBy: createdBy,
                 isActive: true,
             };
 
@@ -92,10 +88,6 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
             message.error('Failed to create role');
         }
     };
-
-
-
-
 
     return (
         <Form

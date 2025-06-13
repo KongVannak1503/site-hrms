@@ -9,6 +9,9 @@ import NotFound from './components/hooks/NotFound'
 import Authorized from './components/hooks/Authorized'
 import RolesPage from './routes/settings/role/RolesPage'
 import UsersPage from './routes/settings/user/UsersPage'
+import UploadForm from './routes/defaults/UploadForm'
+import PositionPage from './routes/settings/position/PositionPage'
+import CategoryPage from './routes/settings/category/CategoryPage'
 
 function App() {
   return (
@@ -36,6 +39,21 @@ function App() {
               path="/setting/roles"
               element={
                 <RolesPage />
+              } />
+            <Route
+              path="/setting/positions"
+              element={
+                <PositionPage />
+              } />
+            <Route
+              path="/setting/categories"
+              element={
+                <CategoryPage />
+              } />
+            <Route
+              path="/upload"
+              element={
+                <UploadForm />
               } />
           </Route>
         </Route>

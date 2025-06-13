@@ -17,6 +17,23 @@
         "employee": "Employee ",
         "employees": "Employees ",
 
+        "position": "Position ",
+        "positions": "Positions ",
+        "title": "Title",
+        "description": "Description",
+        "items": "Items",
+        "item": "Item",
+        "of": "of",
+        "page": "page",
+        "newStart": "new",
+        "newEnd": "",
+
+        "categories": "Categories",
+        "category": "Category",
+
+        "recruiter": "Recruiter",
+        "recruit": "Recruit",
+
         "enter": "Enter ",
         "new": "New ",
         "select": "Select ",
@@ -51,6 +68,23 @@
         "role": "តួនាទី",
         "roles": "តួនាទី",
         "status": "ស្ដានភាព",
+
+        "position": "មុខតំណែង",
+        "positions": "មុខតំណែង",
+        "title": "ចំណងជើង",
+        "description": "ការពិពណ៌នា",
+        "items": "ធាតុ",
+        "item": "ធាតុ",
+        "of": "នៃ",
+        "page": "ទំព័រ",
+        "newStart": "",
+        "newEnd": "ថ្មី",
+
+        "categories": "ប្រភេទ",
+        "category": "ប្រភេទ",
+
+        "recruiter": "អ្នកជ្រើសរើសបុគ្គលិក",
+        "recruit": "ជ្រើសរើសបុគ្គលិក",
 
         "enter": "បញ្ចូល",
         "new": "ថ្មី",

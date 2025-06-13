@@ -11,6 +11,8 @@ import { AutoComplete, Input, Menu } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext';
+import Logo from '../../assets/log_usea.png';
+import LogoTitle from '../../assets/usea-title-1.png';
 const { Search } = Input;
 
 const AppSider = ({ collapsed }) => {
@@ -27,14 +29,14 @@ const AppSider = ({ collapsed }) => {
             icon: <AppstoreOutlined />,
             label: content['dashboard'],
         },
-        // {
-        //     key: 'test',
-        //     icon: <VideoCameraOutlined />,
-        //     label: 'Test',
-        //     children: [
-        //         { key: '/test', label: 'Test 1', },
-        //     ],
-        // },
+        {
+            key: 'recruiter',
+            icon: <VideoCameraOutlined />,
+            label: content['recruiter'],
+            children: [
+                { key: '/recruit', label: content['recruit'], },
+            ],
+        },
         // {
         //     key: '/table',
         //     icon: <UploadOutlined />,
@@ -62,6 +64,8 @@ const AppSider = ({ collapsed }) => {
             label: content['settings'], children: [
                 { key: '/setting/users', label: content['user'] },
                 { key: '/setting/roles', label: content['roles'] },
+                { key: '/setting/positions', label: content['positions'] },
+                { key: '/setting/categories', label: content['categories'] },
 
             ],
         },
@@ -117,8 +121,8 @@ const AppSider = ({ collapsed }) => {
                 <img
                     src={
                         collapsed
-                            ? 'https://www.usea.edu.kh/media/logo_update.png'
-                            : 'https://www.usea.edu.kh/media/title/usea-title-1.png'
+                            ? Logo
+                            : LogoTitle
                     }
                     alt="Logo"
                     style={{
@@ -151,7 +155,6 @@ const AppSider = ({ collapsed }) => {
                                 onChange={(e) => setSearchText(e.target.value)}
                             />
                         </AutoComplete>
-
                 }
 
             </div>

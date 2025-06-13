@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';       // import useNavigate
 import api, { attachTokenToApi } from '../../apis/api';
 import { useAuth } from '../../components/contexts/AuthContext';
-import { Button, Checkbox, Form, Input, Spin } from 'antd'
+import { Button, Checkbox, Form, Input, message, Spin } from 'antd'
 import { UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
 import { LoginUser } from '../../apis/authApi';
+import Logo from '../../assets/log_usea.png';
 
 const LoginPage = () => {
     const { isLoading, token, setToken } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const Logo = 'https://www.usea.edu.kh/media/logo_update.png';
     useEffect(() => {
         if (token) {
             navigate('/', { replace: true }); // or your desired protected page
@@ -28,7 +28,8 @@ const LoginPage = () => {
             attachTokenToApi(accessToken);
             navigate('/');
         } catch (err) {
-            alert('Login failed');
+            console.log(err);
+            message.error('Login failed');
         }
     };
     if (isLoading) {

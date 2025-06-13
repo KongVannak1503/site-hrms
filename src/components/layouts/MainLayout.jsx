@@ -87,9 +87,9 @@ const MainLayout = () => {
                 >
                     <Outlet />
                 </Content>
-                <Footer style={{ textAlign: 'center', background: '#fff' }}>
+                {/* <Footer style={{ textAlign: 'center', background: '#fff' }}>
                     <AppFooter />
-                </Footer>
+                </Footer> */}
             </Layout>
         </Layout >
     );

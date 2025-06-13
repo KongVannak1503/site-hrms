@@ -1,32 +1,27 @@
-import { Content } from 'antd/es/layout/layout'
-import React, { useContext, useEffect, useState } from 'react'
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { deleteRoleApi, getRolesApi } from '../../../apis/roleApi';
-import { Form, Input, message, Space, Table, Tooltip } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
-import {
-    SearchOutlined,
-    FormOutlined,
-    DeleteOutlined,
-    FileAddFilled,
-    PlusOutlined,
-} from "@ant-design/icons";
+import React, { useState } from 'react'
+// import UserCreate from './UserCreate'
+import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import RoleCreatePage from './RoleCreatePage';
-import ModalLgCenter from '../../../components/modals/ModalLgCenter';
-import { formatDateTime } from '../../../components/utils/utils';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
-import RoleUpdatePage from './RoleUpdatePage';
+import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
 import { useAuth } from '../../../components/contexts/AuthContext';
+import { useEffect } from 'react';
+import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
+import { Styles } from '../../../components/utils/CsStyle';
+import { formatDateTime } from '../../../components/utils/utils';
 import FullScreenLoader from '../../../components/utils/FullScreenLoader';
+import { deleteCategoryApi, getCategoriesApi } from '../../../apis/categoryApi';
+import CategoryCreatePage from './CategoryCreatePage';
+import CategoryUpdatePage from './CategoryUpdatePage';
 
-function RolesPage() {
+const CategoryPage = () => {
     const { isLoading, content } = useAuth();
-    const [roles, setRoles] = useState([]);
+    const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
-    const [filteredRoles, setFilteredRoles] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const [actionForm, setActionForm] = useState('create'); // 'create' or 'update'
-    const [selectedRoleId, setSelectedRoleId] = useState(null);
+    const [selectedUserId, setSelectedUserId] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
@@ -47,37 +42,37 @@ function RolesPage() {
 
     const showCreateDrawer = () => {
         setActionForm('create');
-        setSelectedRoleId(null);
+        setSelectedUserId(null);
         setOpen(true);
     };
 
-    const showUpdateDrawer = (roleId) => {
+    const showUpdateDrawer = (userId) => {
         setActionForm('update');
-        setSelectedRoleId(roleId);
+        setSelectedUserId(userId);
         setOpen(true);
     };
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['roles'] }
+        { breadcrumbName: content['categories'] }
     ];
 
     useEffect(() => {
-        document.title = content['roles'];
+        document.title = content['categories'];
         const fetchData = async () => {
             try {
-                const response = await getRolesApi();
+                const response = await getCategoriesApi();
                 if (Array.isArray(response)) {
-                    setRoles(response);
-                    setFilteredRoles(response);
+                    setUsers(response);
+                    setFilteredData(response);
                     setPagination(prev => ({
                         ...prev,
                         total: response.length,
                     }));
                 } else {
                     console.error('Data is not an array:', response);
-                    setRoles([]);
-                    setFilteredRoles([]);
+                    setUsers([]);
+                    setFilteredData([]);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -89,12 +84,12 @@ function RolesPage() {
     const handleSearch = (value) => {
         const term = value.trim().toLowerCase();
         if (!term) {
-            setFilteredRoles(roles);
+            setFilteredData(users);
         } else {
-            const filtered = roles.filter((role) =>
+            const filtered = users.filter((role) =>
                 role.name.toLowerCase().includes(term)
             );
-            setFilteredRoles(filtered);
+            setFilteredData(filtered);
         }
     };
 
@@ -102,25 +97,50 @@ function RolesPage() {
 
     const handleDelete = async (id) => {
         try {
-            await deleteRoleApi(id); // call the API
-            const updatedRoles = roles.filter(role => role._id !== id);
-            setRoles(updatedRoles);
-            setFilteredRoles(updatedRoles);
-            message.success('Role deleted successfully');
+            await deleteCategoryApi(id); // call the API
+            const updatedUsers = users.filter(role => role._id !== id);
+            setUsers(updatedUsers);
+            setFilteredData(updatedUsers);
+            message.success('Deleted successfully');
         } catch (error) {
             console.error('Delete failed:', error);
-            message.error('Failed to delete role');
+            message.error('Failed to delete');
         }
     };
 
     const columns = [
         {
-            title: content['role'],
-            dataIndex: "name",
-            key: "name",
+            title: content['title'],
+            dataIndex: "title",
+            key: "title",
             render: (text) => <span>{text}</span>,
         },
 
+        {
+            title: content['createdAt'],
+            dataIndex: "createdAt",
+            key: "createdAt",
+            render: (text, record) => <div>
+                <span>{formatDateTime(text)}</span>
+                <p>{record.createdBy ? `Created by: ${record.createdBy?.username}` : ''}</p>
+            </div>,
+        },
+        {
+            title: content['status'],
+            dataIndex: "isActive",
+            key: "isActive",
+            render: (text) => {
+                const isActive = Boolean(text); // ensure it's a boolean
+                const color = isActive ? 'geekblue' : 'volcano';
+                const label = isActive ? 'ACTIVE' : 'INACTIVE';
+
+                return (
+                    <Tag color={color} key={String(text)}>
+                        {label}
+                    </Tag>
+                );
+            }
+        },
         {
             title: (
                 <span style={{ display: "flex", justifyContent: "center", width: "100%" }}>
@@ -191,26 +211,27 @@ function RolesPage() {
     const handleAddCreated = async (newUser) => {
         try {
             if (!newUser || !newUser._id) {
-                console.error("New user object does not contain _id:", newUser);
+                console.error("New object does not contain _id:", newUser);
                 return;
             }
-            setFilteredRoles((prevData) => [newUser, ...prevData]);
-            setRoles((prevData) => [newUser, ...prevData]);
+            setFilteredData((prevData) => [newUser, ...prevData]);
+            setUsers((prevData) => [newUser, ...prevData]);
 
             setOpen(false);
+
         } catch (error) {
-            console.error("Error adding user:", error);
+            console.error("Error adding:", error);
         }
     };
     const handleUpdate = (updatedRole) => {
         if (!updatedRole || !updatedRole._id) {
-            console.error("Updated role object does not contain _id:", updatedRole);
+            console.error("Updated   object does not contain _id:", updatedRole);
             return;
         }
-        setRoles((prevRoles) =>
+        setUsers((prevRoles) =>
             prevRoles.map(role => (role._id === updatedRole._id ? updatedRole : role))
         );
-        setFilteredRoles((prevFiltered) =>
+        setFilteredData((prevFiltered) =>
             prevFiltered.map(role => (role._id === updatedRole._id ? updatedRole : role))
         );
 
@@ -221,6 +242,7 @@ function RolesPage() {
     if (isLoading) {
         return <FullScreenLoader />;
     }
+
     return (
         <div>
             <CustomBreadcrumb items={breadcrumbItems} />
@@ -234,7 +256,7 @@ function RolesPage() {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['roles']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['categories']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -251,7 +273,7 @@ function RolesPage() {
                     scroll={{ x: 'max-content' }}
                     rowSelection={rowSelection}
                     columns={columns}
-                    dataSource={filteredRoles}
+                    dataSource={filteredData}
                     rowKey="_id"
                     pagination={{
                         ...pagination,
@@ -268,26 +290,26 @@ function RolesPage() {
                     }}
                 />
 
-                <ModalLgCenter
+                <ModalMdCenter
                     open={open}
                     onOk={() => setOpen(false)}
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['role']}`
-                            : `${content['update']} ${content['role']}`
+                            ? `${content['create']} ${content['newStart']} ${content['category']}${content['newEnd']}`
+                            : `${content['update']} ${content['category']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <RoleCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <CategoryCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <RoleUpdatePage onUserUpdated={handleUpdate} roleId={selectedRoleId} onCancel={closeDrawer} />
+                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
-                </ModalLgCenter>
+                </ModalMdCenter>
 
             </Content >
         </div >
-    );
+    )
 }
 
-export default RolesPage
+export default CategoryPage

@@ -1,14 +1,13 @@
 import { Checkbox, Form, Input, message } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getPermissionsApi } from '../../../apis/permissionApi';
 import { Styles } from '../../../components/utils/CsStyle';
-import { decodeToken } from '../../../components/utils/auth';
 import { getRoleApi, updateRoleApi } from '../../../apis/roleApi';
 import { useAuth } from '../../../components/contexts/AuthContext';
 import FullScreenLoader from '../../../components/utils/FullScreenLoader';
 
 const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
-    const { content, decoded } = useAuth();
+    const { content } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [form] = Form.useForm();
@@ -48,7 +47,6 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
     const handleFinish = async (values) => {
         try {
             const roleName = values.role;
-            const updatedBy = decoded?.id;
 
             const permissionsData = permissions
                 .map((perm) => {
@@ -59,7 +57,6 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
                         permissionId: perm._id,
                         actions: selectedActions,
                         isActive: true,
-                        updatedBy: [updatedBy]
                     };
                 })
                 .filter(Boolean);
