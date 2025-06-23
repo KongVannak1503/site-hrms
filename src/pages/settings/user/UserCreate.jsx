@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
-import { useAuth } from '../../../components/contexts/AuthContext';
-import { createUserApi } from '../../../apis/userApi';
-import { getRolesApi } from '../../../apis/roleApi';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
+import { getRolesApi } from '../../../services/roleApi';
+import { createUserApi } from '../../../services/userApi';
 
 const UserCreate = ({ form, onCancel, onUserCreated }) => {
     const { content } = useAuth();

@@ -4,16 +4,16 @@ import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } 
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
-import { Styles } from '../../../components/utils/CsStyle';
-import { formatDateTime } from '../../../components/utils/utils';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
-import { deleteCategoryApi, getCategoriesApi } from '../../../apis/categoryApi';
+import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
+import { Styles } from '../../../utils/CsStyle';
+import { formatDateTime } from '../../../utils/utils';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import CategoryCreatePage from './CategoryCreatePage';
 import CategoryUpdatePage from './CategoryUpdatePage';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import { deleteCategoryApi, getCategoriesApi } from '../../../services/categoryApi';
 
 const CategoryPage = () => {
     const { isLoading, content } = useAuth();

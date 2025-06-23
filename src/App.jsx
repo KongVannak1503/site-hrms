@@ -3,19 +3,18 @@ import MainLayout from './components/layouts/MainLayout'
 import Dashboard from './pages/defaults/dashboard'
 import Test from './pages/defaults/Test'
 import TableSample from './pages/defaults/TableSample'
-import LoginPage from './pages/defaults/LoginPage'
-import ProtectedRoute from './components/hooks/ProtectedRoute'
-import NotFound from './components/hooks/NotFound'
-import Authorized from './components/hooks/Authorized'
+import LoginPage from './pages/login/LoginPage'
 import RolesPage from './pages/settings/role/RolesPage'
 import UsersPage from './pages/settings/user/UsersPage'
 import UploadForm from './pages/defaults/UploadForm'
-import PositionPage from './pages/settings/position/PositionPage'
 import CategoryPage from './pages/settings/category/CategoryPage'
 import SkillPage from './pages/settings/Skill/SkillPage'
 import DepartmentPage from './pages/settings/department/DepartmentPage'
 import OrganizationPage from './pages/settings/organization/OrganizationPage'
 import EmployeePage from './pages/employee/EmployeePage'
+import Authorized from './components/errors/Authorized'
+import NotFound from './components/errors/NotFound'
+import ProtectedRoute from './hooks/ProtectedRoute'
 
 function App() {
   return (
@@ -45,11 +44,7 @@ function App() {
               element={
                 <RolesPage />
               } />
-            <Route
-              path="/setting/positions"
-              element={
-                <PositionPage />
-              } />
+
             <Route
               path="/setting/categories"
               element={

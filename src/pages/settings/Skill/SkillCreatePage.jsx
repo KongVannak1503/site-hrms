@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Switch, message } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 import { Typography } from 'antd';
-import { createSkillApi } from '../../../apis/skillApi';
+import { createSkillApi } from '../../../services/skillApi';
 
 const SkillCreatePage = ({ form, onCancel, onUserCreated }) => {
     const { content } = useAuth();

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../apis/api';
-import { useAuth } from '../../components/contexts/AuthContext';
 import { Content } from 'antd/es/layout/layout';
 import { Spin } from 'antd';
-import FullScreenLoader from '../../components/utils/FullScreenLoader';
+import { useAuth } from '../../contexts/AuthContext';
+import FullScreenLoader from '../../components/loading/FullScreenLoader';
 
 const Dashboard = () => {
     const { isLoading, token } = useAuth();

@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
-import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
-import { ConfirmDeleteButton } from '../../components/utils/ConfirmDeleteButton ';
-import CategoryUpdatePage from './CategoryUpdatePage';
-import { useAuth } from '../../components/contexts/AuthContext';
-import { formatDateTime } from '../../components/utils/utils';
-import ModalMdCenter from '../../components/modals/ModalMdCenter';
-import { Styles } from '../../components/utils/CsStyle';
-import FullScreenLoader from '../../components/utils/FullScreenLoader';
-import CustomBreadcrumb from '../../components/utils/CustomBreadcrumb';
-import { deleteEmployeeApi, getEmployeesApi } from '../../apis/employeeApi';
-import ModalLgCenter from '../../components/modals/ModalLgCenter';
 import EmployeeCreatePage from './EmployeeCreatePage';
+import { useAuth } from '../../contexts/AuthContext';
+import { deleteEmployeeApi, getEmployeesApi } from '../../services/employeeApi';
+import { formatDateTime } from '../../utils/utils';
+import { Styles } from '../../utils/CsStyle';
+import { ConfirmDeleteButton } from '../../components/button/ConfirmDeleteButton ';
+import ModalLgCenter from '../../components/modals/ModalLgCenter';
+import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
+import FullScreenLoader from '../../components/loading/FullScreenLoader';
 
 const EmployeePage = () => {
     const { isLoading, content } = useAuth();
@@ -55,11 +53,11 @@ const EmployeePage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['categories'] }
+        { breadcrumbName: content['employees'] }
     ];
 
     useEffect(() => {
-        document.title = content['categories'];
+        document.title = content['employees'];
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
@@ -257,7 +255,7 @@ const EmployeePage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['categories']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['employees']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -297,8 +295,8 @@ const EmployeePage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['category']}${content['newEnd']}`
-                            : `${content['update']} ${content['category']}`
+                            ? `${content['create']} ${content['newStart']} ${content['employee']}${content['newEnd']}`
+                            : `${content['update']} ${content['employee']}`
                     }
                 >
                     {actionForm === 'create' ? (

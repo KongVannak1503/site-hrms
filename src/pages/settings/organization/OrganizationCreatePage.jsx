@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card, Upload } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 import { Typography } from 'antd';
-import { createOrganizationApi } from '../../../apis/organizationApi';
 import { useState } from 'react';
+import { createOrganizationApi } from '../../../services/organizationApi';
 
 
 const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {

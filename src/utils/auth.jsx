@@ -1,7 +1,7 @@
 // utils/auth.js
 import { jwtDecode } from 'jwt-decode';
-import { logoutUser } from '../../apis/authApi';
 import { Navigate } from 'react-router-dom';
+import { logoutUser } from '../services/authApi';
 
 
 export const getToken = () => {

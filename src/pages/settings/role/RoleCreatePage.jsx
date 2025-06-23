@@ -1,9 +1,9 @@
 import { Checkbox, Form, Input, message } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { getPermissionsApi } from '../../../apis/permissionApi'
-import { Styles } from '../../../components/utils/CsStyle'
-import { createRoleApi, existNameRoleApi } from '../../../apis/roleApi'
-import { useAuth } from '../../../components/contexts/AuthContext'
+import { getPermissionsApi } from '../../../services/permissionApi'
+import { createRoleApi, existNameRoleApi } from '../../../services/roleApi'
+import { Styles } from '../../../utils/CsStyle'
+import { useAuth } from '../../../contexts/AuthContext'
 
 const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
     const { content } = useAuth();

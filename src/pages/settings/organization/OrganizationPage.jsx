@@ -4,17 +4,17 @@ import { Breadcrumb, Form, Input, message, Space, Table, Tag, Tooltip } from 'an
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { useEffect } from 'react';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
-import { Styles } from '../../../components/utils/CsStyle';
-import { formatDateTime } from '../../../components/utils/utils';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
 import CategoryUpdatePage from './CategoryUpdatePage';
-import { deleteOrganizationApi, getOrganizationsApi } from '../../../apis/organizationApi';
 import OrganizationCreatePage from './OrganizationCreatePage';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
+import { useAuth } from '../../../contexts/AuthContext';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
+import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
+import { Styles } from '../../../utils/CsStyle';
+import { formatDateTime } from '../../../utils/utils';
+import { deleteOrganizationApi, getOrganizationsApi } from '../../../services/organizationApi';
 
 const OrganizationPage = () => {
     const { isLoading, content } = useAuth();

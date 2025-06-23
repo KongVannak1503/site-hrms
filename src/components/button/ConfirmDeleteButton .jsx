@@ -1,6 +1,6 @@
 import { Popconfirm, Button, Tooltip } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { Styles } from './CsStyle'
+import { Styles } from '../../utils/CsStyle'
 
 export const ConfirmDeleteButton = ({
     onConfirm,

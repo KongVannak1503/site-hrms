@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 import { Typography } from 'antd';
-import { createDepartmentApi } from '../../../apis/departmentApi';
+import { createDepartmentApi } from '../../../services/departmentApi';
 
 const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
     const { content } = useAuth();

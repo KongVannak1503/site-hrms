@@ -1,8 +1,8 @@
 // src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
-import dataTranslate from '../Translate/Data.json'
+import dataTranslate from '../data/Data.json'
 import { jwtDecode } from "jwt-decode";
-import { attachTokenToApi } from "../../apis/api";
+import { attachTokenToApi } from "../services/api";
 
 const getInitialLanguage = () => {
     const saved = localStorage.getItem('appLanguage')

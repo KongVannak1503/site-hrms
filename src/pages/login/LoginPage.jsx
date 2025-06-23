@@ -1,12 +1,12 @@
 // src/pages/LoginPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';       // import useNavigate
-import api, { attachTokenToApi } from '../../apis/api';
-import { useAuth } from '../../components/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Button, Checkbox, Form, Input, message, Spin } from 'antd'
 import { UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
-import { LoginUser } from '../../apis/authApi';
 import Logo from '../../assets/log_usea.png';
+import { useAuth } from '../../contexts/AuthContext';
+import { LoginUser } from '../../services/authApi';
+import { attachTokenToApi } from '../../services/api';
 
 const LoginPage = () => {
     const { isLoading, token, setToken, content } = useAuth();

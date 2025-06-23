@@ -6,15 +6,15 @@ import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
-import { deleteUserApi, getUsersApi } from '../../../apis/userApi';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
-import { Styles } from '../../../components/utils/CsStyle';
-import { formatDateTime } from '../../../components/utils/utils';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
+import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
+import { Styles } from '../../../utils/CsStyle';
+import { formatDateTime } from '../../../utils/utils';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import UserUpdatePage from './UserUpdatePage';
+import { deleteUserApi, getUsersApi } from '../../../services/userApi';
 
 const UsersPage = () => {
     const { isLoading, content } = useAuth();

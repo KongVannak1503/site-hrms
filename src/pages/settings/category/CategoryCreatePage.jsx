@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 import { Typography } from 'antd';
-import { createCategoryApi } from '../../../apis/categoryApi';
+import { createCategoryApi } from '../../../services/categoryApi';
 
 const CategoryCreatePage = ({ form, onCancel, onUserCreated }) => {
     const { content } = useAuth();

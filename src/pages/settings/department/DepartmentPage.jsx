@@ -4,17 +4,17 @@ import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } 
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { useAuth } from '../../../components/contexts/AuthContext';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
-import { Styles } from '../../../components/utils/CsStyle';
-import { formatDateTime } from '../../../components/utils/utils';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
+import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
+import { Styles } from '../../../utils/CsStyle';
+import { formatDateTime } from '../../../utils/utils';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import DepartmentCreatePage from './DepartmentCreatePage';
 import DepartmentUpdatePage from './DepartmentUpdatePage';
-import { deleteDepartmentApi, getDepartmentsApi } from '../../../apis/departmentApi';
 import { MdOutlineAssignmentTurnedIn } from "react-icons/md";
+import { deleteDepartmentApi, getDepartmentsApi } from '../../../services/departmentApi';
 
 const DepartmentPage = () => {
     const { isLoading, content } = useAuth();

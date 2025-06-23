@@ -1,8 +1,8 @@
 import { BulbOutlined, DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, Layout, Select, Space } from 'antd'
 import { useContext } from 'react'
-import { logout } from '../utils/auth'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
+import { logout } from '../../utils/auth'
 
 const { Header } = Layout
 

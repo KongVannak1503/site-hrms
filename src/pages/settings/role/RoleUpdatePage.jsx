@@ -1,10 +1,10 @@
 import { Checkbox, Form, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getPermissionsApi } from '../../../apis/permissionApi';
-import { Styles } from '../../../components/utils/CsStyle';
-import { getRoleApi, updateRoleApi } from '../../../apis/roleApi';
-import { useAuth } from '../../../components/contexts/AuthContext';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
+import { getRoleApi, updateRoleApi } from '../../../services/roleApi';
+import { getPermissionsApi } from '../../../services/permissionApi';
 
 const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();

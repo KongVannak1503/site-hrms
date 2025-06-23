@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout } from 'antd';
 import AppHeader from './AppHeader';
 import AppSider from './AppSider';
 import AppFooter from './AppFooter';
 import { Outlet } from 'react-router-dom';
-import { Styles } from '../utils/CsStyle';
-import { useBreakpoint } from '../hooks/useBreakpoint';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 const { Header, Sider, Content, Footer } = Layout;
 

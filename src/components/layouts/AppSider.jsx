@@ -12,9 +12,9 @@ import { LuUsers } from "react-icons/lu";
 import { AutoComplete, Input, Menu } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext';
 import Logo from '../../assets/log_usea.png';
 import LogoTitle from '../../assets/usea-title-1.png';
+import { useAuth } from '../../contexts/AuthContext';
 const { Search } = Input;
 
 const AppSider = ({ collapsed }) => {

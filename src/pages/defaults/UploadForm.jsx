@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../apis/api';
+import api from '../../services/api';
 
 const UploadForm = () => {
     const [file, setFile] = useState(null);

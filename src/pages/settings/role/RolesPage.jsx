@@ -1,9 +1,8 @@
 import { Content } from 'antd/es/layout/layout'
 import React, { useContext, useEffect, useState } from 'react'
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { deleteRoleApi, getRolesApi } from '../../../apis/roleApi';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { Form, Input, message, Space, Table, Tooltip } from 'antd';
-import { Styles } from '../../../components/utils/CsStyle';
+import { Styles } from '../../../utils/CsStyle';
 import {
     SearchOutlined,
     FormOutlined,
@@ -14,11 +13,12 @@ import {
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import RoleCreatePage from './RoleCreatePage';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
-import { formatDateTime } from '../../../components/utils/utils';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
+import { formatDateTime } from '../../../utils/utils';
+import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
 import RoleUpdatePage from './RoleUpdatePage';
-import { useAuth } from '../../../components/contexts/AuthContext';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
+import { useAuth } from '../../../contexts/AuthContext';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
+import { deleteRoleApi, getRolesApi } from '../../../services/roleApi';
 
 function RolesPage() {
     const { isLoading, content } = useAuth();
