@@ -6,7 +6,9 @@ import {
     SettingOutlined,
     SearchOutlined,
     AudioOutlined,
+    UsergroupAddOutlined,
 } from '@ant-design/icons'
+import { LuUsers } from "react-icons/lu";
 import { AutoComplete, Input, Menu } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -30,6 +32,11 @@ const AppSider = ({ collapsed }) => {
             label: content['dashboard'],
         },
         {
+            key: '/employee',
+            icon: <LuUsers />,
+            label: content['employee'],
+        },
+        {
             key: 'recruiter',
             icon: <VideoCameraOutlined />,
             label: content['recruiter'],
@@ -37,6 +44,7 @@ const AppSider = ({ collapsed }) => {
                 { key: '/recruit', label: content['recruit'], },
             ],
         },
+
         // {
         //     key: '/table',
         //     icon: <UploadOutlined />,
@@ -66,6 +74,9 @@ const AppSider = ({ collapsed }) => {
                 { key: '/setting/roles', label: content['roles'] },
                 { key: '/setting/positions', label: content['positions'] },
                 { key: '/setting/categories', label: content['categories'] },
+                { key: '/setting/skills', label: content['skills'] },
+                { key: '/setting/departments', label: content['departments'] },
+                { key: '/setting/organization', label: content['organizations'] },
 
             ],
         },

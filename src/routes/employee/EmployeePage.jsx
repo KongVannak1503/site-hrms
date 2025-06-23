@@ -3,21 +3,20 @@ import React, { useState } from 'react'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
-import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
-import { useAuth } from '../../../components/contexts/AuthContext';
 import { useEffect } from 'react';
-import { deleteUserApi } from '../../../apis/userApi';
-import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
-import { Styles } from '../../../components/utils/CsStyle';
-import { formatDateTime } from '../../../components/utils/utils';
-import FullScreenLoader from '../../../components/utils/FullScreenLoader';
-import { deletePositionApi, getPositionsApi } from '../../../apis/positionApi';
-import PositionCreatePage from './PositionCreatePage';
-import PositionUpdatePage from './PositionUpdatePage';
-// import UserUpdatePage from './UserUpdatePage';
+import { ConfirmDeleteButton } from '../../components/utils/ConfirmDeleteButton ';
+import CategoryUpdatePage from './CategoryUpdatePage';
+import { useAuth } from '../../components/contexts/AuthContext';
+import { formatDateTime } from '../../components/utils/utils';
+import ModalMdCenter from '../../components/modals/ModalMdCenter';
+import { Styles } from '../../components/utils/CsStyle';
+import FullScreenLoader from '../../components/utils/FullScreenLoader';
+import CustomBreadcrumb from '../../components/utils/CustomBreadcrumb';
+import { deleteEmployeeApi, getEmployeesApi } from '../../apis/employeeApi';
+import ModalLgCenter from '../../components/modals/ModalLgCenter';
+import EmployeeCreatePage from './EmployeeCreatePage';
 
-const PositionPage = () => {
+const EmployeePage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -56,14 +55,14 @@ const PositionPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['positions'] }
+        { breadcrumbName: content['categories'] }
     ];
 
     useEffect(() => {
-        document.title = content['positions'];
+        document.title = content['categories'];
         const fetchData = async () => {
             try {
-                const response = await getPositionsApi();
+                const response = await getEmployeesApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -88,8 +87,8 @@ const PositionPage = () => {
         if (!term) {
             setFilteredData(users);
         } else {
-            const filtered = users.filter((role) =>
-                role.title.toLowerCase().includes(term)
+            const filtered = users.filter((base) =>
+                base.title.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
@@ -99,7 +98,7 @@ const PositionPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deletePositionApi(id); // call the API
+            await deleteEmployeeApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -258,7 +257,7 @@ const PositionPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['positions']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['categories']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -292,26 +291,26 @@ const PositionPage = () => {
                     }}
                 />
 
-                <ModalMdCenter
+                <ModalLgCenter
                     open={open}
                     onOk={() => setOpen(false)}
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['position']}`
-                            : `${content['update']} ${content['position']}`
+                            ? `${content['create']} ${content['newStart']} ${content['category']}${content['newEnd']}`
+                            : `${content['update']} ${content['category']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <PositionCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <EmployeeCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <PositionUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
-                </ModalMdCenter>
+                </ModalLgCenter>
 
             </Content >
         </div >
     )
 }
 
-export default PositionPage
+export default EmployeePage

@@ -7,17 +7,16 @@ import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
 import { useAuth } from '../../../components/contexts/AuthContext';
 import { useEffect } from 'react';
-import { deleteUserApi } from '../../../apis/userApi';
 import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
 import { Styles } from '../../../components/utils/CsStyle';
 import { formatDateTime } from '../../../components/utils/utils';
 import FullScreenLoader from '../../../components/utils/FullScreenLoader';
-import { deletePositionApi, getPositionsApi } from '../../../apis/positionApi';
-import PositionCreatePage from './PositionCreatePage';
-import PositionUpdatePage from './PositionUpdatePage';
-// import UserUpdatePage from './UserUpdatePage';
+import DepartmentCreatePage from './DepartmentCreatePage';
+import DepartmentUpdatePage from './DepartmentUpdatePage';
+import { deleteDepartmentApi, getDepartmentsApi } from '../../../apis/departmentApi';
+import { MdOutlineAssignmentTurnedIn } from "react-icons/md";
 
-const PositionPage = () => {
+const DepartmentPage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -56,14 +55,14 @@ const PositionPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['positions'] }
+        { breadcrumbName: content['departments'] }
     ];
 
     useEffect(() => {
-        document.title = content['positions'];
+        document.title = content['departments'];
         const fetchData = async () => {
             try {
-                const response = await getPositionsApi();
+                const response = await getDepartmentsApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -88,8 +87,8 @@ const PositionPage = () => {
         if (!term) {
             setFilteredData(users);
         } else {
-            const filtered = users.filter((role) =>
-                role.title.toLowerCase().includes(term)
+            const filtered = users.filter((base) =>
+                base.title.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
@@ -99,7 +98,7 @@ const PositionPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deletePositionApi(id); // call the API
+            await deleteDepartmentApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -159,6 +158,15 @@ const PositionPage = () => {
                             onClick={() => showUpdateDrawer(record._id)}
                         >
                             <FormOutlined />
+                        </button>
+                    </Tooltip>
+                    <Tooltip title={content['assignee']}>
+                        <button
+                            className={Styles.btnEdit}
+                            shape="circle"
+                            onClick={() => showUpdateDrawer(record._id)}
+                        >
+                            <MdOutlineAssignmentTurnedIn />
                         </button>
                     </Tooltip>
                     {ConfirmDeleteButton({
@@ -258,7 +266,7 @@ const PositionPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['positions']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['departments']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -298,14 +306,14 @@ const PositionPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['position']}`
-                            : `${content['update']} ${content['position']}`
+                            ? `${content['create']} ${content['newStart']} ${content['department']}${content['newEnd']}`
+                            : `${content['update']} ${content['department']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <PositionCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <DepartmentCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <PositionUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <DepartmentUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
 
@@ -314,4 +322,4 @@ const PositionPage = () => {
     )
 }
 
-export default PositionPage
+export default DepartmentPage

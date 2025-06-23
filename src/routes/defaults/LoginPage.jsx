@@ -9,7 +9,7 @@ import { LoginUser } from '../../apis/authApi';
 import Logo from '../../assets/log_usea.png';
 
 const LoginPage = () => {
-    const { isLoading, token, setToken } = useAuth();
+    const { isLoading, token, setToken, content } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -41,13 +41,13 @@ const LoginPage = () => {
                 <img
                     src={Logo}
                     alt='Logo'
-                    className='w-30 h-30 object-contain sm:w-34 sm:h-34 md:w-38 md:h-38'
+                    className='w-30 object-contain '
                 />
             </div>
-            <div className='bg-white p-6 rounded w-full max-w-md shadow sm:p-8'>
+            <div className='bg-white p-6 rounded w-full max-w-sm shadow sm:p-8'>
 
                 <h2 className='text-xl sm:text-2xl font-semibold text-center mb-6 flex items-center justify-center gap-2'>
-                    ចូលប្រើប្រាស់ប្រព័ន្ធគ្រប់គ្រង
+                    {content['loginToSystem']}
                 </h2>
 
                 <Form
@@ -61,7 +61,7 @@ const LoginPage = () => {
                     >
                         <Input
                             prefix={<UserOutlined className="site-form-item-icon" />}
-                            placeholder='ឈ្មោះ'
+                            placeholder={content['username']}
                             size='large'
                             onChange={e => setUsername(e.target.value)}
                         />
@@ -72,15 +72,11 @@ const LoginPage = () => {
                     >
                         <Input.Password
                             prefix={<LockOutlined className='site-form-item-icon' />}
-                            placeholder='លេខសម្ងាត់'
+                            placeholder={content['password']}
                             size='large'
                             onChange={e => setPassword(e.target.value)}
                             iconRender={visible => visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
                         />
-                    </Form.Item>
-
-                    <Form.Item name='remember' valuePropName='checked'>
-                        <Checkbox>ចងចាំខ្ញុំ</Checkbox>
                     </Form.Item>
 
                     <Form.Item>
@@ -90,7 +86,7 @@ const LoginPage = () => {
                             className='w-full'
                             size='large'
                         >
-                            ចូលប្រើប្រាស់
+                            {content['login']}
                         </Button>
                     </Form.Item>
                 </Form>

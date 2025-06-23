@@ -14,7 +14,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await api.get('/users/users');
+                // const res = await api.get('/users/users');
                 setLoading(false); // Permission okay, show dashboard
             } catch (err) {
                 const status = err.response?.status;

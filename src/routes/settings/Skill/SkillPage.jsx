@@ -7,17 +7,14 @@ import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import CustomBreadcrumb from '../../../components/utils/CustomBreadcrumb';
 import { useAuth } from '../../../components/contexts/AuthContext';
 import { useEffect } from 'react';
-import { deleteUserApi } from '../../../apis/userApi';
 import { ConfirmDeleteButton } from '../../../components/utils/ConfirmDeleteButton ';
 import { Styles } from '../../../components/utils/CsStyle';
 import { formatDateTime } from '../../../components/utils/utils';
 import FullScreenLoader from '../../../components/utils/FullScreenLoader';
-import { deletePositionApi, getPositionsApi } from '../../../apis/positionApi';
-import PositionCreatePage from './PositionCreatePage';
-import PositionUpdatePage from './PositionUpdatePage';
-// import UserUpdatePage from './UserUpdatePage';
-
-const PositionPage = () => {
+import SkillCreatePage from './SkillCreatePage';
+import SkillUpdatePage from './SkillUpdatePage';
+import { deleteSkillApi, getSkillsApi } from '../../../apis/skillApi';
+const SkillPage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -56,14 +53,14 @@ const PositionPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['positions'] }
+        { breadcrumbName: content['skills'] }
     ];
 
     useEffect(() => {
-        document.title = content['positions'];
+        document.title = content['skills'];
         const fetchData = async () => {
             try {
-                const response = await getPositionsApi();
+                const response = await getSkillsApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -99,7 +96,7 @@ const PositionPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deletePositionApi(id); // call the API
+            await deleteSkillApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -258,7 +255,7 @@ const PositionPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['positions']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['skills']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -298,14 +295,14 @@ const PositionPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['position']}`
-                            : `${content['update']} ${content['position']}`
+                            ? `${content['create']} ${content['newStart']} ${content['skill']}${content['newEnd']}`
+                            : `${content['update']} ${content['skill']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <PositionCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <SkillCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <PositionUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <SkillUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
 
@@ -314,4 +311,4 @@ const PositionPage = () => {
     )
 }
 
-export default PositionPage
+export default SkillPage

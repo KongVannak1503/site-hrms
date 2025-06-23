@@ -86,8 +86,8 @@ const CategoryPage = () => {
         if (!term) {
             setFilteredData(users);
         } else {
-            const filtered = users.filter((role) =>
-                role.name.toLowerCase().includes(term)
+            const filtered = users.filter((base) =>
+                base.title.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }

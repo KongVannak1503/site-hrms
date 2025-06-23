@@ -12,6 +12,10 @@ import UsersPage from './routes/settings/user/UsersPage'
 import UploadForm from './routes/defaults/UploadForm'
 import PositionPage from './routes/settings/position/PositionPage'
 import CategoryPage from './routes/settings/category/CategoryPage'
+import SkillPage from './routes/settings/Skill/SkillPage'
+import DepartmentPage from './routes/settings/department/DepartmentPage'
+import OrganizationPage from './routes/settings/organization/OrganizationPage'
+import EmployeePage from './routes/employee/EmployeePage'
 
 function App() {
   return (
@@ -28,6 +32,7 @@ function App() {
                 <Dashboard />
               }
             />
+            <Route path="/employee" element={<EmployeePage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
             <Route
@@ -49,6 +54,21 @@ function App() {
               path="/setting/categories"
               element={
                 <CategoryPage />
+              } />
+            <Route
+              path="/setting/skills"
+              element={
+                <SkillPage />
+              } />
+            <Route
+              path="/setting/Organization"
+              element={
+                <OrganizationPage />
+              } />
+            <Route
+              path="/setting/Departments"
+              element={
+                <DepartmentPage />
               } />
             <Route
               path="/upload"
