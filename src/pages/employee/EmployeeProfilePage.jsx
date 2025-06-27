@@ -1,22 +1,21 @@
 import React, { useState } from 'react'
-import UserCreate from './UserCreate'
-import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+// import UserCreate from './UserCreate'
+import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
-import ModalLgCenter from '../../../components/modals/ModalLgCenter';
-import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
-import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
-import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
-import { Styles } from '../../../utils/CsStyle';
-import { formatDateTime } from '../../../utils/utils';
-import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import UserUpdatePage from './UserUpdatePage';
-import { deleteUserApi, getUsersApi } from '../../../services/userApi';
+import EmployeeCreatePage from './EmployeeCreatePage';
+import { useAuth } from '../../contexts/AuthContext';
+import { deleteEmployeeApi, getEmployeesApi } from '../../services/employeeApi';
+import { formatDateTime } from '../../utils/utils';
+import { Styles } from '../../utils/CsStyle';
+import { ConfirmDeleteButton } from '../../components/button/ConfirmDeleteButton ';
+import ModalLgCenter from '../../components/modals/ModalLgCenter';
+import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
+import FullScreenLoader from '../../components/loading/FullScreenLoader';
+import uploadUrl from '../../services/uploadApi';
 
-const UsersPage = () => {
+const EmployeeProfilePage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -41,6 +40,7 @@ const UsersPage = () => {
         setSelectedRowKeys(newSelectedRowKeys);
     }
 
+
     const showCreateDrawer = () => {
         setActionForm('create');
         setSelectedUserId(null);
@@ -55,14 +55,14 @@ const UsersPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['users'] }
+        { breadcrumbName: content['employees'] }
     ];
 
     useEffect(() => {
-        document.title = content['users'];
+        document.title = content['employees'];
         const fetchData = async () => {
             try {
-                const response = await getUsersApi();
+                const response = await getEmployeesApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -81,14 +81,16 @@ const UsersPage = () => {
         };
         fetchData();
     }, [content]);
+    console.log(users);
+
 
     const handleSearch = (value) => {
         const term = value.trim().toLowerCase();
         if (!term) {
             setFilteredData(users);
         } else {
-            const filtered = users.filter((role) =>
-                role.name.toLowerCase().includes(term)
+            const filtered = users.filter((base) =>
+                base.title.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
@@ -98,29 +100,34 @@ const UsersPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteUserApi(id); // call the API
+            await deleteEmployeeApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
-            message.success('Role deleted successfully');
+            message.success('Deleted successfully');
         } catch (error) {
             console.error('Delete failed:', error);
-            message.error('Failed to delete role');
+            message.error('Failed to delete');
         }
     };
 
     const columns = [
         {
-            title: content['username'],
-            dataIndex: "username",
-            key: "username",
-            render: (text) => <span>{text}</span>,
+            title: content['image'],
+            dataIndex: "image_url",
+            key: "image_url",
+            render: (text, record) =>
+                <Avatar
+                    size={40}
+                    src={`${uploadUrl}/${record.image_url?.path}`}
+                />
         },
+
         {
-            title: content['role'],
-            dataIndex: "role",
-            key: "role",
-            render: (text, record) => <span>{record.role.name}</span>,
+            title: content['firstName'],
+            dataIndex: "first_name",
+            key: "first_name",
+            render: (text) => <span>{text}</span>,
         },
 
         {
@@ -129,7 +136,7 @@ const UsersPage = () => {
             key: "createdAt",
             render: (text, record) => <div>
                 <span>{formatDateTime(text)}</span>
-                <p>{record.createdBy ? `Created by: ${record.createdBy.username}` : ''}</p>
+                <p>{record.createdBy ? `Created by: ${record.createdBy?.username}` : ''}</p>
             </div>,
         },
         {
@@ -138,7 +145,7 @@ const UsersPage = () => {
             key: "isActive",
             render: (text) => {
                 const isActive = Boolean(text); // ensure it's a boolean
-                const color = isActive ? '#0b9ab0' : 'volcano';
+                const color = isActive ? 'geekblue' : 'volcano';
                 const label = isActive ? 'ACTIVE' : 'INACTIVE';
 
                 return (
@@ -148,7 +155,6 @@ const UsersPage = () => {
                 );
             }
         },
-
         {
             title: (
                 <span style={{ display: "flex", justifyContent: "center", width: "100%" }}>
@@ -219,22 +225,21 @@ const UsersPage = () => {
     const handleAddCreated = async (newUser) => {
         try {
             if (!newUser || !newUser._id) {
-                console.error("New user object does not contain _id:", newUser);
+                console.error("New object does not contain _id:", newUser);
                 return;
             }
             setFilteredData((prevData) => [newUser, ...prevData]);
             setUsers((prevData) => [newUser, ...prevData]);
 
             setOpen(false);
-            console.log(newUser);
 
         } catch (error) {
-            console.error("Error adding user:", error);
+            console.error("Error adding:", error);
         }
     };
     const handleUpdate = (updatedRole) => {
         if (!updatedRole || !updatedRole._id) {
-            console.error("Updated role object does not contain _id:", updatedRole);
+            console.error("Updated   object does not contain _id:", updatedRole);
             return;
         }
         setUsers((prevRoles) =>
@@ -265,7 +270,7 @@ const UsersPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['users']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['employees']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -279,7 +284,6 @@ const UsersPage = () => {
                     </div>
                 </div>
                 <Table
-                    className="custom-pagination custom-checkbox-table"
                     scroll={{ x: 'max-content' }}
                     rowSelection={rowSelection}
                     columns={columns}
@@ -306,14 +310,14 @@ const UsersPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['role']}`
-                            : `${content['update']} ${content['role']}`
+                            ? `${content['create']} ${content['newStart']} ${content['employee']}${content['newEnd']}`
+                            : `${content['update']} ${content['employee']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <UserCreate form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <EmployeeCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <UserUpdatePage onUserUpdated={handleUpdate} userId={selectedUserId} onCancel={closeDrawer} />
+                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalLgCenter>
 
@@ -322,4 +326,4 @@ const UsersPage = () => {
     )
 }
 
-export default UsersPage
+export default EmployeeProfilePage

@@ -32,18 +32,29 @@ const AppSider = ({ collapsed }) => {
             label: content['dashboard'],
         },
         {
-            key: '/employee',
-            icon: <LuUsers />,
-            label: content['employee'],
-        },
-        {
             key: 'recruiter',
             icon: <VideoCameraOutlined />,
             label: content['recruiter'],
             children: [
+                { key: '/job-posting', label: 'Job Posting' },
+                { key: '/applicants', label: 'Applicants' },
+                { key: '/applications', label: 'Applications' },
+                { key: '/tests', label: 'Tests' },
+                { key: '/interviews', label: 'Interviews' },
+                { key: '/evaluations', label: 'Evaluations' },
                 { key: '/recruit', label: content['recruit'], },
+
             ],
         },
+        {
+            key: '/employee',
+            icon: <LuUsers />,
+            label: content['employee'],
+            children: [
+                { key: '/employee', label: 'Employee' },
+            ]
+        },
+
 
         // {
         //     key: '/table',
@@ -126,10 +137,24 @@ const AppSider = ({ collapsed }) => {
         <>
             {/* Logo section */}
             <div
-                className='!bg-white !border-r !border-gray-200 dark:!border-gray-800 dark:!bg-gray-900'
+                className='contain-bg-sidebar !border-r !border-gray-200'
                 style={{ textAlign: 'center', padding: '10px 16px 16px' }}
             >
                 <img
+                    src={Logo
+                    }
+                    alt="Logo"
+                    className='mx-auto'
+                    style={{
+                        maxWidth: '100%',
+                        height: 90,
+                        objectFit: 'contain',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => navigate("/")}
+                />
+                {/* <img
                     src={
                         collapsed
                             ? Logo
@@ -144,8 +169,8 @@ const AppSider = ({ collapsed }) => {
                         cursor: 'pointer',
                     }}
                     onClick={() => navigate("/")}
-                />
-                {
+                /> */}
+                {/* {
                     collapsed ? '' :
 
                         <AutoComplete
@@ -166,33 +191,25 @@ const AppSider = ({ collapsed }) => {
                                 onChange={(e) => setSearchText(e.target.value)}
                             />
                         </AutoComplete>
-                }
+                } */}
 
             </div>
 
             {/* Main menu */}
             <Menu
-                theme='light'
-                className='!border-r !border-gray-200 dark:!border-gray-800'
+                theme='dark'
+                className='!border-r !border-gray-200'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}
                 items={employeeItems}
             />
 
-            {/* <Menu
-                theme='light'
-                className='!border-t !border-gray-200 dark:!border-gray-800 !border-r !border-l-0 !border-b-0'
-                mode="inline"
-                selectedKeys={[location.pathname]}
-                onClick={(e) => navigate(e.key)}
-                items={recruitmentItems}
-            /> */}
 
             {/* Settings menu with top border */}
             <Menu
-                theme='light'
-                className='!border-t !border-gray-200 dark:!border-gray-800 !border-r !border-l-0 !border-b-0'
+                theme='dark'
+                className='!border-t !border-gray-200 !border-r !border-l-0 !border-b-0'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}

@@ -11,7 +11,12 @@ export const getEmployeeApi = async (id) => {
 };
 
 export const createEmployeeApi = async (userData) => {
-    const res = await api.post(`/employees`, userData);
+
+    const res = await api.post(`/employees`, userData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
     return res.data;
 };
 

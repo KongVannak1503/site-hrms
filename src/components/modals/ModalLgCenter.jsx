@@ -29,6 +29,7 @@ const ModalLgCenter = ({
             footer={null}
             zIndex={2000}
             getContainer={false}
+            maskClosable={false}
             styles={{
                 body: {
                     maxHeight: '85vh',

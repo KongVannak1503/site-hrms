@@ -1,29 +1,41 @@
 @import "tailwindcss";
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+/* @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *)); */
 
 @font-face {
   font-family: 'Siemreap';
   src: url('/src/assets/fonts/Siemreap-Regular.ttf') format('truetype');
 }
 
+/* 
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
-    @apply text-gray-900 dark:!text-white/90;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-gray-900 dark: !text-white/90;
   }
 
-   p,a, blockquote, strong, em{
-    @apply text-gray-700 dark:!text-gray-400;
+  p,
+  a,
+  blockquote,
+  strong,
+  em {
+    @apply text-gray-700 dark: !text-gray-400;
   }
-  
+
   .breadcrumb-custom :where(.ant-breadcrumb-link, .ant-breadcrumb-separator) {
     @apply text-gray-700 dark:text-gray-400;
   }
+
   .breadcrumb-custom :where(.ant-breadcrumb-link):hover {
     @apply text-black dark:text-white/90;
   }
 
-}
+} */
 
 /* 
 :root {

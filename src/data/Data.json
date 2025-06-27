@@ -17,6 +17,13 @@
         "employee": "Employee ",
         "employees": "Employees ",
         "employeeID": "Employee ID ",
+        "employeeRole": "Employee Role",
+        "employeeType": "Employee Type",
+        "employeeStatus": "Employee Status",
+        "dateOfJoining": "Date Of Joining",
+        "personalDetail": "Personal Detail ",
+        "relationship": "Relationship",
+        "image": "Image",
 
         "position": "Position ",
         "positions": "Positions ",
@@ -47,6 +54,8 @@
         "uploadImage": "Upload Image",
         "phone": "Phone",
         "logo": "Logo",
+        "designations": "Designations",
+        "designation": "Designation",
 
         "recruiter": "Recruiter",
         "recruit": "Recruit",
@@ -101,7 +110,7 @@
         "roles": "តួនាទី",
         "status": "ស្ដានភាព",
 
-        "employee": "បុគ្គលិក",
+        "employee": "ការគ្រប់គ្រងបុគ្គលិក",
         "employees": "បុគ្គលិក",
 
         "position": "មុខតំណែង",
@@ -130,7 +139,7 @@
         "phone": "ទូរស័ព្ទ",
         "logo": "ស្លាកសញ្ញា",
 
-        "recruiter": "អ្នកជ្រើសរើសបុគ្គលិក",
+        "recruiter": "ការជ្រើសរើសបុគ្គលិក",
         "recruit": "ជ្រើសរើសបុគ្គលិក",
 
         "departments": "នាយកដ្ឋាន",

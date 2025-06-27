@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
-import { Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
@@ -13,6 +13,7 @@ import { ConfirmDeleteButton } from '../../components/button/ConfirmDeleteButton
 import ModalLgCenter from '../../components/modals/ModalLgCenter';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 import FullScreenLoader from '../../components/loading/FullScreenLoader';
+import uploadUrl from '../../services/uploadApi';
 
 const EmployeePage = () => {
     const { isLoading, content } = useAuth();
@@ -38,6 +39,7 @@ const EmployeePage = () => {
         // console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     }
+
 
     const showCreateDrawer = () => {
         setActionForm('create');
@@ -79,6 +81,8 @@ const EmployeePage = () => {
         };
         fetchData();
     }, [content]);
+    console.log(users);
+
 
     const handleSearch = (value) => {
         const term = value.trim().toLowerCase();
@@ -109,9 +113,20 @@ const EmployeePage = () => {
 
     const columns = [
         {
-            title: content['title'],
-            dataIndex: "title",
-            key: "title",
+            title: content['image'],
+            dataIndex: "image_url",
+            key: "image_url",
+            render: (text, record) =>
+                <Avatar
+                    size={40}
+                    src={`${uploadUrl}/${record.image_url?.path}`}
+                />
+        },
+
+        {
+            title: content['firstName'],
+            dataIndex: "first_name",
+            key: "first_name",
             render: (text) => <span>{text}</span>,
         },
 
@@ -260,7 +275,7 @@ const EmployeePage = () => {
                     <div className='flex items-center gap-3'>
                         <div>
                             <Input
-                                size="large"
+                                // size="large"
                                 placeholder={content['searchAction']}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />

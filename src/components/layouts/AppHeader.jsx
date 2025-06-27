@@ -3,6 +3,8 @@ import { Avatar, Button, Dropdown, Layout, Select, Space } from 'antd'
 import { useContext } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { logout } from '../../utils/auth'
+import { MdMenu } from "react-icons/md";
+import { Styles } from '../../utils/CsStyle'
 
 const { Header } = Layout
 
@@ -70,22 +72,28 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
 
 
     return (
-        <Header className='flex justify-between !bg-white !border-b !border-gray-200 dark:!border-gray-800 dark:!bg-gray-900' style={{ padding: 0, paddingRight: 10 }}>
+        <Header className='flex justify-between !bg-white !border-b !border-gray-200' style={{ padding: 0, paddingRight: 10 }}>
             <div>
                 <Button
                     type="text"
-                    className='text-gray-700 dark:!text-gray-400'
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                    className='text-gray-700 dark:!text-gray-400 flex items-center !pt-2'
+                    icon={<MdMenu size={25} />}
                     onClick={toggle}
                     style={{
-                        fontSize: 16,
                         width: 64,
                         height: 64,
                     }}
                 />
                 {/* You can optionally change button behavior or style if isMobile is true */}
             </div>
-            <div className='pt-1 flex items-center'>
+            <div className='flex items-center'>
+                <div>
+                    <button>
+                        <span className={Styles.btnInfoSm}>
+                            People Quit
+                        </span>
+                    </button>
+                </div>
                 <Select
                     value={language}
                     onChange={setLanguage}

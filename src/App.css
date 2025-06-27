@@ -1,43 +1,262 @@
-
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  --layout-sider-background: #17a2b8;
+  --layout-sider-color: white;
+  --sidebar-hover-bg: #117b8b38;
+  --sidebar-selected-bg: #1fc8e3;
+  --sidebar-selected-color: white;
+  --layout-sub-color: rgba(255, 255, 255, 0.744);
+  --table-check-color: rgba(11, 154, 176, 0.15);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Sidebar (ant-menu-dark) background and text */
+.ant-menu-dark {
+  background-color: var(--layout-sider-background) !important;
+  color: var(--layout-sider-color) !important;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.contain-bg-sidebar {
+  background-color: var(--layout-sider-background) !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Sidebar menu items */
+.ant-menu-dark .ant-menu-item,
+.ant-menu-dark .ant-menu-item a {
+  color: var(--layout-sider-color) !important;
+  background-color: transparent !important;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.card {
-  padding: 2em;
+/* Sidebar menu items hover and focus */
+.ant-menu-dark .ant-menu-item:hover,
+.ant-menu-dark .ant-menu-item:focus {
+  background-color: var(--sidebar-hover-bg) !important;
+  color: var(--sidebar-selected-color) !important;
 }
 
-.read-the-docs {
-  color: #888;
-} */
+/* Sidebar selected menu item */
+.ant-menu-dark .ant-menu-item-selected {
+  background-color: var(--sidebar-selected-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+/* Sidebar selected menu item hover (optional) */
+.ant-menu-dark .ant-menu-item-selected:hover {
+  background-color: var(--sidebar-selected-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+/* Submenu arrow color */
+.ant-menu-dark .ant-menu-submenu-arrow {
+  color: var(--layout-sider-color) !important;
+  transition: color 0.3s;
+}
+
+/* Submenu arrow hover/focus */
+.ant-menu-dark .ant-menu-submenu:hover>.ant-menu-submenu-title .ant-menu-submenu-arrow,
+.ant-menu-dark .ant-menu-submenu:focus>.ant-menu-submenu-title .ant-menu-submenu-arrow {
+  color: var(--sidebar-selected-color) !important;
+}
+
+/* Dropdown submenu (popup) background and text */
+.ant-dropdown-menu-dark {
+  background-color: var(--layout-sider-background) !important;
+  color: var(--layout-sider-color) !important;
+  border: none !important;
+}
+
+/* Dropdown submenu items */
+.ant-dropdown-menu-dark .ant-dropdown-menu-item,
+.ant-dropdown-menu-dark .ant-dropdown-menu-item a {
+  color: var(--layout-sider-color) !important;
+  background-color: transparent !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dropdown submenu items hover and focus */
+.ant-dropdown-menu-dark .ant-dropdown-menu-item:hover,
+.ant-dropdown-menu-dark .ant-dropdown-menu-item:focus {
+  background-color: var(--sidebar-hover-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+/* Dropdown submenu selected item */
+.ant-dropdown-menu-dark .ant-dropdown-menu-item-selected {
+  background-color: var(--sidebar-selected-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+.ant-dropdown-menu-dark .ant-dropdown-menu-item-selected:hover {
+  background-color: var(--sidebar-selected-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+.ant-menu-dark .ant-menu-sub {
+  background-color: var(--layout-sider-background) !important;
+}
+
+/* Submenu items */
+.ant-menu-dark .ant-menu-sub .ant-menu-item {
+  color: var(--layout-sider-color) !important;
+  background-color: transparent !important;
+}
+
+/* Submenu items hover */
+.ant-menu-dark .ant-menu-sub .ant-menu-item:hover {
+  background-color: var(--sidebar-hover-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+/* Submenu selected item */
+.ant-menu-dark .ant-menu-sub .ant-menu-item-selected {
+  background-color: var(--sidebar-selected-bg) !important;
+  color: var(--sidebar-selected-color) !important;
+}
+
+.ant-modal-header {
+  box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  position: relative;
+  padding-bottom: 20px !important;
+}
+
+.ant-menu-dark .ant-menu-sub .ant-menu-item {
+  color: var(--layout-sub-color) !important;
+  /* this is white */
+}
+
+
+/* Change border and hover of pagination items */
+.custom-pagination .ant-pagination-item {
+  border: 1px solid var(--layout-sider-background) !important;
+}
+
+.custom-pagination .ant-pagination-item:hover,
+.custom-pagination .ant-pagination-item-active {
+  border-color: var(--layout-sider-background) !important;
+  color: var(--layout-sider-background) !important;
+}
+
+/* For normal (not active) page numbers */
+.custom-pagination .ant-pagination-item a {
+  color: var(--layout-sider-background) !important;
+}
+
+/* For hover */
+.custom-pagination .ant-pagination-item:hover a {
+  color: var(--layout-sider-background) !important;
+}
+
+/* For active page number */
+.custom-pagination .ant-pagination-item-active a {
+  color: var(--layout-sider-background) !important;
+  font-weight: 600;
+}
+
+
+/* Checked state */
+.custom-checkbox-table .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #0b9ab0 !important;
+  border-color: #0b9ab0 !important;
+}
+
+/* Hovered checkbox */
+.custom-checkbox-table .ant-checkbox:hover .ant-checkbox-inner {
+  border-color: #0b9ab0 !important;
+}
+
+/* Indeterminate state (Select All half-checked) */
+.custom-checkbox-table .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+  background-color: #0b9ab0 !important;
+  border-color: #0b9ab0 !important;
+}
+
+.custom-checkbox-table .ant-checkbox-indeterminate .ant-checkbox-inner {
+  border-color: #0b9ab0 !important;
+}
+
+:root {
+  --form-focus-color: #0b9ab0;
+}
+
+/* Input fields focus & hover */
+.ant-input:focus,
+.ant-input-focused,
+.ant-input:hover {
+  border-color: var(--form-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
+}
+
+/* Input wrapper (icons inside input) focus & hover */
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused,
+.ant-input-affix-wrapper:hover {
+  border-color: var(--form-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
+}
+
+/* Select components focus & hover */
+.ant-select-focused .ant-select-selector,
+.ant-select:hover .ant-select-selector {
+  border-color: var(--form-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
+}
+
+/* DatePicker and other pickers focus & hover */
+.ant-picker-focused,
+.ant-picker:hover {
+  border-color: var(--form-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
+}
+
+/* TextArea focus & hover */
+.ant-input-textarea:focus,
+.ant-input-textarea-focused,
+.ant-input-textarea:hover {
+  border-color: var(--form-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
+}
+
+
+/* Checkbox checked color */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--form-focus-color) !important;
+  border-color: var(--form-focus-color) !important;
+}
+
+/* Checkbox checked hover */
+.ant-checkbox-wrapper:hover .ant-checkbox-inner,
+.ant-checkbox:hover .ant-checkbox-inner {
+  border-color: var(--form-focus-color) !important;
+}
+
+/* Checkbox focus outline */
+.ant-checkbox-input:focus+.ant-checkbox-inner {
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2);
+}
+
+/* Switch checked background */
+.ant-switch-checked {
+  background-color: var(--form-focus-color) !important;
+  border-color: var(--form-focus-color) !important;
+}
+
+/* Switch focus outline */
+.ant-switch:focus {
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2);
+}
+
+/* Optional: Switch hover border */
+.ant-switch:hover {
+  border-color: var(--form-focus-color);
+}
+
+
+/* Selected row background override */
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-row-selected td {
+  background-color: var(--table-check-color) !important;
+}
+
+/* Selected row hover override */
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-row-selected:hover td {
+  background-color: var(--table-check-color) !important;
+}

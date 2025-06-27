@@ -22,8 +22,6 @@ const CategoryCreatePage = ({ form, onCancel, onUserCreated }) => {
                 isActive,
             };
 
-            console.log(values);
-
             const response = await createCategoryApi(formData);
             message.success('Created successfully!');
 

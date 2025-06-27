@@ -10,7 +10,7 @@ const { Header, Sider, Content, Footer } = Layout;
 
 const MainLayout = () => {
     const siderWidth = 250;
-    const headerHeight = 64;
+    const headerHeight = 56;
     const isMobile = useBreakpoint(768);
     const collapsedWidth = isMobile ? 0 : 80;          // true if viewport < 768px
     const [collapsed, setCollapsed] = useState(isMobile);
@@ -29,14 +29,13 @@ const MainLayout = () => {
                 onCollapse={(collapse) => setCollapsed(collapse)}
                 onBreakpoint={(broken) => setCollapsed(broken)}
                 trigger={null}
-                className='!border-r !border-gray-200 dark:!border-r dark:!border-gray-800'
+                className='!border-r contain-bg-sidebar !border-gray-200 dark:!border-r dark:!border-gray-800'
                 style={{
                     position: isMobile ? 'fixed' : 'fixed',
                     top: 0,
                     left: 0,
                     height: '100vh',
                     zIndex: 1000,
-                    background: '#fff',
                     overflow: 'auto',
                 }}
             >
@@ -53,6 +52,7 @@ const MainLayout = () => {
             )}
             {/* Fixed Header */}
             <Header
+                className='!shadow'
                 style={{
                     position: 'fixed',
                     top: 0,
@@ -62,6 +62,7 @@ const MainLayout = () => {
                     transition: 'all 0.3s ease',
                     zIndex: 99,
                     padding: 0,
+                    overflow: 'hidden'
                 }}
             >
                 <AppHeader
@@ -81,7 +82,7 @@ const MainLayout = () => {
                 <Content
                     style={{
                         padding: 24,
-                        backgroundColor: '#f5f5f5',
+                        backgroundColor: '#f6f7f9',
                     }}
                 >
                     <Outlet />
