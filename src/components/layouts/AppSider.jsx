@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Logo from '../../assets/log_usea.png';
 import LogoTitle from '../../assets/usea-title-1.png';
 import { useAuth } from '../../contexts/AuthContext';
+import moment from 'moment';
 const { Search } = Input;
 
 const AppSider = ({ collapsed }) => {
@@ -47,9 +48,9 @@ const AppSider = ({ collapsed }) => {
             ],
         },
         {
-            key: '/employee',
+            key: '/employees',
             icon: <LuUsers />,
-            label: content['employee'],
+            label: content['employees'],
             children: [
                 { key: '/employee', label: 'Employee' },
             ]
@@ -81,13 +82,27 @@ const AppSider = ({ collapsed }) => {
             key: 'settings',
             icon: <SettingOutlined />,
             label: content['settings'], children: [
-                { key: '/setting/users', label: content['user'] },
-                { key: '/setting/roles', label: content['roles'] },
+                {
+                    key: '/setting/user', label: `${content['user']} & ${content['role']}`, children: [
+                        { key: '/setting/user/index', label: content['users'] },
+                        { key: '/setting/user/role', label: content['roles'] },
+                    ]
+                },
+                {
+                    key: '/setting/employees', label: content['employees'], children: [
+                        { key: '/setting/employee/level', label: content['city'] },
+                        { key: '/setting/employee/city', label: content['city'] },
+                        { key: '/setting/employee/district', label: content['district'] },
+                        { key: '/setting/employee/commune', label: content['commune'] },
+                        { key: '/setting/employee/village', label: content['village'] },
+                    ]
+                },
                 { key: '/setting/positions', label: content['positions'] },
                 { key: '/setting/categories', label: content['categories'] },
                 { key: '/setting/skills', label: content['skills'] },
                 { key: '/setting/departments', label: content['departments'] },
                 { key: '/setting/organization', label: content['organizations'] },
+
 
             ],
         },

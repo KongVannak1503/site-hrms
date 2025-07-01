@@ -28,10 +28,11 @@ const ModalMdCenter = ({
             width={width}
             footer={null}
             zIndex={2000}
+            maskClosable={false}
             getContainer={false}
             styles={{
                 body: {
-                    maxHeight: '85vh',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
                     overflowX: 'hidden'
                 },

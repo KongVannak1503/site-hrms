@@ -4,16 +4,20 @@ import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getRolesApi } from '../../../services/roleApi';
 import { createUserApi } from '../../../services/userApi';
+import { getEmployeesApi } from '../../../services/employeeApi';
 
 const UserCreate = ({ form, onCancel, onUserCreated }) => {
     const { content } = useAuth();
     const [roles, setRoles] = useState([]);
+    const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
-        form.resetFields();
 
+        form.resetFields();
         const fetchData = async () => {
             try {
+                const resEmployees = await getEmployeesApi();
+                setEmployees(resEmployees);
                 const resRoles = await getRolesApi();
                 setRoles(resRoles);
             } catch (error) {
@@ -69,7 +73,7 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input size="large" />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     name="email"
@@ -81,7 +85,7 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input size="large" />
+                    <Input />
                 </Form.Item>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -96,20 +100,19 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                     }]}
                 >
                     <Select
-                        defaultValue="lucy"
-                        size="large"
-                        options={[
-                            {
-                                label: <span>manager</span>,
-                                title: 'manager',
-                                options: [
-                                    { label: <span>Jack</span>, value: 'Jack' },
-                                    { label: <span>Lucy</span>, value: 'Lucy' },
-                                ],
-                            },
-
-                        ]}
-                    />
+                        showSearch
+                        optionFilterProp="children"
+                        style={{ width: '100%' }}
+                        filterOption={(input, option) =>
+                            (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                    >
+                        {employees.map((employee) => (
+                            <Select.Option key={employee._id || employee.id} value={employee._id}>
+                                {`${employee.last_name_kh} ${employee.first_name_kh} `}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -123,7 +126,7 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input size="large" type="password" />
+                    <Input type="password" />
                 </Form.Item>
                 <Form.Item
                     name="confirm"
@@ -145,7 +148,7 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                     ]}
                     label={content['confirm']}
                 >
-                    <Input size="large" type="password" />
+                    <Input type="password" />
                 </Form.Item>
 
             </div>
@@ -161,7 +164,7 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
                                 .replace(/^./, str => str.toUpperCase())
                         }]}
                     >
-                        <Select size='large'>
+                        <Select>
                             {roles.map((role) => (
                                 <Select.Option key={role._id} value={role._id}>
                                     {role.name}

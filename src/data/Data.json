@@ -61,7 +61,11 @@
         "recruit": "Recruit",
 
         "firstName": "First Name",
+        "firstNameKh": "First Name (KH)",
+        "firstNameEn": "First Name (EN)",
         "lastName": "Last Name",
+        "lastNameKh": "Last Name (KH)",
+        "lastNameEn": "Last Name (EN)",
         "gender": "Gender",
         "height": "Height",
         "dateOfBirth": "Date 0f Birth",
@@ -93,6 +97,12 @@
         "loginToSystem": "Login To System",
         "addNew": "Add New",
         "searchAction": "Search...",
+        "city": "City",
+        "province": "Province",
+        "district": "District",
+        "commune": "Commune",
+        "village": "Village",
+
         "createdAt": "Created at"
     },
     "khmer":{
@@ -109,6 +119,13 @@
         "role": "តួនាទី",
         "roles": "តួនាទី",
         "status": "ស្ដានភាព",
+
+        "firstName": "នាម​ ខ្លួន",
+        "firstNameKh": "នាម​ ខ្លួនជាភាសាខ្មែរ",
+        "firstNameEn": "នាម​ ខ្លួនជាភាសាអង់គ្លេស",
+        "lastName": "នាមត្រកូល",
+        "lastNameKh": "នាមត្រកូលជាភាសាខ្មែរ",
+        "lastNameEn": "នាមត្រកូលជាភាសាអង់គ្លេស",
 
         "employee": "ការគ្រប់គ្រងបុគ្គលិក",
         "employees": "បុគ្គលិក",

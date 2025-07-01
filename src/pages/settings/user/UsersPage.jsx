@@ -15,6 +15,7 @@ import { formatDateTime } from '../../../utils/utils';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import UserUpdatePage from './UserUpdatePage';
 import { deleteUserApi, getUsersApi } from '../../../services/userApi';
+import StatusTag from '../../../components/style/StatusTag';
 
 const UsersPage = () => {
     const { isLoading, content } = useAuth();
@@ -87,8 +88,9 @@ const UsersPage = () => {
         if (!term) {
             setFilteredData(users);
         } else {
-            const filtered = users.filter((role) =>
-                role.name.toLowerCase().includes(term)
+            const filtered = users.filter((base) =>
+                (base.username || '').toLowerCase().includes(term) ||
+                (base.role.name || '').toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
@@ -136,17 +138,7 @@ const UsersPage = () => {
             title: content['status'],
             dataIndex: "isActive",
             key: "isActive",
-            render: (text) => {
-                const isActive = Boolean(text); // ensure it's a boolean
-                const color = isActive ? '#0b9ab0' : 'volcano';
-                const label = isActive ? 'ACTIVE' : 'INACTIVE';
-
-                return (
-                    <Tag color={color} key={String(text)}>
-                        {label}
-                    </Tag>
-                );
-            }
+            render: (value) => <StatusTag value={value} />,
         },
 
         {
@@ -270,7 +262,6 @@ const UsersPage = () => {
                     <div className='flex items-center gap-3'>
                         <div>
                             <Input
-                                size="large"
                                 placeholder={content['searchAction']}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
@@ -300,7 +291,7 @@ const UsersPage = () => {
                     }}
                 />
 
-                <ModalLgCenter
+                <ModalMdCenter
                     open={open}
                     onOk={() => setOpen(false)}
                     onCancel={closeDrawer}
@@ -315,7 +306,7 @@ const UsersPage = () => {
                     ) : (
                         <UserUpdatePage onUserUpdated={handleUpdate} userId={selectedUserId} onCancel={closeDrawer} />
                     )}
-                </ModalLgCenter>
+                </ModalMdCenter>
 
             </Content >
         </div >

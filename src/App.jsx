@@ -15,6 +15,13 @@ import EmployeePage from './pages/employee/EmployeePage'
 import Authorized from './components/errors/Authorized'
 import NotFound from './components/errors/NotFound'
 import ProtectedRoute from './hooks/ProtectedRoute'
+import EmployeeCreatePage from './pages/employee/EmployeeCreatePage'
+import CityPage from './pages/settings/employee/city/CityPage'
+import DistrictPage from './pages/settings/employee/district/DistrictPage'
+import CommunePage from './pages/settings/employee/commune/CommunePage'
+import VillagePage from './pages/settings/employee/village/VillagePage'
+import EmployeeUpdatePage from './pages/employee/EmployeeUpdatePage'
+import EducationLevelPage from './pages/settings/employee/education-lavel/EducationLevelPage'
 
 function App() {
   return (
@@ -32,15 +39,17 @@ function App() {
               }
             />
             <Route path="/employee" element={<EmployeePage />} />
+            <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
+            <Route path="/employee/create" element={<EmployeeCreatePage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
             <Route
-              path="/setting/users"
+              path="/setting/user/index"
               element={
                 <UsersPage />
               } />
             <Route
-              path="/setting/roles"
+              path="/setting/user/role"
               element={
                 <RolesPage />
               } />
@@ -56,6 +65,31 @@ function App() {
                 <SkillPage />
               } />
             <Route
+              path="/setting/employee/level"
+              element={
+                <EducationLevelPage />
+              } />
+            <Route
+              path="/setting/employee/city"
+              element={
+                <CityPage />
+              } />
+            <Route
+              path="/setting/employee/district"
+              element={
+                <DistrictPage />
+              } />
+            <Route
+              path="/setting/employee/commune"
+              element={
+                <CommunePage />
+              } />
+            <Route
+              path="/setting/employee/village"
+              element={
+                <VillagePage />
+              } />
+            <Route
               path="/setting/Organization"
               element={
                 <OrganizationPage />
@@ -65,6 +99,7 @@ function App() {
               element={
                 <DepartmentPage />
               } />
+
             <Route
               path="/upload"
               element={

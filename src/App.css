@@ -180,7 +180,7 @@
 
 /* Input fields focus & hover */
 .ant-input:focus,
-.ant-input-focused,
+/* .ant-input-focused, */
 .ant-input:hover {
   border-color: var(--form-focus-color) !important;
   box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
@@ -259,4 +259,33 @@
 /* Selected row hover override */
 .ant-table-wrapper .ant-table-tbody>tr.ant-table-row-selected:hover td {
   background-color: var(--table-check-color) !important;
+}
+
+.custom-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #17a2b8 !important;
+}
+
+.custom-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--layout-sider-background) !important;
+  /* active tab text */
+}
+
+.custom-tabs .ant-tabs-ink-bar {
+  background-color: var(--layout-sider-background) !important;
+  /* ink bar color */
+}
+
+.custom-tabs .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: var(--layout-sider-background) !important;
+}
+
+
+/* Hover state */
+.ant-btn-dashed:hover {
+  border-color: var(--layout-sider-background) !important;
+  color: var(--layout-sider-background) !important;
+}
+
+.bg-default {
+  background-color: var(--layout-sider-background) !important;
 }

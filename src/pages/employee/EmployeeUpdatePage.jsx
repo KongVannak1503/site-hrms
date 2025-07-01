@@ -3,11 +3,14 @@ import { Form, Input, Row, Col, Switch, message, Select, Card, Upload, DatePicke
 import { Typography } from 'antd';
 import { useState } from 'react';
 import { FaRegImages } from "react-icons/fa";
-import { createEmployeeApi } from '../../services/employeeApi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Styles } from '../../utils/CsStyle';
 import { getDepartmentsApi } from '../../services/departmentApi';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { getEmployeeApi, updateEmployeeApi } from '../../services/employeeApi';
+import moment from 'moment';
+import uploadUrl from '../../services/uploadApi';
+import { useParams } from 'react-router-dom';
 import { genderOptions } from '../../data/Gender';
 import EmployeePersonalTab from './EmployeePersonalTab ';
 import EmployeeEducationTab from './EmployeeEducationTab';
@@ -17,23 +20,82 @@ import { getCommunesViewApi } from '../../services/communeApi';
 import { getVillagesViewApi } from '../../services/villageApi';
 import EmployeeHistoryPage from './EmployeeHistoryPage';
 
-const EmployeeCreatePage = () => {
+const EmployeeUpdatePage = () => {
+    const { id } = useParams();
     const { content } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
     const [fileList, setFileList] = useState([]);
     const [departments, setDepartments] = useState([]);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const { TabPane } = Tabs;
+    const [file, setFile] = useState(null);
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [communes, setCommunes] = useState([]);
     const [villages, setVillages] = useState([]);
-    const [previewUrl, setPreviewUrl] = useState(null);
-    const { TabPane } = Tabs;
-    const [file, setFile] = useState(null);
     const [activeTab, setActiveTab] = useState('personal');
 
     useEffect(() => {
-    }, [content]);
+        const fetchInitialData = async () => {
+            try {
+                const response = await getEmployeeApi(id);
+                if (response?.image_url?.path) {
+                    setPreviewUrl(uploadUrl + "/" + response.image_url.path);
+                }
+                form.setFieldsValue({
+                    employee_id: response.employee_id,
+                    last_name_kh: response.last_name_kh,
+                    first_name_kh: response.first_name_kh,
+                    last_name_en: response.last_name_en,
+                    first_name_en: response.first_name_en,
+                    gender: response.gender,
+                    height: response.height,
+                    date_of_birth: response.date_of_birth ? moment(response.date_of_birth) : null,
+                    place_of_birth: response.place_of_birth,
+                    nationality: response.nationality,
+                    id_card_no: response.id_card_no,
+                    passport_no: response.passport_no,
+                    present_address: response.present_address,
+                    permanent_address: response.permanent_address,
+                    emergency_contact: response.emergency_contact,
+                    family_members: response.family_member,
+                    city: response.city?._id || response.city,
+                    district: response.district?._id || response.district,
+                    commune: response.commune?._id || response.commune,
+                    village: response.village?._id || response.village,
+                    staff_relationships: response.staff_relationships?.map(item => ({
+                        ...item,
+                        date_of_birth: item.date_of_birth ? moment(item.date_of_birth) : null,
+                    })),
+                    language: response.language || [],
+                    general_education: response.general_education?.map(item => ({
+                        ...item,
+                        start_date: item.start_date ? moment(item.start_date) : null,
+                        end_date: item.end_date ? moment(item.end_date) : null,
+                    })) || [],
+                    short_course: response.short_course?.map(item => ({
+                        ...item,
+                        start_date: item.start_date ? moment(item.start_date) : null,
+                        end_date: item.end_date ? moment(item.end_date) : null,
+                    })) || [],
+                    employment_history: response.employment_history?.map(item => ({
+                        ...item,
+                        start_date: item.start_date ? moment(item.start_date) : null,
+                        end_date: item.end_date ? moment(item.end_date) : null,
+                    })) || [],
+                });
+            } catch (error) {
+                console.error('Failed to fetch employee data:', error);
+            }
+        };
+
+        if (id) {
+            fetchInitialData();
+        }
+    }, [id, content]);
+
+
 
     useEffect(() => {
         // Clean up preview URL to avoid memory leaks
@@ -63,6 +125,7 @@ const EmployeeCreatePage = () => {
                 const resVillages = await getVillagesViewApi();
                 setVillages(resVillages);
 
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -73,17 +136,15 @@ const EmployeeCreatePage = () => {
     const handleChange = ({ fileList: newFileList }) => {
         const latestFileList = newFileList.slice(-1);
         setFileList(latestFileList);
-
         const selectedFile = latestFileList[0]?.originFileObj;
 
         if (selectedFile) {
-            setFile(selectedFile); // ← make sure this is called
             setPreviewUrl(URL.createObjectURL(selectedFile));
         } else {
-            setFile(null); // ← clear file if none
             setPreviewUrl(null);
         }
     };
+
 
 
     const handleFinish = async (values) => {
@@ -98,6 +159,8 @@ const EmployeeCreatePage = () => {
             formData.append('last_name_kh', values.last_name_kh);
             formData.append('gender', values.gender || '');
             formData.append('height', values.height || '');
+            formData.append('id_card_no', values.id_card_no || '');
+            formData.append('passport_no', values.passport_no || '');
             formData.append('date_of_birth', values.date_of_birth);
             formData.append('place_of_birth', values.place_of_birth || '');
             formData.append('nationality', values.nationality || '');
@@ -107,9 +170,6 @@ const EmployeeCreatePage = () => {
             formData.append('commune', values.commune || '');
             formData.append('village', values.village || '');
             formData.append('isActive', values.isActive ?? true);
-
-            // Upload file if any
-            formData.append('file', file);
 
             // Nested objects (stringify before sending)
             formData.append('present_address', JSON.stringify(values.present_address || {}));
@@ -123,20 +183,22 @@ const EmployeeCreatePage = () => {
             formData.append('employment_history', JSON.stringify(values.employment_history || []));
             formData.append('general_education', JSON.stringify(values.general_education || []));
             formData.append('short_course', JSON.stringify(values.short_course || []));
+            formData.append('file', file);
+            if (fileList.length > 0 && fileList[0].originFileObj) {
+                formData.append('file', fileList[0].originFileObj);
+            }
 
-            // Submit to API
-            const res = await createEmployeeApi(formData);
-            message.success('Created successfully');
-            // form.resetFields();
+            // Call your update API with  and formData
+            const response = await updateEmployeeApi(id, formData);
+
+            message.success('User updated successfully!');
+            // onUserUpdated(response.data);
 
         } catch (error) {
-            console.error('Create error:', error);
-            message.error(error.response?.data?.message || 'Failed to create');
+            console.error('Error updating User:', error);
+            message.error('Failed to update User');
         }
     };
-
-
-
     const tabItems = [
         {
             key: 'personal',
@@ -167,6 +229,8 @@ const EmployeeCreatePage = () => {
             label: 'NSSF',
         },
     ];
+
+
     return (
         <div className="flex flex-col">
             {/* Fixed Tabs */}
@@ -229,4 +293,4 @@ const EmployeeCreatePage = () => {
     );
 };
 
-export default EmployeeCreatePage;
+export default EmployeeUpdatePage;

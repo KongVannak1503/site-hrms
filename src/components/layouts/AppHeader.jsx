@@ -1,6 +1,5 @@
 import { BulbOutlined, DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, Layout, Select, Space } from 'antd'
-import { useContext } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { logout } from '../../utils/auth'
 import { MdMenu } from "react-icons/md";
@@ -72,7 +71,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
 
 
     return (
-        <Header className='flex justify-between !bg-white !border-b !border-gray-200' style={{ padding: 0, paddingRight: 10 }}>
+        <Header className='flex justify-between !bg-white !border-b !border-gray-200' style={{ padding: 0, paddingRight: 10, height: 56, overflow: 'hidden' }}>
             <div>
                 <Button
                     type="text"
@@ -99,7 +98,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                     onChange={setLanguage}
                     variant="borderless"
                     suffixIcon={null}
-                    className="w-[50px]"
+                    className="w-[50px] !mx-3"
                 >
                     <Select.Option value="english">
                         <img

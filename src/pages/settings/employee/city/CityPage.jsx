@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
-import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
-import EmployeeCreatePage from './EmployeeCreatePage';
-import { useAuth } from '../../contexts/AuthContext';
-import { deleteEmployeeApi, getEmployeesApi } from '../../services/employeeApi';
-import { formatDateTime } from '../../utils/utils';
-import { Styles } from '../../utils/CsStyle';
-import { ConfirmDeleteButton } from '../../components/button/ConfirmDeleteButton ';
-import ModalLgCenter from '../../components/modals/ModalLgCenter';
-import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
-import FullScreenLoader from '../../components/loading/FullScreenLoader';
-import uploadUrl from '../../services/uploadApi';
+import CityCreatePage from './CityCreatePage';
+import CityUpdatePage from './CityUpdatePage';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { deleteCityApi, getCitiesApi } from '../../../../services/cityApi';
+import { formatDateTime } from '../../../../utils/utils';
+import { Styles } from '../../../../utils/CsStyle';
+import { ConfirmDeleteButton } from '../../../../components/button/ConfirmDeleteButton ';
+import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
+import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
+import ModalMdCenter from '../../../../components/modals/ModalMdCenter';
 
-const EmployeeProfilePage = () => {
+const CityPage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -40,7 +40,6 @@ const EmployeeProfilePage = () => {
         setSelectedRowKeys(newSelectedRowKeys);
     }
 
-
     const showCreateDrawer = () => {
         setActionForm('create');
         setSelectedUserId(null);
@@ -55,14 +54,14 @@ const EmployeeProfilePage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['employees'] }
+        { breadcrumbName: content['cities'] }
     ];
 
     useEffect(() => {
-        document.title = content['employees'];
+        document.title = content['cities'];
         const fetchData = async () => {
             try {
-                const response = await getEmployeesApi();
+                const response = await getCitiesApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -81,8 +80,6 @@ const EmployeeProfilePage = () => {
         };
         fetchData();
     }, [content]);
-    console.log(users);
-
 
     const handleSearch = (value) => {
         const term = value.trim().toLowerCase();
@@ -90,7 +87,7 @@ const EmployeeProfilePage = () => {
             setFilteredData(users);
         } else {
             const filtered = users.filter((base) =>
-                base.title.toLowerCase().includes(term)
+                base.name.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
@@ -100,7 +97,7 @@ const EmployeeProfilePage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteEmployeeApi(id); // call the API
+            await deleteCityApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -113,20 +110,9 @@ const EmployeeProfilePage = () => {
 
     const columns = [
         {
-            title: content['image'],
-            dataIndex: "image_url",
-            key: "image_url",
-            render: (text, record) =>
-                <Avatar
-                    size={40}
-                    src={`${uploadUrl}/${record.image_url?.path}`}
-                />
-        },
-
-        {
-            title: content['firstName'],
-            dataIndex: "first_name",
-            key: "first_name",
+            title: content['name'],
+            dataIndex: "name",
+            key: "name",
             render: (text) => <span>{text}</span>,
         },
 
@@ -270,7 +256,7 @@ const EmployeeProfilePage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['employees']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['cities']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -304,26 +290,26 @@ const EmployeeProfilePage = () => {
                     }}
                 />
 
-                <ModalLgCenter
+                <ModalMdCenter
                     open={open}
                     onOk={() => setOpen(false)}
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['employee']}${content['newEnd']}`
-                            : `${content['update']} ${content['employee']}`
+                            ? `${content['create']} ${content['newStart']} ${content['city']}${content['newEnd']}`
+                            : `${content['update']} ${content['city']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <EmployeeCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <CityCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <CityUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
-                </ModalLgCenter>
+                </ModalMdCenter>
 
             </Content >
         </div >
     )
 }
 
-export default EmployeeProfilePage
+export default CityPage

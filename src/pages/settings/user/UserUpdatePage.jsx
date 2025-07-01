@@ -4,10 +4,12 @@ import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getUserApi, updateUserApi } from '../../../services/userApi';
 import { getRolesApi } from '../../../services/roleApi';
+import { getEmployeesApi } from '../../../services/employeeApi';
 
 const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
     const { content } = useAuth();
     const [roles, setRoles] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [form] = Form.useForm();
     useEffect(() => {
 
@@ -18,10 +20,14 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                 const resRoles = await getRolesApi();
                 setRoles(resRoles);
 
+                const resEmployees = await getEmployeesApi();
+                setEmployees(resEmployees);
+
                 form.setFieldsValue({
                     username: user.username,
                     email: user.email,
                     role: user.role ? user.role._id : undefined,
+                    employeeId: user.employeeId ? user.employeeId._id : undefined,
                     isActive: user.isActive,
                 });
 
@@ -92,20 +98,19 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                     label={content['employee']}
                 >
                     <Select
-                        defaultValue="lucy"
-                        size="large"
-                        options={[
-                            {
-                                label: <span>manager</span>,
-                                title: 'manager',
-                                options: [
-                                    { label: <span>Jack</span>, value: 'Jack' },
-                                    { label: <span>Lucy</span>, value: 'Lucy' },
-                                ],
-                            },
-
-                        ]}
-                    />
+                        showSearch
+                        optionFilterProp="children"
+                        style={{ width: '100%' }}
+                        filterOption={(input, option) =>
+                            (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                    >
+                        {employees.map((employee) => (
+                            <Select.Option key={employee._id || employee.id} value={employee._id}>
+                                {`${employee.last_name_kh} ${employee.first_name_kh} `}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

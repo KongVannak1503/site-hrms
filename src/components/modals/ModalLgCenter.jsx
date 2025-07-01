@@ -32,7 +32,7 @@ const ModalLgCenter = ({
             maskClosable={false}
             styles={{
                 body: {
-                    maxHeight: '85vh',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
                 },
             }}

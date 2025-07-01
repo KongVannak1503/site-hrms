@@ -1,24 +1,21 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
-import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { EyeOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
-import EmployeeCreatePage from './EmployeeCreatePage';
-import { useAuth } from '../../contexts/AuthContext';
-import { deleteEmployeeApi, getEmployeesApi } from '../../services/employeeApi';
-import { formatDateTime } from '../../utils/utils';
-import { Styles } from '../../utils/CsStyle';
-import { ConfirmDeleteButton } from '../../components/button/ConfirmDeleteButton ';
-import ModalLgCenter from '../../components/modals/ModalLgCenter';
-import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
-import FullScreenLoader from '../../components/loading/FullScreenLoader';
-import uploadUrl from '../../services/uploadApi';
-import EmployeeUpdatePage from './EmployeeUpdatePage';
-import { useNavigate } from 'react-router-dom';
-import StatusTag from '../../components/style/StatusTag';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { formatDateTime } from '../../../../utils/utils';
+import { Styles } from '../../../../utils/CsStyle';
+import { ConfirmDeleteButton } from '../../../../components/button/ConfirmDeleteButton ';
+import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
+import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
+import ModalMdCenter from '../../../../components/modals/ModalMdCenter';
+import { deleteDistrictApi, getDistrictsApi } from '../../../../services/DistrictApi';
+import DistrictCreatePage from './DistrictCreatePage';
+import DistrictUpdatePage from './DistrictUpdatePage';
 
-const EmployeePage = () => {
+const DistrictPage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -30,7 +27,6 @@ const EmployeePage = () => {
         pageSize: 10,
         total: 0,
     });
-    const navigate = useNavigate();
 
     const [form] = Form.useForm();
 
@@ -44,7 +40,6 @@ const EmployeePage = () => {
         setSelectedRowKeys(newSelectedRowKeys);
     }
 
-
     const showCreateDrawer = () => {
         setActionForm('create');
         setSelectedUserId(null);
@@ -56,20 +51,17 @@ const EmployeePage = () => {
         setSelectedUserId(userId);
         setOpen(true);
     };
-    const handleView = (userId) => {
-        navigate(`/employee/update/${userId}`);
-    };
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['employees'] }
+        { breadcrumbName: content['district'] }
     ];
 
     useEffect(() => {
-        document.title = content['employees'];
+        document.title = content['district'];
         const fetchData = async () => {
             try {
-                const response = await getEmployeesApi();
+                const response = await getDistrictsApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -95,20 +87,17 @@ const EmployeePage = () => {
             setFilteredData(users);
         } else {
             const filtered = users.filter((base) =>
-                (base.first_name_en || '').toLowerCase().includes(term) ||
-                (base.first_name_kh || '').toLowerCase().includes(term) ||
-                (base.last_name_en || '').toLowerCase().includes(term) ||
-                (base.last_name_kh || '').toLowerCase().includes(term)
+                base.name.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
     };
-    const handleUpdateNav = (id) => {
-        navigate(`/employee/update/${id}`);
-    };
+
+
+
     const handleDelete = async (id) => {
         try {
-            await deleteEmployeeApi(id); // call the API
+            await deleteDistrictApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -121,35 +110,10 @@ const EmployeePage = () => {
 
     const columns = [
         {
-            title: content['image'],
-            dataIndex: "image_url",
-            key: "image_url",
-            render: (text, record) =>
-                <Avatar
-                    size={40}
-                    src={`${uploadUrl}/${record.image_url?.path}`}
-                />
-        },
-
-        {
-            title: content['firstName'],
-            dataIndex: "first_name",
-            key: "first_name",
-            render: (text, record) =>
-                <div>
-                    <p>{record.first_name_kh}</p>
-                    <p>{record.first_name_en}</p>
-                </div>,
-        },
-        {
-            title: content['lastName'],
-            dataIndex: "last_name",
-            key: "last_name",
-            render: (text, record) =>
-                <div>
-                    <p>{record.last_name_kh}</p>
-                    <p>{record.last_name_en}</p>
-                </div>,
+            title: content['name'],
+            dataIndex: "name",
+            key: "name",
+            render: (text) => <span>{text}</span>,
         },
 
         {
@@ -165,7 +129,17 @@ const EmployeePage = () => {
             title: content['status'],
             dataIndex: "isActive",
             key: "isActive",
-            render: (value) => <StatusTag value={value} />,
+            render: (text) => {
+                const isActive = Boolean(text); // ensure it's a boolean
+                const color = isActive ? '#0b9ab0' : 'volcano';
+                const label = isActive ? 'ACTIVE' : 'INACTIVE';
+
+                return (
+                    <Tag color={color} key={String(text)}>
+                        {label}
+                    </Tag>
+                );
+            }
         },
         {
             title: (
@@ -180,7 +154,7 @@ const EmployeePage = () => {
                         <button
                             className={Styles.btnEdit}
                             shape="circle"
-                            onClick={() => handleUpdateNav(record._id)}
+                            onClick={() => showUpdateDrawer(record._id)}
                         >
                             <FormOutlined />
                         </button>
@@ -264,11 +238,6 @@ const EmployeePage = () => {
         setOpen(false);
     };
 
-    const handleCreate = () => {
-        navigate('/employee/create');
-    };
-
-
 
     if (isLoading) {
         return <FullScreenLoader />;
@@ -287,21 +256,20 @@ const EmployeePage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['employees']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['district']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
                             <Input
-                                // size="large"
+                                size="large"
                                 placeholder={content['searchAction']}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </div>
-                        <button onClick={handleCreate} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['employee']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['district']}`}</button>
                     </div>
                 </div>
                 <Table
-                    className='custom-pagination custom-checkbox-table'
                     scroll={{ x: 'max-content' }}
                     rowSelection={rowSelection}
                     columns={columns}
@@ -322,26 +290,26 @@ const EmployeePage = () => {
                     }}
                 />
 
-                {/* <ModalLgCenter
+                <ModalMdCenter
                     open={open}
                     onOk={() => setOpen(false)}
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['employee']}${content['newEnd']}`
-                            : `${content['update']} ${content['employee']}`
+                            ? `${content['create']} ${content['newStart']} ${content['district']}${content['newEnd']}`
+                            : `${content['update']} ${content['district']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <EmployeeCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <DistrictCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <EmployeeUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <DistrictUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
-                </ModalLgCenter> */}
+                </ModalMdCenter>
 
             </Content >
         </div >
     )
 }
 
-export default EmployeePage
+export default DistrictPage

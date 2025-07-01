@@ -83,7 +83,7 @@ const LoginPage = () => {
                         <Button
                             type='primary'
                             htmlType='submit'
-                            className='w-full'
+                            className='w-full bg-default'
                             size='large'
                         >
                             {content['login']}

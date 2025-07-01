@@ -1,21 +1,20 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Typography } from 'antd';
-import { useAuth } from '../../components/contexts/AuthContext';
-import { getCategoryApi, updateCategoryApi } from '../../apis/categoryApi';
-import { Styles } from '../../components/utils/CsStyle';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { Styles } from '../../../../utils/CsStyle';
+import { getVillageApi, updateVillageApi } from '../../../../services/villageApi';
 
-const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
+const VillageUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const response = await getCategoryApi(dataId);
+            const response = await getVillageApi(dataId);
             form.setFieldsValue({
-                title: response.title,
-                description: response.description,
+                name: response.name,
                 isActive: response.isActive
             });
         }
@@ -25,12 +24,11 @@ const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const handleFinish = async (values) => {
         try {
             const formData = {
-                title: values.title,
-                description: values.description,
+                name: values.name,
                 isActive: values.isActive
             };
 
-            const response = await updateCategoryApi(dataId, formData);
+            const response = await updateVillageApi(dataId, formData);
             message.success('Updated successfully!');
             onUserUpdated(response.data);
         } catch (error) {
@@ -48,23 +46,18 @@ const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             autoComplete="off"
         >
             <Form.Item
-                name="title"
-                label={content['title']}
+                name="name"
+                label={content['name']}
                 rules={[{
                     required: true,
-                    message: `${content['please']}${content['enter']}${content['title']}`
+                    message: `${content['please']}${content['enter']}${content['name']}`
                         .toLowerCase()
                         .replace(/^./, str => str.toUpperCase())
                 }]}
             >
                 <Input size="large" />
             </Form.Item>
-            <Form.Item
-                name="description"
-                label={content['description']}
-            >
-                <Input.TextArea rows={4} />
-            </Form.Item>
+
             <Form.Item label={content['status']} name="isActive" valuePropName="checked">
                 <Switch />
             </Form.Item>
@@ -80,4 +73,4 @@ const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     );
 };
 
-export default CategoryUpdatePage;
+export default VillageUpdatePage;

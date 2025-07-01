@@ -3,8 +3,9 @@ import { Layout } from 'antd';
 import AppHeader from './AppHeader';
 import AppSider from './AppSider';
 import AppFooter from './AppFooter';
-import { Outlet } from 'react-router-dom';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { useShowTabHeader } from './TabHeader';
+import { Outlet } from 'react-router-dom';
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -15,9 +16,16 @@ const MainLayout = () => {
     const collapsedWidth = isMobile ? 0 : 80;          // true if viewport < 768px
     const [collapsed, setCollapsed] = useState(isMobile);
 
+    // Add paths here where you want to show TabHeader
+    const showTabHeader = useShowTabHeader();
+
     useEffect(() => {
-        setCollapsed(isMobile);
-    }, [isMobile]);
+        if (showTabHeader) {
+            setCollapsed(!isMobile);
+        } else {
+            setCollapsed(isMobile);
+        }
+    }, [isMobile, showTabHeader]);
 
     return (
         <Layout style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
@@ -62,13 +70,14 @@ const MainLayout = () => {
                     transition: 'all 0.3s ease',
                     zIndex: 99,
                     padding: 0,
-                    overflow: 'hidden'
+                    // overflow: 'hidden'
                 }}
             >
                 <AppHeader
                     collapsed={collapsed}
                     toggle={() => setCollapsed(!collapsed)}
                     isMobile={isMobile} />
+
             </Header>
             {/* Main Content + Footer */}
             <Layout
@@ -81,7 +90,7 @@ const MainLayout = () => {
             >
                 <Content
                     style={{
-                        padding: 24,
+                        padding: showTabHeader ? 0 : 24,
                         backgroundColor: '#f6f7f9',
                     }}
                 >
