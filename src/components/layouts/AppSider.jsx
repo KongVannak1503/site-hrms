@@ -53,6 +53,9 @@ const AppSider = ({ collapsed }) => {
             label: content['employees'],
             children: [
                 { key: '/employee', label: 'Employee' },
+                { key: '/employee/document', label: 'Document' },
+                { key: '/employee/book', label: 'Employee Book' },
+                { key: '/employee/labour-law', label: 'Labor Law' },
             ]
         },
 

@@ -22,6 +22,11 @@ import CommunePage from './pages/settings/employee/commune/CommunePage'
 import VillagePage from './pages/settings/employee/village/VillagePage'
 import EmployeeUpdatePage from './pages/employee/EmployeeUpdatePage'
 import EducationLevelPage from './pages/settings/employee/education-lavel/EducationLevelPage'
+import EmployeeDocumentPage from './pages/employee/document/EmployeeDocumentPage'
+import EmployeeEducationTab from './pages/employee/EmployeeEducationTab'
+import EmployeeHistoryPage from './pages/employee/EmployeeHistoryPage'
+import DocumentUploader from './pages/employee/document/EmployeeTest'
+import DocumentList from './pages/employee/document/DocumentList'
 
 function App() {
   return (
@@ -39,7 +44,13 @@ function App() {
               }
             />
             <Route path="/employee" element={<EmployeePage />} />
+            {/* <Route path="/employee/document" element={<EmployeeDocumentPage />} /> */}
+            <Route path="/employee/profile/:id" element={<EmployeeUpdatePage />} />
             <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
+            <Route path="/employee/education/:id" element={<EmployeeEducationTab />} />
+            <Route path="/employee/history/:id" element={<EmployeeHistoryPage />} />
+            <Route path="/employee/document/:id" element={<DocumentUploader />} />
+            <Route path="/employee/document-list/:id" element={<DocumentList />} />
             <Route path="/employee/create" element={<EmployeeCreatePage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
