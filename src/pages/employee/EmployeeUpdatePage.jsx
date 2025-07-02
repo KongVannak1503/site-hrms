@@ -19,6 +19,10 @@ import { getDistrictsViewApi } from '../../services/DistrictApi';
 import { getCommunesViewApi } from '../../services/communeApi';
 import { getVillagesViewApi } from '../../services/villageApi';
 import EmployeeHistoryPage from './EmployeeHistoryPage';
+import { getEducationLevelViewApi } from '../../services/educationLevelApi';
+import EmployeeDocumentTab from './EmployeeDocumentTab';
+import EmployeeNav from './EmployeeNav';
+import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 
 const EmployeeUpdatePage = () => {
     const { id } = useParams();
@@ -34,6 +38,7 @@ const EmployeeUpdatePage = () => {
     const [districts, setDistricts] = useState([]);
     const [communes, setCommunes] = useState([]);
     const [villages, setVillages] = useState([]);
+    const [levels, setLevels] = useState([]);
     const [activeTab, setActiveTab] = useState('personal');
 
     useEffect(() => {
@@ -68,22 +73,6 @@ const EmployeeUpdatePage = () => {
                         ...item,
                         date_of_birth: item.date_of_birth ? moment(item.date_of_birth) : null,
                     })),
-                    language: response.language || [],
-                    general_education: response.general_education?.map(item => ({
-                        ...item,
-                        start_date: item.start_date ? moment(item.start_date) : null,
-                        end_date: item.end_date ? moment(item.end_date) : null,
-                    })) || [],
-                    short_course: response.short_course?.map(item => ({
-                        ...item,
-                        start_date: item.start_date ? moment(item.start_date) : null,
-                        end_date: item.end_date ? moment(item.end_date) : null,
-                    })) || [],
-                    employment_history: response.employment_history?.map(item => ({
-                        ...item,
-                        start_date: item.start_date ? moment(item.start_date) : null,
-                        end_date: item.end_date ? moment(item.end_date) : null,
-                    })) || [],
                 });
             } catch (error) {
                 console.error('Failed to fetch employee data:', error);
@@ -124,6 +113,9 @@ const EmployeeUpdatePage = () => {
 
                 const resVillages = await getVillagesViewApi();
                 setVillages(resVillages);
+
+                const resLevel = await getEducationLevelViewApi();
+                setLevels(resLevel);
 
 
             } catch (error) {
@@ -176,13 +168,7 @@ const EmployeeUpdatePage = () => {
             formData.append('permanent_address', JSON.stringify(values.permanent_address || {}));
             formData.append('family_members', JSON.stringify(values.family_members || []));
             formData.append('emergency_contact', JSON.stringify(values.emergency_contact || []));
-            formData.append('staff_relationships', JSON.stringify(values.staff_relationships || []));
 
-            // Education & History arrays
-            formData.append('language', JSON.stringify(values.language || []));
-            formData.append('employment_history', JSON.stringify(values.employment_history || []));
-            formData.append('general_education', JSON.stringify(values.general_education || []));
-            formData.append('short_course', JSON.stringify(values.short_course || []));
             formData.append('file', file);
             if (fileList.length > 0 && fileList[0].originFileObj) {
                 formData.append('file', fileList[0].originFileObj);
@@ -199,37 +185,12 @@ const EmployeeUpdatePage = () => {
             message.error('Failed to update User');
         }
     };
-    const tabItems = [
-        {
-            key: 'personal',
-            label: 'Personal Data',
-        },
-        {
-            key: 'education',
-            label: 'Education',
-        },
-        {
-            key: 'history',
-            label: 'Employment History',
-        },
-        {
-            key: 'document',
-            label: 'Document',
-        },
-        {
-            key: 'employment_book',
-            label: 'Employment Book',
-        },
-        {
-            key: 'labour_law',
-            label: 'Labour Law',
-        },
-        {
-            key: 'nssf',
-            label: 'NSSF',
-        },
-    ];
 
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['employee'], path: '/employee' },
+        { breadcrumbName: content['update'] }
+    ];
 
     return (
         <div className="flex flex-col">
@@ -238,12 +199,7 @@ const EmployeeUpdatePage = () => {
                 className="employee-tab-bar !bg-white !border-b !border-gray-200 px-5 !pb-0 !mb-0"
                 style={{ position: 'fixed', top: 56, width: '100%', zIndex: 20 }}
             >
-                <Tabs
-                    className='custom-tabs'
-                    activeKey={activeTab}
-                    onChange={(key) => setActiveTab(key)}
-                    items={tabItems}
-                />
+                <EmployeeNav />
             </div>
             <Form
                 form={form}
@@ -251,12 +207,15 @@ const EmployeeUpdatePage = () => {
                 layout="vertical"
                 autoComplete="off"
                 style={{
-                    paddingTop: 85,
+                    paddingTop: 70,
                     paddingBottom: 100,
                     paddingLeft: 20,
                     paddingRight: 20,
                 }}
             >
+                <div className="mb-3">
+                    <CustomBreadcrumb items={breadcrumbItems} />
+                </div>
                 {/* Always render all tab contents, but control visibility via style only */}
                 <div style={{ display: activeTab === 'personal' ? 'block' : 'none' }}>
                     <EmployeePersonalTab
@@ -273,13 +232,19 @@ const EmployeeUpdatePage = () => {
                     />
                 </div>
 
-                <div style={{ display: activeTab === 'education' ? 'block' : 'none' }}>
-                    <EmployeeEducationTab content={content} />
+                {/* <div style={{ display: activeTab === 'education' ? 'block' : 'none' }}>
+                    <EmployeeEducationTab
+                        levels={levels}
+                        content={content} />
                 </div>
 
                 <div style={{ display: activeTab === 'history' ? 'block' : 'none' }}>
                     <EmployeeHistoryPage content={content} />
                 </div>
+
+                <div style={{ display: activeTab === 'document' ? 'block' : 'none' }}>
+                    <EmployeeDocumentTab content={content} />
+                </div> */}
 
                 {/* Submit Button */}
                 <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"

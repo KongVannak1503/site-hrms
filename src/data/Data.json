@@ -51,6 +51,7 @@
         "socialMedia": "Social Media",
         "website": "Website",
         "imageUpload": "Image Upload",
+        "upload": "Upload",
         "uploadImage": "Upload Image",
         "phone": "Phone",
         "logo": "Logo",
@@ -102,6 +103,10 @@
         "district": "District",
         "commune": "Commune",
         "village": "Village",
+        "document": "Document",
+        "documents": "Documents",
+        "file": "File",
+        "files": "Files",
 
         "createdAt": "Created at"
     },

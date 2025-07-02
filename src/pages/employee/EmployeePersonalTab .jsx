@@ -7,13 +7,14 @@ import { nationalityOption } from '../../data/Nationality';
 
 const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages }) => {
 
+
     return (
         <div>
             <Card className="shadow custom-card">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Upload image */}
-                    <div className="col-span-1">
-                        <label className="text-sm font-semibold text-gray-700">{content['logo']}</label>
+                    <div className="col-span-1 flex justify-center">
+                        {/* <label className="text-sm font-semibold text-gray-700">{content['logo']}</label> */}
                         <div>
                             <Upload
                                 listType="picture"
@@ -24,22 +25,24 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                 fileList={fileList}
                                 showUploadList={false}
                             >
-                                <div className="border mt-2 relative border-dashed bg-gray-50 hover:bg-gray-100 p-4 rounded-lg cursor-pointer hover:border-blue-500 w-[200px] h-[150px] overflow-hidden flex justify-center items-center">
+                                <div className="border mt-2 relative border-dashed bg-gray-50 hover:bg-gray-100  rounded-lg cursor-pointer hover:border-blue-500 w-[180px] h-[200px] flex items-center justify-center overflow-hidden">
                                     {previewUrl ? (
-                                        <div>
+                                        <>
                                             <p className="absolute bottom-2 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
                                                 {content['uploadImage']}
                                             </p>
                                             <img
                                                 src={previewUrl}
                                                 alt="Uploaded"
-                                                width={200}
-                                                height={150}
-                                                className="max-w-full max-h-full object-cover"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                }}
                                             />
-                                        </div>
+                                        </>
                                     ) : (
-                                        <div>
+                                        <div className=''>
                                             <p className="absolute bottom-2 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
                                                 {content['uploadImage']}
                                             </p>
@@ -49,10 +52,10 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                 </div>
                             </Upload>
                         </div>
-                    </div>
+                    </div >
 
                     {/* Basic info */}
-                    <div className="md:col-span-2">
+                    < div className="md:col-span-2" >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Form.Item name="employee_id" label={content['employeeID']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['employeeID']}` }]}>
                                 <Input />
@@ -68,7 +71,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                             </Form.Item>
 
                         </div>
-                    </div>
+                    </div >
                     <div className="grid grid-cols-1 gap-4">
 
                         <Form.Item name="first_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
@@ -84,7 +87,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                             </Select>
                         </Form.Item>
                     </div>
-                </div>
+                </div >
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Form.Item name="height" label={content['height']}><Input /></Form.Item>
@@ -238,7 +241,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                     ]}
                 />
 
-            </Card>
+            </Card >
             <hr className="border-0 py-3" />
             <Card title="Family Member Information" className="shadow">
                 <Form.List name="family_members">
@@ -455,7 +458,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                     )}
                 </Form.List>
             </Card> */}
-        </div>
+        </div >
     );
 };
 

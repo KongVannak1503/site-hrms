@@ -1,42 +1,36 @@
 import React from 'react';
 import { Tabs } from 'antd';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import '../../components/style/Tap.css'
+import '../../components/style/Tap.css';
 
 const EmployeeNav = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id, section } = useParams();
+    const { id } = useParams();
 
     const tabs = [
-        { key: 'profile', label: 'Profile' },
-        { key: 'education', label: 'Education' },
-        { key: 'training', label: 'Training' },
-        { key: 'languages', label: 'Languages' },
-        { key: 'history', label: 'History' },
-        { key: 'exact-post', label: 'Exact Post' },
-        { key: 'reference', label: 'Reference' },
+        { key: 'profile', label: 'Personal Date', path: `/employee/profile/${id}` },
+        { key: 'education', label: 'Education', path: `/employee/education/${id}` },
+        { key: 'history', label: 'Employment History', path: `/employee/history/${id}` },
+        { key: 'document', label: 'Document', path: `/employee/document/${id}` },
+        { key: 'nssf', label: 'NSSF', path: `/employee/nssf/${id}` },
     ];
 
-    const currentTabKey = section || 'profile';
+    // Determine current tab based on location.pathname
+    const currentTab = tabs.find(tab => location.pathname.startsWith(tab.path));
+    const currentTabKey = currentTab?.key || 'profile';
 
     const onChange = (key) => {
-        navigate(`/employee/${key}/${id}`);
+        const selectedTab = tabs.find(tab => tab.key === key);
+        if (selectedTab) {
+            navigate(selectedTab.path);
+        }
     };
 
     return (
-        <div
-            className="employee-tab-bar !bg-white !border-b !border-gray-200 px-5"
-            style={{
-                position: 'fixed',
-                top: 56,
-                width: '100%',
-                zIndex: 10,
-            }}
-        >
+        <div className="employee-tab-bar !bg-white !border-b !border-gray-200">
             <Tabs
-                className="!pb-0 !mb-0"
-                style={{ marginBottom: 0 }}
+                className="!pb-0 !mb-0 custom-tabs"
                 activeKey={currentTabKey}
                 onChange={onChange}
                 items={tabs.map(tab => ({
