@@ -22,6 +22,7 @@ import CommunePage from './pages/settings/employee/commune/CommunePage'
 import VillagePage from './pages/settings/employee/village/VillagePage'
 import EmployeeUpdatePage from './pages/employee/EmployeeUpdatePage'
 import EducationLevelPage from './pages/settings/employee/education-lavel/EducationLevelPage'
+
 import JobPostingPage from './pages/recruitment/jobposting/JobPostingPage'
 import ApplicantPage from './pages/recruitment/applicants/ApplicantPage'
 import ApplicationPage from './pages/recruitment/applications/ApplicationPage'
@@ -33,6 +34,12 @@ import JobTypePage from './pages/settings/jobType/JobTypePage'
 import PositionPage from './pages/settings/position/PositionPage'
 import UpdateJobPostingPage from './pages/recruitment/jobposting/UpdateJobPostingPage'
 import CreateApplicantPage from './pages/recruitment/applicants/CreateApplicantPage'
+
+import EmployeeDocumentPage from './pages/employee/document/EmployeeDocumentPage'
+import EmployeeEducationTab from './pages/employee/EmployeeEducationTab'
+import EmployeeHistoryPage from './pages/employee/EmployeeHistoryPage'
+import DocumentUploader from './pages/employee/document/EmployeeTest'
+import DocumentList from './pages/employee/document/DocumentList'
 
 function App() {
   return (
@@ -64,7 +71,13 @@ function App() {
 
             {/* Employee */}
             <Route path="/employee" element={<EmployeePage />} />
+            <Route path="/employee/document1" element={<EmployeeDocumentPage />} />
+            <Route path="/employee/profile/:id" element={<EmployeeUpdatePage />} />
             <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
+            <Route path="/employee/education/:id" element={<EmployeeEducationTab />} />
+            <Route path="/employee/history/:id" element={<EmployeeHistoryPage />} />
+            <Route path="/employee/document/:id" element={<DocumentUploader />} />
+            <Route path="/employee/document-list/:id" element={<DocumentList />} />
             <Route path="/employee/create" element={<EmployeeCreatePage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />

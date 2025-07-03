@@ -10,17 +10,17 @@ import { getDepartmentsApi } from '../../services/departmentApi';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { genderOptions } from '../../data/Gender';
 import EmployeePersonalTab from './EmployeePersonalTab ';
-import EmployeeEducationTab from './EmployeeEducationTab';
 import { getCitiesViewApi } from '../../services/cityApi';
 import { getDistrictsViewApi } from '../../services/DistrictApi';
 import { getCommunesViewApi } from '../../services/communeApi';
 import { getVillagesViewApi } from '../../services/villageApi';
-import EmployeeHistoryPage from './EmployeeHistoryPage';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeCreatePage = () => {
     const { content } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
+    const navigate = useNavigate();
     const [fileList, setFileList] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [cities, setCities] = useState([]);
@@ -89,23 +89,28 @@ const EmployeeCreatePage = () => {
     const handleFinish = async (values) => {
         try {
             const formData = new FormData();
-
+            const safeAppend = (key, value) => {
+                if (value !== undefined && value !== null && value !== '') {
+                    formData.append(key, value);
+                }
+            };
             // Flat fields
             formData.append('employee_id', values.employee_id);
             formData.append('first_name_en', values.first_name_en); // Assuming you use first_name_en for backend
             formData.append('last_name_en', values.last_name_en);   // Same here
             formData.append('first_name_kh', values.first_name_kh); // Assuming you use first_name_en for backend
             formData.append('last_name_kh', values.last_name_kh);
-            formData.append('gender', values.gender || '');
-            formData.append('height', values.height || '');
+            formData.append('gender', values.gender);
+            formData.append('height', values.height);
             formData.append('date_of_birth', values.date_of_birth);
-            formData.append('place_of_birth', values.place_of_birth || '');
-            formData.append('nationality', values.nationality || '');
-            formData.append('maritalStatus', values.maritalStatus || '');
-            formData.append('city', values.city || '');
-            formData.append('district', values.district || '');
-            formData.append('commune', values.commune || '');
-            formData.append('village', values.village || '');
+            formData.append('place_of_birth', values.place_of_birth);
+            formData.append('nationality', values.nationality);
+            formData.append('maritalStatus', values.maritalStatus);
+            // Optional ObjectId fields (skip if invalid)
+            safeAppend('city', values.city);
+            safeAppend('district', values.district);
+            safeAppend('commune', values.commune);
+            safeAppend('village', values.village);
             formData.append('isActive', values.isActive ?? true);
 
             // Upload file if any
@@ -118,17 +123,13 @@ const EmployeeCreatePage = () => {
             formData.append('emergency_contact', JSON.stringify(values.emergency_contact || []));
             formData.append('staff_relationships', JSON.stringify(values.staff_relationships || []));
 
-            // Education & History arrays
-            formData.append('language', JSON.stringify(values.language || []));
-            formData.append('employment_history', JSON.stringify(values.employment_history || []));
-            formData.append('general_education', JSON.stringify(values.general_education || []));
-            formData.append('short_course', JSON.stringify(values.short_course || []));
-
             // Submit to API
             const res = await createEmployeeApi(formData);
+            console.log(res);
+
             message.success('Created successfully');
             // form.resetFields();
-
+            navigate(`/employee/update/${res.data?._id}`);
         } catch (error) {
             console.error('Create error:', error);
             message.error(error.response?.data?.message || 'Failed to create');
@@ -142,30 +143,7 @@ const EmployeeCreatePage = () => {
             key: 'personal',
             label: 'Personal Data',
         },
-        {
-            key: 'education',
-            label: 'Education',
-        },
-        {
-            key: 'history',
-            label: 'Employment History',
-        },
-        {
-            key: 'document',
-            label: 'Document',
-        },
-        {
-            key: 'employment_book',
-            label: 'Employment Book',
-        },
-        {
-            key: 'labour_law',
-            label: 'Labour Law',
-        },
-        {
-            key: 'nssf',
-            label: 'NSSF',
-        },
+
     ];
     return (
         <div className="flex flex-col">
@@ -207,14 +185,6 @@ const EmployeeCreatePage = () => {
                         communes={communes}
                         villages={villages}
                     />
-                </div>
-
-                <div style={{ display: activeTab === 'education' ? 'block' : 'none' }}>
-                    <EmployeeEducationTab content={content} />
-                </div>
-
-                <div style={{ display: activeTab === 'history' ? 'block' : 'none' }}>
-                    <EmployeeHistoryPage content={content} />
                 </div>
 
                 {/* Submit Button */}

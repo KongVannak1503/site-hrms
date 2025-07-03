@@ -9,11 +9,11 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
 
     return (
         <div>
-            <Card className="shadow custom-card">
+            <Card title={<p className='text-default text-sm font-bold'>{content['informationData']}</p>} className="shadow custom-card">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Upload image */}
-                    <div className="col-span-1">
-                        <label className="text-sm font-semibold text-gray-700">{content['logo']}</label>
+                    <div className="col-span-1 flex justify-center">
+                        {/* <label className="text-sm font-semibold text-gray-700">{content['logo']}</label> */}
                         <div>
                             <Upload
                                 listType="picture"
@@ -24,22 +24,24 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                 fileList={fileList}
                                 showUploadList={false}
                             >
-                                <div className="border mt-2 relative border-dashed bg-gray-50 hover:bg-gray-100 p-4 rounded-lg cursor-pointer hover:border-blue-500 w-[200px] h-[150px] overflow-hidden flex justify-center items-center">
+                                <div className="border mt-2 relative border-dashed bg-gray-50 hover:bg-gray-100  rounded-lg cursor-pointer hover:border-blue-500 w-[180px] h-[200px] flex items-center justify-center overflow-hidden">
                                     {previewUrl ? (
-                                        <div>
+                                        <>
                                             <p className="absolute bottom-2 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
                                                 {content['uploadImage']}
                                             </p>
                                             <img
                                                 src={previewUrl}
                                                 alt="Uploaded"
-                                                width={200}
-                                                height={150}
-                                                className="max-w-full max-h-full object-cover"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                }}
                                             />
-                                        </div>
+                                        </>
                                     ) : (
-                                        <div>
+                                        <div className=''>
                                             <p className="absolute bottom-2 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
                                                 {content['uploadImage']}
                                             </p>
@@ -49,11 +51,11 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                 </div>
                             </Upload>
                         </div>
-                    </div>
+                    </div >
 
                     {/* Basic info */}
-                    <div className="md:col-span-2">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    < div className="md:col-span-3" >
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <Form.Item name="employee_id" label={content['employeeID']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['employeeID']}` }]}>
                                 <Input />
                             </Form.Item>
@@ -66,98 +68,25 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                             <Form.Item name="last_name_en" label={content['lastNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['lastName']}` }]}>
                                 <Input />
                             </Form.Item>
-
+                            <Form.Item name="first_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="gender" label={content['gender']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>
+                                <Select>
+                                    {genderOptions.map(option => (
+                                        <Select.Option key={option.name_kh} value={option.name_kh}>
+                                            {option.name_kh}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
                         </div>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
+                    </div >
 
-                        <Form.Item name="first_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name="gender" label={content['gender']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>
-                            <Select>
-                                {genderOptions.map(option => (
-                                    <Select.Option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                </div>
+                </div >
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Form.Item name="height" label={content['height']}><Input /></Form.Item>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Form.Item name="date_of_birth" label={content['dateOfBirth']}><DatePicker className="w-full" /></Form.Item>
-                    <Form.Item name="city" label={content['province']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {cities.map((city) => (
-                                <Select.Option key={city._id || city.id} value={city._id}>
-                                    {city.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Form.Item name="district" label={content['district']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {districts.map((district) => (
-                                <Select.Option key={district._id} value={district._id}>
-                                    {district.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name="commune" label={content['commune']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {communes.map((commune) => (
-                                <Select.Option key={commune._id} value={commune._id}>
-                                    {commune.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name="village" label={content['village']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {villages.map((village) => (
-                                <Select.Option key={village._id} value={village._id}>
-                                    {village.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Form.Item name="nationality" label={content['nationality']}>
                         <Select
                             showSearch
@@ -166,14 +95,16 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                 option?.children.toLowerCase().includes(input.toLowerCase())
                             }>
                             {nationalityOption.map(option => (
-                                <Select.Option key={option.value} value={option.value}>
-                                    {option.label}
+                                <Select.Option key={option.name_en} value={option.name_kh}>
+                                    {option.name_kh}
                                 </Select.Option>
                             ))}
                         </Select>
                     </Form.Item>
+
                     <Form.Item name="id_card_no" label={content['idCardNo']}><Input /></Form.Item>
                     <Form.Item name="passport_no" label={content['passportNo']}><Input /></Form.Item>
+
                 </div>
                 <Tabs
                     defaultActiveKey="present"
@@ -237,10 +168,80 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                         },
                     ]}
                 />
+                <p className='text-default text-sm font-bold mb-4'>ទីកន្លែងកំណើត</p>
 
-            </Card>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <Form.Item name="city" label={content['province']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {cities.map((city) => (
+                                <Select.Option key={city._id || city.id} value={city._id}>
+                                    {city.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="district" label={content['district']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {districts.map((district) => (
+                                <Select.Option key={district._id} value={district._id}>
+                                    {district.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="commune" label={content['commune']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {communes.map((commune) => (
+                                <Select.Option key={commune._id} value={commune._id}>
+                                    {commune.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="village" label={content['village']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {villages.map((village) => (
+                                <Select.Option key={village._id} value={village._id}>
+                                    {village.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                </div>
+
+
+
+            </Card >
             <hr className="border-0 py-3" />
-            <Card title="Family Member Information" className="shadow">
+            <Card title={<p className='text-default text-sm font-bold'>{content['familyMemberInformation']}</p>} className="shadow">
                 <Form.List name="family_members">
                     {(fields, { add, remove }) => (
                         <>
@@ -304,7 +305,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                     block
                                     icon={<PlusOutlined />}
                                 >
-                                    Add Family Member
+                                    {content["addFamilyMember"]}
                                 </Button>
                             </Form.Item>
                         </>
@@ -313,7 +314,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
             </Card>
 
             <hr className="border-0 py-3" />
-            <Card title="In Case of Emergency Contact" className="shadow">
+            <Card title={<p className='text-default text-sm font-bold'>{content['inCaseOfEmergencyContact']}</p>} className="shadow">
                 <Form.List name="emergency_contact">
                     {(fields, { add, remove }) => (
                         <>
@@ -377,7 +378,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                     block
                                     icon={<PlusOutlined />}
                                 >
-                                    Add Emergency Contact
+                                    {content["addEmergencyContact"]}
                                 </Button>
                             </Form.Item>
                         </>
@@ -455,7 +456,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                     )}
                 </Form.List>
             </Card> */}
-        </div>
+        </div >
     );
 };
 

@@ -8,6 +8,20 @@
   --table-check-color: rgba(11, 154, 176, 0.15);
 }
 
+.text-default {
+  color: var(--layout-sider-background);
+}
+
+a.btnDownload {
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a.btnDownload:hover {
+  background-color: var(--layout-sider-background);
+  color: var(--sidebar-selected-color);
+}
+
 /* Sidebar (ant-menu-dark) background and text */
 .ant-menu-dark {
   background-color: var(--layout-sider-background) !important;
