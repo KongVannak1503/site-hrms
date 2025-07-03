@@ -2,19 +2,21 @@ import React from 'react';
 import { Tabs } from 'antd';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import '../../components/style/Tap.css';
+import { useAuth } from '../../contexts/AuthContext';
 
 const EmployeeNav = () => {
+    const { content } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = useParams();
 
     const tabs = [
-        { key: 'profile', label: 'Personal Date', path: `/employee/profile/${id}` },
-        { key: 'education', label: 'Education', path: `/employee/education/${id}` },
-        { key: 'history', label: 'Employment History', path: `/employee/history/${id}` },
-        { key: 'document', label: 'Document', path: `/employee/document/${id}` },
-        { key: 'book', label: 'Employee Book', path: `/employee/book/${id}` },
-        { key: 'nssf', label: 'NSSF', path: `/employee/nssf/${id}` },
+        { key: 'profile', label: content['employeeInfo'], path: `/employee/profile/${id}` },
+        { key: 'education', label: content['education'], path: `/employee/education/${id}` },
+        { key: 'history', label: content['employmentHistory'], path: `/employee/history/${id}` },
+        { key: 'document', label: content['document'], path: `/employee/document/${id}` },
+        { key: 'book', label: content['employeeBook'], path: `/employee/book/${id}` },
+        { key: 'nssf', label: content['nssf'], path: `/employee/nssf/${id}` },
     ];
 
     // Determine current tab based on location.pathname

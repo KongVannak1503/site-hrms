@@ -218,7 +218,7 @@ const EmployeeUpdatePage = () => {
                 }}
             >
                 <div className="mb-3 flex justify-between">
-                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />ព័ត៌មានបុគ្គលិក</p>
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeInfo']}</p>
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 {/* Always render all tab contents, but control visibility via style only */}

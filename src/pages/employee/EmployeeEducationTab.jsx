@@ -1,5 +1,5 @@
 import { Button, Card, Checkbox, DatePicker, Form, Input, message, Select } from 'antd'
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusCircleOutlined, FileTextOutlined } from '@ant-design/icons';
 import React from 'react'
 import { FaRegImages } from 'react-icons/fa';
 import { Styles } from '../../utils/CsStyle';
@@ -11,6 +11,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getEducationLevelViewApi } from '../../services/educationLevelApi';
 import { createEducationApi, getEducationApi } from '../../services/employeeApi';
 import { useParams } from 'react-router-dom';
+import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 
 const EmployeeEducationTab = () => {
     const { content } = useAuth();
@@ -83,6 +84,12 @@ const EmployeeEducationTab = () => {
         }
     };
 
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['employee'], path: '/employee' },
+        { breadcrumbName: content['education'] }
+    ];
+
     return (
         <div className="flex flex-col">
             {/* Fixed Tabs */}
@@ -110,9 +117,12 @@ const EmployeeEducationTab = () => {
                     paddingRight: 20,
                 }}
             >
-
+                <div className="mb-3 flex justify-between">
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeInfo']}</p>
+                    <CustomBreadcrumb items={breadcrumbItems} />
+                </div>
                 <div>
-                    <Card title="Foreign Languages" className="shadow">
+                    <Card title={<p className='text-default text-sm font-bold'>{content['foreignLanguages']}</p>} className="shadow">
                         <Form.List name="language">
                             {(fields, { add, remove }) => (
                                 <>
@@ -120,27 +130,27 @@ const EmployeeEducationTab = () => {
                                         <thead className="bg-[#17a2b8] text-left text-gray-200 font-semibold rounded-t-md">
                                             <tr className='pt-3 border-b'>
                                                 <th rowSpan={2} className="px-3 py-2 text-center first:rounded-tl-md last:rounded-tr-md">
-                                                    Languages
+                                                    {content['languages']}
                                                 </th>
-                                                <th colSpan={3} className="px-3 py-2 text-center">Read</th>
-                                                <th colSpan={3} className="px-3 py-2 text-center">Write</th>
-                                                <th colSpan={3} className="px-3 py-2 text-center">Speak</th>
-                                                <th colSpan={3} className="px-3 py-2 text-center">Listen</th>
+                                                <th colSpan={3} className="px-3 py-2 text-center">{content['read']}</th>
+                                                <th colSpan={3} className="px-3 py-2 text-center">{content['write']}</th>
+                                                <th colSpan={3} className="px-3 py-2 text-center">{content['speak']}</th>
+                                                <th colSpan={3} className="px-3 py-2 text-center">{content['listen']}</th>
                                                 <th rowSpan={2} className="px-3 py-2 w-12 first:rounded-tl-md last:rounded-tr-md"></th>
                                             </tr>
                                             <tr className="text-center bg-[#17a2b8]">
-                                                <th className="pt-1 pb-3 px-1">Poor</th>
-                                                <th className="pt-1 pb-3 px-1">Fair</th>
-                                                <th className="pt-1 pb-3 px-1">Good</th>
-                                                <th className="pt-1 pb-3 px-1">Poor</th>
-                                                <th className="pt-1 pb-3 px-1">Fair</th>
-                                                <th className="pt-1 pb-3 px-1">Good</th>
-                                                <th className="pt-1 pb-3 px-1">Poor</th>
-                                                <th className="pt-1 pb-3 px-1">Fair</th>
-                                                <th className="pt-1 pb-3 px-1">Good</th>
-                                                <th className="pt-1 pb-3 px-1">Poor</th>
-                                                <th className="pt-1 pb-3 px-1">Fair</th>
-                                                <th className="pt-1 pb-3 px-1">Good</th>
+                                                <th className="pt-1 pb-3 px-1">{content['poor']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['fair']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['good']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['poor']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['fair']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['good']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['poor']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['fair']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['good']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['poor']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['fair']}</th>
+                                                <th className="pt-1 pb-3 px-1">{content['good']}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -265,7 +275,7 @@ const EmployeeEducationTab = () => {
                                                 block
                                                 icon={<PlusOutlined />}
                                             >
-                                                Add Language
+                                                {content['addLanguage']}
                                             </Button>
                                         </Form.Item>
                                     </div>
@@ -277,7 +287,7 @@ const EmployeeEducationTab = () => {
 
                     <hr className='my-3 border-0' />
 
-                    <Card title="General Education">
+                    <Card title={<p className='text-default text-sm font-bold'>{content['generalEducation']}</p>} >
 
                         <Form.List name="general_education">
                             {(fields, { add, remove }) => (
@@ -290,8 +300,8 @@ const EmployeeEducationTab = () => {
                                                 </th>
                                                 <th className="px-0 py-2 text-start">Major of Study</th>
                                                 <th className="px-0 py-2 text-start">Name of Supervisor</th>
-                                                <th className="px-0 py-2 text-start">From Date</th>
-                                                <th className="px-0 py-2 text-start">To Date</th>
+                                                <th className="px-0 py-2 text-start">{content['fromDate']}</th>
+                                                <th className="px-0 py-2 text-start">{content['toDate']}</th>
                                                 <th className="px-0 py-2 text-start">Degree</th>
                                                 <th className={`px-0 py-2 text-start text whitespace-nowrap`}>Title Thesis</th>
                                                 <th className={Styles.tHeadR}></th>
@@ -410,7 +420,7 @@ const EmployeeEducationTab = () => {
                                             block
                                             icon={<PlusOutlined />}
                                         >
-                                            Add Education
+                                            {content['addEducation']}
                                         </Button>
                                     </Form.Item>
                                 </>
@@ -418,13 +428,12 @@ const EmployeeEducationTab = () => {
                         </Form.List>
                     </Card>
                     <hr className='my-3 border-0' />
-                    <Card title="Training & Short Courses">
+                    <Card title={<p className='text-default text-sm font-bold'>{content['trainingShortCourse']}</p>} >
                         {/* Table headers */}
 
                         <Form.List name="short_course">
                             {(fields, { add, remove }) => (
                                 <>
-
                                     <table className="table-auto w-full">
                                         <thead className={Styles.tHead}>
                                             <tr className='pt-3 border-b'>
@@ -432,8 +441,8 @@ const EmployeeEducationTab = () => {
                                                     Institution
                                                 </th>
                                                 <th className="px-0 py-2 text-start">Subject</th>
-                                                <th className="px-0 py-2 text-start">From Date</th>
-                                                <th className="px-0 py-2 text-start">To Date</th>
+                                                <th className="px-0 py-2 text-start">{content['fromDate']}</th>
+                                                <th className="px-0 py-2 text-start">{content['toDate']}</th>
                                                 <th className="px-0 py-2 text-start">Level</th>
                                                 <th className={`px-0 py-2 text-start text whitespace-nowrap`}>Certificates</th>
                                                 <th className={Styles.tHeadR}></th>
@@ -541,7 +550,7 @@ const EmployeeEducationTab = () => {
                                             block
                                             icon={<PlusOutlined />}
                                         >
-                                            Add Short Course
+                                            {content['addShortCourse']}
                                         </Button>
                                     </Form.Item>
                                 </>
