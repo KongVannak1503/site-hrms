@@ -37,13 +37,12 @@ const AppSider = ({ collapsed }) => {
             icon: <VideoCameraOutlined />,
             label: content['recruiter'],
             children: [
-                { key: '/job-posting', label: 'Job Posting' },
+                { key: '/job-postings', label: 'Job Posting' },
                 { key: '/applicants', label: 'Applicants' },
                 { key: '/applications', label: 'Applications' },
                 { key: '/tests', label: 'Tests' },
                 { key: '/interviews', label: 'Interviews' },
                 { key: '/evaluations', label: 'Evaluations' },
-                { key: '/recruit', label: content['recruit'], },
 
             ],
         },
@@ -102,7 +101,7 @@ const AppSider = ({ collapsed }) => {
                 },
                 { key: '/setting/positions', label: content['positions'] },
                 { key: '/setting/categories', label: content['categories'] },
-                { key: '/setting/skills', label: content['skills'] },
+                { key: '/setting/job-types', label: content['jobType'] },
                 { key: '/setting/departments', label: content['departments'] },
                 { key: '/setting/organization', label: content['organizations'] },
 
