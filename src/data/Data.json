@@ -103,6 +103,10 @@
         "commune": "Commune",
         "village": "Village",
 
+        "jobType": "Job Type",
+        "jobPostings": "Job Postings",
+        "jobPosting": "Job Posting",
+
         "createdAt": "Created at"
     },
     "khmer":{
@@ -183,6 +187,11 @@
         "loginToSystem": "ចូលប្រើប្រាស់ប្រព័ន្ធគ្រប់គ្រង", 
         "addNew": "Add New",
         "searchAction": "ស្វែងរក...",
+
+        "jobType": "ប្រភេទការងារ",
+        "jobPostings": "ប្រកាសរើសការងារ",
+        "jobPosting": "ប្រកាសរើសការងារ",
+
         "createdAt": "កាលបរិច្ឆេទបង្កើត"
 
     }

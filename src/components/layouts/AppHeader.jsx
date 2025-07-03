@@ -86,13 +86,13 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                 {/* You can optionally change button behavior or style if isMobile is true */}
             </div>
             <div className='flex items-center'>
-                <div>
+                {/* <div>
                     <button>
                         <span className={Styles.btnInfoSm}>
                             People Quit
                         </span>
                     </button>
-                </div>
+                </div> */}
                 <Select
                     value={language}
                     onChange={setLanguage}

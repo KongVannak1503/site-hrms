@@ -22,6 +22,17 @@ import CommunePage from './pages/settings/employee/commune/CommunePage'
 import VillagePage from './pages/settings/employee/village/VillagePage'
 import EmployeeUpdatePage from './pages/employee/EmployeeUpdatePage'
 import EducationLevelPage from './pages/settings/employee/education-lavel/EducationLevelPage'
+import JobPostingPage from './pages/recruitment/jobposting/JobPostingPage'
+import ApplicantPage from './pages/recruitment/applicants/ApplicantPage'
+import ApplicationPage from './pages/recruitment/applications/ApplicationPage'
+import TestPage from './pages/recruitment/tests/TestPage'
+import InterviewPage from './pages/recruitment/interviews/InterviewPage'
+import EvaluationPage from './pages/recruitment/evaluations/EvaluationPage'
+import CreateJobPostingPage from './pages/recruitment/jobposting/CreateJobPostingPage'
+import JobTypePage from './pages/settings/jobType/JobTypePage'
+import PositionPage from './pages/settings/position/PositionPage'
+import UpdateJobPostingPage from './pages/recruitment/jobposting/UpdateJobPostingPage'
+import CreateApplicantPage from './pages/recruitment/applicants/CreateApplicantPage'
 
 function App() {
   return (
@@ -38,6 +49,20 @@ function App() {
                 <Dashboard />
               }
             />
+            {/* Recruitment */}
+            <Route path="/job-postings" element={<JobPostingPage />} />
+            <Route path="/job-postings/create" element={<CreateJobPostingPage />} />
+            <Route path="/job-postings/edit/:id" element={<UpdateJobPostingPage />} />
+
+            <Route path="/applicants" element={<ApplicantPage />} />
+            <Route path="/applicants/create" element={<CreateApplicantPage />} />
+
+            <Route path="/applications" element={<ApplicationPage />} />
+            <Route path="/tests" element={<TestPage />} />
+            <Route path="/interviews" element={<InterviewPage />} />
+            <Route path="/evaluations" element={<EvaluationPage />} />
+
+            {/* Employee */}
             <Route path="/employee" element={<EmployeePage />} />
             <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
             <Route path="/employee/create" element={<EmployeeCreatePage />} />
@@ -60,9 +85,9 @@ function App() {
                 <CategoryPage />
               } />
             <Route
-              path="/setting/skills"
+              path="/setting/job-types"
               element={
-                <SkillPage />
+                <JobTypePage />
               } />
             <Route
               path="/setting/employee/level"
@@ -98,6 +123,12 @@ function App() {
               path="/setting/Departments"
               element={
                 <DepartmentPage />
+              } />
+
+              <Route
+              path="/setting/positions"
+              element={
+                <PositionPage />
               } />
 
             <Route

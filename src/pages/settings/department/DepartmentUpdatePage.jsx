@@ -1,23 +1,27 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
+import { Form, Input, Switch, message } from 'antd';
 import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
-import { Typography } from 'antd';
 import { getDepartmentApi, updateDepartmentApi } from '../../../services/departmentApi';
 
 const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();
     const [form] = Form.useForm();
-    const { Text } = Typography;
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const response = await getDepartmentApi(dataId);
-            form.setFieldsValue({
-                title: response.title,
-                isActive: response.isActive
-            });
-        }
+            try {
+                const response = await getDepartmentApi(dataId);
+                form.setFieldsValue({
+                    title: response.title,
+                    description: response.description,
+                    isActive: response.isActive
+                });
+            } catch (error) {
+                console.error("Error fetching department:", error);
+                message.error("Failed to load department data");
+            }
+        };
         fetchInitialData();
     }, [dataId, content]);
 
@@ -25,6 +29,7 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
         try {
             const formData = {
                 title: values.title,
+                description: values.description,
                 isActive: values.isActive
             };
 
@@ -32,11 +37,10 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             message.success('Updated successfully!');
             onUserUpdated(response.data);
         } catch (error) {
-            console.error('Error creating:', error);
-            message.error('Failed to create');
+            console.error('Error updating Department:', error);
+            message.error('Failed to update Department');
         }
     };
-
 
     return (
         <Form
@@ -57,21 +61,24 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             >
                 <Input size="large" />
             </Form.Item>
-            {/* <Form.Item
+
+            <Form.Item
                 name="description"
                 label={content['description']}
             >
-                <Input.TextArea rows={4} />
-            </Form.Item> */}
+                <Input.TextArea rows={4} placeholder={content['enter'] + content['description']} />
+            </Form.Item>
+
             <Form.Item label={content['status']} name="isActive" valuePropName="checked">
                 <Switch />
             </Form.Item>
+
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
                     Cancel
                 </button>
-                <button type="submit" className={Styles.btnCreate} >
-                    Submit
+                <button type="submit" className={Styles.btnUpdate}>
+                    Update
                 </button>
             </div>
         </Form>

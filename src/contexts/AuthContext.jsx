@@ -17,6 +17,8 @@ export const AuthProvider = ({ children }) => {
         attachTokenToApi(savedToken);
         return savedToken;
     });
+
+    const [user, setUser] = useState(null);
     const [language, setLanguage] = useState(getInitialLanguage)
     const [content, setContent] = useState(dataTranslate[getInitialLanguage()])
     const [isLoading, setIsLoading] = useState(true)
@@ -31,12 +33,14 @@ export const AuthProvider = ({ children }) => {
             sessionStorage.setItem('token', token);
             try {
                 const decoded = jwtDecode(token);
+                setUser(decoded);
 
             } catch (e) {
                 console.error("Invalid token:", e);
             }
         } else {
             sessionStorage.removeItem('token');
+            setUser(null);
         }
 
         if (dataTranslate[language]) {
@@ -52,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
 
     const contextValue = useMemo(() => ({
-        language, setLanguage, content, token, setToken, isLoading
+        language, setLanguage, content, token, setToken,user, isLoading
     }), [language, content, token, isLoading]);
 
     return (
