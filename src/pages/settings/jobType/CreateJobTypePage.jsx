@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { Form, Input, Switch, message } from 'antd';
 import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
-import { createDepartmentApi } from '../../../services/departmentApi';
+import { Typography } from 'antd';
+import { createJobTypeApi } from '../../../services/jobType';
 
-const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
+const CreateJobTypePage = ({ form, onCancel, onUserCreated }) => {
     const { content } = useAuth();
 
+    const { Text } = Typography;
     useEffect(() => {
         form.resetFields();
     }, [content]);
@@ -14,17 +16,25 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
     const handleFinish = async (values) => {
         try {
             const { title, description, isActive } = values;
-            const formData = { title, description, isActive };
+            const formData = {
+                title,
+                description,
+                isActive,
+            };
 
-            const response = await createDepartmentApi(formData);
+            console.log(values);
+
+            const response = await createJobTypeApi(formData);
             message.success('Created successfully!');
+
             onUserCreated(response.data);
             form.resetFields();
         } catch (error) {
-            console.error('Error creating Department:', error);
-            message.error('Failed to create Department');
+            console.error('Error creating User:', error);
+            message.error('Failed to create User');
         }
     };
+
 
     return (
         <Form
@@ -48,23 +58,20 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
             >
                 <Input size="large" />
             </Form.Item>
-
             <Form.Item
                 name="description"
                 label={content['description']}
             >
-                <Input.TextArea rows={4} placeholder={content['enter'] + content['description']} />
+                <Input.TextArea rows={4} />
             </Form.Item>
-
             <Form.Item label={content['status']} name="isActive" valuePropName="checked">
                 <Switch />
             </Form.Item>
-
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
                     Cancel
                 </button>
-                <button type="submit" className={Styles.btnCreate}>
+                <button type="submit" className={Styles.btnCreate} >
                     Submit
                 </button>
             </div>
@@ -72,4 +79,4 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
     );
 };
 
-export default DepartmentCreatePage;
+export default CreateJobTypePage;

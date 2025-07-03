@@ -10,6 +10,11 @@ export const getPositionApi = async (id) => {
     return res.data;
 };
 
+export const getPositionsByDepartmentApi = async (departmentId) => {
+    const res = await api.get(`/positions/by-department/${departmentId}`);
+    return res.data;
+};
+
 export const createPositionApi = async (userData) => {
     const res = await api.post(`/positions`, userData);
     return res.data;
@@ -19,11 +24,6 @@ export const updatePositionApi = async (id, formData) => {
     const res = await api.put(`/positions/${id}`, formData);
     return res.data;
 };
-
-// export const existNameRoleApi = async (name) => {
-//     const res = await api.get(`/positions/check/${name}`);
-//     return res;
-// };
 
 export const deletePositionApi = async (id) => {
     const res = await api.delete(`/positions/${id}`);

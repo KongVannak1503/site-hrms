@@ -1,30 +1,44 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Switch, message } from 'antd';
+import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
-import { createDepartmentApi } from '../../../services/departmentApi';
+import { Typography } from 'antd';
+import { getJobTypeApi, updateJobTypeApi } from '../../../services/jobType';
 
-const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
+const UpdateJobTypePage = ({ dataId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();
+    const [form] = Form.useForm();
+    const { Text } = Typography;
 
     useEffect(() => {
-        form.resetFields();
-    }, [content]);
+        const fetchInitialData = async () => {
+            const response = await getJobTypeApi(dataId);
+            form.setFieldsValue({
+                title: response.title,
+                description: response.description,
+                isActive: response.isActive
+            });
+        }
+        fetchInitialData();
+    }, [dataId, content]);
 
     const handleFinish = async (values) => {
         try {
-            const { title, description, isActive } = values;
-            const formData = { title, description, isActive };
+            const formData = {
+                title: values.title,
+                description: values.description,
+                isActive: values.isActive
+            };
 
-            const response = await createDepartmentApi(formData);
-            message.success('Created successfully!');
-            onUserCreated(response.data);
-            form.resetFields();
+            const response = await updateJobTypeApi(dataId, formData);
+            message.success('Updated successfully!');
+            onUserUpdated(response.data);
         } catch (error) {
-            console.error('Error creating Department:', error);
-            message.error('Failed to create Department');
+            console.error('Error creating:', error);
+            message.error('Failed to create');
         }
     };
+
 
     return (
         <Form
@@ -32,9 +46,6 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
             onFinish={handleFinish}
             layout="vertical"
             autoComplete="off"
-            initialValues={{
-                isActive: true
-            }}
         >
             <Form.Item
                 name="title"
@@ -48,23 +59,20 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
             >
                 <Input size="large" />
             </Form.Item>
-
             <Form.Item
                 name="description"
                 label={content['description']}
             >
-                <Input.TextArea rows={4} placeholder={content['enter'] + content['description']} />
+                <Input.TextArea rows={4} />
             </Form.Item>
-
             <Form.Item label={content['status']} name="isActive" valuePropName="checked">
                 <Switch />
             </Form.Item>
-
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
                     Cancel
                 </button>
-                <button type="submit" className={Styles.btnCreate}>
+                <button type="submit" className={Styles.btnCreate} >
                     Submit
                 </button>
             </div>
@@ -72,4 +80,4 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
     );
 };
 
-export default DepartmentCreatePage;
+export default UpdateJobTypePage;

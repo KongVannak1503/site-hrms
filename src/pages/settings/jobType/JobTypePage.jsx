@@ -11,17 +11,17 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import { Styles } from '../../../utils/CsStyle';
 import { formatDateTime } from '../../../utils/utils';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import DepartmentCreatePage from './DepartmentCreatePage';
-import DepartmentUpdatePage from './DepartmentUpdatePage';
-import { MdOutlineAssignmentTurnedIn } from "react-icons/md";
-import { deleteDepartmentApi, getDepartmentsApi } from '../../../services/departmentApi';
+import { deleteJobTypeApi, getJobTypesApi } from '../../../services/jobType';
+import UpdateJobTypePage from './UpdateJobTypePage';
+import CreateJobTypePage from './CreateJobTypePage';
 
-const DepartmentPage = () => {
+
+const JobTypePage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
-    const [actionForm, setActionForm] = useState('create'); // 'create' or 'update'
+    const [actionForm, setActionForm] = useState('create');
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -55,14 +55,14 @@ const DepartmentPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['departments'] }
+        { breadcrumbName: content['jobType'] }
     ];
 
     useEffect(() => {
-        document.title = content['departments'];
+        document.title = content['jobType'];
         const fetchData = async () => {
             try {
-                const response = await getDepartmentsApi();
+                const response = await getJobTypesApi();
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -87,18 +87,18 @@ const DepartmentPage = () => {
         if (!term) {
             setFilteredData(users);
         } else {
-            const filtered = users.filter((dept) =>
-                dept.title?.toLowerCase().includes(term) ||
-                dept.description?.toLowerCase().includes(term) ||
-                dept.createdBy?.username?.toLowerCase().includes(term)
+            const filtered = users.filter((role) =>
+                role.title.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
     };
 
+
+
     const handleDelete = async (id) => {
         try {
-            await deleteDepartmentApi(id); // call the API
+            await deleteJobTypeApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -120,18 +120,9 @@ const DepartmentPage = () => {
             title: content['description'],
             dataIndex: "description",
             key: "description",
-            render: (text) => <span>{text || '-'}</span>,
+            render: (text) => <span>{text}</span>,
         },
-        {
-            title: content['positionCount'] || 'Positions',
-            dataIndex: "positionCount",
-            key: "positionCount",
-            render: (count) => (
-                <Tag color="green">
-                    {count || 0}
-                </Tag>
-            ),
-        },
+
         {
             title: content['createdAt'],
             dataIndex: "createdAt",
@@ -239,39 +230,20 @@ const DepartmentPage = () => {
             console.error("Error adding:", error);
         }
     };
-    const handleUpdate = (updatedDepartment) => {
-        if (!updatedDepartment || !updatedDepartment._id) {
-            console.error("Updated object does not contain _id:", updatedDepartment);
+    const handleUpdate = (updatedRole) => {
+        if (!updatedRole || !updatedRole._id) {
+            console.error("Updated   object does not contain _id:", updatedRole);
             return;
         }
-
-        setUsers((prevDepartments) =>
-            prevDepartments.map(dept => {
-                if (dept._id === updatedDepartment._id) {
-                    return {
-                        ...updatedDepartment,
-                        positionCount: dept.positionCount // preserve count
-                    };
-                }
-                return dept;
-            })
+        setUsers((prevRoles) =>
+            prevRoles.map(role => (role._id === updatedRole._id ? updatedRole : role))
         );
-
-        setFilteredData((prevDepartments) =>
-            prevDepartments.map(dept => {
-                if (dept._id === updatedDepartment._id) {
-                    return {
-                        ...updatedDepartment,
-                        positionCount: dept.positionCount // preserve count
-                    };
-                }
-                return dept;
-            })
+        setFilteredData((prevFiltered) =>
+            prevFiltered.map(role => (role._id === updatedRole._id ? updatedRole : role))
         );
 
         setOpen(false);
     };
-
 
     if (isLoading) {
         return <FullScreenLoader />;
@@ -290,18 +262,17 @@ const DepartmentPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['departments']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['jobType']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
                             <Input
-                                // size="large"
+                                size="large"
                                 placeholder={content['searchAction']}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                allowClear
                             />
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['department']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['jobType']}`}</button>
                     </div>
                 </div>
                 <Table
@@ -331,14 +302,14 @@ const DepartmentPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['department']}${content['newEnd']}`
-                            : `${content['update']} ${content['department']}`
+                            ? `${content['create']} ${content['newStart']} ${content['jobType']}${content['newEnd']}`
+                            : `${content['update']} ${content['jobType']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <DepartmentCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <CreateJobTypePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <DepartmentUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <UpdateJobTypePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
 
@@ -347,4 +318,4 @@ const DepartmentPage = () => {
     )
 }
 
-export default DepartmentPage
+export default JobTypePage

@@ -115,6 +115,7 @@
         "informationData": "Personal Data",
         "inCaseOfEmergencyContact": "In Case of Emergency Contact",
         "familyMemberInformation": "Family member information:",
+
         "employeeInfo": "Employee Information ",
         "education": "Education",
         "employmentHistory": "Employment History",
@@ -136,6 +137,12 @@
         "trainingShortCourse": "Training & Short Course",
         "fromDate": "From Date",
         "toDate": "To Date",
+
+        "jobType": "Job Type",
+        "jobPostings": "Job Postings",
+        "jobPosting": "Job Posting",
+
+
         "createdAt": "Created at"
     },
     "khmer":{
@@ -216,6 +223,11 @@
         "loginToSystem": "ចូលប្រើប្រាស់ប្រព័ន្ធគ្រប់គ្រង", 
         "addNew": "Add New",
         "searchAction": "ស្វែងរក...",
+
+        "jobType": "ប្រភេទការងារ",
+        "jobPostings": "ប្រកាសរើសការងារ",
+        "jobPosting": "ប្រកាសរើសការងារ",
+
         "employeeID": "អត្តលេខ/ID",
         "gender": "ភេទ",
         "dateOfBirth": "ថ្ងៃ ខែ ឆ្នាំកំណើត",
