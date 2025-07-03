@@ -74,6 +74,13 @@ export const createEpmUploadApi = async (id, formData) => {
 };
 
 export const getEpmUploadApi = async (employeeId) => {
-    const res = await api.get(`/upload/${employeeId}`);
+    const res = await api.get(`/employees/upload/${employeeId}`);
+    console.log(res);
+
+    return res.data;
+};
+
+export const deleteEpmUploadApi = async (id) => {
+    const res = await api.delete(`/employees/upload/${id}`);
     return res.data;
 };

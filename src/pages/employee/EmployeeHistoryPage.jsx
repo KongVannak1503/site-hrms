@@ -91,6 +91,7 @@ const EmployeeHistoryPage = () => {
                                                 <th className="px-3 py-2 text-center">Company</th>
                                                 <th className="px-3 py-2 text-center">Name of Supervisor</th>
                                                 <th className="px-3 py-2 text-center">Phone</th>
+                                                <th className="px-3 py-2 text-center">Address</th>
                                                 <th className="px-3 py-2 text-center">Start Date</th>
                                                 <th className="px-3 py-2 text-center">End Date</th>
                                                 <th className={Styles.tHeadR}></th>
@@ -133,6 +134,16 @@ const EmployeeHistoryPage = () => {
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'phone']}
+                                                            className="mb-0"
+                                                        >
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </td>
+
+                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'address']}
                                                             className="mb-0"
                                                         >
                                                             <Input />

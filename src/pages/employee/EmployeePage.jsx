@@ -276,7 +276,11 @@ const EmployeePage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="flex justify-between">
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មានបុគ្គលិក</h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
+
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -287,7 +291,7 @@ const EmployeePage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['employees']}</h5>
+                        {/* <h5 className='text-lg font-semibold'>{content['employees']}</h5> */}
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>

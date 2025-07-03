@@ -44,7 +44,7 @@ function App() {
               }
             />
             <Route path="/employee" element={<EmployeePage />} />
-            {/* <Route path="/employee/document" element={<EmployeeDocumentPage />} /> */}
+            <Route path="/employee/document1" element={<EmployeeDocumentPage />} />
             <Route path="/employee/profile/:id" element={<EmployeeUpdatePage />} />
             <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
             <Route path="/employee/education/:id" element={<EmployeeEducationTab />} />

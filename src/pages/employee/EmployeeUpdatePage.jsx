@@ -6,7 +6,7 @@ import { FaRegImages } from "react-icons/fa";
 import { useAuth } from '../../contexts/AuthContext';
 import { Styles } from '../../utils/CsStyle';
 import { getDepartmentsApi } from '../../services/departmentApi';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { getEmployeeApi, updateEmployeeApi } from '../../services/employeeApi';
 import moment from 'moment';
 import uploadUrl from '../../services/uploadApi';
@@ -142,7 +142,11 @@ const EmployeeUpdatePage = () => {
     const handleFinish = async (values) => {
         try {
             const formData = new FormData();
-
+            const safeAppend = (key, value) => {
+                if (value !== undefined && value !== null && value !== '') {
+                    formData.append(key, value);
+                }
+            };
             // Flat fields
             formData.append('employee_id', values.employee_id);
             formData.append('first_name_en', values.first_name_en); // Assuming you use first_name_en for backend
@@ -157,10 +161,10 @@ const EmployeeUpdatePage = () => {
             formData.append('place_of_birth', values.place_of_birth || '');
             formData.append('nationality', values.nationality || '');
             formData.append('maritalStatus', values.maritalStatus || '');
-            formData.append('city', values.city || '');
-            formData.append('district', values.district || '');
-            formData.append('commune', values.commune || '');
-            formData.append('village', values.village || '');
+            safeAppend('city', values.city);
+            safeAppend('district', values.district);
+            safeAppend('commune', values.commune);
+            safeAppend('village', values.village);
             formData.append('isActive', values.isActive ?? true);
 
             // Nested objects (stringify before sending)
@@ -213,7 +217,8 @@ const EmployeeUpdatePage = () => {
                     paddingRight: 20,
                 }}
             >
-                <div className="mb-3">
+                <div className="mb-3 flex justify-between">
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />ព័ត៌មានបុគ្គលិក</p>
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 {/* Always render all tab contents, but control visibility via style only */}
@@ -249,8 +254,8 @@ const EmployeeUpdatePage = () => {
                 {/* Submit Button */}
                 <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                     style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
-                    <button type="button" className={Styles.btnCancel}>Cancel</button>
-                    <button type="submit" className={Styles.btnCreate}>Submit</button>
+                    {/* <button type="button" className={Styles.btnCancel}>Cancel</button> */}
+                    <button type="submit" className={Styles.btnCreate}>{content["submit"]}</button>
                 </div>
             </Form>
 

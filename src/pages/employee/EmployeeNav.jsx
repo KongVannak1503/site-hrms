@@ -13,6 +13,7 @@ const EmployeeNav = () => {
         { key: 'education', label: 'Education', path: `/employee/education/${id}` },
         { key: 'history', label: 'Employment History', path: `/employee/history/${id}` },
         { key: 'document', label: 'Document', path: `/employee/document/${id}` },
+        { key: 'book', label: 'Employee Book', path: `/employee/book/${id}` },
         { key: 'nssf', label: 'NSSF', path: `/employee/nssf/${id}` },
     ];
 
