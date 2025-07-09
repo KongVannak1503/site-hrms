@@ -20,11 +20,11 @@ const MainLayout = () => {
     const showTabHeader = useShowTabHeader();
 
     useEffect(() => {
-        if (showTabHeader) {
-            setCollapsed(!isMobile);
-        } else {
-            setCollapsed(isMobile);
-        }
+        // if (showTabHeader) {
+        setCollapsed(!isMobile);
+        // } else {
+        //     setCollapsed(isMobile);
+        // }
     }, [isMobile, showTabHeader]);
 
     return (

@@ -16,6 +16,7 @@ const EmployeeNav = () => {
         { key: 'history', label: content['employmentHistory'], path: `/employee/history/${id}` },
         { key: 'document', label: content['document'], path: `/employee/document/${id}` },
         { key: 'book', label: content['employeeBook'], path: `/employee/book/${id}` },
+        { key: 'law', label: content['laborLaw'], path: `/employee/law/${id}` },
         { key: 'nssf', label: content['nssf'], path: `/employee/nssf/${id}` },
     ];
 

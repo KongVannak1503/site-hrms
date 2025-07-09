@@ -23,6 +23,8 @@ import { getEducationLevelViewApi } from '../../services/educationLevelApi';
 import EmployeeDocumentTab from './EmployeeDocumentTab';
 import EmployeeNav from './EmployeeNav';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
+import CityCreatePage from '../settings/employee/city/CityCreatePage';
+import ModalMdCenter from '../../components/modals/ModalMdCenter';
 
 const EmployeeUpdatePage = () => {
     const { id } = useParams();
@@ -40,8 +42,39 @@ const EmployeeUpdatePage = () => {
     const [villages, setVillages] = useState([]);
     const [levels, setLevels] = useState([]);
     const [activeTab, setActiveTab] = useState('personal');
+    const [open, setOpen] = useState(false);
+    const [actionForm, setActionForm] = useState('create');
+    const [selectId, setSelectedId] = useState(null);
+
+    const closeDrawer = async () => {
+        setOpen(false);
+        // refreshLanguages();
+    };
+
+    // const refreshLanguages = async () => {
+    //     try {
+    //         const resLanguages = await getLanguagesApi();
+    //         setLanguages(resLanguages);
+    //         console.log(resLanguages);
+    //     } catch (error) {
+    //         console.error("Failed to fetch languages:", error);
+    //     }
+    // };
+
+    const showCreateDrawer = (create = '', id = '') => {
+        if (create == 'create') {
+            setOpen(true);
+            setActionForm('create');
+        } if (create == 'update') {
+            setOpen(true);
+            setSelectedId(id);
+            setActionForm('update');
+        }
+
+    };
 
     useEffect(() => {
+        document.title = `${content['employeeInfo']} | USEA`;
         const fetchInitialData = async () => {
             try {
                 const response = await getEmployeeApi(id);
@@ -55,7 +88,8 @@ const EmployeeUpdatePage = () => {
                     last_name_en: response.last_name_en,
                     first_name_en: response.first_name_en,
                     gender: response.gender,
-                    height: response.height,
+                    email: response.email,
+                    phone: response.phone,
                     date_of_birth: response.date_of_birth ? moment(response.date_of_birth) : null,
                     place_of_birth: response.place_of_birth,
                     nationality: response.nationality,
@@ -69,6 +103,13 @@ const EmployeeUpdatePage = () => {
                     district: response.district?._id || response.district,
                     commune: response.commune?._id || response.commune,
                     village: response.village?._id || response.village,
+
+                    // present
+                    present_city: response.present_city?._id || response.present_city,
+                    present_district: response.present_district?._id || response.present_district,
+                    present_commune: response.present_commune?._id || response.present_commune,
+                    present_village: response.present_village?._id || response.present_village,
+
                     staff_relationships: response.staff_relationships?.map(item => ({
                         ...item,
                         date_of_birth: item.date_of_birth ? moment(item.date_of_birth) : null,
@@ -154,7 +195,8 @@ const EmployeeUpdatePage = () => {
             formData.append('first_name_kh', values.first_name_kh); // Assuming you use first_name_en for backend
             formData.append('last_name_kh', values.last_name_kh);
             formData.append('gender', values.gender || '');
-            formData.append('height', values.height || '');
+            formData.append('email', values.email || '');
+            formData.append('phone', values.phone || '');
             formData.append('id_card_no', values.id_card_no || '');
             formData.append('passport_no', values.passport_no || '');
             formData.append('date_of_birth', values.date_of_birth);
@@ -165,11 +207,14 @@ const EmployeeUpdatePage = () => {
             safeAppend('district', values.district);
             safeAppend('commune', values.commune);
             safeAppend('village', values.village);
+            // present
+            safeAppend('present_city', values.present_city);
+            safeAppend('present_district', values.present_district);
+            safeAppend('present_commune', values.present_commune);
+            safeAppend('present_village', values.present_village);
             formData.append('isActive', values.isActive ?? true);
 
             // Nested objects (stringify before sending)
-            formData.append('present_address', JSON.stringify(values.present_address || {}));
-            formData.append('permanent_address', JSON.stringify(values.permanent_address || {}));
             formData.append('family_members', JSON.stringify(values.family_members || []));
             formData.append('emergency_contact', JSON.stringify(values.emergency_contact || []));
 
@@ -234,6 +279,7 @@ const EmployeeUpdatePage = () => {
                         districts={districts}
                         communes={communes}
                         villages={villages}
+                        showCreateDrawer={showCreateDrawer}
                     />
                 </div>
 
@@ -258,7 +304,23 @@ const EmployeeUpdatePage = () => {
                     <button type="submit" className={Styles.btnCreate}>{content["submit"]}</button>
                 </div>
             </Form>
-
+            <ModalMdCenter
+                open={open}
+                onOk={() => setOpen(false)}
+                onCancel={closeDrawer}
+                title={
+                    actionForm === 'create'
+                        ? `${content['create']} ${content['newStart']} ${content['city']}${content['newEnd']}`
+                        : `${content['update']} ${content['city']}`
+                }
+            >
+                {actionForm === 'create' ? (
+                    <CityCreatePage mess={"mess"} onUserCreated={''} onCancel={closeDrawer} />
+                ) : (
+                    ''
+                    // <CityUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                )}
+            </ModalMdCenter>
         </div >
     );
 };

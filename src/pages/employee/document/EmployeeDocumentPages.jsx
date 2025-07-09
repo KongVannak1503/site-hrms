@@ -1,5 +1,5 @@
-import { Upload, Button, message, Card, Table, Tag, Space, Tooltip } from 'antd';
-import { CloudDownloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { Upload, Button, message, Card, Table, Tag, Space, Tooltip, Input } from 'antd';
+import { CloudDownloadOutlined, FileTextOutlined, UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { createEpmUploadApi, deleteEpmUploadApi, getEpmUploadApi } from '../../../services/employeeApi';
@@ -11,10 +11,12 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import { formatDateTime } from '../../../utils/utils';
 import StatusTag from '../../../components/style/StatusTag';
 import uploadUrl, { handleDownload } from '../../../services/uploadApi';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 
-const DocumentUploader = () => {
+const EmployeeDocumentPage = () => {
     const { content } = useAuth();
     const [fileList, setFileList] = useState([]);
+    const [title, setTitle] = useState('');
     const { id } = useParams();
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [users, setUsers] = useState([]);
@@ -25,7 +27,7 @@ const DocumentUploader = () => {
     };
 
     useEffect(() => {
-        document.title = content['documents'];
+        document.title = `${content['documents']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getEpmUploadApi(id);
@@ -47,7 +49,7 @@ const DocumentUploader = () => {
 
     const handleUpload = async () => {
         const formData = new FormData();
-
+        formData.append('title', title);
         fileList.forEach(file => {
             formData.append('documents', file.originFileObj);
         });
@@ -55,6 +57,7 @@ const DocumentUploader = () => {
         try {
             await createEpmUploadApi(id, formData);
             message.success('Documents uploaded successfully!');
+            setTitle('')
             setUploadedFiles(fileList.map(file => file.name));
             setFileList([]);
 
@@ -93,9 +96,9 @@ const DocumentUploader = () => {
     const columns = [
         {
             title: content['name'],
-            dataIndex: "name",
-            key: "name",
-            render: (text) => <span>{text}</span>,
+            dataIndex: "title",
+            key: "title",
+            render: (_, text) => <span>{text.title}</span>,
         },
 
         {
@@ -117,7 +120,7 @@ const DocumentUploader = () => {
             key: "createdAt",
             render: (text, record) => <div>
                 <span>{formatDateTime(text)}</span>
-                <p>{record.createdBy ? `Created by: ${record.createdBy?.username}` : ''}</p>
+                <p>{record.createdBy ? `${content['createdBy']}: ${record.createdBy?.username}` : ''}</p>
             </div>,
         },
         {
@@ -140,24 +143,48 @@ const DocumentUploader = () => {
                         title: content['confirmDelete'],
                         okText: content['yes'],
                         cancelText: content['no'],
-                        description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
+                        description: `${content['areYouSureToDelete']} ${record.title || 'this item'}?`
                     })}
                 </Space>
             ),
         },
     ];
 
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['employee'], path: '/employee' },
+        { breadcrumbName: content['documents'] }
+    ];
+
     return (
         <>
-            <EmployeeNav />
+            <div
+                className="employee-tab-bar !bg-white !border-b !border-gray-200 px-5 !pb-0 !mb-0"
+                style={{ position: 'fixed', top: 56, width: '100%', zIndex: 20 }}
+            >
+                <EmployeeNav />
+            </div>
 
             <div style={{
-                paddingTop: 20,
+                paddingTop: 56,
                 paddingBottom: 100,
                 paddingLeft: 20,
                 paddingRight: 20,
             }}>
-                <Card title="Documents" className="shadow">
+                <div className="mb-3 flex justify-between">
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeInfo']}</p>
+                    <CustomBreadcrumb items={breadcrumbItems} />
+                </div>
+                <Card title={<p className='text-default text-sm font-bold'>{content['documents']}</p>} className="shadow">
+                    <div className='pb-3'>{`${content['documentName']}`}</div>
+                    <div className="grid grid-cols-3">
+                        <Input
+                            name="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
+                    <div className="mt-3"></div>
                     <Upload
                         multiple
                         beforeUpload={() => false}
@@ -183,12 +210,11 @@ const DocumentUploader = () => {
 
             <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                 style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
-                <button type="button" className={Styles.btnCancel}>Cancel</button>
                 <button onClick={handleUpload}
-                    disabled={fileList.length === 0} type="submit" className={Styles.btnCreate}>Submit</button>
+                    disabled={fileList.length === 0} type="submit" className={Styles.btnCreate}>{content['save']}</button>
             </div>
         </>
     );
 };
 
-export default DocumentUploader;
+export default EmployeeDocumentPage;
