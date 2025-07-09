@@ -38,8 +38,12 @@ import CreateApplicantPage from './pages/recruitment/applicants/CreateApplicantP
 import EmployeeDocumentPage from './pages/employee/document/EmployeeDocumentPage'
 import EmployeeEducationTab from './pages/employee/EmployeeEducationTab'
 import EmployeeHistoryPage from './pages/employee/EmployeeHistoryPage'
-import DocumentUploader from './pages/employee/document/EmployeeTest'
 import DocumentList from './pages/employee/document/DocumentList'
+import EmployeeDocumentPages from './pages/employee/document/EmployeeDocumentPages'
+import EmployeeBookPage from './pages/employee/book/EmployeeBookPage'
+import LaborLawPage from './pages/employee/law/LaborLawPage'
+import NSSFPage from './pages/employee/book/NSSFPage'
+import PayrollPage from './pages/employee/payroll/PayrollPage'
 
 function App() {
   return (
@@ -76,9 +80,13 @@ function App() {
             <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
             <Route path="/employee/education/:id" element={<EmployeeEducationTab />} />
             <Route path="/employee/history/:id" element={<EmployeeHistoryPage />} />
-            <Route path="/employee/document/:id" element={<DocumentUploader />} />
+            <Route path="/employee/document/:id" element={<EmployeeDocumentPages />} />
+            <Route path="/employee/book/:id" element={<EmployeeBookPage />} />
+            <Route path="/employee/law/:id" element={<LaborLawPage />} />
+            <Route path="/employee/nssf/:id" element={<NSSFPage />} />
             <Route path="/employee/document-list/:id" element={<DocumentList />} />
             <Route path="/employee/create" element={<EmployeeCreatePage />} />
+            <Route path="/payroll" element={<PayrollPage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
             <Route
@@ -138,7 +146,7 @@ function App() {
                 <DepartmentPage />
               } />
 
-              <Route
+            <Route
               path="/setting/positions"
               element={
                 <PositionPage />

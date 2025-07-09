@@ -1,5 +1,5 @@
 import { Button, Card, Checkbox, DatePicker, Form, Input, message, Select } from 'antd'
-import { PlusOutlined, MinusCircleOutlined, FileTextOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusCircleOutlined, FileTextOutlined, FormOutlined } from '@ant-design/icons';
 import React from 'react'
 import { FaRegImages } from 'react-icons/fa';
 import { Styles } from '../../utils/CsStyle';
@@ -9,21 +9,59 @@ import { useEffect } from 'react';
 import EmployeeNav from './EmployeeNav';
 import { useAuth } from '../../contexts/AuthContext';
 import { getEducationLevelViewApi } from '../../services/educationLevelApi';
-import { createEducationApi, getEducationApi } from '../../services/employeeApi';
+import { createEducationApi, getEducationApi, getLanguagesApi } from '../../services/employeeApi';
 import { useParams } from 'react-router-dom';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
+import LanguageCreatePage from './Education/LanguageCreatePage';
+import ModalMdCenter from '../../components/modals/ModalMdCenter';
+import LanguageUpdatePage from './Education/LanguageUpdatePage';
 
 const EmployeeEducationTab = () => {
     const { content } = useAuth();
     const [levels, setLevels] = useState([]);
+    const [languages, setLanguages] = useState([]);
     const [form] = Form.useForm();
+    const [open, setOpen] = useState(false);
+    const [actionForm, setActionForm] = useState('create');
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const closeDrawer = async () => {
+        setOpen(false);
+        refreshLanguages();
+    };
+
+    const refreshLanguages = async () => {
+        try {
+            const resLanguages = await getLanguagesApi();
+            setLanguages(resLanguages);
+            console.log(resLanguages);
+        } catch (error) {
+            console.error("Failed to fetch languages:", error);
+        }
+    };
+
+    const showCreateDrawer = (create = '', id = '') => {
+        if (create == 'create') {
+            setOpen(true);
+            setActionForm('create');
+        } if (create == 'update') {
+            setOpen(true);
+            setSelectedUserId(id);
+            setActionForm('update');
+        }
+
+    };
+
     const { id } = useParams();
     const [educationId, setEducationId] = useState(null);
     useEffect(() => {
+        document.title = `${content['education']} | USEA`;
         const fetchData = async () => {
             try {
                 const resLevel = await getEducationLevelViewApi();
                 setLevels(resLevel);
+
+                const resLanguages = await getLanguagesApi();
+                setLanguages(resLanguages);
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -52,6 +90,11 @@ const EmployeeEducationTab = () => {
                         start_date: item.start_date ? moment(item.start_date) : null,
                         end_date: item.end_date ? moment(item.end_date) : null,
                     })) || [],
+                    vocational_training: response.vocational_training?.map(item => ({
+                        ...item,
+                        start_date: item.start_date ? moment(item.start_date) : null,
+                        end_date: item.end_date ? moment(item.end_date) : null,
+                    })) || [],
                 });
             } catch (error) {
                 if (error.response?.status === 404) {
@@ -75,6 +118,7 @@ const EmployeeEducationTab = () => {
             formData.append('language', JSON.stringify(values.language || []));
             formData.append('general_education', JSON.stringify(values.general_education || []));
             formData.append('short_course', JSON.stringify(values.short_course || []));
+            formData.append('vocational_training', JSON.stringify(values.vocational_training || []));
 
             await createEducationApi(id, formData);
             message.success('Save successfully!');
@@ -122,14 +166,14 @@ const EmployeeEducationTab = () => {
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 <div>
-                    <Card title={<p className='text-default text-sm font-bold'>{content['foreignLanguages']}</p>} className="shadow">
+                    <Card title={<p className='text-default text-sm font-bold'>{content['foreignLanguages']}</p>} className="overflow-x-auto">
                         <Form.List name="language">
                             {(fields, { add, remove }) => (
                                 <>
                                     <table className="table-auto w-full">
                                         <thead className="bg-[#17a2b8] text-left text-gray-200 font-semibold rounded-t-md">
                                             <tr className='pt-3 border-b'>
-                                                <th rowSpan={2} className="px-3 py-2 text-center first:rounded-tl-md last:rounded-tr-md">
+                                                <th rowSpan={2} className="min-w-[150px] px-3 py-2 text-center first:rounded-tl-md last:rounded-tr-md">
                                                     {content['languages']}
                                                 </th>
                                                 <th colSpan={3} className="px-3 py-2 text-center">{content['read']}</th>
@@ -164,8 +208,36 @@ const EmployeeEducationTab = () => {
                                                             rules={[{ required: true, message: `${content['please']}${content['enter']}${content['name']}` }]}
                                                             className="mb-0"
                                                         >
-                                                            <Input />
+                                                            <Select
+                                                                showSearch
+                                                                optionFilterProp="children"
+                                                                style={{ width: '100%' }}
+                                                                filterOption={(input, option) =>
+                                                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                                                                }
+                                                                // ✅ These two lines are required for Form.List to work well
+                                                                value={restField?.value?.name}
+                                                                onChange={(value) => restField?.onChange?.({ ...restField.value, name: value })}
+                                                            >
+                                                                {languages.map((language) => (
+                                                                    <Select.Option key={language._id} value={language._id}>
+                                                                        <div className="flex justify-between items-center">
+                                                                            <span>{language.name_kh}</span>
+                                                                            <span
+                                                                                className="hover:text-blue-600 ml-2"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    showCreateDrawer('update', language._id);
+                                                                                }}
+                                                                            >
+                                                                                <FormOutlined />
+                                                                            </span>
+                                                                        </div>
+                                                                    </Select.Option>
+                                                                ))}
+                                                            </Select>
                                                         </Form.Item>
+
                                                     </td>
 
                                                     {/* Read - Poor */}
@@ -287,7 +359,7 @@ const EmployeeEducationTab = () => {
 
                     <hr className='my-3 border-0' />
 
-                    <Card title={<p className='text-default text-sm font-bold'>{content['generalEducation']}</p>} >
+                    <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['generalEducation']}</p>} >
 
                         <Form.List name="general_education">
                             {(fields, { add, remove }) => (
@@ -296,14 +368,14 @@ const EmployeeEducationTab = () => {
                                         <thead className={Styles.tHead}>
                                             <tr className='pt-3 border-b'>
                                                 <th className={Styles.tHeadL}>
-                                                    Universities
+                                                    {content['university']}
                                                 </th>
-                                                <th className="px-0 py-2 text-start">Major of Study</th>
-                                                <th className="px-0 py-2 text-start">Name of Supervisor</th>
-                                                <th className="px-0 py-2 text-start">{content['fromDate']}</th>
-                                                <th className="px-0 py-2 text-start">{content['toDate']}</th>
-                                                <th className="px-0 py-2 text-start">Degree</th>
-                                                <th className={`px-0 py-2 text-start text whitespace-nowrap`}>Title Thesis</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['majorOfStudy']}</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['nameOfSupervisor']}</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['fromDate']}</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['toDate']}</th>
+                                                <th className="px-0 py-2 text-start">{content['degree']}</th>
+                                                <th className={`px-0 py-2 text-start text text-nowrap`}>{content['titleOfThesis']}</th>
                                                 <th className={Styles.tHeadR}></th>
                                             </tr>
                                         </thead>
@@ -311,7 +383,7 @@ const EmployeeEducationTab = () => {
                                             {fields.map(({ key, name, ...restField }, index) => (
                                                 <tr key={key} className="hover:bg-[#f0fbfd] transition">
                                                     {/* Name */}
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'university']}
@@ -321,7 +393,7 @@ const EmployeeEducationTab = () => {
                                                             <Input />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3  min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'major']}
@@ -331,7 +403,7 @@ const EmployeeEducationTab = () => {
                                                             <Input />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'supervisor_name']}
@@ -342,7 +414,7 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'start_date']}
@@ -353,7 +425,7 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'end_date']}
@@ -363,7 +435,7 @@ const EmployeeEducationTab = () => {
                                                             <DatePicker className="w-full" />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'level_id']}
@@ -386,7 +458,7 @@ const EmployeeEducationTab = () => {
                                                             </Select>
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'title_thesis']}
@@ -428,7 +500,137 @@ const EmployeeEducationTab = () => {
                         </Form.List>
                     </Card>
                     <hr className='my-3 border-0' />
-                    <Card title={<p className='text-default text-sm font-bold'>{content['trainingShortCourse']}</p>} >
+                    <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['vocationalTraining']}</p>} >
+                        {/* Table headers */}
+
+                        <Form.List name="vocational_training">
+                            {(fields, { add, remove }) => (
+                                <>
+                                    <table className="table-auto w-full">
+                                        <thead className={Styles.tHead}>
+                                            <tr className='pt-3 border-b'>
+                                                <th className={Styles.tHeadL}>
+                                                    Institution
+                                                </th>
+                                                <th className="px-0 py-2 text-start">Subject</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['fromDate']}</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['toDate']}</th>
+                                                <th className="px-0 py-2 text-start">Level</th>
+                                                <th className={`px-0 py-2 text-start text whitespace-nowrap`}>Certificates</th>
+                                                <th className={Styles.tHeadR}></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {fields.map(({ key, name, ...restField }, index) => (
+                                                <tr key={key} className="hover:bg-[#f0fbfd] transition">
+                                                    {/* Name */}
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'institution']}
+                                                            className="mb-0"
+
+                                                        >
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </td>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'subject']}
+                                                            className="mb-0"
+
+                                                        >
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </td>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'start_date']}
+                                                            className="mb-0"
+
+                                                        >
+                                                            <DatePicker className="w-full" />
+                                                        </Form.Item>
+                                                    </td>
+
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'end_date']}
+                                                            className="mb-0"
+
+                                                        >
+                                                            <DatePicker className="w-full" />
+                                                        </Form.Item>
+                                                    </td>
+
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'level_id']}
+                                                            className="mb-0 w-[100%]"
+
+                                                        >
+                                                            <Select
+                                                                showSearch
+                                                                optionFilterProp="children"
+                                                                style={{ width: '100%', minWidth: 150 }}
+                                                                filterOption={(input, option) =>
+                                                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                                                                }
+                                                            >
+                                                                {levels.map((level) => (
+                                                                    <Select.Option key={level._id || level.id} value={level._id}>
+                                                                        {level.name}
+                                                                    </Select.Option>
+                                                                ))}
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </td>
+
+                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'certificate']}
+                                                            className="mb-0"
+
+                                                        >
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </td>
+
+                                                    {/* Remove button */}
+                                                    <td className={`px-3 ${index === 0 ? 'pt-0' : 'flex justify-start'}`}>
+                                                        <Button
+                                                            type="text"
+                                                            danger
+                                                            icon={<MinusCircleOutlined />}
+                                                            onClick={() => remove(name)}
+                                                            aria-label="Remove language"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <Form.Item>
+                                        <Button
+                                            type="dashed"
+                                            onClick={() => add()}
+                                            block
+                                            icon={<PlusOutlined />}
+                                        >
+                                            {content['add']} {content['vocationalTraining']}
+                                        </Button>
+                                    </Form.Item>
+                                </>
+                            )}
+                        </Form.List>
+                    </Card>
+                    <hr className='my-3 border-0' />
+                    <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['trainingShortCourse']}</p>} >
                         {/* Table headers */}
 
                         <Form.List name="short_course">
@@ -441,8 +643,8 @@ const EmployeeEducationTab = () => {
                                                     Institution
                                                 </th>
                                                 <th className="px-0 py-2 text-start">Subject</th>
-                                                <th className="px-0 py-2 text-start">{content['fromDate']}</th>
-                                                <th className="px-0 py-2 text-start">{content['toDate']}</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['fromDate']}</th>
+                                                <th className="px-0 py-2 text-start text-nowrap">{content['toDate']}</th>
                                                 <th className="px-0 py-2 text-start">Level</th>
                                                 <th className={`px-0 py-2 text-start text whitespace-nowrap`}>Certificates</th>
                                                 <th className={Styles.tHeadR}></th>
@@ -452,7 +654,7 @@ const EmployeeEducationTab = () => {
                                             {fields.map(({ key, name, ...restField }, index) => (
                                                 <tr key={key} className="hover:bg-[#f0fbfd] transition">
                                                     {/* Name */}
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'institution']}
@@ -462,7 +664,7 @@ const EmployeeEducationTab = () => {
                                                             <Input />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'subject']}
@@ -472,7 +674,7 @@ const EmployeeEducationTab = () => {
                                                             <Input />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'start_date']}
@@ -483,7 +685,7 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'end_date']}
@@ -494,7 +696,7 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'level_id']}
@@ -566,6 +768,23 @@ const EmployeeEducationTab = () => {
                     <button type="submit" className={Styles.btnCreate}>Submit</button>
                 </div>
             </Form>
+
+            <ModalMdCenter
+                open={open}
+                onOk={() => setOpen(false)}
+                onCancel={closeDrawer}
+                title={
+                    "Language"
+                }
+            >
+                {actionForm === 'create' && (
+                    <LanguageCreatePage onCancel={closeDrawer} />
+                )}
+                {actionForm === 'update' && (
+                    <LanguageUpdatePage dataId={selectedUserId} content={content} onCancel={closeDrawer} />
+
+                )}
+            </ModalMdCenter>
         </div >
     )
 }

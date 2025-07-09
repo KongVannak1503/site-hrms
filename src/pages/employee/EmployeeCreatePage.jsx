@@ -101,7 +101,8 @@ const EmployeeCreatePage = () => {
             formData.append('first_name_kh', values.first_name_kh); // Assuming you use first_name_en for backend
             formData.append('last_name_kh', values.last_name_kh);
             formData.append('gender', values.gender);
-            formData.append('height', values.height);
+            formData.append('phone', values.phone);
+            formData.append('email', values.email);
             formData.append('date_of_birth', values.date_of_birth);
             formData.append('place_of_birth', values.place_of_birth);
             formData.append('nationality', values.nationality);
@@ -111,14 +112,18 @@ const EmployeeCreatePage = () => {
             safeAppend('district', values.district);
             safeAppend('commune', values.commune);
             safeAppend('village', values.village);
+
+            safeAppend('present_city', values.present_city);
+            safeAppend('present_district', values.present_district);
+            safeAppend('present_commune', values.present_commune);
+            safeAppend('present_village', values.present_village);
+
             formData.append('isActive', values.isActive ?? true);
 
             // Upload file if any
             formData.append('file', file);
 
             // Nested objects (stringify before sending)
-            formData.append('present_address', JSON.stringify(values.present_address || {}));
-            formData.append('permanent_address', JSON.stringify(values.permanent_address || {}));
             formData.append('family_members', JSON.stringify(values.family_members || []));
             formData.append('emergency_contact', JSON.stringify(values.emergency_contact || []));
             formData.append('staff_relationships', JSON.stringify(values.staff_relationships || []));
@@ -135,7 +140,6 @@ const EmployeeCreatePage = () => {
             message.error(error.response?.data?.message || 'Failed to create');
         }
     };
-
 
 
     const tabItems = [

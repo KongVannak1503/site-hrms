@@ -1,11 +1,14 @@
 import React from 'react';
 import { Card, Upload, Form, Input, Select, DatePicker, Button, Tabs } from 'antd';
 import { FaRegImages } from 'react-icons/fa';
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusCircleOutlined, FormOutlined } from '@ant-design/icons';
 import { nationalityOption } from '../../data/Nationality';
+import CityUpdatePage from '../settings/employee/city/CityUpdatePage';
+import CityCreatePage from '../settings/employee/city/CityCreatePage';
+import ModalMdCenter from '../../components/modals/ModalMdCenter';
 
 
-const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages }) => {
+const EmployeePersonalTab = ({ showCreateDrawer, content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages }) => {
 
     return (
         <div>
@@ -55,7 +58,7 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
 
                     {/* Basic info */}
                     < div className="md:col-span-3" >
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             <Form.Item name="employee_id" label={content['employeeID']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['employeeID']}` }]}>
                                 <Input />
                             </Form.Item>
@@ -79,6 +82,12 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                         </Select.Option>
                                     ))}
                                 </Select>
+                            </Form.Item>
+                            <Form.Item name="email" label={content['email']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="phone" label={content['phone']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
+                                <Input />
                             </Form.Item>
                         </div>
                     </div >
@@ -105,86 +114,43 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                     <Form.Item name="passport_no" label={content['passportNo']}><Input /></Form.Item>
 
                 </div>
-                <Tabs
-                    defaultActiveKey="present"
-                    className='custom-tabs'
-                    items={[
-                        {
-                            label: 'Present Address',
-                            key: 'present',
-                            children: (
-                                <>
-                                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                                        <Form.Item
-                                            name={['present_address', 'email']}
-                                            label={content['email']}
-                                        >
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item
-                                            name={['present_address', 'phone']}
-                                            label={content['phone']}
-                                        >
-                                            <Input />
-                                        </Form.Item>
-                                    </div>
-                                    <Form.Item
-                                        name={['present_address', 'description']}
-                                        label={content['description']}
-                                    >
-                                        <Input.TextArea rows={4} />
-                                    </Form.Item>
-                                </>
-                            ),
-                        },
-                        {
-                            label: 'Permanent Address',
-                            key: 'permanent',
-                            children: (
-                                <>
-                                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                                        <Form.Item
-                                            name={['permanent_address', 'email']}
-                                            label={content['email']}
-                                        >
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item
-                                            name={['permanent_address', 'phone']}
-                                            label={content['phone']}
-                                        >
-                                            <Input />
-                                        </Form.Item>
-                                    </div>
-                                    <Form.Item
-                                        name={['permanent_address', 'description']}
-                                        label={content['description']}
-                                    >
-                                        <Input.TextArea rows={4} />
-                                    </Form.Item>
-                                </>
-                            ),
-                        },
-                    ]}
-                />
-                <p className='text-default text-sm font-bold mb-4'>ទីកន្លែងកំណើត</p>
+
+                <p className='text-default text-sm font-bold mb-4'>{content['placeOfBirth']}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Form.Item name="city" label={content['province']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {cities.map((city) => (
-                                <Select.Option key={city._id || city.id} value={city._id}>
-                                    {city.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <div className="flex items-center gap-2">
+                            <Select
+                                showSearch
+                                optionFilterProp="children"
+                                style={{ width: '100%' }}
+                                filterOption={(input, option) =>
+                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                            >
+                                {cities.map((city) => (
+                                    <Select.Option key={city._id || city.id} value={city._id}>
+                                        <div className="flex justify-between items-center">
+                                            <span>{city.name}</span>
+                                            <span
+                                                className=" hover:text-blue-600 ml-2"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    showCreateDrawer('update', city._id); // your update modal
+                                                }}
+                                            >
+                                                <FormOutlined />
+                                            </span>
+                                        </div>
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                            <PlusOutlined
+                                className="text-blue-500 cursor-pointer hover:text-blue-600"
+                                onClick={() => showCreateDrawer('create', '')}
+                            />
+                        </div>
+
                     </Form.Item>
                     <Form.Item name="district" label={content['district']}>
                         <Select
@@ -219,6 +185,75 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                         </Select>
                     </Form.Item>
                     <Form.Item name="village" label={content['village']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {villages.map((village) => (
+                                <Select.Option key={village._id} value={village._id}>
+                                    {village.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                </div>
+
+                <p className='text-default text-sm font-bold mb-4'>{content['presentAddress']}</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <Form.Item name="present_city" label={content['province']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {cities.map((city) => (
+                                <Select.Option key={city._id || city.id} value={city._id}>
+                                    {city.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="present_district" label={content['district']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {districts.map((district) => (
+                                <Select.Option key={district._id} value={district._id}>
+                                    {district.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="present_commune" label={content['commune']}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {communes.map((commune) => (
+                                <Select.Option key={commune._id} value={commune._id}>
+                                    {commune.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="present_village" label={content['village']}>
                         <Select
                             showSearch
                             optionFilterProp="children"
@@ -327,8 +362,6 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                                         name={[name, 'name']}
                                         label={content['name']}
                                         rules={[{ required: true, message: `${content['please']}${content['enter']}${content['name']}` }]}
-
-
                                     >
                                         <Input />
                                     </Form.Item>
@@ -385,76 +418,6 @@ const EmployeePersonalTab = ({ content, fileList, handleChange, previewUrl, gend
                 </Form.List>
             </Card>
 
-            <hr className="border-0 py-3" />
-            {/* <Card title="Relationship With Staff" className="shadow">
-                <p className='mb-5'> Do you have any relationship with staff?  if the answer is "yes", give the following information:</p>
-                <Form.List name="staff_relationships">
-                    {(fields, { add, remove }) => (
-                        <>
-                            {fields.map(({ key, name, ...restField }) => (
-                                <div
-                                    key={key}
-                                    className="grid items-center grid-cols-1 md:grid-cols-4 gap-4 mb-4 items-end"
-                                >
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'name']}
-                                        label={content['name']}
-
-                                    >
-                                        <Input />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name={[name, 'date_of_birth']}
-                                        label={content['dateOfBirth']}
-                                    >
-                                        <DatePicker className='w-[100%]' />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'position']}
-                                        label={content['position']}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'relationship']}
-                                        label={content['relationship']}
-                                    >
-                                        <div className="flex">
-                                            <Input />
-
-                                            <Button
-                                                type="text"
-                                                danger
-                                                icon={<MinusCircleOutlined />}
-                                                onClick={() => remove(name)}
-                                                aria-label="Remove Emergency Contact"
-                                            />
-                                        </div>
-                                    </Form.Item>
-
-                                </div>
-                            ))}
-
-                            <Form.Item>
-                                <Button
-                                    type="dashed"
-                                    onClick={() => add()}
-                                    block
-                                    icon={<PlusOutlined />}
-                                >
-                                    Add Emergency Contact
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form.List>
-            </Card> */}
         </div >
     );
 };

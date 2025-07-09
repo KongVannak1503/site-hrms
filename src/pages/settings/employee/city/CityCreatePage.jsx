@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
-import { Typography } from 'antd';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { createCityApi } from '../../../../services/cityApi';
 import { Styles } from '../../../../utils/CsStyle';
 
-const CityCreatePage = ({ form, onCancel, onUserCreated }) => {
+const CityCreatePage = ({ mess = '', onCancel, onUserCreated }) => {
     const { content } = useAuth();
-
-    const { Text } = Typography;
+    const [form] = Form.useForm();
     useEffect(() => {
         form.resetFields();
     }, [content]);
@@ -28,7 +26,10 @@ const CityCreatePage = ({ form, onCancel, onUserCreated }) => {
             form.resetFields();
         } catch (error) {
             console.error('Error creating User:', error);
-            message.error('Failed to create User');
+
+            if (mess !== 'mess') {
+                message.error(mess || 'Failed to create ');
+            }
         }
     };
 

@@ -3,19 +3,20 @@ import React, { useState } from 'react'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
+import ModalMdCenter from '../../../components/modals/ModalMdCenter';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
-import CityCreatePage from './CityCreatePage';
-import CityUpdatePage from './CityUpdatePage';
-import { useAuth } from '../../../../contexts/AuthContext';
-import { deleteCityApi, getCitiesApi } from '../../../../services/cityApi';
-import { formatDateTime } from '../../../../utils/utils';
-import { Styles } from '../../../../utils/CsStyle';
-import { ConfirmDeleteButton } from '../../../../components/button/ConfirmDeleteButton ';
-import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
-import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
-import ModalMdCenter from '../../../../components/modals/ModalMdCenter';
+import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
+import { Styles } from '../../../utils/CsStyle';
+import { formatDateTime } from '../../../utils/utils';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
+import CategoryUpdatePage from './CategoryUpdatePage';
+import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import { deletePayrollApi, getPayrollsApi } from '../../../services/payrollApi';
+import PayrollCreatePage from './PayrollCreatePage';
+import { typePayrollOptions } from '../../../data/Type';
 
-const CityPage = () => {
+const PayrollPage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -54,14 +55,16 @@ const CityPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['cities'] }
+        { breadcrumbName: content['payroll'] }
     ];
 
     useEffect(() => {
-        document.title = content['cities'];
+        document.title = content['payroll'];
         const fetchData = async () => {
             try {
-                const response = await getCitiesApi();
+                const response = await getPayrollsApi();
+                console.log(response);
+
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -87,7 +90,7 @@ const CityPage = () => {
             setFilteredData(users);
         } else {
             const filtered = users.filter((base) =>
-                base.name.toLowerCase().includes(term)
+                base.title.toLowerCase().includes(term)
             );
             setFilteredData(filtered);
         }
@@ -97,7 +100,7 @@ const CityPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteCityApi(id); // call the API
+            await deletePayrollApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -110,12 +113,26 @@ const CityPage = () => {
 
     const columns = [
         {
-            title: content['name'],
-            dataIndex: "name",
-            key: "name",
-            render: (text) => <span>{text}</span>,
+            title: content['department'],
+            dataIndex: "departmentId",
+            key: "departmentId",
+            render: (_, text) => <span>{text.departmentId?.title}</span>,
         },
-
+        {
+            title: content['name'],
+            dataIndex: "employeeId",
+            key: "employeeId",
+            render: (_, text) => <span>{text.employeeId?.name_kh}</span>,
+        },
+        {
+            title: content['type'],
+            dataIndex: 'status', // this is the ID stored in your data
+            key: 'status',
+            render: (value) => {
+                const type = typePayrollOptions.find(item => item.id === value);
+                return type ? type.name_kh : '-'; // or use `type.name_kh`
+            },
+        },
         {
             title: content['createdAt'],
             dataIndex: "createdAt",
@@ -125,22 +142,7 @@ const CityPage = () => {
                 <p>{record.createdBy ? `Created by: ${record.createdBy?.username}` : ''}</p>
             </div>,
         },
-        {
-            title: content['status'],
-            dataIndex: "isActive",
-            key: "isActive",
-            render: (text) => {
-                const isActive = Boolean(text); // ensure it's a boolean
-                const color = isActive ? 'geekblue' : 'volcano';
-                const label = isActive ? 'ACTIVE' : 'INACTIVE';
 
-                return (
-                    <Tag color={color} key={String(text)}>
-                        {label}
-                    </Tag>
-                );
-            }
-        },
         {
             title: (
                 <span style={{ display: "flex", justifyContent: "center", width: "100%" }}>
@@ -256,7 +258,7 @@ const CityPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['cities']}</h5>
+                        <h5 className='text-lg font-semibold'>{content['payroll']}</h5>
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
@@ -296,14 +298,14 @@ const CityPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['city']}${content['newEnd']}`
-                            : `${content['update']} ${content['city']}`
+                            ? `${content['create']} ${content['newStart']} ${content['payroll']}${content['newEnd']}`
+                            : `${content['update']} ${content['payroll']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <CityCreatePage onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <PayrollCreatePage onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <CityUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
 
@@ -312,4 +314,4 @@ const CityPage = () => {
     )
 }
 
-export default CityPage
+export default PayrollPage

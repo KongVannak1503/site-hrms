@@ -8,6 +8,13 @@
   --table-check-color: rgba(11, 154, 176, 0.15);
 }
 
+input,
+select,
+textarea,
+label {
+  font-family: 'Siemreap', sans-serif !important;
+}
+
 .text-default {
   color: var(--layout-sider-background);
 }
