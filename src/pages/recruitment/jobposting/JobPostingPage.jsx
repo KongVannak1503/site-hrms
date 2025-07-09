@@ -16,6 +16,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import JobCardList from './JobCardList';
 
 
 const JobPostingPage = () => {
@@ -36,7 +37,7 @@ const JobPostingPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: "Job Posting" }
+        { breadcrumbName: content['jobPosting'] }
     ];
 
     useEffect(() => {
@@ -107,6 +108,9 @@ const JobPostingPage = () => {
         setSelectedJob(null);
     };
 
+    const handleCardClick = (job) => {
+        navigate(`/job-postings/${job._id}/candidates`);
+    };
 
     const columns = [
         {
@@ -143,6 +147,13 @@ const JobPostingPage = () => {
             dataIndex: "close_date",
             key: "close_date",
             render: (text) => <span>{formatDateTime(text)}</span>,
+        },
+        {
+            title: content['numberOfCandidates'] || 'Candidates',
+            dataIndex: 'candidates_count',
+            key: 'candidates_count',
+            align: 'center',
+            render: (count) => count ?? 0,
         },
         {
             title: content['status'],
@@ -339,7 +350,13 @@ const JobPostingPage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="flex justify-between">
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+                    ព័ត៌មាន{content['jobPosting']}
+                </h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
+            </div>
+
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -371,26 +388,13 @@ const JobPostingPage = () => {
                     </div>
                 </div>
 
-                <Table
-                    className='custom-pagination custom-checkbox-table'
-                    scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
-                    columns={columns}
-                    dataSource={filteredData}
-                    rowKey="_id"
-                    pagination={{
-                        ...pagination,
-                        showSizeChanger: true,
-                        pageSizeOptions: ['10', '20', '50', '100'],
-                        showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
-                        onChange: (page, pageSize) => {
-                            setPagination({
-                                ...pagination,
-                                current: page,
-                                pageSize: pageSize,
-                            });
-                        }
-                    }}
+                <JobCardList
+                    jobs={filteredData}
+                    onView={(job) => handleView(job)}
+                    onEdit={(job) => handleUpdateNav(job._id)}
+                    onDelete={(job) => handleDelete(job._id)}
+                    pageSize={6}
+                    onCardClick={handleCardClick}
                 />
 
                 <Drawer

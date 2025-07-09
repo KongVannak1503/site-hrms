@@ -125,9 +125,16 @@ const EmployeePage = () => {
             dataIndex: "image_url",
             key: "image_url",
             render: (text, record) =>
-                <Avatar
-                    size={40}
+                // <Avatar
+                //     size={40}
+                //     src={`${uploadUrl}/${record.image_url?.path}`}
+                // />
+                <img
                     src={`${uploadUrl}/${record.image_url?.path}`}
+                    alt="photo"
+                    width={60}
+                    height={60}
+                    style={{ borderRadius: '5px', objectFit: 'cover' }}
                 />
         },
 

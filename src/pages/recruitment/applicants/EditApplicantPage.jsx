@@ -1,54 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card, Form, Input, DatePicker, Select, Upload,
-  Button, Row, Col, message, Spin, Modal
+  Button, Row, Col, message, Spin
 } from 'antd';
-import {
-  UploadOutlined, EyeOutlined
-} from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { UploadOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import { useAuth } from '../../../contexts/AuthContext';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import { Styles } from '../../../utils/CsStyle';
 import { getJobPostingsApi } from '../../../services/jobPosting';
-import dayjs from 'dayjs';
 import { getCitiesApi } from '../../../services/cityApi';
-import { createApplicantApi } from '../../../services/applicant';
+import { getApplicantApi, updateApplicantApi } from '../../../services/applicant';
 import { FaRegImages } from 'react-icons/fa';
+import { Styles } from '../../../utils/CsStyle';
+import uploadUrl from '../../../services/uploadApi';
+import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 
 const { Option } = Select;
 
-const CreateApplicantPage = () => {
+const EditApplicantPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { content } = useAuth();
+  const { id } = useParams();
+  const { isLoading, content } = useAuth();
 
-  const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState([]);
-  const [jobPostings, setJobPostings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [provinces, setProvinces] = useState([]);
   const [loadingProvinces, setLoadingProvinces] = useState(true);
+  const [jobPostings, setJobPostings] = useState([]);
+  const [provinces, setProvinces] = useState([]);
 
+  // Manage photo and CV files in state (not controlled by Form)
+  const [fileList, setFileList] = useState([]);
+  const [previewImage, setPreviewImage] = useState('');
+  const [cvFileList, setCvFileList] = useState([]);
+
+  // Load job postings and provinces
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const jobs = await getJobPostingsApi();
-        const now = dayjs();
-        const openJobs = jobs
-          .filter(job => job.status && dayjs(job.open_date).isBefore(now) && dayjs(job.close_date).isAfter(now))
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setJobPostings(openJobs);
+        setJobPostings(jobs);
       } catch {
         message.error("Failed to load job postings");
       } finally {
         setLoadingJobs(false);
       }
     };
-    fetchJobs();
-  }, []);
-
-  useEffect(() => {
     const fetchProvinces = async () => {
       try {
         const provs = await getCitiesApi();
@@ -59,40 +57,118 @@ const CreateApplicantPage = () => {
         setLoadingProvinces(false);
       }
     };
+    fetchJobs();
     fetchProvinces();
   }, []);
+
+  // Load applicant data
+  useEffect(() => {
+    const fetchApplicant = async () => {
+      try {
+        setLoading(true);
+        const data = await getApplicantApi(id);
+        form.setFieldsValue({
+          ...data,
+          dob: data.dob ? dayjs(data.dob) : null,
+          job_posting_id: data.job_posting_id?._id || data.job_posting_id,
+          current_province: data.current_province,
+          // add more fields as needed
+        });
+
+        // Set photo preview and fileList state if photo exists
+        if (data.photo) {
+          setPreviewImage(`${uploadUrl}/uploads/applicants/${encodeURIComponent(data.photo)}`);
+          setFileList([
+            {
+              uid: '-1',
+              name: data.photo,
+              status: 'done',
+              url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(data.photo)}`,
+              originFileObj: null,
+            },
+          ]);
+        } else {
+          setFileList([]);
+          setPreviewImage('');
+        }
+
+        // Set CV fileList state if CV exists
+        if (data.cv) {
+          setCvFileList([
+            {
+              uid: '-1',
+              name: data.cv,
+              status: 'done',
+              url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(data.cv)}`,
+            },
+          ]);
+        } else {
+          setCvFileList([]);
+        }
+      } catch {
+        message.error("Failed to load applicant data");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchApplicant();
+  }, [id, form]);
+
+  // Handle photo upload changes
+  const onPhotoChange = ({ fileList }) => {
+    setFileList(fileList);
+
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      getBase64(fileList[0].originFileObj).then(setPreviewImage);
+    } else if (fileList.length === 0) {
+      setPreviewImage('');
+    }
+  };
+
+  // Handle CV upload changes
+  const onCvChange = ({ fileList }) => {
+    setCvFileList(fileList);
+  };
+
+  // Submit form handler
+  const onFinish = async (values) => {
+    const formData = new FormData();
+
+    // Append all normal fields except photo and cv
+    Object.entries(values).forEach(([key, value]) => {
+      if (key === 'dob' && value) {
+        formData.append(key, value.format('YYYY-MM-DD'));
+      } else if (key !== 'photo' && key !== 'cv') {
+        formData.append(key, value);
+      }
+    });
+
+    // Append photo file if exists (take from fileList state)
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      formData.append('photo', fileList[0].originFileObj);
+    }
+
+    // Append CV file if exists
+    if (cvFileList.length > 0 && cvFileList[0].originFileObj) {
+      formData.append('cv', cvFileList[0].originFileObj);
+    }
+
+    try {
+      await updateApplicantApi(id, formData);
+      message.success("Applicant updated successfully!");
+      navigate('/applicants');
+    } catch {
+      message.error("Failed to update applicant.");
+    }
+  };
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
     { breadcrumbName: content['applicants'], path: '/applicants' },
-    { breadcrumbName: content['createApplicant'] },
+    { breadcrumbName: content['editApplicant'] },
   ];
 
-  const normFile = (e) => Array.isArray(e) ? e : e?.fileList;
-
-  const handleCancel = () => navigate("/applicants");
-
-  const onFinish = async (values) => {
-    const formData = new FormData();
-    Object.entries(values).forEach(([key, value]) => {
-      if (key === 'dob') {
-        formData.append(key, value.format('YYYY-MM-DD'));
-      } else if (key === 'photo' || key === 'cv') {
-        if (value?.[0]?.originFileObj) {
-          formData.append(key, value[0].originFileObj);
-        }
-      } else {
-        formData.append(key, value);
-      }
-    });
-    try {
-      await createApplicantApi(formData);
-      message.success("Applicant created successfully!");
-      navigate('/applicants');
-    } catch {
-      message.error("Failed to create applicant.");
-    }
-  };
+  if (isLoading) return <FullScreenLoader />;
 
   return (
     <div>
@@ -102,32 +178,23 @@ const CreateApplicantPage = () => {
       </div>
 
       <div className='mt-4'>
-        <Card title={content['createApplicant']} className="shadow custom-card">
-          <Form form={form} layout="vertical" onFinish={onFinish}>
+        <Card title={content['editApplicant']} className="shadow custom-card">
+          <Form form={form} layout="vertical" onFinish={onFinish} encType="multipart/form-data">
             <Row gutter={16}>
               {/* Left column: Photo + CV */}
               <Col xs={24} md={6}>
                 <div className="flex justify-center flex-col items-center">
                   <Form.Item
-                    name="photo"
-                    valuePropName="fileList"
-                    getValueFromEvent={normFile}
+                    // REMOVE valuePropName="fileList" and getValueFromEvent to avoid binding fileList to Form
                   >
                     <Upload
                       listType="picture"
                       maxCount={1}
                       accept="image/*"
-                      onChange={({ fileList }) => {
-                        setFileList(fileList);
-                        if (fileList.length > 0) {
-                          getBase64(fileList[0].originFileObj).then(setPreviewImage);
-                        } else {
-                          setPreviewImage('');
-                        }
-                      }}
-                      beforeUpload={() => false}
+                      onChange={onPhotoChange}
+                      beforeUpload={() => false} // Prevent automatic upload
                       fileList={fileList}
-                      showUploadList={false}
+                      showUploadList={false} // Hide default list, you show preview manually
                     >
                       <div className="border mt-2 relative border-dashed bg-gray-50 hover:bg-gray-100 rounded-lg cursor-pointer hover:border-blue-500 w-[180px] h-[200px] flex items-center justify-center overflow-hidden">
                         {previewImage ? (
@@ -135,16 +202,10 @@ const CreateApplicantPage = () => {
                             <p className="absolute bottom-2 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 text-xs whitespace-nowrap">
                               {content['uploadImage'] || "Upload Image"}
                             </p>
-                            {/* 🟡 Now clicking the whole image will allow change */}
                             <img
                               src={previewImage}
                               alt="Uploaded"
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                cursor: 'pointer'
-                              }}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }}
                             />
                           </>
                         ) : (
@@ -162,11 +223,14 @@ const CreateApplicantPage = () => {
 
                 <Form.Item
                   label="Upload CV"
-                  name="cv"
-                  valuePropName="fileList"
-                  getValueFromEvent={normFile}
+                  // Remove valuePropName="fileList" to avoid form binding
                 >
-                  <Upload name="cv" beforeUpload={() => false}>
+                  <Upload
+                    name="cv"
+                    beforeUpload={() => false}
+                    onChange={onCvChange}
+                    fileList={cvFileList}
+                  >
                     <Button icon={<UploadOutlined />}>Click to upload</Button>
                   </Upload>
                 </Form.Item>
@@ -202,11 +266,13 @@ const CreateApplicantPage = () => {
                     </Form.Item>
                   </Col>
 
+                  {/* Add your other form fields here */}
                   <Col xs={24} md={12}>
                     <Form.Item label="Full Name (Khmer)" name="full_name_kh" rules={[{ required: true }]}>
                       <Input />
                     </Form.Item>
                   </Col>
+
                   <Col xs={24} md={12}>
                     <Form.Item label="Full Name (English)" name="full_name_en" rules={[{ required: true }]}>
                       <Input />
@@ -221,11 +287,13 @@ const CreateApplicantPage = () => {
                       </Select>
                     </Form.Item>
                   </Col>
+
                   <Col xs={24} md={8}>
                     <Form.Item label="Date of Birth" name="dob" rules={[{ required: true }]}>
                       <DatePicker style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
+
                   <Col xs={24} md={8}>
                     <Form.Item label="Marital Status" name="material_status">
                       <Select placeholder="Select marital status">
@@ -236,14 +304,16 @@ const CreateApplicantPage = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col xs={24} md={12}>
+                  {/* Add other fields as needed */}
+                   <Col xs={24} md={12}>
                     <Form.Item label="Phone Number" name="phone_no" rules={[{ required: true }]}>
                       <Input />
                     </Form.Item>
                   </Col>
+
                   <Col xs={24} md={12}>
-                    <Form.Item label="Email" name="email" rules={[{ type: 'email' }]}>
-                      <Input />
+                    <Form.Item label="Email" name="email">
+                      <Input type="email" />
                     </Form.Item>
                   </Col>
 
@@ -266,16 +336,19 @@ const CreateApplicantPage = () => {
                       )}
                     </Form.Item>
                   </Col>
+                  
                   <Col xs={24} md={8}>
                     <Form.Item label="District" name="current_district">
                       <Input />
                     </Form.Item>
                   </Col>
+
                   <Col xs={24} md={8}>
                     <Form.Item label="Commune" name="current_commune">
                       <Input />
                     </Form.Item>
                   </Col>
+
                   <Col xs={24}>
                     <Form.Item label="Village" name="current_village">
                       <Input />
@@ -285,14 +358,12 @@ const CreateApplicantPage = () => {
               </Col>
             </Row>
 
-            <div 
-                className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
-                style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
+            <div
+              className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
+              style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
             >
-                <button onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
-                <button type="submit" className={`${Styles.btnCreate}`}>
-                    Save
-                </button>
+              <button onClick={() => navigate("/applicants")} className={`${Styles.btnCancel}`}>Cancel</button>
+              <button type="submit" className={`${Styles.btnUpdate}`}>Update</button>
             </div>
           </Form>
         </Card>
@@ -309,4 +380,4 @@ const getBase64 = (file) =>
     reader.onerror = reject;
   });
 
-export default CreateApplicantPage;
+export default EditApplicantPage;

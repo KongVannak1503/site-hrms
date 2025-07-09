@@ -58,7 +58,7 @@
         "designations": "Designations",
         "designation": "Designation",
 
-        "recruiter": "Recruiter",
+        "recruiter": "Recruitment",
         "recruit": "Recruit",
 
         "firstName": "First Name",
@@ -141,7 +141,13 @@
         "jobType": "Job Type",
         "jobPostings": "Job Postings",
         "jobPosting": "Job Posting",
+        "createJobPosting": "Create Job Posting",
+        "editJobPosting": "Edit Job Posting",
+        "jobApplied": "Candidates Applied",
 
+        "applicants": "Applicants",
+        "createApplicant": "Create Applicant",
+        "editApplicant": "Edit Applicant",
 
         "createdAt": "Created at"
     },
@@ -158,7 +164,7 @@
         "name": "ឈ្មោះ",
         "role": "តួនាទី",
         "roles": "តួនាទី",
-        "status": "ស្ដានភាព",
+        "status": "ស្ថានភាព",
 
         "firstName": "នាម​ខ្លួន",
         "firstNameKh": "នាម​ខ្លួន​​ (ខ្មែរ)",
@@ -227,6 +233,13 @@
         "jobType": "ប្រភេទការងារ",
         "jobPostings": "ប្រកាសរើសការងារ",
         "jobPosting": "ប្រកាសរើសការងារ",
+        "createJobPosting": "បង្កើតការប្រកាសរើសការងារ",
+        "editJobPosting": "កែប្រែការប្រកាសរើសការងារ",
+        "jobApplied": "បេក្ខជនដាក់ពាក្យ",
+
+        "applicants": "បេក្ខជន",
+        "createApplicant": "បង្កើតបេក្ខជន",
+        "editApplicant": "កែប្រែបេក្ខជន",
 
         "employeeID": "អត្តលេខ/ID",
         "gender": "ភេទ",
