@@ -1,5 +1,5 @@
 import { Button, Card, Checkbox, DatePicker, Form, Input, message } from 'antd'
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusCircleOutlined, FileTextOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { Styles } from '../../utils/CsStyle';
 import { useAuth } from '../../contexts/AuthContext';
@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import EmployeeNav from './EmployeeNav';
 import moment from 'moment';
 import { createHistoryApi, getHistoryApi } from '../../services/employeeApi';
+import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 
 const EmployeeHistoryPage = () => {
     const { content } = useAuth();
@@ -15,6 +16,7 @@ const EmployeeHistoryPage = () => {
     const [historyId, setHistoryId] = useState(null);
 
     useEffect(() => {
+        document.title = `${content['employmentHistory']} | USEA`;
         const fetchInitialData = async () => {
             try {
                 const response = await getHistoryApi(id);
@@ -55,6 +57,11 @@ const EmployeeHistoryPage = () => {
             message.error('Failed to save Education');
         }
     };
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['employee'], path: '/employee' },
+        { breadcrumbName: content['employmentHistory'] }
+    ];
 
     return (
         <div className="flex flex-col">
@@ -77,8 +84,12 @@ const EmployeeHistoryPage = () => {
                     paddingRight: 20,
                 }}
             >
+                <div className="mb-3 flex justify-between">
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeInfo']}</p>
+                    <CustomBreadcrumb items={breadcrumbItems} />
+                </div>
                 <div>
-                    <Card title="Exact title of your post" className="shadow">
+                    <Card title={<p className='text-default text-sm font-bold'>{content['employmentHistory']}</p>} className="overflow-x-auto">
                         <Form.List name="employment_history">
                             {(fields, { add, remove }) => (
                                 <>
@@ -86,14 +97,14 @@ const EmployeeHistoryPage = () => {
                                         <thead className={Styles.tHead}>
                                             <tr className='pt-3 border-b'>
                                                 <th className={Styles.tHeadL}>
-                                                    Position
+                                                    {content['position']}
                                                 </th>
-                                                <th className="px-3 py-2 text-center">Company</th>
-                                                <th className="px-3 py-2 text-center">Name of Supervisor</th>
-                                                <th className="px-3 py-2 text-center">Phone</th>
-                                                <th className="px-3 py-2 text-center">Address</th>
-                                                <th className="px-3 py-2 text-center">Start Date</th>
-                                                <th className="px-3 py-2 text-center">End Date</th>
+                                                <th className="px-3 py-2 text-center"> {content['company']}</th>
+                                                <th className="px-3 py-2 text-center text-nowrap"> {content['nameOfSupervisor']}</th>
+                                                <th className="px-3 py-2 text-center"> {content['phone']}</th>
+                                                <th className="px-3 py-2 text-center"> {content['address']}</th>
+                                                <th className="px-3 py-2 text-center text-nowrap"> {content['fromDate']}</th>
+                                                <th className="px-3 py-2 text-center text-nowrap">{content['toDate']}</th>
                                                 <th className={Styles.tHeadR}></th>
                                             </tr>
 
@@ -102,7 +113,7 @@ const EmployeeHistoryPage = () => {
                                             {fields.map(({ key, name, ...restField }, index) => (
                                                 <tr key={key} className="hover:bg-[#f0fbfd] transition">
                                                     {/* Name */}
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'position']}
@@ -111,7 +122,7 @@ const EmployeeHistoryPage = () => {
                                                             <Input />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'company']}
@@ -121,7 +132,7 @@ const EmployeeHistoryPage = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'supervisor_name']}
@@ -130,7 +141,7 @@ const EmployeeHistoryPage = () => {
                                                             <Input />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'phone']}
@@ -140,7 +151,7 @@ const EmployeeHistoryPage = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'address']}
@@ -150,7 +161,7 @@ const EmployeeHistoryPage = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'start_date']}
@@ -159,7 +170,7 @@ const EmployeeHistoryPage = () => {
                                                             <DatePicker className='w-[100%]' />
                                                         </Form.Item>
                                                     </td>
-                                                    <td className={`px-3 ${index === 0 ? 'pt-4' : 'pt-0'}`}>
+                                                    <td className={`px-3 min-w-[100px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
                                                             name={[name, 'end_date']}
@@ -192,7 +203,7 @@ const EmployeeHistoryPage = () => {
                                                 block
                                                 icon={<PlusOutlined />}
                                             >
-                                                Add Language
+                                                {content['addHistory']}
                                             </Button>
                                         </Form.Item>
                                     </div>
@@ -203,8 +214,7 @@ const EmployeeHistoryPage = () => {
                 </div>
                 <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                     style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
-                    <button type="button" className={Styles.btnCancel}>Cancel</button>
-                    <button type="submit" className={Styles.btnCreate}>Submit</button>
+                    <button type="submit" className={Styles.btnCreate}>{content['save']}</button>
                 </div>
             </Form>
         </div >
