@@ -11,11 +11,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Styles } from '../../../utils/CsStyle';
 import dayjs from 'dayjs';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const { Option } = Select;
 
 const UpdateJobPostingPage = () => {
   const { id } = useParams();
+  const { content } = useAuth();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,9 +32,9 @@ const UpdateJobPostingPage = () => {
   const navigate = useNavigate();
 
   const breadcrumbItems = [
-    { breadcrumbName: 'Home', path: '/' },
-    { breadcrumbName: 'Job Posting', path: '/job-postings' },
-    { breadcrumbName: 'Edit Job Posting' }
+    { breadcrumbName: content['home'], path: '/' },
+    { breadcrumbName: content['jobPosting'], path: '/job-postings' },
+    { breadcrumbName: content['editJobPosting'] }
   ];
 
   // Load job posting + departments + job types
@@ -48,18 +50,24 @@ const UpdateJobPostingPage = () => {
         setDepartments(depts);
         setJobTypes(types);
 
-        setResponsibilities(job.responsibilities || '');
-        setRequirements(job.requirements || '');
+        // setResponsibilities(job.responsibilities || '');
+        // setRequirements(job.requirements || '');
+
+        const normalizedStatus = typeof job.status === 'boolean'
+          ? (job.status ? 'Open' : 'Draft')
+          : job.status;
 
         form.setFieldsValue({
           ...job,
-          status: job.status,
+          status: normalizedStatus,
           open_date: job.open_date ? dayjs(job.open_date) : null,
           close_date: job.close_date ? dayjs(job.close_date) : null,
           department: job.department?._id || job.department || null, // handle populated or id
           position: job.position?._id || job.position || null,
           job_type: job.job_type?._id || job.job_type || null,
           quantity_available: job.quantity_available,
+          responsibilities: job.responsibilities || '',
+          requirements: job.requirements || '',
         });
 
         setSelectedDepartment(job.department?._id || job.department || null);
@@ -101,6 +109,8 @@ const UpdateJobPostingPage = () => {
             ...values,
             responsibilities,
             requirements,
+            open_date: values.open_date?.toISOString(),
+            close_date: values.close_date?.toISOString(),
         };
 
         await updateJobPostingApi(id, formData);
@@ -118,8 +128,14 @@ const UpdateJobPostingPage = () => {
 
   return (
     <div>
-      <CustomBreadcrumb items={breadcrumbItems} />
-      <div className="mt-4">
+      <div className="flex justify-between">
+          <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+              ព័ត៌មាន{content['jobPosting']}
+          </h1>
+          <CustomBreadcrumb items={breadcrumbItems} />
+      </div>
+
+      <div className="mt-4 mb-4">
         <Card title="Edit Job Posting">
           <Form layout="vertical" form={form} onFinish={onFinish}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -165,12 +181,34 @@ const UpdateJobPostingPage = () => {
                     </Select>
                 </Form.Item>
 
-                <Form.Item label="Responsibilities" required>
-                    <ReactQuill value={responsibilities} onChange={setResponsibilities} />
+                <Form.Item
+                  label="Responsibilities"
+                  name="responsibilities"
+                  rules={[{ required: true, message: 'Please enter responsibilities' }]}
+                >
+                  <ReactQuill
+                    theme="snow"
+                    value={responsibilities}
+                    onChange={(value) => {
+                      setResponsibilities(value);
+                      form.setFieldsValue({ responsibilities: value });
+                    }}
+                  />
                 </Form.Item>
 
-                <Form.Item label="Requirements" required>
-                    <ReactQuill value={requirements} onChange={setRequirements} />
+                <Form.Item
+                  label="Requirements"
+                  name="requirements"
+                  rules={[{ required: true, message: 'Please enter requirements' }]}
+                >
+                  <ReactQuill
+                    theme="snow"
+                    value={requirements}
+                    onChange={(value) => {
+                      setRequirements(value);
+                      form.setFieldsValue({ requirements: value });
+                    }}
+                  />
                 </Form.Item>
 
                 <Form.Item label="Open Date" name="open_date" rules={[{ required: true }]}>
@@ -181,12 +219,17 @@ const UpdateJobPostingPage = () => {
                     <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
 
-                {/* <Form.Item label="Status" name="status" valuePropName="checked" initialValue={true}>
-                    <Switch />
+                {/* <Form.Item label="Status" name="status" rules={[{ required: true }]}>
+                  <Select>
+                    <Option value="Draft">Draft</Option>
+                    <Option value="Open">Open</Option>
+                    <Option value="Close">Close</Option>
+                  </Select>
                 </Form.Item> */}
+
             </div>
 
-                <Form.Item>
+                {/* <Form.Item>
                     <div className="flex justify-end gap-3">
                         <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>
                             Cancel
@@ -195,7 +238,17 @@ const UpdateJobPostingPage = () => {
                             Update
                         </button>
                     </div>
-                </Form.Item>
+                </Form.Item> */}
+
+                <div 
+                    className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
+                    style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
+                >
+                    <button onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
+                    <button type="primary" htmlType="submit" className={`${Styles.btnCreate}`}>
+                        Save
+                    </button>
+                </div>
           </Form>
         </Card>
       </div>

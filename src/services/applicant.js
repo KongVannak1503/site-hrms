@@ -12,6 +12,13 @@ export const getApplicantApi = async (id) => {
   return res.data;
 };
 
+// Get applicants by job posting ID
+export const getApplicantsByJobApi = async (jobId) => {
+  const res = await api.get(`/applicants/by-job/${jobId}`);
+  return res.data;
+};
+
+
 // Create new applicant (use FormData)
 export const createApplicantApi = async (formData) => {
   const res = await api.post('/applicants', formData, {
@@ -22,11 +29,12 @@ export const createApplicantApi = async (formData) => {
   return res.data;
 };
 
-// Update applicant status only (e.g., to "Interview", "Hired", etc.)
-export const updateApplicantStatusApi = async (id, status, updatedBy) => {
-  const res = await api.put(`/applicants/${id}/status`, {
-    status,
-    updated_by: updatedBy, // optional, depending on your backend
+// Update full applicant (use FormData)
+export const updateApplicantApi = async (id, formData) => {
+  const res = await api.put(`/applicants/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
   return res.data;
 };

@@ -55,27 +55,7 @@ const AppSider = ({ collapsed }) => {
                 { key: '/payroll', label: content['payRoll'] },
             ]
         },
-
-
-        // {
-        //     key: '/table',
-        //     icon: <UploadOutlined />,
-        //     label: 'Table',
-        // },
     ]
-
-    // const recruitmentItems = [
-    //     {
-    //         key: '/job',
-    //         icon: <SettingOutlined />,
-    //         label: content['job'] || 'Job',
-    //     },
-    //     {
-    //         key: '/job-application',
-    //         icon: <SettingOutlined />,
-    //         label: content['jobApplication'] || 'Job Application',
-    //     },
-    // ]
 
     const settingsMenuItem = [
         {
@@ -224,7 +204,7 @@ const AppSider = ({ collapsed }) => {
             {/* Settings menu with top border */}
             <Menu
                 theme='dark'
-                className='!border-t !border-gray-200 !border-r !border-l-0 !border-b-0'
+                className=' !border-gray-200 !border-r !border-l-0 !border-b-0'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}

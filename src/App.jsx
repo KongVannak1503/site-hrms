@@ -39,6 +39,8 @@ import EmployeeDocumentPage from './pages/employee/document/EmployeeDocumentPage
 import EmployeeEducationTab from './pages/employee/EmployeeEducationTab'
 import EmployeeHistoryPage from './pages/employee/EmployeeHistoryPage'
 import DocumentList from './pages/employee/document/DocumentList'
+import EditApplicantPage from './pages/recruitment/applicants/EditApplicantPage'
+import ApplicantListPage from './pages/recruitment/jobposting/ApplicantListPage'
 import EmployeeDocumentPages from './pages/employee/document/EmployeeDocumentPages'
 import EmployeeBookPage from './pages/employee/book/EmployeeBookPage'
 import LaborLawPage from './pages/employee/law/LaborLawPage'
@@ -64,9 +66,11 @@ function App() {
             <Route path="/job-postings" element={<JobPostingPage />} />
             <Route path="/job-postings/create" element={<CreateJobPostingPage />} />
             <Route path="/job-postings/edit/:id" element={<UpdateJobPostingPage />} />
+            <Route path="/job-postings/:jobId/candidates" element={<ApplicantListPage />} />
 
             <Route path="/applicants" element={<ApplicantPage />} />
             <Route path="/applicants/create" element={<CreateApplicantPage />} />
+            <Route path="/applicants/edit/:id" element={<EditApplicantPage />} />
 
             <Route path="/applications" element={<ApplicationPage />} />
             <Route path="/tests" element={<TestPage />} />

@@ -27,8 +27,8 @@ const CreateJobPostingPage = () => {
 
   const breadcrumbItems = [
       { breadcrumbName: content['home'], path: '/' },
-      { breadcrumbName: "Job Posting", path: '/job-postings' },
-      { breadcrumbName: "Create Job Posting" },
+      { breadcrumbName: content['jobPosting'], path: '/job-postings' },
+      { breadcrumbName: content['createJobPosting'] },
   ];
 
     useEffect(() => {
@@ -70,9 +70,11 @@ const CreateJobPostingPage = () => {
     const onFinish = async (values) => {
         try {
             const formData = {
-            ...values,
-            responsibilities,
-            requirements,
+                ...values,
+                responsibilities,
+                requirements,
+                open_date: values.open_date?.toISOString(),
+                close_date: values.close_date?.toISOString(),
             };
 
             await createJobPostingApi(formData); // ✅ Create API call here
@@ -95,7 +97,12 @@ const CreateJobPostingPage = () => {
   
     return (
         <div>
-        <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="flex justify-between">
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+                    ព័ត៌មាន{content['jobPosting']}
+                </h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
+            </div>
 
         <div className='mt-4'>
             <Card title="Create Job Posting">
@@ -163,22 +170,26 @@ const CreateJobPostingPage = () => {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item label="Responibilities" required>
-                        <ReactQuill
-                            theme="snow"
-                            value={responsibilities}
-                            onChange={setResponsibilities}
-                            placeholder="Enter responsibilities..."
-                        />
+                    <Form.Item
+                        label="Responsibilities"
+                        name="responsibilities"
+                        rules={[{ required: true, message: 'Please enter responsibilities' }]}
+                    >
+                        <ReactQuill theme="snow" value={responsibilities} onChange={(value) => {
+                            setResponsibilities(value);
+                            form.setFieldsValue({ responsibilities: value });
+                        }} />
                     </Form.Item>
 
-                    <Form.Item label="Rquirement" required>
-                        <ReactQuill
-                            theme="snow"
-                            value={requirements}
-                            onChange={setRequirements}
-                            placeholder="Enter requirements..."
-                        />
+                    <Form.Item
+                        label="Requirements"
+                        name="requirements"
+                        rules={[{ required: true, message: 'Please enter requirements' }]}
+                    >
+                        <ReactQuill theme="snow" value={requirements} onChange={(value) => {
+                            setRequirements(value);
+                            form.setFieldsValue({ requirements: value });
+                        }} />
                     </Form.Item>
 
                     <Form.Item
@@ -197,25 +208,34 @@ const CreateJobPostingPage = () => {
                         <DatePicker style={{ width: '100%' }} />
                     </Form.Item>
 
-                    {/* <Form.Item
-                        label="Status"
-                        name="status"
-                        valuePropName="checked"
-                        initialValue={true}
-                    >
-                        <Switch />
+                    {/* <Form.Item label="Status" name="status" initialValue="Draft">
+                        <Select>
+                            <Option value="Draft">Draft</Option>
+                            <Option value="Open">Open</Option>
+                            <Option value="Close">Close</Option>
+                        </Select>
                     </Form.Item> */}
+
                 </div>
 
                 {/* Footer Actions */}
-                <Form.Item>
+                {/* <Form.Item>
                     <div className="flex gap-3 justify-end">
                         <button onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
                         <button type="primary" htmlType="submit" className={`${Styles.btnCreate}`}>
                             Save
                         </button>
                     </div>
-                </Form.Item>
+                </Form.Item> */}
+                <div 
+                    className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
+                    style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
+                >
+                    <button onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
+                    <button type="primary" htmlType="submit" className={`${Styles.btnCreate}`}>
+                        Save
+                    </button>
+                </div>
             </Form>
             </Card>
         </div>
