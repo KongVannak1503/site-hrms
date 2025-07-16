@@ -25,6 +25,10 @@ export function formatDate(dateString) {
     return `${weekday}, ${day} ${month} ${year}`;
 }
 
+export function formatYear(dateString) {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}`;
+}
 
 export function formatTime(dateString) {
     const date = new Date(dateString);

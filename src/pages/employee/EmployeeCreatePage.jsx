@@ -17,7 +17,7 @@ import { getVillagesViewApi } from '../../services/villageApi';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeCreatePage = () => {
-    const { content } = useAuth();
+    const { content, language } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
     const navigate = useNavigate();
@@ -103,6 +103,8 @@ const EmployeeCreatePage = () => {
             formData.append('gender', values.gender);
             formData.append('phone', values.phone);
             formData.append('email', values.email);
+            formData.append('bloodType', values.bloodType);
+            formData.append('joinDate', values.joinDate);
             formData.append('date_of_birth', values.date_of_birth);
             formData.append('place_of_birth', values.place_of_birth);
             formData.append('nationality', values.nationality);
@@ -188,6 +190,7 @@ const EmployeeCreatePage = () => {
                         districts={districts}
                         communes={communes}
                         villages={villages}
+                        language={language}
                     />
                 </div>
 

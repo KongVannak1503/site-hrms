@@ -13,8 +13,8 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const { title, description, isActive } = values;
-            const formData = { title, description, isActive };
+            const { title_en, title_kh, description, isActive } = values;
+            const formData = { title_en, title_kh, description, isActive };
 
             const response = await createDepartmentApi(formData);
             message.success('Created successfully!');
@@ -37,16 +37,28 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
             }}
         >
             <Form.Item
-                name="title"
-                label={content['title']}
+                name="title_kh"
+                label={content['titleKh']}
                 rules={[{
                     required: true,
-                    message: `${content['please']}${content['enter']}${content['title']}`
+                    message: `${content['please']}${content['enter']}${content['titleKh']}`
                         .toLowerCase()
                         .replace(/^./, str => str.toUpperCase())
                 }]}
             >
-                <Input size="large" />
+                <Input />
+            </Form.Item>
+            <Form.Item
+                name="title_en"
+                label={content['titleEn']}
+                rules={[{
+                    required: true,
+                    message: `${content['please']}${content['enter']}${content['titleEn']}`
+                        .toLowerCase()
+                        .replace(/^./, str => str.toUpperCase())
+                }]}
+            >
+                <Input />
             </Form.Item>
 
             <Form.Item

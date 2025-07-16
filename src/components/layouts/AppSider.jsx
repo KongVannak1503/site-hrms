@@ -52,7 +52,7 @@ const AppSider = ({ collapsed }) => {
             label: content['employees'],
             children: [
                 { key: '/employee', label: content['employee'] },
-                { key: '/payroll', label: content['payRoll'] },
+                { key: '/payroll', label: content['payroll'] },
             ]
         },
     ]

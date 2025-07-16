@@ -3,20 +3,21 @@ import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Typography } from 'antd';
-import { getCategoryApi, updateCategoryApi } from '../../../services/categoryApi';
+import PayrollFormPage from './PayrollFormPage';
+import { getBonusApi, updateBonusApi } from '../../../services/payrollApi';
+import dayjs from 'dayjs';
 
-const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
+
+const PayrollUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const response = await getCategoryApi(dataId);
+            const response = await getBonusApi(dataId);
             form.setFieldsValue({
-                title: response.title,
-                description: response.description,
-                isActive: response.isActive
+                payDate: response.payDate ? dayjs(response.payDate) : null,
             });
         }
         fetchInitialData();
@@ -25,12 +26,10 @@ const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const handleFinish = async (values) => {
         try {
             const formData = {
-                title: values.title,
-                description: values.description,
-                isActive: values.isActive
+                payDate: values.payDate
             };
 
-            const response = await updateCategoryApi(dataId, formData);
+            const response = await updateBonusApi(dataId, formData);
             message.success('Updated successfully!');
             onUserUpdated(response.data);
         } catch (error) {
@@ -47,27 +46,7 @@ const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             layout="vertical"
             autoComplete="off"
         >
-            <Form.Item
-                name="title"
-                label={content['title']}
-                rules={[{
-                    required: true,
-                    message: `${content['please']}${content['enter']}${content['title']}`
-                        .toLowerCase()
-                        .replace(/^./, str => str.toUpperCase())
-                }]}
-            >
-                <Input size="large" />
-            </Form.Item>
-            <Form.Item
-                name="description"
-                label={content['description']}
-            >
-                <Input.TextArea rows={4} />
-            </Form.Item>
-            <Form.Item label={content['status']} name="isActive" valuePropName="checked">
-                <Switch />
-            </Form.Item>
+            <PayrollFormPage Form={Form} form={form} />
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
                     Cancel
@@ -80,4 +59,4 @@ const CategoryUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     );
 };
 
-export default CategoryUpdatePage;
+export default PayrollUpdatePage;

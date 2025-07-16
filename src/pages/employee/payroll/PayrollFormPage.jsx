@@ -30,56 +30,6 @@ const PayrollFormPage = ({ Form, form }) => {
     return (
         <>
             <Form.Item
-                name="departmentId"
-                label={content['department']}
-                rules={[{
-                    required: true,
-                    message: `${content['selectA']}${content['department']}`
-                        .toLowerCase()
-                        .replace(/^./, str => str.toUpperCase())
-                }]}
-            >
-                <Select
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                >
-                    {departments.map((dept) => (
-                        <Select.Option key={dept._id} value={dept._id}>
-                            {dept.title}
-                        </Select.Option>
-                    ))}
-                </Select>
-            </Form.Item>
-
-            <Form.Item
-                name="employeeId"
-                label={content['employee']}
-                rules={[{
-                    required: true,
-                    message: `${content['selectA']}${content['employee']}`
-                        .toLowerCase()
-                        .replace(/^./, str => str.toUpperCase())
-                }]}
-            >
-                <Select
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                >
-                    {employees.map((emp) => (
-                        <Select.Option key={emp._id} value={emp._id}>
-                            {emp.name_kh}
-                        </Select.Option>
-                    ))}
-                </Select>
-            </Form.Item>
-
-            <Form.Item
                 name="payDate"
                 label={content['date']}
                 rules={[{
@@ -89,16 +39,7 @@ const PayrollFormPage = ({ Form, form }) => {
                         .replace(/^./, str => str.toUpperCase())
                 }]}
             >
-                <DatePicker style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item name="status" label={content['type']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>
-                <Select>
-                    {typePayrollOptions.map(option => (
-                        <Select.Option key={option.name_kh} value={option.id}>
-                            {option.name_kh}
-                        </Select.Option>
-                    ))}
-                </Select>
+                <DatePicker picker="year" style={{ width: '100%' }} />
             </Form.Item>
         </>
     );
