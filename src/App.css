@@ -15,8 +15,17 @@ label {
   font-family: 'Siemreap', sans-serif !important;
 }
 
+.customTableHeader .ant-table-thead>tr>th {
+  background-color: var(--layout-sider-background);
+  color: var(--layout-sider-color);
+}
+
 .text-default {
-  color: var(--layout-sider-background);
+  color: var(--layout-sider-background) !important;
+}
+
+.bg-default {
+  background-color: var(--layout-sider-background) !important;
 }
 
 a.btnDownload {
@@ -305,8 +314,4 @@ a.btnDownload:hover {
 .ant-btn-dashed:hover {
   border-color: var(--layout-sider-background) !important;
   color: var(--layout-sider-background) !important;
-}
-
-.bg-default {
-  background-color: var(--layout-sider-background) !important;
 }

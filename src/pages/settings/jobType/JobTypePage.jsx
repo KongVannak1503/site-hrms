@@ -14,6 +14,7 @@ import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { deleteJobTypeApi, getJobTypesApi } from '../../../services/jobType';
 import UpdateJobTypePage from './UpdateJobTypePage';
 import CreateJobTypePage from './CreateJobTypePage';
+import StatusTag from '../../../components/style/StatusTag';
 
 
 const JobTypePage = () => {
@@ -136,17 +137,7 @@ const JobTypePage = () => {
             title: content['status'],
             dataIndex: "isActive",
             key: "isActive",
-            render: (text) => {
-                const isActive = Boolean(text); // ensure it's a boolean
-                const color = isActive ? 'geekblue' : 'volcano';
-                const label = isActive ? 'ACTIVE' : 'INACTIVE';
-
-                return (
-                    <Tag color={color} key={String(text)}>
-                        {label}
-                    </Tag>
-                );
-            }
+            render: (text) => <StatusTag value={text} />
         },
         {
             title: (
@@ -276,6 +267,7 @@ const JobTypePage = () => {
                     </div>
                 </div>
                 <Table
+                    className="custom-pagination custom-checkbox-table"
                     scroll={{ x: 'max-content' }}
                     rowSelection={rowSelection}
                     columns={columns}

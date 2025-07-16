@@ -13,7 +13,8 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             try {
                 const response = await getDepartmentApi(dataId);
                 form.setFieldsValue({
-                    title: response.title,
+                    title_kh: response.title_kh,
+                    title_en: response.title_en,
                     description: response.description,
                     isActive: response.isActive
                 });
@@ -28,7 +29,8 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const handleFinish = async (values) => {
         try {
             const formData = {
-                title: values.title,
+                title_kh: values.title_kh,
+                title_en: values.title_en,
                 description: values.description,
                 isActive: values.isActive
             };
@@ -50,18 +52,29 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             autoComplete="off"
         >
             <Form.Item
-                name="title"
-                label={content['title']}
+                name="title_kh"
+                label={content['titleKh']}
                 rules={[{
                     required: true,
-                    message: `${content['please']}${content['enter']}${content['title']}`
+                    message: `${content['please']}${content['enter']}${content['titleKh']}`
                         .toLowerCase()
                         .replace(/^./, str => str.toUpperCase())
                 }]}
             >
-                <Input size="large" />
+                <Input />
             </Form.Item>
-
+            <Form.Item
+                name="title_en"
+                label={content['titleEn']}
+                rules={[{
+                    required: true,
+                    message: `${content['please']}${content['enter']}${content['titleEn']}`
+                        .toLowerCase()
+                        .replace(/^./, str => str.toUpperCase())
+                }]}
+            >
+                <Input />
+            </Form.Item>
             <Form.Item
                 name="description"
                 label={content['description']}

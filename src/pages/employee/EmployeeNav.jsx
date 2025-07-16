@@ -12,11 +12,12 @@ const EmployeeNav = () => {
 
     const tabs = [
         { key: 'profile', label: content['employeeInfo'], path: `/employee/profile/${id}` },
+        { key: 'position', label: content['position'], path: `/employee/position/${id}` },
         { key: 'education', label: content['education'], path: `/employee/education/${id}` },
         { key: 'history', label: content['employmentHistory'], path: `/employee/history/${id}` },
         { key: 'document', label: content['document'], path: `/employee/document/${id}` },
         { key: 'book', label: content['employeeBook'], path: `/employee/book/${id}` },
-        { key: 'law', label: content['laborLaw'], path: `/employee/law/${id}` },
+        { key: 'law', label: content['contract'], path: `/employee/law/${id}` },
         { key: 'nssf', label: content['nssf'], path: `/employee/nssf/${id}` },
     ];
 

@@ -6,13 +6,14 @@ import { nationalityOption } from '../../data/Nationality';
 import CityUpdatePage from '../settings/employee/city/CityUpdatePage';
 import CityCreatePage from '../settings/employee/city/CityCreatePage';
 import ModalMdCenter from '../../components/modals/ModalMdCenter';
+import { bloodTypeOptions, typeEmpStatusOptions } from '../../data/Type';
 
 
-const EmployeePersonalTab = ({ showCreateDrawer, content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages }) => {
+const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages, language }) => {
 
     return (
         <div>
-            <Card title={<p className='text-default text-sm font-bold'>{content['informationData']}</p>} className="shadow custom-card">
+            <Card title={<p className='text-default text-sm font-bold'>{content['1'] + "." + content['informationData']}</p>} className="shadow custom-card">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Upload image */}
                     <div className="col-span-1 flex justify-center">
@@ -89,6 +90,15 @@ const EmployeePersonalTab = ({ showCreateDrawer, content, fileList, handleChange
                             <Form.Item name="phone" label={content['phone']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
                                 <Input />
                             </Form.Item>
+                            <Form.Item name="bloodType" label={content['bloodType']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>
+                                <Select>
+                                    {bloodTypeOptions.map(option => (
+                                        <Select.Option key={option.name} value={option.name}>
+                                            {option.name_kh}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
                         </div>
                     </div >
                 </div >
@@ -113,6 +123,29 @@ const EmployeePersonalTab = ({ showCreateDrawer, content, fileList, handleChange
                     <Form.Item name="id_card_no" label={content['idCardNo']}><Input /></Form.Item>
                     <Form.Item name="passport_no" label={content['passportNo']}><Input /></Form.Item>
 
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <Form.Item name="joinDate" label={content['joinDate']}><DatePicker className="w-full" /></Form.Item>
+                    <Form.Item
+                        label={content['department']}
+                    >
+                        <Input className='text-default' disabled value={position?.positionId?.title} />
+                    </Form.Item>
+                    <Form.Item
+                        label={content['role']}
+                    >
+                        <Input className='text-default' disabled value={position?.positionId?.title} />
+                    </Form.Item>
+                    <Form.Item name="status" label={content['status']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>
+                        <Select>
+                            {typeEmpStatusOptions.map(option => (
+                                <Select.Option key={option.id} value={option.id}>
+                                    {language == 'khmer' ? option.name_kh : option.name_en}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
                 </div>
 
                 <p className='text-default text-sm font-bold mb-4'>{content['placeOfBirth']}</p>
@@ -274,8 +307,9 @@ const EmployeePersonalTab = ({ showCreateDrawer, content, fileList, handleChange
 
 
             </Card >
+
             <hr className="border-0 py-3" />
-            <Card title={<p className='text-default text-sm font-bold'>{content['familyMemberInformation']}</p>} className="shadow">
+            <Card title={<p className='text-default text-sm font-bold'>{content['2'] + "." + content['familyMemberInformation']}</p>} className="shadow">
                 <Form.List name="family_members">
                     {(fields, { add, remove }) => (
                         <>
@@ -348,7 +382,7 @@ const EmployeePersonalTab = ({ showCreateDrawer, content, fileList, handleChange
             </Card>
 
             <hr className="border-0 py-3" />
-            <Card title={<p className='text-default text-sm font-bold'>{content['inCaseOfEmergencyContact']}</p>} className="shadow">
+            <Card title={<p className='text-default text-sm font-bold'>{content['3'] + "." + content['inCaseOfEmergencyContact']}</p>} className="shadow">
                 <Form.List name="emergency_contact">
                     {(fields, { add, remove }) => (
                         <>

@@ -25,6 +25,11 @@ export const updateEmployeeApi = async (id, formData) => {
     return res.data;
 };
 
+export const assignEmployeeApi = async (id, formData) => {
+    const res = await api.put(`/employees/assign/${id}`, formData);
+    return res.data;
+};
+
 // export const existNameRoleApi = async (name) => {
 //     const res = await api.get(`/employees/check/${name}`);
 //     return res;
@@ -185,5 +190,31 @@ export const getEpmUploadNssfDocApi = async (employeeId) => {
 
 export const deleteEpmNssfDocApi = async (id) => {
     const res = await api.delete(`/employees/nssf/doc/${id}`);
+    return res.data;
+};
+
+// position
+
+export const createEpmPositionApi = async (id, formData) => {
+    const res = await api.post(`/employees/position/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return res.data;
+};
+
+export const updateEpmPositionApi = async (id, formData) => {
+    const res = await api.put(`/employees/position/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return res.data;
+};
+
+
+export const getEpmPositionsApi = async (employeeId) => {
+    const res = await api.get(`/employees/position/${employeeId}`);
     return res.data;
 };

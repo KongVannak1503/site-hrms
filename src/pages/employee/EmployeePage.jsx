@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
 import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { EyeOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { EyeOutlined, FormOutlined, PlusOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import EmployeeCreatePage from './EmployeeCreatePage';
@@ -17,6 +17,8 @@ import uploadUrl from '../../services/uploadApi';
 import EmployeeUpdatePage from './EmployeeUpdatePage';
 import { useNavigate } from 'react-router-dom';
 import StatusTag from '../../components/style/StatusTag';
+import ModalMdCenter from '../../components/modals/ModalMdCenter';
+import EmployeeAssigneePage from './EmployeeAssigneePage';
 
 const EmployeePage = () => {
     const { isLoading, content } = useAuth();
@@ -53,6 +55,12 @@ const EmployeePage = () => {
 
     const showUpdateDrawer = (userId) => {
         setActionForm('update');
+        setSelectedUserId(userId);
+        setOpen(true);
+    };
+
+    const showAssignDrawer = (userId) => {
+        setActionForm('assignee');
         setSelectedUserId(userId);
         setOpen(true);
     };
@@ -125,16 +133,10 @@ const EmployeePage = () => {
             dataIndex: "image_url",
             key: "image_url",
             render: (text, record) =>
-                // <Avatar
-                //     size={40}
-                //     src={`${uploadUrl}/${record.image_url?.path}`}
-                // />
                 <img
                     src={`${uploadUrl}/${record.image_url?.path}`}
                     alt="photo"
-                    width={60}
-                    height={60}
-                    style={{ borderRadius: '5px', objectFit: 'cover' }}
+                    className="w-[70px] h-[80px] rounded object-cover"
                 />
         },
 
@@ -156,6 +158,16 @@ const EmployeePage = () => {
                 <div>
                     <p>{record.last_name_kh}</p>
                     <p>{record.last_name_en}</p>
+                </div>,
+        },
+
+        {
+            title: content['position'],
+            dataIndex: "positionId",
+            key: "positionId",
+            render: (text, record) =>
+                <div>
+                    <p>{record?.positionId?.title}</p>
                 </div>,
         },
 
@@ -183,6 +195,16 @@ const EmployeePage = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
+                    <Tooltip title={content['assignManager']}>
+                        <button
+                            type="primary"
+                            shape="circle"
+                            className={Styles.btnDownload}
+                            onClick={() => showAssignDrawer(record._id)}
+                        >
+                            <UserSwitchOutlined />
+                        </button>
+                    </Tooltip>
                     <Tooltip title={content['edit']}>
                         <button
                             className={Styles.btnEdit}
@@ -332,6 +354,18 @@ const EmployeePage = () => {
                         }
                     }}
                 />
+
+                <ModalMdCenter
+                    open={open}
+                    onOk={() => setOpen(false)}
+                    onCancel={closeDrawer}
+                    title="Assign Position"
+                >
+
+                    {actionForm === 'assignee' && (
+                        <EmployeeAssigneePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                    )}
+                </ModalMdCenter>
 
                 {/* <ModalLgCenter
                     open={open}
