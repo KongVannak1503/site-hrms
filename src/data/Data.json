@@ -143,11 +143,25 @@
 
         "createJobPosting": "Create Job Posting",
         "editJobPosting": "Edit Job Posting",
-        "jobApplied": "Candidates Applied",
+        "jobApplied": "Applicants Applied",
+        "openDate": "Open Date",
+        "closeDate": "Close Date",
 
         "applicants": "Applicants",
         "createApplicant": "Create Applicant",
         "editApplicant": "Edit Applicant",
+
+        "tests": "Tests",
+        "testType": "Test types",
+        "testSchedule": "Test Schedule",
+
+        "interviews": "Interviews",
+
+        "appraisal": "Appraisal",
+
+        "awarding": "Awarding",
+
+        "report": "Reports",
 
         "university": "University",
         "majorOfStudy": "Major of Study",
@@ -269,15 +283,29 @@
         "searchAction": "ស្វែងរក...",
 
         "jobType": "ប្រភេទការងារ",
-        "jobPostings": "ប្រកាសរើសការងារ",
+        "jobPostings": "ការប្រកាសរើសការងារ",
         "jobPosting": "ប្រកាសរើសការងារ",
         "createJobPosting": "បង្កើតការប្រកាសរើសការងារ",
         "editJobPosting": "កែប្រែការប្រកាសរើសការងារ",
         "jobApplied": "បេក្ខជនដាក់ពាក្យ",
+        "openDate": "កាលបរិច្ឆេទបើក",
+        "closeDate": "កាលបរិច្ឆេទបិទ",
 
         "applicants": "បេក្ខជន",
         "createApplicant": "បង្កើតបេក្ខជន",
         "editApplicant": "កែប្រែបេក្ខជន",
+
+        "tests": "ការតេស្ដ",
+        "testType": "ប្រភេទតេស្ដ",
+        "testSchedule": "កាលវិភាគតេស្ដ",
+
+        "interviews": "ការសម្ភាសន៍",
+
+        "appraisal": "ការវាយតម្លៃការងារ",
+
+        "awarding": "ការលើកទឹកចិត្ដ",
+
+        "report": "របាយការណ៍",
 
         "employeeID": "អត្តលេខ/ID",
         "gender": "ភេទ",

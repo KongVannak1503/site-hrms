@@ -25,10 +25,6 @@ import EducationLevelPage from './pages/settings/employee/education-lavel/Educat
 
 import JobPostingPage from './pages/recruitment/jobposting/JobPostingPage'
 import ApplicantPage from './pages/recruitment/applicants/ApplicantPage'
-import ApplicationPage from './pages/recruitment/applications/ApplicationPage'
-import TestPage from './pages/recruitment/tests/TestPage'
-import InterviewPage from './pages/recruitment/interviews/InterviewPage'
-import EvaluationPage from './pages/recruitment/evaluations/EvaluationPage'
 import CreateJobPostingPage from './pages/recruitment/jobposting/CreateJobPostingPage'
 import JobTypePage from './pages/settings/jobType/JobTypePage'
 import PositionPage from './pages/settings/position/PositionPage'
@@ -40,12 +36,16 @@ import EmployeeEducationTab from './pages/employee/EmployeeEducationTab'
 import EmployeeHistoryPage from './pages/employee/EmployeeHistoryPage'
 import DocumentList from './pages/employee/document/DocumentList'
 import EditApplicantPage from './pages/recruitment/applicants/EditApplicantPage'
-import ApplicantListPage from './pages/recruitment/jobposting/ApplicantListPage'
 import EmployeeDocumentPages from './pages/employee/document/EmployeeDocumentPages'
 import EmployeeBookPage from './pages/employee/book/EmployeeBookPage'
 import LaborLawPage from './pages/employee/law/LaborLawPage'
 import NSSFPage from './pages/employee/book/NSSFPage'
 import PayrollPage from './pages/employee/payroll/PayrollPage'
+
+import TestTypePage from './pages/recruitment/tests/TestTypePage'
+import TestSchedulePage from './pages/recruitment/tests/TestSchedulePage'
+import TestDetailPage from './pages/recruitment/tests/TestDetailPage'
+
 import EmployeePositionPage from './pages/employee/position/EmployeePositionPage'
 import SubPayrollPage from './pages/employee/payroll/sub-payroll/SubPayrollPage'
 
@@ -68,16 +68,14 @@ function App() {
             <Route path="/job-postings" element={<JobPostingPage />} />
             <Route path="/job-postings/create" element={<CreateJobPostingPage />} />
             <Route path="/job-postings/edit/:id" element={<UpdateJobPostingPage />} />
-            <Route path="/job-postings/:jobId/candidates" element={<ApplicantListPage />} />
 
             <Route path="/applicants" element={<ApplicantPage />} />
             <Route path="/applicants/create" element={<CreateApplicantPage />} />
             <Route path="/applicants/edit/:id" element={<EditApplicantPage />} />
 
-            <Route path="/applications" element={<ApplicationPage />} />
-            <Route path="/tests" element={<TestPage />} />
-            <Route path="/interviews" element={<InterviewPage />} />
-            <Route path="/evaluations" element={<EvaluationPage />} />
+            <Route path="/test-schedules" element={<TestSchedulePage />} />
+            <Route path="/test-schedules/:id" element={<TestDetailPage />} />
+            <Route path="/test-types" element={<TestTypePage />} />
 
             {/* Employee */}
             <Route path="/employee" element={<EmployeePage />} />
@@ -97,6 +95,13 @@ function App() {
             <Route path="/payroll/:id" element={<SubPayrollPage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
+
+            {/* Appraisal */}
+            <Route path="/appraisal" element={<TableSample />} />
+
+            {/* Awarding */}
+            <Route path="/awarding" element={<TableSample />} />
+
             <Route
               path="/setting/user/index"
               element={

@@ -2,38 +2,41 @@ import React, { useState, useEffect } from 'react';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Table, Tag, Button, Popconfirm, message, Tooltip, Space } from 'antd';
+import {
+  Form, Input, Table, Tag, Select,
+  Tooltip, Space, message,
+  Modal
+} from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { Styles } from '../../../utils/CsStyle';
-import { EyeOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  EyeOutlined, FormOutlined, PlusOutlined
+} from '@ant-design/icons';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import { deleteApplicantApi, getApplicantsApi } from '../../../services/applicant';
-import { FaUser } from 'react-icons/fa';
+import {
+  deleteApplicantApi,
+  getApplicantsApi
+} from '../../../services/applicantApi';
 import uploadUrl from '../../../services/uploadApi';
 import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
+import { updateJobApplicationStatus } from '../../../services/jobApplicationApi';
+import TestAssignmentModal from '../tests/testAssignmentModal';
+
+const { Option } = Select;
 
 const ApplicantPage = () => {
   const { isLoading, content } = useAuth();
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const navigate = useNavigate();
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0,
+  const [testModalData, setTestModalData] = useState({
+    visible: false,
+    jobAppId: null,
+    applicant: null
   });
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const onSelectChange = newSelectedRowKeys => {
-      // console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-      setSelectedRowKeys(newSelectedRowKeys);
-  }
-
-  const breadcrumbItems = [
-    { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['applicants'] }
-  ];
 
   useEffect(() => {
     fetchApplicants();
@@ -44,53 +47,95 @@ const ApplicantPage = () => {
     try {
       const data = await getApplicantsApi();
       setApplicants(data);
-    } catch (error) {
-      message.error("Failed to load applicants");
+    } catch {
+      message.error('Failed to load applicants');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreate = () => {
-    navigate('/applicants/create');
-  };
+  const handleCreate = () => navigate('/applicants/create');
 
-  const handleUpdate = (id) => {
-      navigate(`/applicants/edit/${id}`);
-  };
+  const handleUpdate = (id) => navigate(`/applicants/edit/${id}`);
 
   const handleDelete = async (id) => {
-      try {
-        await deleteApplicantApi(id); // ✅ Call the delete API
-        const updatedApplicants = applicants.filter(applicant => applicant._id !== id); // ✅ Update local list
-        setApplicants(updatedApplicants);
-        message.success('Applicant deleted successfully');
-      } catch (error) {
-        console.error('Delete failed:', error);
-        message.error('Failed to delete applicant');
-      }
+    try {
+      await deleteApplicantApi(id);
+      setApplicants(applicants.filter(applicant => applicant._id !== id));
+      message.success('Applicant deleted');
+    } catch {
+      message.error('Delete failed');
+    }
   };
 
-  const filteredApplicants = applicants.filter((item) =>
-    item.full_name_en?.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.full_name_kh?.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filteredApplicants = applicants.filter(applicant => {
+    const matchesSearch =
+      applicant.full_name_en?.toLowerCase().includes(searchText.toLowerCase()) ||
+      applicant.full_name_kh?.toLowerCase().includes(searchText.toLowerCase());
+
+    const matchesStatus = !statusFilter || applicant.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const validTransitions = {
+    applied: ['shortlisted'],
+    shortlisted: ['test'],
+    test: ['interview'],
+    interview: ['hired', 'reserve', 'rejected'],
+    hired: [],
+    reserve: [],
+    rejected: []
+  };
+
+  const handleStatusChange = async (jobAppId, newStatus, oldStatus, applicantData) => {
+    if (!validTransitions[oldStatus]?.includes(newStatus)) {
+      message.warning(`Cannot change status from ${oldStatus} to ${newStatus}`);
+      return;
+    }
+    
+    if (oldStatus === 'applied' && newStatus === 'shortlisted') {
+      Modal.confirm({
+        title: 'Confirm Shortlisting',
+        content: 'Are you sure you want to mark this applicant as Shortlisted?',
+        okText: 'Yes',
+        cancelText: 'No',
+        onOk: async () => {
+          try {
+            await updateJobApplicationStatus(jobAppId, newStatus);
+            message.success('Status updated to Shortlisted');
+            fetchApplicants();
+          } catch {
+            message.error('Failed to update status');
+          }
+        }
+      });
+    } else if (oldStatus === 'shortlisted' && newStatus === 'test') {
+      setTestModalData({
+        visible: true,
+        jobAppId,
+        applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id }
+      });
+    } else {
+      try {
+        await updateJobApplicationStatus(jobAppId, newStatus);
+        message.success(`Status updated to ${newStatus}`);
+        fetchApplicants();
+      } catch {
+        message.error('Failed to update status');
+      }
+    }
+  };
 
   const columns = [
     {
       title: 'Photo',
       dataIndex: 'photo',
-      render: (text) => (
-        text
-          ? <img
-              src={`${uploadUrl}/uploads/applicants/${encodeURIComponent(text)}`}
-              alt="photo"
-              width={60}
-              height={60}
-              style={{ borderRadius: '5px', objectFit: 'cover' }}
-            />
-          : '-'
-      )
+      render: (text) => text ? 
+        <img 
+          src={`${uploadUrl}/uploads/applicants/${encodeURIComponent(text)}`}
+          className="w-[70px] h-[80px] rounded object-cover" 
+        /> : '-'
     },
     {
       title: 'Full Name (KH)',
@@ -101,144 +146,138 @@ const ApplicantPage = () => {
       dataIndex: 'full_name_en',
     },
     {
+      title: 'Gender',
+      dataIndex: 'gender'
+    },
+    {
       title: 'Phone',
       dataIndex: 'phone_no',
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: 'Job Title',
+      dataIndex: 'job_title',
+      render: (text) => text || '-'
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (status) => <Tag color={getStatusColor(status)}>{status}</Tag>,
+      render: (status, record) => {
+        const jobAppId = record.job_application_id;
+        return jobAppId ? (
+          <Select
+            value={status}
+            onChange={(newStatus) => handleStatusChange(jobAppId, newStatus, status, record)}
+            style={{ width: 140 }}
+          >
+            <Option value='applied'>Applied</Option>
+            <Option value='shortlisted'>Shortlisted</Option>
+            <Option value='test'>Test</Option>
+            <Option value='interview'>Interview</Option>
+            <Option value='hired'>Hired</Option>
+            <Option value='reserve'>Reserve</Option>
+            <Option value='rejected'>Rejected</Option>
+          </Select>
+        ) : (
+          <Tag>-</Tag>
+        );
+      }
     },
     {
       title: 'Actions',
-      key: 'actions',
       render: (_, record) => (
-        <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
-          <Tooltip title={content['edit']}>
-              <button
-                  className={Styles.btnEdit}
-                  shape="circle"
-                  onClick={() => handleUpdate(record._id)}
-              >
-                  <FormOutlined />
-              </button>
+        <Space>
+          <Tooltip title="Edit">
+            <button className={Styles.btnEdit} onClick={() => handleUpdate(record._id)}><FormOutlined /></button>
           </Tooltip>
+          {record.cv && (
+            <Tooltip title="View CV">
+              <a className={Styles.btnView} href={`${uploadUrl}/uploads/applicants/${record.cv}`} target="_blank"><EyeOutlined /></a>
+            </Tooltip>
+          )}
           {ConfirmDeleteButton({
-              onConfirm: () => handleDelete(record._id),
-              tooltip: content['delete'],
-              title: content['confirmDelete'],
-              okText: content['yes'],
-              cancelText: content['no'],
-              description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
+            onConfirm: () => handleDelete(record._id),
+            tooltip: 'Delete',
+            title: 'Confirm Deletion',
+            okText: 'Yes',
+            cancelText: 'No',
+            description: 'Are you sure to delete this applicant?'
           })}
-      </Space>
+        </Space>
       )
-    },
-  ];
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-    selections: [
-        Table.SELECTION_ALL,
-        Table.SELECTION_INVERT,
-        Table.SELECTION_NONE,
-        {
-            key: 'odd',
-            text: 'Select Odd Row',
-            onSelect: changeableRowKeys => {
-                let newSelectedRowKeys = [];
-                newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
-                    if (index % 2 !== 0) {
-                        return false;
-                    }
-                    return true;
-                });
-                setSelectedRowKeys(newSelectedRowKeys);
-            },
-        },
-        {
-            key: 'even',
-            text: 'Select Even Row',
-            onSelect: changeableRowKeys => {
-                let newSelectedRowKeys = [];
-                newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
-                    if (index % 2 !== 0) {
-                        return true;
-                    }
-                    return false;
-                });
-                setSelectedRowKeys(newSelectedRowKeys);
-            },
-        },
-    ],
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Review': return 'blue';
-      case 'Shortlist': return 'cyan';
-      case 'Interview': return 'gold';
-      case 'Fail': return 'red';
-      case 'Reserve': return 'orange';
-      case 'Hired': return 'green';
-      default: return 'default';
     }
-  };
+  ];
 
   if (isLoading) return <FullScreenLoader />;
 
   return (
     <div>
       <div className="flex justify-between">
-          <h1 className='text-xl font-extrabold text-[#17a2b8]'>
-            ព័ត៌មាន{content['applicants']}
-          </h1>
-          <CustomBreadcrumb items={breadcrumbItems} />
+        <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មាន{content['applicants']}</h1>
+        <CustomBreadcrumb items={[{ breadcrumbName: content['home'], path: '/' }, { breadcrumbName: content['applicants'] }]} />
       </div>
 
       <Content className="border border-gray-200 bg-white p-5 rounded-md mt-4">
         <div className='flex flex-col sm:flex-row justify-between items-center mb-4'>
-          <h5 className='text-lg font-semibold'>Applicants</h5>
-          <div className='flex gap-3 mt-2 sm:mt-0'>
+          <div className='flex flex-wrap gap-3'>
+            <div>
+              <label className='block text-sm text-gray-500 font-semibold mb-1'>Status</label>
+              <Select allowClear placeholder='Filter by status' onChange={setStatusFilter} style={{ width: 160 }}>
+                <Option value='applied'>Applied</Option>
+                <Option value='shortlisted'>Shortlisted</Option>
+                <Option value='test'>Test</Option>
+                <Option value='interview'>Interview</Option>
+                <Option value='hired'>Hired</Option>
+                <Option value='reserve'>Reserve</Option>
+                <Option value='rejected'>Rejected</Option>
+              </Select>
+            </div>
+          </div>
+          <div className='flex gap-3 mt-4 sm:mt-0'>
             <Input
               placeholder={content['searchAction']}
               allowClear
               onChange={(e) => setSearchText(e.target.value)}
             />
             <button onClick={handleCreate} className={Styles.btnCreate}>
-              <PlusOutlined /> {`${content['create']} ${content['jobPosting']}`}
+              <PlusOutlined /> {`${content['create']} ${content['applicants']}`}
             </button>
           </div>
         </div>
 
         <Table
           className='custom-pagination custom-checkbox-table'
-          scroll={{ x: 'max-content' }}
-          rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredApplicants}
-          rowKey="_id"
-          loading={loading}
+          rowKey='_id'
           pagination={{
             ...pagination,
             showSizeChanger: true,
             pageSizeOptions: ['10', '20', '50', '100'],
-            showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
-            onChange: (page, pageSize) => {
-                setPagination({
-                    ...pagination,
-                    current: page,
-                    pageSize: pageSize,
-                });
-            }
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            onChange: (page, size) => setPagination({ ...pagination, current: page, pageSize: size })
           }}
+          loading={loading}
+          scroll={{ x: 'max-content' }}
         />
       </Content>
+
+      <TestAssignmentModal
+        open={testModalData.visible}
+        applicant={testModalData.applicant}
+        onCancel={() => setTestModalData({ visible: false, applicant: null, jobAppId: null })}
+        onSuccess={async () => {
+          // ✅ Update status to 'test' after assignment
+          try {
+            await updateJobApplicationStatus(testModalData.jobAppId, 'test');
+          } catch {
+            message.error('Failed to update status to test');
+          }
+
+          setTestModalData({ visible: false, applicant: null, jobAppId: null });
+          fetchApplicants();
+        }}
+      />
+
     </div>
   );
 };

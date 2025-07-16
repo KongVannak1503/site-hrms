@@ -50,8 +50,8 @@ const UpdateJobPostingPage = () => {
         setDepartments(depts);
         setJobTypes(types);
 
-        // setResponsibilities(job.responsibilities || '');
-        // setRequirements(job.requirements || '');
+        setResponsibilities(job.responsibilities || '');
+        setRequirements(job.requirements || '');
 
         const normalizedStatus = typeof job.status === 'boolean'
           ? (job.status ? 'Open' : 'Draft')
@@ -219,34 +219,65 @@ const UpdateJobPostingPage = () => {
                     <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
 
-                {/* <Form.Item label="Status" name="status" rules={[{ required: true }]}>
-                  <Select>
-                    <Option value="Draft">Draft</Option>
-                    <Option value="Open">Open</Option>
-                    <Option value="Close">Close</Option>
+                <Form.Item label="Status" name="status" rules={[{ required: true }]}>
+                  <Select placeholder="Select Status">
+                    <Option value="Draft">
+                      <span>
+                        <span
+                          style={{
+                            height: 10,
+                            width: 10,
+                            backgroundColor: 'orange',
+                            borderRadius: '50%',
+                            display: 'inline-block',
+                            marginRight: 8,
+                          }}
+                        />
+                        Draft
+                      </span>
+                    </Option>
+                    <Option value="Open">
+                      <span>
+                        <span
+                          style={{
+                            height: 10,
+                            width: 10,
+                            backgroundColor: 'green',
+                            borderRadius: '50%',
+                            display: 'inline-block',
+                            marginRight: 8,
+                          }}
+                        />
+                        Open
+                      </span>
+                    </Option>
+                    <Option value="Close">
+                      <span>
+                        <span
+                          style={{
+                            height: 10,
+                            width: 10,
+                            backgroundColor: 'red',
+                            borderRadius: '50%',
+                            display: 'inline-block',
+                            marginRight: 8,
+                          }}
+                        />
+                        Close
+                      </span>
+                    </Option>
                   </Select>
-                </Form.Item> */}
+                </Form.Item>
 
             </div>
-
-                {/* <Form.Item>
-                    <div className="flex justify-end gap-3">
-                        <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>
-                            Cancel
-                        </button>
-                        <button type="submit" className={`${Styles.btnUpdate}`}>
-                            Update
-                        </button>
-                    </div>
-                </Form.Item> */}
 
                 <div 
                     className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                     style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
                 >
-                    <button onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
-                    <button type="primary" htmlType="submit" className={`${Styles.btnCreate}`}>
-                        Save
+                    <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
+                    <button type="primary" htmlType="submit" className={`${Styles.btnUpdate}`}>
+                        Update
                     </button>
                 </div>
           </Form>

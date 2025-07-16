@@ -19,6 +19,12 @@ export const updateJobPostingApi = async (id, formData) => {
     return res.data;
 };
 
+// ✅ Update only status of job posting
+export const updateJobPostingStatusApi = async (id, status) => {
+  const res = await api.patch(`/job-postings/${id}/status`, { status });
+  return res.data;
+};
+
 export const deleteJobPostingApi = async (id) => {
     const res = await api.delete(`/job-postings/${id}`);
     return res.data;
