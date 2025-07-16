@@ -81,6 +81,7 @@ const AppSider = ({ collapsed }) => {
                 { key: '/employee', label: "របាយការណ៍ជ្រើសរើសបុគ្គលិក" },
                 { key: '/payroll', label: "របាយការណ៍បុគ្គលិក" },
                 { key: '/payroll', label: "របាយការណ៍វាយតម្លៃការងារ" },
+
             ]
         },
     ]

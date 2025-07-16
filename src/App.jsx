@@ -41,9 +41,13 @@ import EmployeeBookPage from './pages/employee/book/EmployeeBookPage'
 import LaborLawPage from './pages/employee/law/LaborLawPage'
 import NSSFPage from './pages/employee/book/NSSFPage'
 import PayrollPage from './pages/employee/payroll/PayrollPage'
+
 import TestTypePage from './pages/recruitment/tests/TestTypePage'
 import TestSchedulePage from './pages/recruitment/tests/TestSchedulePage'
 import TestDetailPage from './pages/recruitment/tests/TestDetailPage'
+
+import EmployeePositionPage from './pages/employee/position/EmployeePositionPage'
+import SubPayrollPage from './pages/employee/payroll/sub-payroll/SubPayrollPage'
 
 function App() {
   return (
@@ -84,9 +88,11 @@ function App() {
             <Route path="/employee/book/:id" element={<EmployeeBookPage />} />
             <Route path="/employee/law/:id" element={<LaborLawPage />} />
             <Route path="/employee/nssf/:id" element={<NSSFPage />} />
+            <Route path="/employee/position/:id" element={<EmployeePositionPage />} />
             <Route path="/employee/document-list/:id" element={<DocumentList />} />
             <Route path="/employee/create" element={<EmployeeCreatePage />} />
             <Route path="/payroll" element={<PayrollPage />} />
+            <Route path="/payroll/:id" element={<SubPayrollPage />} />
             <Route path="/test" element={<Test />} />
             <Route path="/table" element={<TableSample />} />
 

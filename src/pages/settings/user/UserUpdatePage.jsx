@@ -44,7 +44,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
         try {
             const formData = {
                 username: values.username,
-                employeeId: values.employeeIdData,
+                employeeId: values.employeeId,
                 role: values.role,
                 password: values.password
             };

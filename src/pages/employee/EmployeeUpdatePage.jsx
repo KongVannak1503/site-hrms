@@ -28,7 +28,7 @@ import ModalMdCenter from '../../components/modals/ModalMdCenter';
 
 const EmployeeUpdatePage = () => {
     const { id } = useParams();
-    const { content } = useAuth();
+    const { content, language } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
     const [fileList, setFileList] = useState([]);
@@ -41,6 +41,7 @@ const EmployeeUpdatePage = () => {
     const [communes, setCommunes] = useState([]);
     const [villages, setVillages] = useState([]);
     const [levels, setLevels] = useState([]);
+    const [position, setPosition] = useState([]);
     const [activeTab, setActiveTab] = useState('personal');
     const [open, setOpen] = useState(false);
     const [actionForm, setActionForm] = useState('create');
@@ -78,6 +79,7 @@ const EmployeeUpdatePage = () => {
         const fetchInitialData = async () => {
             try {
                 const response = await getEmployeeApi(id);
+                setPosition(response)
                 if (response?.image_url?.path) {
                     setPreviewUrl(uploadUrl + "/" + response.image_url.path);
                 }
@@ -90,6 +92,8 @@ const EmployeeUpdatePage = () => {
                     gender: response.gender,
                     email: response.email,
                     phone: response.phone,
+                    bloodType: response.bloodType,
+                    joinDate: response.joinDate ? moment(response.joinDate) : null,
                     date_of_birth: response.date_of_birth ? moment(response.date_of_birth) : null,
                     place_of_birth: response.place_of_birth,
                     nationality: response.nationality,
@@ -197,8 +201,10 @@ const EmployeeUpdatePage = () => {
             formData.append('gender', values.gender || '');
             formData.append('email', values.email || '');
             formData.append('phone', values.phone || '');
+            formData.append('bloodType', values.bloodType || '');
             formData.append('id_card_no', values.id_card_no || '');
             formData.append('passport_no', values.passport_no || '');
+            formData.append('joinDate', values.joinDate);
             formData.append('date_of_birth', values.date_of_birth);
             formData.append('place_of_birth', values.place_of_birth || '');
             formData.append('nationality', values.nationality || '');
@@ -280,6 +286,8 @@ const EmployeeUpdatePage = () => {
                         communes={communes}
                         villages={villages}
                         showCreateDrawer={showCreateDrawer}
+                        position={position}
+                        language={language}
                     />
                 </div>
 

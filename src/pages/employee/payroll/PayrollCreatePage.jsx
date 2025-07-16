@@ -3,8 +3,8 @@ import { Form, Input, Row, Col, Switch, message, Select, Card } from 'antd';
 import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Typography } from 'antd';
-import { createPayrollApi } from '../../../services/payrollApi';
 import PayrollFormPage from './PayrollFormPage';
+import { createBonusApi } from '../../../services/payrollApi';
 
 const PayrollCreatePage = ({ onCancel, onUserCreated }) => {
     const { content } = useAuth();
@@ -16,18 +16,14 @@ const PayrollCreatePage = ({ onCancel, onUserCreated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const { employeeId, departmentId, payDate, status } = values;
+            const { payDate } = values;
 
             const formData = {
-                departmentId,
-                employeeId,
                 payDate: payDate.format('YYYY-MM-DD'),
-                status,
             };
-
             console.log('🟡 Payload sent to backend:', formData); // 👈 log this
 
-            const response = await createPayrollApi(formData);
+            const response = await createBonusApi(formData);
             message.success('Created successfully!');
             onUserCreated(response.data);
         } catch (error) {

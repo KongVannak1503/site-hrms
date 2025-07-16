@@ -17,7 +17,7 @@ import { createEpmLaborLawsApi, deleteEpmLaborLawApi, getEpmUploadLaborLawApi } 
 import moment from 'moment';
 
 const LaborLawPage = () => {
-    const { content } = useAuth();
+    const { content, language } = useAuth();
     const [fileList, setFileList] = useState([]);
     const [title, setTitle] = useState('');
     const [position, setPosition] = useState('');
@@ -34,6 +34,7 @@ const LaborLawPage = () => {
     };
 
     useEffect(() => {
+        document.title = `${content['contract']} | USEA`;
         const fetchData = async () => {
             try {
                 const resPositions = await getPositionsApi();
@@ -58,8 +59,9 @@ const LaborLawPage = () => {
             }
         };
         fetchData();
-    }, [content, id]);
+    }, [content, id, language]);
 
+    console.log(language);
 
     const handleUpload = async () => {
         const formData = new FormData();
@@ -178,7 +180,7 @@ const LaborLawPage = () => {
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 <div className="mb-3 flex justify-between">
-                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeBook']}</p>
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeInfo']}</p>
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 <Card title={<p className='text-default text-sm font-bold'>{content['laborLaw']}</p>} className="shadow">
@@ -202,7 +204,8 @@ const LaborLawPage = () => {
                             >
                                 {typeLaborLawOptions.map(option => (
                                     <Select.Option key={option.id} value={option.id}>
-                                        {option.name_kh}
+                                        {language == 'khmer' ? option.name_kh : option.name_en}
+
                                     </Select.Option>
                                 ))}
                             </Select>
@@ -260,6 +263,7 @@ const LaborLawPage = () => {
                         columns={columns}
                         dataSource={filteredData}
                         rowKey="_id"
+                        pagination={false}
                     />
                 </Card>
             </div>

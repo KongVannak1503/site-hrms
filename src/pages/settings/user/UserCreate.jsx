@@ -6,11 +6,11 @@ import { getRolesApi } from '../../../services/roleApi';
 import { createUserApi } from '../../../services/userApi';
 import { getEmployeesApi } from '../../../services/employeeApi';
 
-const UserCreate = ({ form, onCancel, onUserCreated }) => {
+const UserCreate = ({ onCancel, onUserCreated }) => {
     const { content } = useAuth();
     const [roles, setRoles] = useState([]);
     const [employees, setEmployees] = useState([]);
-
+    const [form] = Form.useForm();
     useEffect(() => {
 
         form.resetFields();
@@ -30,9 +30,10 @@ const UserCreate = ({ form, onCancel, onUserCreated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const { username, password, email, role, isActive } = values;
+            const { username, employeeId, password, email, role, isActive } = values;
             const formData = {
                 username,
+                employeeId,
                 password,
                 email,
                 role,

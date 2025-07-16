@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from "
 import dataTranslate from '../data/Data.json'
 import { jwtDecode } from "jwt-decode";
 import { attachTokenToApi } from "../services/api";
+import { getUserApi } from "../services/userApi";
 
 const getInitialLanguage = () => {
     const saved = localStorage.getItem('appLanguage')
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     const [user, setUser] = useState(null);
+    const [identity, setIdentity] = useState(null);
     const [language, setLanguage] = useState(getInitialLanguage)
     const [content, setContent] = useState(dataTranslate[getInitialLanguage()])
     const [isLoading, setIsLoading] = useState(true)
@@ -34,7 +36,6 @@ export const AuthProvider = ({ children }) => {
             try {
                 const decoded = jwtDecode(token);
                 setUser(decoded);
-
             } catch (e) {
                 console.error("Invalid token:", e);
             }
@@ -54,10 +55,25 @@ export const AuthProvider = ({ children }) => {
         return () => clearTimeout(timer);
     }, [token, language]);
 
+    useEffect(() => {
+        if (!user || !user.id) return;
+
+        let isMounted = true;
+        const fetchData = async () => {
+            try {
+                const resUser = await getUserApi(user.id);
+                if (isMounted) setIdentity(resUser);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+        fetchData();
+        return () => { isMounted = false; };
+    }, [user?.id]);
 
     const contextValue = useMemo(() => ({
-        language, setLanguage, content, token, setToken,user, isLoading
-    }), [language, content, token, isLoading]);
+        language, setLanguage, content, token, setToken, user, isLoading, identity
+    }), [language, content, token, isLoading, identity]);
 
     return (
         <AuthContext.Provider value={contextValue}>

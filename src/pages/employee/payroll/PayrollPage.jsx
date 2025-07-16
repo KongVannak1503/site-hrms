@@ -1,28 +1,29 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FormOutlined, PlusOutlined, RightCircleOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
 import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
 import { Styles } from '../../../utils/CsStyle';
-import { formatDateTime } from '../../../utils/utils';
+import { formatDateTime, formatYear } from '../../../utils/utils';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import CategoryUpdatePage from './CategoryUpdatePage';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import { deletePayrollApi, getPayrollsApi } from '../../../services/payrollApi';
 import PayrollCreatePage from './PayrollCreatePage';
-import { typePayrollOptions } from '../../../data/Type';
+import { deleteBonusApi, getBonusesApi } from '../../../services/payrollApi';
+import PayrollUpdatePage from './PayrollUpdatePage';
+import { useNavigate } from 'react-router-dom';
 
 const PayrollPage = () => {
     const { isLoading, content } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
-    const [actionForm, setActionForm] = useState('create'); // 'create' or 'update'
+    const [actionForm, setActionForm] = useState('create');
     const [selectedUserId, setSelectedUserId] = useState(null);
+    const navigate = useNavigate();
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
@@ -62,7 +63,7 @@ const PayrollPage = () => {
         document.title = content['payroll'];
         const fetchData = async () => {
             try {
-                const response = await getPayrollsApi();
+                const response = await getBonusesApi();
                 console.log(response);
 
                 if (Array.isArray(response)) {
@@ -100,7 +101,7 @@ const PayrollPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deletePayrollApi(id); // call the API
+            await deleteBonusApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -111,28 +112,19 @@ const PayrollPage = () => {
         }
     };
 
+    const handleEntrain = (id) => {
+        navigate(`/payroll/${id}`);
+    };
+
+
     const columns = [
         {
-            title: content['department'],
-            dataIndex: "departmentId",
-            key: "departmentId",
-            render: (_, text) => <span>{text.departmentId?.title}</span>,
+            title: "Pay Date",
+            dataIndex: "payDate",
+            key: "payDate",
+            render: (text) => <span>{formatYear(text)}</span>,
         },
-        {
-            title: content['name'],
-            dataIndex: "employeeId",
-            key: "employeeId",
-            render: (_, text) => <span>{text.employeeId?.name_kh}</span>,
-        },
-        {
-            title: content['type'],
-            dataIndex: 'status', // this is the ID stored in your data
-            key: 'status',
-            render: (value) => {
-                const type = typePayrollOptions.find(item => item.id === value);
-                return type ? type.name_kh : '-'; // or use `type.name_kh`
-            },
-        },
+
         {
             title: content['createdAt'],
             dataIndex: "createdAt",
@@ -152,6 +144,17 @@ const PayrollPage = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
+
+                    <Tooltip title={content['entrain']}>
+                        <button
+                            className={Styles.btnDownload}
+                            shape="circle"
+                            onClick={() => handleEntrain(record._id)}
+                        >
+                            <RightCircleOutlined />
+                        </button>
+                    </Tooltip>
+
                     <Tooltip title={content['edit']}>
                         <button
                             className={Styles.btnEdit}
@@ -161,14 +164,6 @@ const PayrollPage = () => {
                             <FormOutlined />
                         </button>
                     </Tooltip>
-                    {ConfirmDeleteButton({
-                        onConfirm: () => handleDelete(record._id),
-                        tooltip: content['delete'],
-                        title: content['confirmDelete'],
-                        okText: content['yes'],
-                        cancelText: content['no'],
-                        description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
-                    })}
                 </Space>
             ),
         },
@@ -247,7 +242,10 @@ const PayrollPage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="mb-3 flex justify-between">
+                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['payroll']}</p>
+                <CustomBreadcrumb items={breadcrumbItems} />
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -268,7 +266,7 @@ const PayrollPage = () => {
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['payroll']}`}</button>
                     </div>
                 </div>
                 <Table
@@ -305,7 +303,7 @@ const PayrollPage = () => {
                     {actionForm === 'create' ? (
                         <PayrollCreatePage onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <PayrollUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
 
