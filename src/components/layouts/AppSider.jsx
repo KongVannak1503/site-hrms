@@ -8,7 +8,7 @@ import {
     AudioOutlined,
     UsergroupAddOutlined,
 } from '@ant-design/icons'
-import { LuUsers } from "react-icons/lu";
+import { LuChartNoAxesCombined, LuClipboardPen, LuGift, LuUsers } from "react-icons/lu";
 import { AutoComplete, Input, Menu } from 'antd'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -37,12 +37,10 @@ const AppSider = ({ collapsed }) => {
             icon: <VideoCameraOutlined />,
             label: content['recruiter'],
             children: [
-                { key: '/job-postings', label: 'Job Posting' },
-                { key: '/applicants', label: 'Applicants' },
-                { key: '/applications', label: 'Applications' },
-                { key: '/tests', label: 'Tests' },
-                { key: '/interviews', label: 'Interviews' },
-                { key: '/evaluations', label: 'Evaluations' },
+                { key: '/job-postings', label: content['jobPostings'] }, 
+                { key: '/applicants', label: content['applicants'] },
+                { key: '/test-schedules', label: content['testSchedule'] },
+                { key: '/test-types', label: content['testType'] },
 
             ],
         },
@@ -52,7 +50,37 @@ const AppSider = ({ collapsed }) => {
             label: content['employees'],
             children: [
                 { key: '/employee', label: content['employee'] },
-                { key: '/payroll', label: content['payRoll'] },
+                { key: '/payroll', label: content['payroll'] },
+            ]
+        },
+        {
+            key: '/appraisals',
+            icon: <LuClipboardPen />,
+            label: content['appraisal'],
+            children: [
+                { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
+                { key: '/payroll', label: "វាយតម្លៃការងារប្រចាំថ្ងៃ" },
+                { key: '/payroll', label: "វាយតម្លៃការងារប្រចាំខែ" },
+                { key: '/payroll', label: "វាយតម្លៃការងារប្រចាំឆ្នាំ" },
+            ]
+        },
+        {
+            key: '/awarding',
+            icon: <LuGift />,
+            label: content['awarding'],
+            children: [
+                { key: '/employee', label: "ការលើកទឹកចិត្ដ" },
+                { key: '/payroll', label: "ប្រភេទលើកទឹកចិត្ដ" },
+            ]
+        },
+        {
+            key: '/reports',
+            icon: <LuChartNoAxesCombined />,
+            label: content['report'],
+            children: [
+                { key: '/employee', label: "របាយការណ៍ជ្រើសរើសបុគ្គលិក" },
+                { key: '/payroll', label: "របាយការណ៍បុគ្គលិក" },
+                { key: '/payroll', label: "របាយការណ៍វាយតម្លៃការងារ" },
             ]
         },
     ]

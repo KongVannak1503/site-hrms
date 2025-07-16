@@ -19,4 +19,14 @@ export const Styles = {
 
     btnDelete: "flex items-center justify-center shadow hover:bg-red-600 hover:text-white rounded-full hover:bg-red-700 transition duration-200 w-[30px] h-[30px]",
     btnSecondary: "border border-[#d9d9d9] text-[#595959] bg-white px-4 py-1.5 rounded hover:border-[#17a2b8] hover:text-[#17a2b8] transition-all duration-200 cursor-pointer",
+    statusButtons: {
+        applied: "text-white bg-[#1890ff] hover:bg-[#40a9ff] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+        shortlisted: "text-white bg-[#722ed1] hover:bg-[#9254de] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+        test: "text-white bg-[#faad14] hover:bg-[#ffc53d] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+        interview: "text-white bg-[#13c2c2] hover:bg-[#36cfc9] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+        hired: "text-white bg-[#52c41a] hover:bg-[#73d13d] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+        reserve: "text-white bg-[#2f54eb] hover:bg-[#597ef7] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+        rejected: "text-white bg-[#f5222d] hover:bg-[#ff4d4f] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
+    }
+
 }

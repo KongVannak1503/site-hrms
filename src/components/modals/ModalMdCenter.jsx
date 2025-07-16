@@ -6,6 +6,7 @@ const ModalMdCenter = ({
     onCancel,
     title = 'Custom Modal',
     width = 700,
+    footer,
     children,
 }) => {
     useEffect(() => {
@@ -26,7 +27,7 @@ const ModalMdCenter = ({
             open={open}
             onCancel={onCancel}
             width={width}
-            footer={null}
+            footer={footer}
             zIndex={2000}
             maskClosable={false}
             getContainer={false}

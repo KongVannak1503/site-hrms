@@ -10,7 +10,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { getJobPostingsApi } from '../../../services/jobPosting';
 import { getCitiesApi } from '../../../services/cityApi';
-import { getApplicantApi, updateApplicantApi } from '../../../services/applicant';
+// import { getApplicantApi, updateApplicantApi } from '../../../services/applicant';
 import { FaRegImages } from 'react-icons/fa';
 import { Styles } from '../../../utils/CsStyle';
 import uploadUrl from '../../../services/uploadApi';
@@ -63,56 +63,75 @@ const EditApplicantPage = () => {
 
   // Load applicant data
   useEffect(() => {
-    const fetchApplicant = async () => {
-      try {
-        setLoading(true);
-        const data = await getApplicantApi(id);
-        form.setFieldsValue({
-          ...data,
-          dob: data.dob ? dayjs(data.dob) : null,
-          job_posting_id: data.job_posting_id?._id || data.job_posting_id,
-          current_province: data.current_province,
-          // add more fields as needed
-        });
+  const fetchApplicant = async () => {
+    try {
+      setLoading(true);
+      const data = await getApplicantApi(id);
+      const applicant = data.applicant;
+      const jobApplications = data.jobApplications || [];
 
-        // Set photo preview and fileList state if photo exists
-        if (data.photo) {
-          setPreviewImage(`${uploadUrl}/uploads/applicants/${encodeURIComponent(data.photo)}`);
-          setFileList([
-            {
-              uid: '-1',
-              name: data.photo,
-              status: 'done',
-              url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(data.photo)}`,
-              originFileObj: null,
-            },
-          ]);
-        } else {
-          setFileList([]);
-          setPreviewImage('');
-        }
+      // Get first applied job posting ID or null
+      const jobPostingId = jobApplications.length > 0 
+        ? jobApplications[0].job_id._id 
+        : null;
 
-        // Set CV fileList state if CV exists
-        if (data.cv) {
-          setCvFileList([
-            {
-              uid: '-1',
-              name: data.cv,
-              status: 'done',
-              url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(data.cv)}`,
-            },
-          ]);
-        } else {
-          setCvFileList([]);
-        }
-      } catch {
-        message.error("Failed to load applicant data");
-      } finally {
-        setLoading(false);
+      form.setFieldsValue({
+        full_name_kh: applicant.full_name_kh || '',
+        full_name_en: applicant.full_name_en || '',
+        gender: applicant.gender || '',
+        dob: applicant.dob ? dayjs(applicant.dob) : null,
+        marital_status: applicant.marital_status || '',
+        phone_no: applicant.phone_no || '',
+        email: applicant.email || '',
+        current_province: applicant.current_province || '',
+        current_district: applicant.current_district || '',
+        current_commune: applicant.current_commune || '',
+        current_village: applicant.current_village || '',
+        job_posting_id: jobPostingId || '',
+        // Add any additional fields here explicitly
+      });
+
+      // Photo preview setup
+      if (applicant.photo) {
+        setPreviewImage(`${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.photo)}`);
+        setFileList([
+          {
+            uid: '-1',
+            name: applicant.photo,
+            status: 'done',
+            url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.photo)}`,
+            originFileObj: null,
+          },
+        ]);
+      } else {
+        setFileList([]);
+        setPreviewImage('');
       }
-    };
-    fetchApplicant();
-  }, [id, form]);
+
+      // CV preview setup
+      if (applicant.cv) {
+        setCvFileList([
+          {
+            uid: '-1',
+            name: applicant.cv,
+            status: 'done',
+            url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.cv)}`,
+          },
+        ]);
+      } else {
+        setCvFileList([]);
+      }
+
+    } catch (error) {
+      console.error(error);
+      message.error("Failed to load applicant data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchApplicant();
+}, [id, form]);
 
   // Handle photo upload changes
   const onPhotoChange = ({ fileList }) => {
@@ -295,7 +314,7 @@ const EditApplicantPage = () => {
                   </Col>
 
                   <Col xs={24} md={8}>
-                    <Form.Item label="Marital Status" name="material_status">
+                    <Form.Item label="Marital Status" name="marital_status">
                       <Select placeholder="Select marital status">
                         <Option value="Single">Single</Option>
                         <Option value="Married">Married</Option>
