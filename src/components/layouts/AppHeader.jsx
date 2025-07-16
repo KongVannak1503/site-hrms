@@ -120,7 +120,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                         <Space className='pt-4'>
                             <img
                                 className="w-[45px] h-[45px] rounded-full object-cover"
-                                src={`${uploadUrl}/${identity?.employeeId.image_url?.path}`}
+                                src={`${uploadUrl}/${identity?.employeeId?.image_url?.path}`}
                                 alt="photo"
                             />
                             <span className="mr-1 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">{identity?.username}</span>
