@@ -100,75 +100,44 @@ const JobPostingPage = () => {
 
   const columns = [
     {
-      title: 'Job Title',
+      title: content['jobTitle'],
       dataIndex: 'job_title',
       key: 'job_title',
       render: (text) => <strong>{text}</strong>,
     },
     {
-      title: 'Department',
+      title: content['department'],
       dataIndex: ['department', 'title'],
       key: 'department',
     },
     {
-      title: 'Position',
+      title: content['position'],
       dataIndex: ['position', 'title'],
       key: 'position',
     },
     {
-        title: 'Quantity',
+        title: content['pax'],
         dataIndex: 'quantity_available',
         key: 'quantity',
         render: (qty) => <span className="font-semibold">{qty}</span>,
     },
-    // {
-    //     title: 'Applicants',
-    //     key: 'applicants',
-    //     render: (_, record) => {
-    //         const candidates = record.candidates || [];
-    //         return (
-    //         <div className="flex items-center gap-2">
-    //             <div className="flex -space-x-2">
-    //             {candidates.slice(0, 3).map((candidate, index) => {
-    //                 const avatarUrl = candidate.avatar
-    //                 ? `${uploadUrl}/uploads/applicants/${candidate.avatar}`
-    //                 : null;
-    //                 return (
-    //                 <Tooltip key={index} title={candidate.name}>
-    //                     <img
-    //                         src={avatarUrl}
-    //                         alt={candidate.name}
-    //                         className="w-10 h-10 rounded-full border border-white shadow-sm"
-    //                         onError={(e) => (e.target.style.display = 'none')}
-    //                     />
-    //                 </Tooltip>
-    //                 );
-    //             })}
-    //             </div>
-    //             <span className="text-sm font-semibold text-gray-700">
-    //                 {record.candidates_count || 0}
-    //             </span>
-    //         </div>
-    //         );
-    //     },
-    // },
     {
-      title: 'Job Type',
+      title: content['jobType'],
       dataIndex: ['job_type', 'title'],
       key: 'job_type',
     },
     {
-      title: 'Open Date',
+      title: content['openDate'],
       dataIndex: 'open_date',
       render: (date) => dayjs(date).format('YYYY-MM-DD'),
     },
     {
-      title: 'Close Date',
+      title: content['closeDate'],
       dataIndex: 'close_date',
       render: (date) => dayjs(date).format('YYYY-MM-DD'),
     },
     {
-      title: 'Status',
+      title: content['status'],
       dataIndex: 'status',
       key: 'status',
       render: (status, record) => (
@@ -226,7 +195,7 @@ const JobPostingPage = () => {
       ),
     },
     {
-      title: 'Actions',
+      title: content['action'],
       key: 'actions',
       render: (_, record) => (
         <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
@@ -271,7 +240,6 @@ const JobPostingPage = () => {
             <div className='flex flex-wrap gap-4 items-end'>
               {/* Duration filter */}
               <div className='flex flex-col'>
-                <label className='text-sm text-gray-500 font-semibold mb-1.5'>Duration</label>
                 <RangePicker
                   format="YYYY-MM-DD"
                   onChange={(dates) => {
@@ -291,9 +259,8 @@ const JobPostingPage = () => {
 
               {/* Department filter */}
               <div className='flex flex-col'>
-                <label className='text-sm text-gray-500 font-semibold mb-1.5'>Department</label>
                 <Select
-                  placeholder="All Departments"
+                  placeholder= {content['allDepartment']}
                   allowClear
                   style={{ minWidth: 150 }}
                   onChange={(value) => {
@@ -316,9 +283,8 @@ const JobPostingPage = () => {
 
               {/* Status filter */}
               <div className='flex flex-col'>
-                <label className='text-sm text-gray-500 font-semibold mb-1.5'>Status</label>
                 <Select
-                  placeholder="All Status"
+                  placeholder={content['allStatus']}
                   allowClear
                   style={{ minWidth: 120 }}
                   onChange={(status) => {

@@ -40,6 +40,7 @@ const AppSider = ({ collapsed }) => {
                 { key: '/job-postings', label: content['jobPostings'] }, 
                 { key: '/applicants', label: content['applicants'] },
                 { key: '/test-schedules', label: content['testSchedule'] },
+                { key: '/interview-schedules', label: content['interviewSchedule'] },
                 { key: '/test-types', label: content['testType'] },
 
             ],

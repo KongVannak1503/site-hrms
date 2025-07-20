@@ -2,16 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Select, DatePicker, InputNumber, Input, message } from 'antd';
 import { getAllTestTypesApi } from '../../../services/testTypeService';
 import { createTestAssignmentApi } from '../../../services/testAssignmentService';
+import { getShortlistedApplicantsApi } from '../../../services/applicantApi';
+import { updateJobApplicationStatus } from '../../../services/jobApplicationApi';
 
 const { Option } = Select;
 
 const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
   const [form] = Form.useForm();
   const [testTypes, setTestTypes] = useState([]);
+  const [applicants, setApplicants] = useState([]);
+  const [loadingApplicants, setLoadingApplicants] = useState(false);
 
   useEffect(() => {
     if (open) {
       fetchTestTypes();
+
+      if (!applicant) {
+        fetchShortlistedApplicants();
+      }
     }
   }, [open]);
 
@@ -19,8 +27,22 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
     try {
       const data = await getAllTestTypesApi();
       setTestTypes(data);
-    } catch {
+    } catch (err) {
       message.error('Failed to load test types');
+      console.error('Test types error:', err);
+    }
+  };
+
+  const fetchShortlistedApplicants = async () => {
+    setLoadingApplicants(true);
+    try {
+      const data = await getShortlistedApplicantsApi();
+      setApplicants(data);
+    } catch (err) {
+      console.error('Applicant fetch error:', err);
+      message.error('Failed to load applicants');
+    } finally {
+      setLoadingApplicants(false);
     }
   };
 
@@ -28,18 +50,31 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
     try {
       const values = await form.validateFields();
 
+      const selectedApplicant = applicant || applicants.find(a => a._id === values.applicant_id);
+
+      if (!selectedApplicant) {
+        message.error('Selected applicant not found');
+        return;
+      }
+
       const payload = {
-        test_type: values.test_type, // array
+        test_type: values.test_type,
         start_at: values.start_at,
         duration_min: values.duration_min,
         location: values.location,
-        applicant_id: applicant._id,
-        job_id: applicant.job_id?._id || applicant.job_id,
+        applicant_id: selectedApplicant._id,
+        job_id: selectedApplicant?.job_id?._id || selectedApplicant?.job_id,
       };
 
       console.log('Payload to send:', payload);
 
       await createTestAssignmentApi(payload);
+
+      // ✅ New: update status to 'test' for selected applicant
+      await updateJobApplicationStatus(
+        selectedApplicant.job_application_id || selectedApplicant._id, // make sure this is the correct ID
+        'test'
+      );
 
       message.success('Test assignment created successfully');
       form.resetFields();
@@ -56,6 +91,7 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
       open={open}
       onCancel={() => {
         form.resetFields();
+        setApplicants([]);
         onCancel();
       }}
       onOk={handleOk}
@@ -63,9 +99,33 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
       maskClosable={false}
     >
       <Form form={form} layout="vertical">
-        <Form.Item label="Applicant Name">
-          <Input value={applicant?.full_name_kh || applicant?.full_name_en} disabled />
-        </Form.Item>
+        {applicant ? (
+          <Form.Item label="Applicant Name">
+            <Input value={applicant?.full_name_kh || applicant?.full_name_en} disabled />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            label="Select Applicant"
+            name="applicant_id"
+            rules={[{ required: true, message: 'Please select an applicant' }]}
+          >
+            <Select
+              placeholder="Select an applicant"
+              showSearch
+              loading={loadingApplicants}
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option?.children?.toLowerCase?.().includes(input.toLowerCase())
+              }
+            >
+              {applicants.map((a) => (
+                <Option key={a._id} value={a._id}>
+                  {a.full_name_en} ({a.job_title || 'No job'})
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
 
         <Form.Item
           label="Test Type(s)"

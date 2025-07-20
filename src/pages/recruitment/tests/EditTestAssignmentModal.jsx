@@ -11,15 +11,30 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
   const [testTypes, setTestTypes] = useState([]);
 
   useEffect(() => {
-    if (open && testAssignment) {
-      fetchTestTypes();
-      form.setFieldsValue({
-        test_type: testAssignment.extendedProps?.test_type?.map(t => t._id),
-        start_at: dayjs(testAssignment.start),
-        duration_min: testAssignment.extendedProps?.duration,
-        location: testAssignment.extendedProps?.location,
-      });
-    }
+    const fetchAndSetForm = async () => {
+      if (open && testAssignment) {
+        try {
+          const types = await getAllTestTypesApi();
+          setTestTypes(types);
+
+          const testTypeIds = testAssignment.extendedProps?.test_type_scores?.map(
+            (t) => typeof t.test_type === 'object' ? t.test_type._id : t.test_type
+          ) || [];
+
+          // ✅ Only set values after testTypes are loaded
+          form.setFieldsValue({
+            test_type: testTypeIds,
+            start_at: dayjs(testAssignment.start),
+            duration_min: testAssignment.extendedProps?.duration,
+            location: testAssignment.extendedProps?.location,
+          });
+        } catch (err) {
+          message.error('Failed to load test types');
+        }
+      }
+    };
+
+    fetchAndSetForm();
   }, [open, testAssignment]);
 
   const fetchTestTypes = async () => {
@@ -78,8 +93,10 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
           rules={[{ required: true, message: 'Please select at least one test type' }]}
         >
           <Select mode="multiple" placeholder="Select test type(s)">
-            {testTypes.map(t => (
-              <Option key={t._id} value={t._id}>{t.name_en}</Option>
+            {testTypes.map((t) => (
+              <Select.Option key={t._id} value={t._id}>
+                {t.name_en}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>

@@ -104,11 +104,11 @@ const CreateJobPostingPage = () => {
       </div>
 
       <div className='mt-4'>
-        <Card title="Create Job Posting">
+        <Card title={content['createJobPosting']}>
           <Form layout="vertical" form={form} onFinish={onFinish}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Form.Item
-                label="Job Title"
+                label={content['jobTitle']}
                 name="job_title"
                 rules={[{ required: true, message: 'Please enter job title' }]}
                 className="md:col-span-2"
@@ -117,7 +117,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Department"
+                label={content['department']}
                 name="department"
                 rules={[{ required: true, message: 'Please select department' }]}
               >
@@ -134,7 +134,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Position"
+                label={content['position']}
                 name="position"
                 rules={[{ required: true, message: 'Please select position' }]}
               >
@@ -148,7 +148,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Quantity Available"
+                label={content['pax']}
                 name="quantity_available"
                 rules={[{ required: true, message: 'Please enter quantity' }]}
               >
@@ -156,7 +156,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Job Type"
+                label={content['jobType']}
                 name="job_type"
                 rules={[{ required: true, message: 'Please select job type' }]}
               >
@@ -170,7 +170,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Responsibilities"
+                label={content['responsibilities']}
                 name="responsibilities"
                 rules={[{ required: true, message: 'Please enter responsibilities' }]}
               >
@@ -185,7 +185,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Requirements"
+                label={content['requirements']}
                 name="requirements"
                 rules={[{ required: true, message: 'Please enter requirements' }]}
               >
@@ -200,7 +200,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Open Date"
+                label={content['openDate']}
                 name="open_date"
                 rules={[{ required: true, message: 'Please select open date' }]}
               >
@@ -208,7 +208,7 @@ const CreateJobPostingPage = () => {
               </Form.Item>
 
               <Form.Item
-                label="Close Date"
+                label={content['closeDate']}
                 name="close_date"
                 rules={[{ required: true, message: 'Please select close date' }]}
               >
@@ -217,7 +217,7 @@ const CreateJobPostingPage = () => {
 
               {/* ✅ Manual status selection */}
               <Form.Item
-                label="Status"
+                label={content['status']}
                 name="status"
                 initialValue="Draft"
                 rules={[{ required: true, message: 'Please select status' }]}
@@ -276,9 +276,9 @@ const CreateJobPostingPage = () => {
               className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
               style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
             >
-              <button onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
+              <button onClick={handleCancel} className={`${Styles.btnCancel}`}>{content['cancel']}</button>
               <button type="submit" className={`${Styles.btnCreate}`}>
-                Save
+                {content['save']}
               </button>
             </div>
           </Form>

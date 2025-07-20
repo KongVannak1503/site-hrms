@@ -46,7 +46,7 @@ const LoginPage = () => {
             </div>
             <div className='bg-white p-6 rounded w-full max-w-sm shadow sm:p-8'>
 
-                <h2 className='text-xl sm:text-2xl font-semibold text-center mb-6 flex items-center justify-center gap-2'>
+                <h2 className='text-xl sm:text-2xl font-semibold tracking-wide text-center mb-6 flex items-center justify-center gap-2'>
                     {content['loginToSystem']}
                 </h2>
 

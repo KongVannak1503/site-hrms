@@ -13,6 +13,7 @@
         "role": "Role ",
         "roles": "Roles ",
         "status": "Status ",
+        "allStatus": "All Status ",
 
         "employee": "Employee ",
         "employees": "Employees ",
@@ -44,6 +45,7 @@
 
         "departments": "Departments",
         "department": "Department",
+        "allDepartment": "All Department",
         "assignee": "Assignee",
 
         "organizations": "Organizations",
@@ -95,7 +97,7 @@
         "yes": "Yes",
         "no": "No",
         "login": "Login",
-        "loginToSystem": "Login To System",
+        "loginToSystem": "Login to HRMS",
         "addNew": "Add New",
         "searchAction": "Search...",
         "city": "City",
@@ -140,22 +142,30 @@
         "jobType": "Job Type",
         "jobPostings": "Job Postings",
         "jobPosting": "Job Posting",
+        "jobTitle": "Job Title",
 
         "createJobPosting": "Create Job Posting",
         "editJobPosting": "Edit Job Posting",
         "jobApplied": "Applicants Applied",
         "openDate": "Open Date",
         "closeDate": "Close Date",
+        "pax": "Pax",
+        "responsibilities": "Responsibilities",
+        "requirements": "Requirements",
 
         "applicants": "Applicants",
+        "photo": "Photo",
         "createApplicant": "Create Applicant",
         "editApplicant": "Edit Applicant",
 
         "tests": "Tests",
         "testType": "Test types",
         "testSchedule": "Test Schedule",
+        "score": "Score",
+        "resultTest": "Result of Test",
 
         "interviews": "Interviews",
+        "interviewSchedule": "Interview Schedule",
 
         "appraisal": "Appraisal",
 
@@ -217,6 +227,7 @@
         "role": "តួនាទី",
         "roles": "តួនាទី",
         "status": "ស្ថានភាព",
+        "allStatus": "ស្ថានភាពទាំងអស់ ",
 
         "firstName": "នាម​ខ្លួន",
         "firstNameKh": "នាម​ខ្លួន​​ (ខ្មែរ)",
@@ -259,6 +270,7 @@
 
         "departments": "នាយកដ្ឋាន",
         "department": "នាយកដ្ឋាន",
+        "allDepartment": "នាយកដ្ឋានទាំងអស់",
         "assignee": "អ្នកទទួលបន្ទុក",
 
         "enter": "បញ្ចូល",
@@ -278,28 +290,37 @@
         "yes": "យលព្រម",
         "no": "ទេ",
         "login": "ចូលប្រើប្រាស់",
-        "loginToSystem": "ចូលប្រើប្រាស់ប្រព័ន្ធគ្រប់គ្រង", 
+        "loginToSystem": "ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស", 
         "addNew": "Add New",
         "searchAction": "ស្វែងរក...",
 
         "jobType": "ប្រភេទការងារ",
         "jobPostings": "ការប្រកាសរើសការងារ",
         "jobPosting": "ប្រកាសរើសការងារ",
+        "jobTitle": "ចំណងជើងការងារ",
+
         "createJobPosting": "បង្កើតការប្រកាសរើសការងារ",
         "editJobPosting": "កែប្រែការប្រកាសរើសការងារ",
         "jobApplied": "បេក្ខជនដាក់ពាក្យ",
         "openDate": "កាលបរិច្ឆេទបើក",
         "closeDate": "កាលបរិច្ឆេទបិទ",
+        "pax": "ចំនួនរើស",
+        "responsibilities": "ទំនួលខុសត្រូវ",
+        "requirements": "លក្ខខណ្ឌការងារ",
 
-        "applicants": "បេក្ខជន",
+        "applicants": "បេក្ខជនដាក់ពាក្យ",
+        "photo": "រូបភាព",
         "createApplicant": "បង្កើតបេក្ខជន",
         "editApplicant": "កែប្រែបេក្ខជន",
 
         "tests": "ការតេស្ដ",
         "testType": "ប្រភេទតេស្ដ",
         "testSchedule": "កាលវិភាគតេស្ដ",
+        "score": "ពិន្ទុ",
+        "resultTest": "លទ្ធផលតេស្ដ",
 
         "interviews": "ការសម្ភាសន៍",
+        "interviewSchedule": "កាលវិភាគសម្ភាសន៍",
 
         "appraisal": "ការវាយតម្លៃការងារ",
 
