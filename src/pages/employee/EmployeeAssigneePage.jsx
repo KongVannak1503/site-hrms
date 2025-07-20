@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Styles } from '../../utils/CsStyle';
 
 const EmployeeAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
-    const { content } = useAuth();
+    const { content, language } = useAuth();
     const [form] = Form.useForm();
     const [positions, setPositions] = useState([]);
 
@@ -70,7 +70,7 @@ const EmployeeAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
                 >
                     {positions.map((position) => (
                         <Select.Option key={position._id || position.id} value={position._id}>
-                            {position.title}
+                            {language == 'khmer' ? position.title_kh : position.title_en}
                         </Select.Option>
                     ))}
                 </Select>

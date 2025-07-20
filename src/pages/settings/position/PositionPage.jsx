@@ -17,7 +17,7 @@ import CreatePositionPage from './CreatePositionPage';
 import UpdatePositionPage from './UpdatePositionPage';
 
 const PositionPage = () => {
-    const { isLoading, content } = useAuth();
+    const { isLoading, content, language } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -123,7 +123,7 @@ const PositionPage = () => {
             title: content['title'],
             dataIndex: "title",
             key: "title",
-            render: (text) => <span>{text}</span>,
+            render: (_, text) => <span>{language == 'khmer' ? text.title_kh : text.title_en}</span>,
         },
         {
             title: content['description'],

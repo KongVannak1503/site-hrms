@@ -1,0 +1,4 @@
+:where(.css-dev-only-do-not-override-5uvb3z).ant-timeline .ant-timeline-item-last>.ant-timeline-item-content {
+    min-height: 0px;
+    /* inset-block-start: -4px !important; */
+}

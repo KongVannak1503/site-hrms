@@ -9,6 +9,7 @@ import {
     DeleteOutlined,
     FileAddFilled,
     PlusOutlined,
+    FileTextOutlined,
 } from "@ant-design/icons";
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import RoleCreatePage from './RoleCreatePage';
@@ -223,7 +224,10 @@ function RolesPage() {
     }
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="mb-3 flex justify-between">
+                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['roles']}</p>
+                <CustomBreadcrumb items={breadcrumbItems} />
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -234,18 +238,10 @@ function RolesPage() {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['roles']}</h5>
+                        <p className='text-default text-sm font-bold'>{content['roles']}</p>
+                        <h5 className='text-lg font-semibold'></h5>
                     </div>
-                    <div className='flex items-center gap-3'>
-                        <div>
-                            <Input
-                                size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
-                        </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
-                    </div>
+
                 </div>
                 <Table
                     scroll={{ x: 'max-content' }}

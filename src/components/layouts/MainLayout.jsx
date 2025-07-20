@@ -14,14 +14,14 @@ const MainLayout = () => {
     const headerHeight = 56;
     const isMobile = useBreakpoint(768);
     const collapsedWidth = isMobile ? 0 : 80;          // true if viewport < 768px
-    const [collapsed, setCollapsed] = useState(isMobile);
+    const [collapsed, setCollapsed] = useState(true);
 
     // Add paths here where you want to show TabHeader
     const showTabHeader = useShowTabHeader();
 
     useEffect(() => {
         // if (showTabHeader) {
-        setCollapsed(!isMobile);
+        // setCollapsed(!isMobile);
         // } else {
         //     setCollapsed(isMobile);
         // }

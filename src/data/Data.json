@@ -162,6 +162,7 @@
         "awarding": "Awarding",
 
         "report": "Reports",
+        "timeLine": "Time Line",
 
         "university": "University",
         "majorOfStudy": "Major of Study",
@@ -238,7 +239,7 @@
         "page": "ទំព័រ",
         "newStart": "",
         "newEnd": "ថ្មី",
-
+        "city": "ក្រុង",
         "categories": "ប្រភេទ",
         "category": "ប្រភេទ",
 
@@ -260,6 +261,7 @@
         "departments": "នាយកដ្ឋាន",
         "department": "នាយកដ្ឋាន",
         "assignee": "អ្នកទទួលបន្ទុក",
+        "timeLine": "បន្ទាត់ពេលវេលា",
 
         "enter": "បញ្ចូល",
         "new": "ថ្មី",
