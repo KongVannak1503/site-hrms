@@ -48,6 +48,7 @@ import TestDetailPage from './pages/recruitment/tests/TestDetailPage'
 
 import EmployeePositionPage from './pages/employee/position/EmployeePositionPage'
 import SubPayrollPage from './pages/employee/payroll/sub-payroll/SubPayrollPage'
+import InterviewPage from './pages/recruitment/interviews/InterviewPage'
 import EmployeeTimeLinePage from './pages/employee/payroll/EmployeeTimeLinePage'
 
 function App() {
@@ -77,6 +78,8 @@ function App() {
             <Route path="/test-schedules" element={<TestSchedulePage />} />
             <Route path="/test-schedules/:id" element={<TestDetailPage />} />
             <Route path="/test-types" element={<TestTypePage />} />
+
+            <Route path='/interview-schedules' element={<InterviewPage />}/>
 
             {/* Employee */}
             <Route path="/employee" element={<EmployeePage />} />

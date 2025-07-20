@@ -36,8 +36,23 @@ export const deleteTestAssignmentApi = async (id) => {
   return res.data;
 };
 
+export const cancelTestAssignmentApi = async (id) => {
+  const res = await api.put(`/test-assignments/${id}/cancel`);
+  return res.data;
+};
+
 // ✅ Get test assignment detail by ID
 export const getTestAssignmentDetailApi = async (id) => {
   const res = await api.get(`/test-assignments/${id}/detail`);
+  return res.data;
+};
+
+// ✅ Update test result (status, feedback, scores, attachment)
+export const updateTestResultApi = async (id, formData) => {
+  const res = await api.put(`/test-assignments/${id}/result`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
   return res.data;
 };

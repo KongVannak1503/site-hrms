@@ -37,3 +37,10 @@ export const deleteApplicantApi = async (id) => {
   const res = await api.delete(`/applicants/${id}`);
   return res.data;
 };
+
+// ✅ Get only shortlisted applicants
+export const getShortlistedApplicantsApi = async () => {
+  const res = await api.get('/applicants/shortlisted');
+  return res.data;
+};
+

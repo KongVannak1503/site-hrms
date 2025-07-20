@@ -129,7 +129,7 @@ const ApplicantPage = () => {
 
   const columns = [
     {
-      title: 'Photo',
+      title: content['photo'],
       dataIndex: 'photo',
       render: (text) => text ? 
         <img 
@@ -146,20 +146,20 @@ const ApplicantPage = () => {
       dataIndex: 'full_name_en',
     },
     {
-      title: 'Gender',
+      title: content['gender'],
       dataIndex: 'gender'
     },
     {
-      title: 'Phone',
+      title: content['phone'],
       dataIndex: 'phone_no',
     },
     {
-      title: 'Job Title',
+      title: content['jobTitle'],
       dataIndex: 'job_title',
       render: (text) => text || '-'
     },
     {
-      title: 'Status',
+      title: content['status'],
       dataIndex: 'status',
       render: (status, record) => {
         const jobAppId = record.job_application_id;
@@ -183,10 +183,10 @@ const ApplicantPage = () => {
       }
     },
     {
-      title: 'Actions',
+      title: content['action'],
       render: (_, record) => (
         <Space>
-          <Tooltip title="Edit">
+          <Tooltip title={content['edit']}>
             <button className={Styles.btnEdit} onClick={() => handleUpdate(record._id)}><FormOutlined /></button>
           </Tooltip>
           {record.cv && (
@@ -196,7 +196,7 @@ const ApplicantPage = () => {
           )}
           {ConfirmDeleteButton({
             onConfirm: () => handleDelete(record._id),
-            tooltip: 'Delete',
+            tooltip: content['delete'],
             title: 'Confirm Deletion',
             okText: 'Yes',
             cancelText: 'No',
@@ -220,8 +220,7 @@ const ApplicantPage = () => {
         <div className='flex flex-col sm:flex-row justify-between items-center mb-4'>
           <div className='flex flex-wrap gap-3'>
             <div>
-              <label className='block text-sm text-gray-500 font-semibold mb-1'>Status</label>
-              <Select allowClear placeholder='Filter by status' onChange={setStatusFilter} style={{ width: 160 }}>
+              <Select allowClear placeholder={content['allStatus']} onChange={setStatusFilter} style={{ width: 160 }}>
                 <Option value='applied'>Applied</Option>
                 <Option value='shortlisted'>Shortlisted</Option>
                 <Option value='test'>Test</Option>
