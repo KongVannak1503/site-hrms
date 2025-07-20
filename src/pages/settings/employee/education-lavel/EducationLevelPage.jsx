@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext';
@@ -55,11 +55,11 @@ const EducationLevelPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['cities'] }
+        { breadcrumbName: content['level'] }
     ];
 
     useEffect(() => {
-        document.title = content['cities'];
+        document.title = content['level'];
         const fetchData = async () => {
             try {
                 const response = await getEducationLevelsApi();
@@ -236,7 +236,10 @@ const EducationLevelPage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="mb-3 flex justify-between">
+                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['level']}</p>
+                <CustomBreadcrumb items={breadcrumbItems} />
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{

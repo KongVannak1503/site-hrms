@@ -16,6 +16,7 @@ api.interceptors.response.use(
     response => response,
     error => {
         const status = error?.response?.status;
+        const currentPath = window.location.pathname;
 
         if (status === 401) {
             sessionStorage.removeItem('token');
@@ -25,7 +26,10 @@ api.interceptors.response.use(
         }
 
         if (status === 403) {
-            window.location.href = '/unauthorized';
+            // Prevent redirect loop
+            if (currentPath !== '/unauthorized') {
+                window.location.href = '/unauthorized';
+            }
         }
 
         return Promise.reject(error);

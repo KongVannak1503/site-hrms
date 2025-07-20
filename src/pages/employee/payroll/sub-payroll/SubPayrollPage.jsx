@@ -159,7 +159,7 @@ const SubPayrollPage = () => {
             dataIndex: '6months',
             key: '6months',
             render: (_, record) => {
-                const bonusMatch = record?.subBonus?.find(b => b.bonusId === id);
+                const bonusMatch = record?.subBonus?.find(b => b.bonusId?._id === id);
                 return (
                     <Checkbox checked={bonusMatch?.isSix === true} disabled />
                 );
@@ -170,7 +170,7 @@ const SubPayrollPage = () => {
             dataIndex: '12months',
             key: '12months',
             render: (_, record) => {
-                const bonusMatch = record?.subBonus?.find(b => b.bonusId === id);
+                const bonusMatch = record?.subBonus?.find(b => b.bonusId?._id === id);
                 return (
                     <Checkbox checked={bonusMatch?.isTwelve === true} disabled />
                 );
@@ -181,7 +181,7 @@ const SubPayrollPage = () => {
             dataIndex: 'total',
             key: 'total',
             render: (_, record) => {
-                const bonusMatch = record?.subBonus?.find(b => b.bonusId === id);
+                const bonusMatch = record?.subBonus?.find(b => b.bonusId?._id === id);
                 return (
                     <span>$ {bonusMatch?.total}</span>
                 );

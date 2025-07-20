@@ -11,22 +11,32 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
     const [permissions, setPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [form] = Form.useForm();
+    const [currentRoleName, setCurrentRoleName] = useState('');
 
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
+                // Fetch all permissions and the role data in parallel
                 const [permResponse, roleResponse] = await Promise.all([
                     getPermissionsApi(),
                     getRoleApi(roleId)
                 ]);
 
-                setPermissions(permResponse); // Save all available permissions
+                setCurrentRoleName(roleResponse.name);
 
+                // Filter permissions to only those allowed for current role
+                const filteredPermissions = permResponse.filter(perm =>
+                    perm.roles?.includes(roleResponse.name)
+                );
+
+                setPermissions(filteredPermissions);
+
+                // Prepare initial form values
                 const initialValues = {
                     role: roleResponse.name
                 };
 
-                // Assign permission actions to initial form values
+                // Populate permission actions in form initial values
                 roleResponse.permissions.forEach(rolePerm => {
                     const key = `actions-${rolePerm.permissionId?._id || rolePerm.permissionId}`;
                     initialValues[key] = rolePerm.actions;
@@ -75,7 +85,7 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
         }
     };
 
-    // ✅ Don't render form until loading is complete
+    // Don't render form until loading is complete
     if (loading) return <FullScreenLoader />;
 
     return (
@@ -88,16 +98,9 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Form.Item
-                    name="role"
                     label={content['role']}
-                    rules={[{
-                        required: true,
-                        message: `${content['please']}${content['enter']}${content['role']}`
-                            .toLowerCase()
-                            .replace(/^./, str => str.toUpperCase())
-                    }]}
                 >
-                    <Input size="large" />
+                    <Input value={currentRoleName} disabled /> {/* disable editing role name */}
                 </Form.Item>
             </div>
 

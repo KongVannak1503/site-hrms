@@ -21,7 +21,7 @@ import ModalMdCenter from '../../components/modals/ModalMdCenter';
 import EmployeeAssigneePage from './EmployeeAssigneePage';
 
 const EmployeePage = () => {
-    const { isLoading, content } = useAuth();
+    const { isLoading, content, language } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -78,6 +78,8 @@ const EmployeePage = () => {
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
+                console.log(response);
+
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -167,7 +169,7 @@ const EmployeePage = () => {
             key: "positionId",
             render: (text, record) =>
                 <div>
-                    <p>{record?.positionId?.title}</p>
+                    <p>{language == 'khmer' ? record.positionId?.title_kh : record.positionId?.title_en}</p>
                 </div>,
         },
 

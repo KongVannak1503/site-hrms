@@ -49,6 +49,7 @@ import TestDetailPage from './pages/recruitment/tests/TestDetailPage'
 import EmployeePositionPage from './pages/employee/position/EmployeePositionPage'
 import SubPayrollPage from './pages/employee/payroll/sub-payroll/SubPayrollPage'
 import InterviewPage from './pages/recruitment/interviews/InterviewPage'
+import EmployeeTimeLinePage from './pages/employee/payroll/EmployeeTimeLinePage'
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
             <Route path="/employee/law/:id" element={<LaborLawPage />} />
             <Route path="/employee/nssf/:id" element={<NSSFPage />} />
             <Route path="/employee/position/:id" element={<EmployeePositionPage />} />
+            <Route path="/employee/time-line/:id" element={<EmployeeTimeLinePage />} />
             <Route path="/employee/document-list/:id" element={<DocumentList />} />
             <Route path="/employee/create" element={<EmployeeCreatePage />} />
             <Route path="/payroll" element={<PayrollPage />} />
