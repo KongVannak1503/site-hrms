@@ -24,7 +24,7 @@ const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
             const { subBonus = [] } = response;
 
             // Find the subBonus with matching bonusId
-            const matchingSubBonus = subBonus.find(sb => sb.bonusId === id);
+            const matchingSubBonus = subBonus.find(sb => sb.bonusId?._id === id);
 
             if (matchingSubBonus) {
                 form.setFieldsValue({

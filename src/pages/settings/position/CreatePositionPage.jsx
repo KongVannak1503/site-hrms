@@ -9,7 +9,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const CreatePositionPage = ({ form, onCancel, onUserCreated }) => {
-  const { content } = useAuth();
+  const { content, language } = useAuth();
   const [departments, setDepartments] = useState([]);
 
   useEffect(() => {
@@ -28,9 +28,9 @@ const CreatePositionPage = ({ form, onCancel, onUserCreated }) => {
 
   const handleFinish = async (values) => {
     try {
-      const { title, description, isActive, department } = values;
+      const { title_en, title_kh, description, isActive, department } = values;
       const formData = {
-        title,
+        title_en, title_kh,
         description,
         isActive,
         department,
@@ -57,19 +57,34 @@ const CreatePositionPage = ({ form, onCancel, onUserCreated }) => {
       }}
     >
       <Form.Item
-        name="title"
-        label={content['title']}
+        name="title_kh"
+        label={content['titleKh']}
         rules={[
           {
             required: true,
             message:
-              `${content['please']}${content['enter']}${content['title']}`
+              `${content['please']}${content['enter']}${content['titleKh']}`
                 .toLowerCase()
                 .replace(/^./, (str) => str.toUpperCase()),
           },
         ]}
       >
-        <Input size="large" />
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="title_en"
+        label={content['titleEn']}
+        rules={[
+          {
+            required: true,
+            message:
+              `${content['please']}${content['enter']}${content['titleEn']}`
+                .toLowerCase()
+                .replace(/^./, (str) => str.toUpperCase()),
+          },
+        ]}
+      >
+        <Input />
       </Form.Item>
 
       <Form.Item
@@ -97,10 +112,10 @@ const CreatePositionPage = ({ form, onCancel, onUserCreated }) => {
           },
         ]}
       >
-        <Select placeholder="Select Department" size="large">
+        <Select placeholder="Select Department" >
           {departments.map((dept) => (
             <Option key={dept._id} value={dept._id}>
-              {dept.title}
+              {language == 'khmer' ? dept.title_kh : dept.title_en}
             </Option>
           ))}
         </Select>
@@ -112,10 +127,10 @@ const CreatePositionPage = ({ form, onCancel, onUserCreated }) => {
 
       <div className="text-end mt-3">
         <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-            Cancel
+          {content['cancel']}
         </button>
         <button type="submit" className={Styles.btnCreate}>
-            Save
+          {content['save']}
         </button>
       </div>
     </Form>

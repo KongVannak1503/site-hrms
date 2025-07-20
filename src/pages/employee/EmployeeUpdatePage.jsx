@@ -92,6 +92,7 @@ const EmployeeUpdatePage = () => {
                     gender: response.gender,
                     email: response.email,
                     phone: response.phone,
+                    status: response.status,
                     bloodType: response.bloodType,
                     joinDate: response.joinDate ? moment(response.joinDate) : null,
                     date_of_birth: response.date_of_birth ? moment(response.date_of_birth) : null,
@@ -186,6 +187,8 @@ const EmployeeUpdatePage = () => {
 
     const handleFinish = async (values) => {
         try {
+            console.log(values);
+
             const formData = new FormData();
             const safeAppend = (key, value) => {
                 if (value !== undefined && value !== null && value !== '') {
@@ -223,6 +226,7 @@ const EmployeeUpdatePage = () => {
             // Nested objects (stringify before sending)
             formData.append('family_members', JSON.stringify(values.family_members || []));
             formData.append('emergency_contact', JSON.stringify(values.emergency_contact || []));
+            safeAppend('status', values.status);
 
             formData.append('file', file);
             if (fileList.length > 0 && fileList[0].originFileObj) {

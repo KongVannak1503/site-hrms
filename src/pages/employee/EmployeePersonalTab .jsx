@@ -137,7 +137,7 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
                     >
                         <Input className='text-default' disabled value={position?.positionId?.title} />
                     </Form.Item>
-                    <Form.Item name="status" label={content['status']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>
+                    <Form.Item name="status" label={content['status']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['status']}` }]}>
                         <Select>
                             {typeEmpStatusOptions.map(option => (
                                 <Select.Option key={option.id} value={option.id}>
@@ -186,52 +186,13 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
 
                     </Form.Item>
                     <Form.Item name="district" label={content['district']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {districts.map((district) => (
-                                <Select.Option key={district._id} value={district._id}>
-                                    {district.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Input />
                     </Form.Item>
                     <Form.Item name="commune" label={content['commune']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {communes.map((commune) => (
-                                <Select.Option key={commune._id} value={commune._id}>
-                                    {commune.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Input />
                     </Form.Item>
                     <Form.Item name="village" label={content['village']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {villages.map((village) => (
-                                <Select.Option key={village._id} value={village._id}>
-                                    {village.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Input />
                     </Form.Item>
                 </div>
 
@@ -255,57 +216,15 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
                         </Select>
                     </Form.Item>
                     <Form.Item name="present_district" label={content['district']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {districts.map((district) => (
-                                <Select.Option key={district._id} value={district._id}>
-                                    {district.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Input />
                     </Form.Item>
                     <Form.Item name="present_commune" label={content['commune']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {communes.map((commune) => (
-                                <Select.Option key={commune._id} value={commune._id}>
-                                    {commune.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Input />
                     </Form.Item>
                     <Form.Item name="present_village" label={content['village']}>
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            style={{ width: '100%' }}
-                            filterOption={(input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                        >
-                            {villages.map((village) => (
-                                <Select.Option key={village._id} value={village._id}>
-                                    {village.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
+                        <Input />
                     </Form.Item>
                 </div>
-
-
-
             </Card >
 
             <hr className="border-0 py-3" />

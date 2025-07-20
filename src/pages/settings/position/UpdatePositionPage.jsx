@@ -9,7 +9,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
-  const { content } = useAuth();
+  const { content, language } = useAuth();
   const [form] = Form.useForm();
   const [departments, setDepartments] = useState([]);
 
@@ -24,7 +24,8 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
         setDepartments(deptRes);
 
         form.setFieldsValue({
-          title: positionRes.title,
+          title_en: positionRes.title_en,
+          title_kh: positionRes.title_kh,
           description: positionRes.description,
           department: positionRes.department?._id || positionRes.department,
           isActive: positionRes.isActive,
@@ -41,7 +42,8 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
   const handleFinish = async (values) => {
     try {
       const formData = {
-        title: values.title,
+        title_en: values.title_en,
+        title_kh: values.title_kh,
         description: values.description,
         department: values.department,
         isActive: values.isActive,
@@ -64,19 +66,34 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
       autoComplete="off"
     >
       <Form.Item
-        name="title"
-        label={content['title']}
+        name="title_kh"
+        label={content['titleKh']}
         rules={[
           {
             required: true,
             message:
-              `${content['please']}${content['enter']}${content['title']}`
+              `${content['please']}${content['enter']}${content['titleKh']}`
                 .toLowerCase()
                 .replace(/^./, (str) => str.toUpperCase()),
           },
         ]}
       >
-        <Input size="large" />
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="title_en"
+        label={content['titleEn']}
+        rules={[
+          {
+            required: true,
+            message:
+              `${content['please']}${content['enter']}${content['titleEn']}`
+                .toLowerCase()
+                .replace(/^./, (str) => str.toUpperCase()),
+          },
+        ]}
+      >
+        <Input />
       </Form.Item>
 
       <Form.Item
@@ -100,10 +117,10 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
           },
         ]}
       >
-        <Select placeholder="Select Department" size="large">
+        <Select placeholder="Select Department">
           {departments.map((dept) => (
             <Option key={dept._id} value={dept._id}>
-              {dept.title}
+              {language == 'khmer' ? dept.title_kh : dept.title_en}
             </Option>
           ))}
         </Select>
@@ -115,10 +132,10 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
 
       <div className="text-end mt-3">
         <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-            Cancel
+          Cancel
         </button>
         <button type="submit" className={Styles.btnUpdate}>
-            Update
+          Update
         </button>
       </div>
     </Form>

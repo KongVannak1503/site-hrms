@@ -37,7 +37,7 @@ const AppSider = ({ collapsed }) => {
             icon: <VideoCameraOutlined />,
             label: content['recruiter'],
             children: [
-                { key: '/job-postings', label: content['jobPostings'] }, 
+                { key: '/job-postings', label: content['jobPostings'] },
                 { key: '/applicants', label: content['applicants'] },
                 { key: '/test-schedules', label: content['testSchedule'] },
                 { key: '/test-types', label: content['testType'] },
@@ -88,6 +88,10 @@ const AppSider = ({ collapsed }) => {
 
     const settingsMenuItem = [
         {
+            type: 'group',
+            label: <span style={{ fontWeight: 'bold', color: '#fff', fontSize: 12, paddingLeft: 10 }}>Settings</span>,
+        },
+        {
             key: 'settings',
             icon: <SettingOutlined />,
             label: content['settings'], children: [
@@ -99,7 +103,7 @@ const AppSider = ({ collapsed }) => {
                 },
                 {
                     key: '/setting/employees', label: content['employees'], children: [
-                        { key: '/setting/employee/level', label: content['city'] },
+                        { key: '/setting/employee/level', label: content['level'] },
                         { key: '/setting/employee/city', label: content['city'] },
                         { key: '/setting/employee/district', label: content['district'] },
                         { key: '/setting/employee/commune', label: content['commune'] },
