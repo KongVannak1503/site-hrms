@@ -168,7 +168,7 @@ const UserCreate = ({ onCancel, onUserCreated }) => {
                         <Select>
                             {roles.map((role) => (
                                 <Select.Option key={role._id} value={role._id}>
-                                    {role.name}
+                                    {role.role}
                                 </Select.Option>
                             ))}
                         </Select>

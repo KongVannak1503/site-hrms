@@ -78,8 +78,6 @@ const EmployeePage = () => {
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
-                console.log(response);
-
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);

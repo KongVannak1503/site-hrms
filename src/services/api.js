@@ -21,7 +21,9 @@ api.interceptors.response.use(
         if (status === 401) {
             sessionStorage.removeItem('token');
             if (window.location.pathname !== '/login') {
-                window.location.href = '/login';
+                if (currentPath !== '/login') {
+                    window.location.href = '/login';
+                }
             }
         }
 

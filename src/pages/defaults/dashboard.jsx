@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Content } from 'antd/es/layout/layout';
 import { Card, Col, Row, Statistic, Table, Tag, Button } from 'antd';
 import {
-  UserOutlined,
-  TeamOutlined,
-  TrophyOutlined,
-  FileSearchOutlined,
-  SolutionOutlined,
-  CrownOutlined,
-  SettingOutlined,
+    UserOutlined,
+    TeamOutlined,
+    TrophyOutlined,
+    FileSearchOutlined,
+    SolutionOutlined,
+    CrownOutlined,
+    SettingOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import FullScreenLoader from '../../components/loading/FullScreenLoader';
@@ -74,66 +74,66 @@ const Dashboard = () => {
             {/* Top KPIs */}
             <Row gutter={[16, 16]} className="mb-4">
                 <Col xs={24} sm={12} md={6}>
-                <Card>
-                    <Statistic title="Total Applicants" value={128} prefix={<FileSearchOutlined />} />
-                </Card>
+                    <Card>
+                        <Statistic title="Total Applicants" value={128} prefix={<FileSearchOutlined />} />
+                    </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                <Card>
-                    <Statistic title="Employees" value={53} prefix={<TeamOutlined />} />
-                </Card>
+                    <Card>
+                        <Statistic title="Employees" value={53} prefix={<TeamOutlined />} />
+                    </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                <Card>
-                    <Statistic title="Pending Appraisals" value={8} prefix={<TrophyOutlined />} />
-                </Card>
+                    <Card>
+                        <Statistic title="Pending Appraisals" value={8} prefix={<TrophyOutlined />} />
+                    </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                <Card>
-                    <Statistic title="Users" value={12} prefix={<UserOutlined />} />
-                </Card>
+                    <Card>
+                        <Statistic title="Users" value={12} prefix={<UserOutlined />} />
+                    </Card>
                 </Col>
             </Row>
 
             {/* Recruitment and Appraisal Panels */}
             <Row gutter={[16, 16]} className="mb-4">
                 <Col xs={24} md={12}>
-                <Card title="Recent Applicants">
-                    <Table
-                    columns={applicantColumns}
-                    dataSource={recentApplicants}
-                    pagination={false}
-                    size="small"
-                    />
-                </Card>
+                    <Card title="Recent Applicants">
+                        <Table
+                            columns={applicantColumns}
+                            dataSource={recentApplicants}
+                            pagination={false}
+                            size="small"
+                        />
+                    </Card>
                 </Col>
                 <Col xs={24} md={12}>
-                <Card title="Upcoming Appraisals">
-                    <Table
-                    columns={appraisalColumns}
-                    dataSource={appraisalSchedule}
-                    pagination={false}
-                    size="small"
-                    />
-                </Card>
+                    <Card title="Upcoming Appraisals">
+                        <Table
+                            columns={appraisalColumns}
+                            dataSource={appraisalSchedule}
+                            pagination={false}
+                            size="small"
+                        />
+                    </Card>
                 </Col>
             </Row>
 
             {/* Quick Shortcuts */}
             <Card title="Quick Actions / Modules">
                 <Row gutter={[16, 16]}>
-                <Col xs={12} sm={6}>
-                    <Button icon={<FileSearchOutlined />} block>Recruitment</Button>
-                </Col>
-                <Col xs={12} sm={6}>
-                    <Button icon={<SolutionOutlined />} block>Employment</Button>
-                </Col>
-                <Col xs={12} sm={6}>
-                    <Button icon={<CrownOutlined />} block>Appraisal & Award</Button>
-                </Col>
-                <Col xs={12} sm={6}>
-                    <Button icon={<SettingOutlined />} block>User Management</Button>
-                </Col>
+                    <Col xs={12} sm={6}>
+                        <Button icon={<FileSearchOutlined />} block>Recruitment</Button>
+                    </Col>
+                    <Col xs={12} sm={6}>
+                        <Button icon={<SolutionOutlined />} block>Employment</Button>
+                    </Col>
+                    <Col xs={12} sm={6}>
+                        <Button icon={<CrownOutlined />} block>Appraisal & Award</Button>
+                    </Col>
+                    <Col xs={12} sm={6}>
+                        <Button icon={<SettingOutlined />} block>User Management</Button>
+                    </Col>
                 </Row>
             </Card>
         </Content>

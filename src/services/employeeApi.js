@@ -5,6 +5,10 @@ export const getEmployeesApi = async () => {
     const res = await api.get('/employees');
     return res.data;
 };
+export const getEmployeesManagerApi = async () => {
+    const res = await api.get('/employees/manager');
+    return res.data;
+};
 export const getEmployeeApi = async (id) => {
     const res = await api.get(`/employees/${id}`);
     return res.data;
@@ -183,6 +187,10 @@ export const deleteEpmNssfApi = async (id) => {
     return res.data;
 };
 
+export const updateEmpNssfApi = async (formData) => {
+    const res = await api.put(`/employees/nssf/update`, formData);
+    return res.data;
+};
 export const getEpmUploadNssfDocApi = async (employeeId) => {
     const res = await api.get(`/employees/nssf/doc/${employeeId}`);
     return res.data;

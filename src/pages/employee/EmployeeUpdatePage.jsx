@@ -15,9 +15,6 @@ import { genderOptions } from '../../data/Gender';
 import EmployeePersonalTab from './EmployeePersonalTab ';
 import EmployeeEducationTab from './EmployeeEducationTab';
 import { getCitiesViewApi } from '../../services/cityApi';
-import { getDistrictsViewApi } from '../../services/DistrictApi';
-import { getCommunesViewApi } from '../../services/communeApi';
-import { getVillagesViewApi } from '../../services/villageApi';
 import EmployeeHistoryPage from './EmployeeHistoryPage';
 import { getEducationLevelViewApi } from '../../services/educationLevelApi';
 import EmployeeDocumentTab from './EmployeeDocumentTab';
@@ -150,15 +147,6 @@ const EmployeeUpdatePage = () => {
 
                 const resCities = await getCitiesViewApi();
                 setCities(resCities);
-
-                const resDistrict = await getDistrictsViewApi();
-                setDistricts(resDistrict);
-
-                const resCommunes = await getCommunesViewApi();
-                setCommunes(resCommunes);
-
-                const resVillages = await getVillagesViewApi();
-                setVillages(resVillages);
 
                 const resLevel = await getEducationLevelViewApi();
                 setLevels(resLevel);
