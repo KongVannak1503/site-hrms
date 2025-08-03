@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Select, DatePicker, InputNumber, Input, message } from 'antd';
+import { Modal, Form, Select, DatePicker, InputNumber, Input, message, Space } from 'antd';
 import { getAllTestTypesApi } from '../../../services/testTypeService';
 import { createTestAssignmentApi } from '../../../services/testAssignmentService';
 import { getShortlistedApplicantsApi } from '../../../services/applicantApi';
 import { updateJobApplicationStatus } from '../../../services/jobApplicationApi';
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const { Option } = Select;
 
 const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
+  const {content} = useAuth();
   const [form] = Form.useForm();
   const [testTypes, setTestTypes] = useState([]);
   const [applicants, setApplicants] = useState([]);
@@ -16,7 +19,6 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
   useEffect(() => {
     if (open) {
       fetchTestTypes();
-
       if (!applicant) {
         fetchShortlistedApplicants();
       }
@@ -46,12 +48,9 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
     }
   };
 
-  const handleOk = async () => {
+  const handleSubmit = async (values) => {
     try {
-      const values = await form.validateFields();
-
       const selectedApplicant = applicant || applicants.find(a => a._id === values.applicant_id);
-
       if (!selectedApplicant) {
         message.error('Selected applicant not found');
         return;
@@ -66,13 +65,10 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
         job_id: selectedApplicant?.job_id?._id || selectedApplicant?.job_id,
       };
 
-      console.log('Payload to send:', payload);
-
       await createTestAssignmentApi(payload);
 
-      // ✅ New: update status to 'test' for selected applicant
       await updateJobApplicationStatus(
-        selectedApplicant.job_application_id || selectedApplicant._id, // make sure this is the correct ID
+        selectedApplicant.job_application_id || selectedApplicant._id,
         'test'
       );
 
@@ -94,11 +90,11 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
         setApplicants([]);
         onCancel();
       }}
-      onOk={handleOk}
-      okText="Assign"
+      footer={null}
+      centered
       maskClosable={false}
     >
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         {applicant ? (
           <Form.Item label="Applicant Name">
             <Input value={applicant?.full_name_kh || applicant?.full_name_en} disabled />
@@ -128,7 +124,7 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
         )}
 
         <Form.Item
-          label="Test Type(s)"
+          label={content['testType']}
           name="test_type"
           rules={[{ required: true, message: 'Please select at least one test type' }]}
         >
@@ -140,19 +136,30 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
         </Form.Item>
 
         <Form.Item
-          label="Start Time"
+          label={content['startOn']}
           name="start_at"
           rules={[{ required: true, message: 'Please choose a start time' }]}
         >
           <DatePicker showTime style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item label="Duration (minutes)" name="duration_min">
+        <Form.Item label={content['duration']} name="duration_min" rules={[{required: true, message: "Please "}]}>
           <InputNumber min={1} placeholder="e.g. 60" style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item label="Location" name="location">
+        <Form.Item label={content['location']} name="location">
           <Input placeholder="Room 101, Lab A, etc." />
+        </Form.Item>
+
+        <Form.Item>
+          <Space className="flex justify-end w-full">
+            <button type="button" onClick={onCancel} className={Styles.btnCancel}>
+              {content['cancel']}
+            </button>
+            <button type="submit" className={Styles.btnCreate}>
+              {content['save']}
+            </button>
+          </Space>
         </Form.Item>
       </Form>
     </Modal>

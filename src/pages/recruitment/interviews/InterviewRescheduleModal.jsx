@@ -1,54 +1,42 @@
 import React, { useEffect } from 'react';
 import { Modal, Form, DatePicker, message, Space } from 'antd';
 import dayjs from 'dayjs';
-import { updateTestScheduleApi } from '../../../services/testAssignmentService';
+import { rescheduleInterviewApi } from '../../../services/interviewApi';
 import { Styles } from '../../../utils/CsStyle';
-import { useAuth } from '../../../contexts/AuthContext';
 
-const RescheduleTestModal = ({ open, onCancel, assignment, onSuccess }) => {
-  const {content} = useAuth();
+const RescheduleModal = ({ open, interview, onCancel, onSuccess }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (open && assignment) {
+    if (open && interview) {
       form.setFieldsValue({
-        start_at: dayjs(assignment.start),
+        start_at: interview?.start_at ? dayjs(interview.start_at) : null
       });
     }
-  }, [open, assignment]);
+  }, [open, interview]);
 
   const handleSubmit = async (values) => {
     try {
-      const payload = {
-        start_at: values.start_at,
-        duration_min: assignment.extendedProps?.duration, // keep existing duration
-      };
-
-      await updateTestScheduleApi(assignment.id, payload);
-      message.success('Test rescheduled successfully');
-      form.resetFields();
+      await rescheduleInterviewApi(interview._id, values.start_at);
+      message.success('Interview rescheduled successfully');
       onSuccess();
     } catch (err) {
-      console.error(err);
-      message.error('Failed to reschedule test');
+      message.error('Failed to reschedule interview');
     }
   };
 
   return (
     <Modal
       open={open}
-      title="Reschedule Test"
-      onCancel={() => {
-        form.resetFields();
-        onCancel();
-      }}
+      title="Reschedule Interview"
+      onCancel={onCancel}
       footer={null}
       centered
       maskClosable={false}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
-          label={content['startOn']}
+          label="New Start Time"
           name="start_at"
           rules={[{ required: true, message: 'Please select new start time' }]}
         >
@@ -58,10 +46,10 @@ const RescheduleTestModal = ({ open, onCancel, assignment, onSuccess }) => {
         <Form.Item>
           <Space className="flex justify-end w-full">
             <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-              {content['cancel']}
+              Cancel
             </button>
             <button type="submit" className={Styles.btnUpdate}>
-              {content['update']}
+              Update
             </button>
           </Space>
         </Form.Item>
@@ -70,4 +58,4 @@ const RescheduleTestModal = ({ open, onCancel, assignment, onSuccess }) => {
   );
 };
 
-export default RescheduleTestModal;
+export default RescheduleModal;

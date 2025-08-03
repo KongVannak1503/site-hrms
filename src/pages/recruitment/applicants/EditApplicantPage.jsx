@@ -10,7 +10,8 @@ import { useAuth } from '../../../contexts/AuthContext';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { getJobPostingsApi } from '../../../services/jobPosting';
 import { getCitiesApi } from '../../../services/cityApi';
-// import { getApplicantApi, updateApplicantApi } from '../../../services/applicant';
+import { getApplicantApi, updateApplicantApi } from '../../../services/applicantApi';
+import { updateJobApplicationApi } from '../../../services/jobApplicationApi';
 import { FaRegImages } from 'react-icons/fa';
 import { Styles } from '../../../utils/CsStyle';
 import uploadUrl from '../../../services/uploadApi';
@@ -29,13 +30,12 @@ const EditApplicantPage = () => {
   const [loadingProvinces, setLoadingProvinces] = useState(true);
   const [jobPostings, setJobPostings] = useState([]);
   const [provinces, setProvinces] = useState([]);
+  const [jobApplicationId, setJobApplicationId] = useState(null);
 
-  // Manage photo and CV files in state (not controlled by Form)
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [cvFileList, setCvFileList] = useState([]);
 
-  // Load job postings and provinces
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -47,6 +47,7 @@ const EditApplicantPage = () => {
         setLoadingJobs(false);
       }
     };
+
     const fetchProvinces = async () => {
       try {
         const provs = await getCitiesApi();
@@ -57,126 +58,121 @@ const EditApplicantPage = () => {
         setLoadingProvinces(false);
       }
     };
+
     fetchJobs();
     fetchProvinces();
   }, []);
 
-  // Load applicant data
   useEffect(() => {
-  const fetchApplicant = async () => {
-    try {
-      setLoading(true);
-      const data = await getApplicantApi(id);
-      const applicant = data.applicant;
-      const jobApplications = data.jobApplications || [];
+    const fetchApplicant = async () => {
+      try {
+        setLoading(true);
+        const data = await getApplicantApi(id);
+        const applicant = data.applicant;
+        const jobApplications = data.jobApplications || [];
+        const app = jobApplications[0];
 
-      // Get first applied job posting ID or null
-      const jobPostingId = jobApplications.length > 0 
-        ? jobApplications[0].job_id._id 
-        : null;
+        if (app) {
+          setJobApplicationId(app._id);
+          form.setFieldsValue({
+            job_posting_id: app.job_id?._id,
+            applied_date: app.applied_date ? dayjs(app.applied_date) : null,
+          });
+        }
 
-      form.setFieldsValue({
-        full_name_kh: applicant.full_name_kh || '',
-        full_name_en: applicant.full_name_en || '',
-        gender: applicant.gender || '',
-        dob: applicant.dob ? dayjs(applicant.dob) : null,
-        marital_status: applicant.marital_status || '',
-        phone_no: applicant.phone_no || '',
-        email: applicant.email || '',
-        current_province: applicant.current_province || '',
-        current_district: applicant.current_district || '',
-        current_commune: applicant.current_commune || '',
-        current_village: applicant.current_village || '',
-        job_posting_id: jobPostingId || '',
-        // Add any additional fields here explicitly
-      });
+        form.setFieldsValue({
+          full_name_kh: applicant.full_name_kh || '',
+          full_name_en: applicant.full_name_en || '',
+          gender: applicant.gender || '',
+          dob: applicant.dob ? dayjs(applicant.dob) : null,
+          marital_status: applicant.marital_status || '',
+          phone_no: applicant.phone_no || '',
+          email: applicant.email || '',
+          current_province: applicant.current_province || '',
+          current_district: applicant.current_district || '',
+          current_commune: applicant.current_commune || '',
+          current_village: applicant.current_village || '',
+        });
 
-      // Photo preview setup
-      if (applicant.photo) {
-        setPreviewImage(`${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.photo)}`);
-        setFileList([
-          {
+        // ✅ Set preview for photo
+        if (applicant.photo) {
+          const photoUrl = `${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.photo)}`;
+          setPreviewImage(photoUrl);
+          setFileList([{
             uid: '-1',
             name: applicant.photo,
             status: 'done',
-            url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.photo)}`,
+            url: photoUrl,
             originFileObj: null,
-          },
-        ]);
-      } else {
-        setFileList([]);
-        setPreviewImage('');
-      }
+          }]);
+        }
 
-      // CV preview setup
-      if (applicant.cv) {
-        setCvFileList([
-          {
+        // ✅ Set preview for CV
+        if (applicant.cv) {
+          const cvUrl = `${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.cv)}`;
+          setCvFileList([{
             uid: '-1',
             name: applicant.cv,
             status: 'done',
-            url: `${uploadUrl}/uploads/applicants/${encodeURIComponent(applicant.cv)}`,
-          },
-        ]);
-      } else {
-        setCvFileList([]);
+            url: cvUrl,
+            originFileObj: null,
+          }]);
+        }
+
+      } catch (error) {
+        console.error(error);
+        message.error("Failed to load applicant data");
+      } finally {
+        setLoading(false);
       }
+    };
 
-    } catch (error) {
-      console.error(error);
-      message.error("Failed to load applicant data");
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchApplicant();
+  }, [id, form]);
 
-  fetchApplicant();
-}, [id, form]);
-
-  // Handle photo upload changes
   const onPhotoChange = ({ fileList }) => {
     setFileList(fileList);
-
-    if (fileList.length > 0 && fileList[0].originFileObj) {
-      getBase64(fileList[0].originFileObj).then(setPreviewImage);
-    } else if (fileList.length === 0) {
-      setPreviewImage('');
-    }
+    if (fileList[0]?.originFileObj) getBase64(fileList[0].originFileObj).then(setPreviewImage);
+    if (fileList.length === 0) setPreviewImage('');
   };
 
-  // Handle CV upload changes
   const onCvChange = ({ fileList }) => {
     setCvFileList(fileList);
   };
 
-  // Submit form handler
   const onFinish = async (values) => {
     const formData = new FormData();
-
-    // Append all normal fields except photo and cv
     Object.entries(values).forEach(([key, value]) => {
       if (key === 'dob' && value) {
         formData.append(key, value.format('YYYY-MM-DD'));
-      } else if (key !== 'photo' && key !== 'cv') {
+      } else if (!['photo', 'cv', 'applied_date', 'job_posting_id'].includes(key)) {
         formData.append(key, value);
       }
     });
 
-    // Append photo file if exists (take from fileList state)
-    if (fileList.length > 0 && fileList[0].originFileObj) {
+    if (fileList[0]?.originFileObj) {
       formData.append('photo', fileList[0].originFileObj);
     }
 
-    // Append CV file if exists
-    if (cvFileList.length > 0 && cvFileList[0].originFileObj) {
+    if (cvFileList[0]?.originFileObj) {
       formData.append('cv', cvFileList[0].originFileObj);
     }
 
     try {
       await updateApplicantApi(id, formData);
+
+      if (jobApplicationId) {
+        await updateJobApplicationApi(jobApplicationId, {
+          applicant_id: id,
+          job_id: values.job_posting_id,
+          applied_date: values.applied_date?.format('YYYY-MM-DD'),
+        });
+      }
+
       message.success("Applicant updated successfully!");
       navigate('/applicants');
-    } catch {
+    } catch (err) {
+      console.error(err);
       message.error("Failed to update applicant.");
     }
   };
@@ -200,20 +196,17 @@ const EditApplicantPage = () => {
         <Card title={content['editApplicant']} className="shadow custom-card">
           <Form form={form} layout="vertical" onFinish={onFinish} encType="multipart/form-data">
             <Row gutter={16}>
-              {/* Left column: Photo + CV */}
               <Col xs={24} md={6}>
                 <div className="flex justify-center flex-col items-center">
-                  <Form.Item
-                    // REMOVE valuePropName="fileList" and getValueFromEvent to avoid binding fileList to Form
-                  >
+                  <Form.Item>
                     <Upload
                       listType="picture"
                       maxCount={1}
                       accept="image/*"
                       onChange={onPhotoChange}
-                      beforeUpload={() => false} // Prevent automatic upload
+                      beforeUpload={() => false}
                       fileList={fileList}
-                      showUploadList={false} // Hide default list, you show preview manually
+                      showUploadList={false}
                     >
                       <div className="border mt-2 relative border-dashed bg-gray-50 hover:bg-gray-100 rounded-lg cursor-pointer hover:border-blue-500 w-[180px] h-[200px] flex items-center justify-center overflow-hidden">
                         {previewImage ? (
@@ -221,11 +214,7 @@ const EditApplicantPage = () => {
                             <p className="absolute bottom-2 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 text-xs whitespace-nowrap">
                               {content['uploadImage'] || "Upload Image"}
                             </p>
-                            <img
-                              src={previewImage}
-                              alt="Uploaded"
-                              style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }}
-                            />
+                            <img src={previewImage} alt="Uploaded" className="w-full h-full object-cover" />
                           </>
                         ) : (
                           <div className="flex flex-col items-center justify-center">
@@ -240,10 +229,7 @@ const EditApplicantPage = () => {
                   </Form.Item>
                 </div>
 
-                <Form.Item
-                  label="Upload CV"
-                  // Remove valuePropName="fileList" to avoid form binding
-                >
+                <Form.Item label="Upload CV">
                   <Upload
                     name="cv"
                     beforeUpload={() => false}
@@ -255,134 +241,60 @@ const EditApplicantPage = () => {
                 </Form.Item>
               </Col>
 
-              {/* Right column: Form fields */}
               <Col xs={24} md={18}>
                 <Row gutter={16}>
-                  <Col span={24}>
+                  <Col xs={24} md={12}>
                     <Form.Item
                       label="Job Posting"
                       name="job_posting_id"
-                      rules={[{ required: true, message: 'Please select a job posting' }]}
+                      rules={[{ required: true }]}
                     >
-                      {loadingJobs ? (
-                        <Spin size="small" />
-                      ) : (
-                        <Select
-                          placeholder="Select an open job posting"
-                          showSearch
-                          optionFilterProp="children"
-                          filterOption={(input, option) =>
-                            option?.children?.toLowerCase().includes(input.toLowerCase())
-                          }
-                        >
-                          {jobPostings.map((job) => (
-                            <Option key={job._id} value={job._id}>
-                              {job.job_title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-
-                  {/* Add your other form fields here */}
-                  <Col xs={24} md={12}>
-                    <Form.Item label="Full Name (Khmer)" name="full_name_kh" rules={[{ required: true }]}>
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} md={12}>
-                    <Form.Item label="Full Name (English)" name="full_name_en" rules={[{ required: true }]}>
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} md={8}>
-                    <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
-                      <Select placeholder="Select gender">
-                        <Option value="Male">Male</Option>
-                        <Option value="Female">Female</Option>
+                      <Select
+                        placeholder="Select job"
+                        loading={loadingJobs}
+                        showSearch
+                        optionFilterProp="children"
+                      >
+                        {jobPostings.map(job => (
+                          <Option key={job._id} value={job._id}>{job.job_title}</Option>
+                        ))}
                       </Select>
                     </Form.Item>
                   </Col>
 
-                  <Col xs={24} md={8}>
-                    <Form.Item label="Date of Birth" name="dob" rules={[{ required: true }]}>
-                      <DatePicker style={{ width: '100%' }} />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} md={8}>
-                    <Form.Item label="Marital Status" name="marital_status">
-                      <Select placeholder="Select marital status">
-                        <Option value="Single">Single</Option>
-                        <Option value="Married">Married</Option>
-                        <Option value="Other">Other</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-
-                  {/* Add other fields as needed */}
-                   <Col xs={24} md={12}>
-                    <Form.Item label="Phone Number" name="phone_no" rules={[{ required: true }]}>
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
                   <Col xs={24} md={12}>
-                    <Form.Item label="Email" name="email">
-                      <Input type="email" />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} md={8}>
                     <Form.Item
-                      label="Province"
-                      name="current_province"
-                      rules={[{ required: true, message: 'Please select a province' }]}
+                      label="Applied Date"
+                      name="applied_date"
+                      rules={[{ required: true }]}
                     >
-                      {loadingProvinces ? (
-                        <Spin size="small" />
-                      ) : (
-                        <Select placeholder="Select province" showSearch optionFilterProp="children">
-                          {provinces.map((prov) => (
-                            <Option key={prov._id || prov.id} value={prov.name || prov.province_name}>
-                              {prov.name || prov.province_name}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  
-                  <Col xs={24} md={8}>
-                    <Form.Item label="District" name="current_district">
-                      <Input />
+                      <DatePicker
+                        style={{ width: '100%' }}
+                        // disabledDate={d => d && d > dayjs().endOf('day')}
+                      />
                     </Form.Item>
                   </Col>
 
-                  <Col xs={24} md={8}>
-                    <Form.Item label="Commune" name="current_commune">
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24}>
-                    <Form.Item label="Village" name="current_village">
-                      <Input />
-                    </Form.Item>
-                  </Col>
+                  <Col xs={24} md={12}><Form.Item label="Full Name (Khmer)" name="full_name_kh" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label="Full Name (English)" name="full_name_en" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label="Gender" name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label="Date of Birth" name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label="Marital Status" name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label="Phone Number" name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label="Email" name="email"><Input type="email" /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label="Province" name="current_province" rules={[{ required: true }]}>{loadingProvinces ? <Spin size="small" /> : <Select showSearch placeholder="Select province">{provinces.map((prov) => (<Option key={prov._id || prov.id} value={prov.name || prov.province_name}>{prov.name || prov.province_name}</Option>))}</Select>}</Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label="District" name="current_district"><Input /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label="Commune" name="current_commune"><Input /></Form.Item></Col>
+                  <Col xs={24}><Form.Item label="Village" name="current_village"><Input /></Form.Item></Col>
                 </Row>
               </Col>
             </Row>
 
-            <div
-              className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
-              style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
-            >
-              <button onClick={() => navigate("/applicants")} className={`${Styles.btnCancel}`}>Cancel</button>
-              <button type="submit" className={`${Styles.btnUpdate}`}>Update</button>
+            <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
+              style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
+
+              <button type='button' onClick={() => navigate("/applicants")} className={`${Styles.btnCancel}`}>{content['cancel']}</button>
+              <button type="submit" className={`${Styles.btnUpdate}`}>{content['update']}</button>
             </div>
           </Form>
         </Card>

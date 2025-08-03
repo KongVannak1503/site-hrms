@@ -21,6 +21,7 @@ import uploadUrl from '../../../services/uploadApi';
 import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
 import { updateJobApplicationStatus } from '../../../services/jobApplicationApi';
 import TestAssignmentModal from '../tests/testAssignmentModal';
+import InterviewModal from '../interviews/InterviewModal';
 
 const { Option } = Select;
 
@@ -36,6 +37,12 @@ const ApplicantPage = () => {
     visible: false,
     jobAppId: null,
     applicant: null
+  });
+
+  const [interviewModalData, setInterviewModalData] = useState({
+    visible: false,
+    applicant: null,
+    jobAppId: null
   });
 
   useEffect(() => {
@@ -116,6 +123,18 @@ const ApplicantPage = () => {
         jobAppId,
         applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id }
       });
+    } else if (oldStatus === 'test' && newStatus === 'interview') {
+      if (applicantData.test_assignment_status !== 'completed') {
+        message.warning('Cannot move to interview before completing the test.');
+        return;
+      }
+
+      setInterviewModalData({
+        visible: true,
+        jobAppId,
+        applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id },
+        job: applicantData.job_application_id?.job_id || applicantData.job_id,
+      });
     } else {
       try {
         await updateJobApplicationStatus(jobAppId, newStatus);
@@ -157,6 +176,11 @@ const ApplicantPage = () => {
       title: content['jobTitle'],
       dataIndex: 'job_title',
       render: (text) => text || '-'
+    },
+    {
+      title: content['appliedDate'] || 'Applied Date',
+      dataIndex: ['job_application_id', 'applied_date'],
+      render: (date) => date ? dayjs(date).format('YYYY-MM-DD') : '-'
     },
     {
       title: content['status'],
@@ -273,6 +297,22 @@ const ApplicantPage = () => {
           }
 
           setTestModalData({ visible: false, applicant: null, jobAppId: null });
+          fetchApplicants();
+        }}
+      />
+
+      <InterviewModal
+        open={interviewModalData.visible}
+        applicant={interviewModalData.applicant}
+        job={interviewModalData.job}
+        onCancel={() => setInterviewModalData({ visible: false, applicant: null, jobAppId: null })}
+        onSuccess={async () => {
+          try {
+            await updateJobApplicationStatus(interviewModalData.jobAppId, 'interview');
+          } catch {
+            message.error('Failed to update status to interview');
+          }
+          setInterviewModalData({ visible: false, applicant: null, jobAppId: null });
           fetchApplicants();
         }}
       />

@@ -139,6 +139,7 @@
         "trainingShortCourse": "Training & Short Course",
         "fromDate": "From Date",
         "toDate": "To Date",
+        "job": "Job",
         "jobType": "Job Type",
         "jobPostings": "Job Postings",
         "jobPosting": "Job Posting",
@@ -154,18 +155,31 @@
         "requirements": "Requirements",
 
         "applicants": "Applicants",
+        "applicantName": "Applicant Name",
         "photo": "Photo",
         "createApplicant": "Create Applicant",
         "editApplicant": "Edit Applicant",
 
         "tests": "Tests",
+        "testDetail": "Test Detail",
         "testType": "Test types",
         "testSchedule": "Test Schedule",
+        "testName": "Test Name",
         "score": "Score",
         "resultTest": "Result of Test",
+        "jobApplication": "Job Application",
+        "averageScore": "Average Score",
+        "startOn": "Start On",
+        "location": "Location",
+        
 
         "interviews": "Interviews",
         "interviewSchedule": "Interview Schedule",
+        "interviewDetail": "Interview Detail",
+        "interviewResult": "Interview Result",
+        "interviewer": "Interviewer",
+        "comment": "Comment",
+        "attactFile": "Attach File",
 
         "appraisal": "Appraisal",
 
@@ -296,6 +310,7 @@
         "addNew": "Add New",
         "searchAction": "ស្វែងរក...",
 
+        "job": "ការងារ",
         "jobType": "ប្រភេទការងារ",
         "jobPostings": "ការប្រកាសរើសការងារ",
         "jobPosting": "ប្រកាសរើសការងារ",
@@ -311,18 +326,30 @@
         "requirements": "លក្ខខណ្ឌការងារ",
 
         "applicants": "បេក្ខជនដាក់ពាក្យ",
+        "applicantName": "ឈ្មោះបេក្ខជន",
         "photo": "រូបភាព",
         "createApplicant": "បង្កើតបេក្ខជន",
         "editApplicant": "កែប្រែបេក្ខជន",
 
         "tests": "ការតេស្ដ",
+        "testDetail": "ព័ត៌មានតេស្ដលម្អិត",
         "testType": "ប្រភេទតេស្ដ",
         "testSchedule": "កាលវិភាគតេស្ដ",
+        "testName": "ឈ្មោះតេស្ដ",
         "score": "ពិន្ទុ",
         "resultTest": "លទ្ធផលតេស្ដ",
+        "jobApplication": "បេក្ខជនដាក់ពាក្យ",
+        "averageScore": "ពិន្ទុមធ្យមភាគ",
+        "startOn": "ចាប់ផ្ដើម",
+        "location": "ទីកន្លែង",
 
         "interviews": "ការសម្ភាសន៍",
         "interviewSchedule": "កាលវិភាគសម្ភាសន៍",
+        "interviewDetail": "ព័ត៌មានសម្ភាសន៍លម្អិត",
+        "interviewResult": "លទ្ធផលសម្ភាសន៍",
+        "interviewer": "អ្នកសម្ភាសន៍",
+        "comment": "មតិយោបល់",
+        "attactFile": "ឯកសារ",
 
         "appraisal": "ការវាយតម្លៃការងារ",
 
@@ -342,6 +369,7 @@
         "cancel": "បោះបង់",
         "idCardNo": "លេខអត្តសញ្ញាណប័ណ្ណ",
         "passportNo": "លេខលិខិតឆ្លងដែន",
+        "maritalStatus": "ស្ថានភាពគ្រួសារ",
         "inCaseOfEmergencyContact": "ការទំនាក់ទំនងពេលមានអាសន្ន",
         "informationData": "ព័ត៌មានផ្ទាល់ខ្លួន",
         "familyMemberInformation": "ព័ត៌មានអំពីសមាជិកគ្រួសារ",

@@ -216,6 +216,12 @@ a.btnDownload:hover {
   box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
 }
 
+.ant-input-number:focus,
+.ant-input-number:hover {
+  border-color: var(--form-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(11, 154, 176, 0.2) !important;
+}
+
 /* Input wrapper (icons inside input) focus & hover */
 .ant-input-affix-wrapper:focus,
 .ant-input-affix-wrapper-focused,
