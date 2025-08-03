@@ -86,7 +86,7 @@ const CreateApplicantPage = () => {
   const onFinish = async (values) => {
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
-      if (key === 'dob') {
+      if (key === 'dob' || key === 'applied_date') {
         formData.append(key, value.format('YYYY-MM-DD'));
       } else if (key === 'photo' || key === 'cv') {
         if (value?.[0]?.originFileObj) {
@@ -102,7 +102,8 @@ const CreateApplicantPage = () => {
 
       await applyToJobApi({
         applicant_id: createdApplicant._id,
-        job_id: values.job_posting_id
+        job_id: values.job_posting_id,
+        applied_date: values.applied_date?.format('YYYY-MM-DD'),
       });
 
       message.success("Applicant created and applied successfully!");
@@ -196,30 +197,44 @@ const CreateApplicantPage = () => {
               <Col xs={24} md={18}>
                 <Row gutter={16}>
                   <Col span={24}>
-                    <Form.Item
-                      label="Job Posting"
-                      name="job_posting_id"
-                      rules={[{ required: true, message: 'Please select a job posting' }]}
-                    >
-                      {loadingJobs ? (
-                        <Spin size="small" />
-                      ) : (
-                        <Select
-                          placeholder="Select an open job posting"
-                          showSearch
-                          optionFilterProp="children"
-                          filterOption={(input, option) =>
-                            option?.children?.toLowerCase().includes(input.toLowerCase())
-                          }
+                    <Row gutter={16}>
+                      <Col xs={24} md={12}>
+                        <Form.Item
+                          label="Job Posting"
+                          name="job_posting_id"
+                          rules={[{ required: true, message: 'Please select a job posting' }]}
                         >
-                          {jobPostings.map((job) => (
-                            <Option key={job._id} value={job._id}>
-                              {job.job_title} ({dayjs(job.close_date).format("YYYY-MM-DD")})
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
+                          {loadingJobs ? (
+                            <Spin size="small" />
+                          ) : (
+                            <Select
+                              placeholder="Select an open job posting"
+                              showSearch
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                option?.children?.toLowerCase().includes(input.toLowerCase())
+                              }
+                            >
+                              {jobPostings.map((job) => (
+                                <Option key={job._id} value={job._id}>
+                                  {job.job_title} ({dayjs(job.close_date).format("YYYY-MM-DD")})
+                                </Option>
+                              ))}
+                            </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
+
+                      <Col xs={24} md={12}>
+                        <Form.Item
+                          label="Applied Date"
+                          name="applied_date"
+                          rules={[{ required: true, message: 'Please select applied date' }]}
+                        >
+                          <DatePicker style={{ width: '100%' }} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
                   </Col>
 
                   <Col xs={24} md={12}><Form.Item label="Full Name (Khmer)" name="full_name_kh" rules={[{ required: true }]}><Input /></Form.Item></Col>
@@ -261,7 +276,7 @@ const CreateApplicantPage = () => {
             {/* Buttons */}
             <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
               style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
-              <button onClick={handleCancel} className={Styles.btnCancel}>Cancel</button>
+              <button onClick={handleCancel} className={Styles.btnCancel}>{content['cancel']}</button>
               <button type="submit" className={Styles.btnCreate}>Save</button>
             </div>
           </Form>

@@ -7,7 +7,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { EllipsisOutlined, EyeOutlined, PaperClipOutlined, PlusOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, PaperClipOutlined, PlusOutlined } from '@ant-design/icons';
 import { FaList, FaRegCalendar } from "react-icons/fa6";
 import {
   getAllTestAssignmentsApi,
@@ -23,6 +23,8 @@ import TestDetailPage from './TestDetailPage';
 import uploadUrl from '../../../services/uploadApi';
 import TestAssignmentModal from './TestAssignmentModal';
 import showCustomConfirm from '../../../utils/showCustomConfirm';
+import InterviewModal from '../interviews/InterviewModal';
+import { getAllInterviewsApi } from '../../../services/interviewApi';
 
 const TestSchedulePage = () => {
   const { isLoading, content } = useAuth();
@@ -46,6 +48,12 @@ const TestSchedulePage = () => {
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
 
+  const [interviewModalData, setInterviewModalData] = useState({
+    visible: false,
+    applicant: null,
+    job: null
+  });
+
 
   const openDetailModal = (assignmentId) => {
     setDetailModalData({
@@ -54,7 +62,6 @@ const TestSchedulePage = () => {
       refresh: Date.now() 
     });
   };
-
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
@@ -83,9 +90,7 @@ const TestSchedulePage = () => {
 
       const today = new Date();
 
-      const formatted = data
-        .filter(item => item.status !== 'cancelled') // 👈 exclude cancelled
-        .map(item => {
+       const formatted = data.map(item => {
         const title = `${item?.applicant_id?.full_name_en || 'Unknown'} - ${
           item?.test_type_scores?.map(t => t.test_type?.name_en).join(', ')
         }`;
@@ -94,12 +99,14 @@ const TestSchedulePage = () => {
           id: item._id,
           title,
           start: item.start_at,
+          color: item.status === 'rejected' ? '#e3342f' : undefined,
           extendedProps: {
             applicant: item.applicant_id,
             test_type_scores: item.test_type_scores,
             location: item.location,
             duration: item.duration_min,
-            job: item.job_id?.job_title
+            job: item.job_id?.job_title,
+            status: item.status,
           }
         };
       });
@@ -111,9 +118,11 @@ const TestSchedulePage = () => {
         return (
           d.getDate() === today.getDate() &&
           d.getMonth() === today.getMonth() &&
-          d.getFullYear() === today.getFullYear()
+          d.getFullYear() === today.getFullYear() &&
+          e.extendedProps.status !== 'rejected'
         );
       });
+
       if (todayTest) setSelectedEvent(todayTest);
 
     } catch (err) {
@@ -123,32 +132,59 @@ const TestSchedulePage = () => {
 
   const fetchTableData = async () => {
     try {
-      const data = await getAllTestAssignmentsApi();
+      const testData = await getAllTestAssignmentsApi();
 
-      const formatted = data.map(item => ({
-        _id: item._id,
-        applicant_id: item.applicant_id,
-        test_type_scores: item.test_type_scores,
-        photo: item.applicant_id?.photo,
-        full_name_kh: item.applicant_id?.full_name_kh,
-        full_name_en: item.applicant_id?.full_name_en,
-        gender: item.applicant_id?.gender,
-        phone_no: item.applicant_id?.phone_no,
-        email: item.applicant_id?.email,
-        job_title: item.job_id?.job_title,
-        test_types: item.test_type_scores?.map(t => t.test_type?.name_en).join(', '),
-        start_at: item.start_at,
-        duration_min: item.duration_min,
-        location: item.location,
-        status: item.status,
-        average_score: item.average_score,
-        attachment: item.attachment || null
-      }));
+      const interviewData = await getAllInterviewsApi();
+      // console.log("✅ Interviews:", interviewData);
 
-      setRawData(formatted); // ✅ store original
-      setTableData(applyFilters(formatted)); // apply initial filter if any
+      const interviewMap = new Map();
+      interviewData.forEach(interview => {
+        const applicantId = interview.applicant_id?._id || interview.applicant_id;
+        const jobId = interview.job_id?._id || interview.job_id;
+
+        if (applicantId && jobId) {
+          const key = `${applicantId}_${jobId}`;
+          interviewMap.set(key, true);
+        } else {
+          console.warn('❗ Missing applicant_id or job_id in interview:', interview);
+        }
+      });
+
+
+      const formatted = testData.map(item => {
+        const applicantId = item.applicant_id?._id || item.applicant_id;
+        const jobId = item.job_id?._id || item.job_id;
+        const key = `${applicantId}_${jobId}`;
+        const hasInterview = interviewMap.has(key);
+
+        return {
+          _id: item._id,
+          applicant_id: item.applicant_id,
+          test_type_scores: item.test_type_scores,
+          photo: item.applicant_id?.photo,
+          full_name_kh: item.applicant_id?.full_name_kh,
+          full_name_en: item.applicant_id?.full_name_en,
+          gender: item.applicant_id?.gender,
+          phone_no: item.applicant_id?.phone_no,
+          email: item.applicant_id?.email,
+          job_id: item.job_id,
+          job_title: item.job_id?.job_title,
+          test_types: item.test_type_scores?.map(t => t.test_type?.name_en).join(', '),
+          start_at: item.start_at,
+          duration_min: item.duration_min,
+          location: item.location,
+          status: item.status,
+          average_score: item.average_score,
+          attachment: item.attachment || null,
+          has_interview: hasInterview
+        };
+      });
+
+      setRawData(formatted);
+      setTableData(applyFilters(formatted));
       setPagination(prev => ({ ...prev, total: formatted.length }));
     } catch (err) {
+      console.error("❌ Error in fetchTableData:", err);
       message.error('Failed to load table data');
     }
   };
@@ -186,13 +222,17 @@ const TestSchedulePage = () => {
 
 
   const handleEventClick = ({ event }) => {
+    const status = event.extendedProps?.status;
+    if (status === 'rejected') {
+      return;
+    }
     openDetailModal(event.id);
   };
 
-  const handleCancel = async (id) => {
+  const handleReject = async (id) => {
     showCustomConfirm({
-      title: 'Confirm Cancel',
-      content: 'Are you sure you want to cancel this test?',
+      title: 'Confirm Rejection',
+      content: 'Are you sure you want to reject this applicant?',
       okButton: (
         <button
           onClick={async () => {
@@ -273,52 +313,69 @@ const TestSchedulePage = () => {
     dayjs(ev.start).isSame(dayjs(), 'day')
   );
 
+  const handleMoveToInterview = (record) => {
+    setInterviewModalData({
+      visible: true,
+      applicant: record.applicant_id,
+      job: record.job_id
+    });
+  };
+
+
   const columns = [
     {
-      title: content['photo'],
-      dataIndex: 'photo',
-      render: (photo) =>
-        photo ? (
+      title: content['applicantName'],
+      key: 'applicant_info',
+      render: (_, record) => (
+        <div className="flex gap-3 items-center">
           <Avatar
-            src={`${uploadUrl}/uploads/applicants/${encodeURIComponent(photo)}`}
-            size={55}
+            size={50}
+            src={
+              record.photo
+                ? `${uploadUrl}/uploads/applicants/${encodeURIComponent(record.photo)}`
+                : undefined
+            }
           />
-        ) : (
-          <Avatar size={55}>{/* Optional fallback initials */}</Avatar>
-        )
-    },
-    {
-      title: 'Full Name (KH)',
-      dataIndex: 'full_name_kh',
-    },
-    {
-      title: content['jobTitle'],
-      dataIndex: 'job_title',
+          <div>
+            <div className="font-semibold text-gray-800">{record.full_name_kh || 'Unknown'}</div>
+            <div className="text-sm text-gray-500">{record.job_title || '—'}</div>
+          </div>
+        </div>
+      )
     },
     {
       title: content['testType'],
       dataIndex: 'test_types',
     },
     {
-      title: 'Start Time',
+      title: content['startOn'],
       dataIndex: 'start_at',
       render: val => dayjs(val).format('DD-MM-YYYY hh:mm A')
     },
     {
-      title: 'Duration',
+      title: content['duration'],
       dataIndex: 'duration_min',
     },
     {
-      title: 'Location',
+      title: content['location'],
       dataIndex: 'location',
     },
     {
-      title: 'Average Score',
+      title: content['averageScore'],
       dataIndex: 'average_score',
-      render: (score) => score ?? '-'
+      render: (score) => {
+        if (score == null) return '-';
+        const color = score < 50 ? 'red' : "green";
+
+        return (
+          <span className={`text-${color}-600 font-semibold`}>
+            {score}
+          </span>
+        );
+      }
     },
     {
-      title: 'Attachment',
+      title: content['attactFile'],
       dataIndex: 'attachment',
       render: (file) =>
         file ? (
@@ -342,7 +399,7 @@ const TestSchedulePage = () => {
         const colorMap = {
           scheduled: 'yellow',
           completed: 'green',
-          cancelled: 'red'
+          rejected: 'red'
         };
         const capitalized = status.charAt(0).toUpperCase() + status.slice(1);
         return <span className={`text-${colorMap[status] || 'gray'}-600 font-semibold`}>{capitalized}</span>
@@ -351,59 +408,78 @@ const TestSchedulePage = () => {
     {
       title: content['action'],
       key: 'action',
+      align: 'center',
       render: (_, record) => {
-        if (record.status === 'cancelled') {
+        if (record.status === 'rejected') {
           return (
-            <span className="text-gray-400 italic">Cancelled</span>
+            <div className="flex justify-center items-center h-full">
+              <span className="text-gray-400 italic">Rejected</span>
+            </div>
           );
         }
+
+        const canScheduleInterview = record.status === 'completed' && !record.has_interview;
+
         return (
-          <Dropdown
-            placement="bottomRight"
-            trigger={['click']}
-            menu={{
-              items: [
-                {
-                  key: 'view',
-                  label: (
-                    <div
-                      onClick={() => openDetailModal(record._id)}
-                      className="flex items-center gap-2 cursor-pointer"
-                    >
-                      {content['view']} View
-                    </div>
-                  )
-                },
-                {
-                  key: 'edit',
-                  label: (
-                    <div onClick={() => handleEdit(record)}>
-                      Edit
-                    </div>
-                  )
-                },
-                {
-                  key: 'reschedule',
-                  label: (
-                    <div onClick={() => handleReschedule(record)}>
-                      Reschedule
-                    </div>
-                  )
-                },
-                {
-                  key: 'cancel',
-                  label: (
-                    <span onClick={() => handleCancel(record._id)} className="text-red-500">
-                      Cancel
-                    </span>
-                  )
-                },
-              ]
-            }}
-          >
-            <Button icon={<EllipsisOutlined />} />
-          </Dropdown>
-        )
+          <div className="flex justify-center items-center gap-2 h-full">
+            {/* ✅ Interview Button or ✔ Icon */}
+            {record.has_interview ? (
+              <Tooltip>
+                <span className="text-green-600 text-lg font-bold">✔</span>
+              </Tooltip>
+            ) : (
+              <Tooltip>
+                <button
+                  className={`${Styles.btnSecondary} ${
+                    !canScheduleInterview ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  disabled={!canScheduleInterview}
+                  onClick={() => {
+                    if (canScheduleInterview) handleMoveToInterview(record);
+                  }}
+                >
+                  Interview
+                </button>
+              </Tooltip>
+            )}
+
+            {/* ✅ Dropdown Actions */}
+            <Dropdown
+              placement="bottomRight"
+              trigger={['click']}
+              menu={{
+                items: [
+                  {
+                    key: 'view',
+                    label: (
+                      <div onClick={() => openDetailModal(record._id)} className="flex items-center gap-2 cursor-pointer">
+                        {content['view']} View
+                      </div>
+                    )
+                  },
+                  {
+                    key: 'edit',
+                    label: <div onClick={() => handleEdit(record)}>Edit</div>
+                  },
+                  {
+                    key: 'reschedule',
+                    label: <div onClick={() => handleReschedule(record)}>Reschedule</div>
+                  },
+                  {
+                    key: 'reject',
+                    label: (
+                      <span onClick={() => handleReject(record._id)} className="text-red-500">
+                        Rejected
+                      </span>
+                    )
+                  }
+                ]
+              }}
+            >
+              <Button icon={<EllipsisOutlined />} />
+            </Dropdown>
+          </div>
+        );
       }
     }
   ];
@@ -525,9 +601,9 @@ const TestSchedulePage = () => {
                                   onClick: () => setRescheduleModalData({ visible: true, assignment: selectedEvent })
                                 },
                                 {
-                                  key: 'cancel',
-                                  label: <span className="text-red-500">Cancel</span>,
-                                  onClick: () => handleCancel(selectedEvent.id)
+                                  key: 'reject',
+                                  label: <span className="text-red-500">Rejected</span>,
+                                  onClick: () => handleReject(selectedEvent.id)
                                 }
                               ]
                             }}
@@ -562,7 +638,7 @@ const TestSchedulePage = () => {
                         <Select allowClear placeholder="Select status">
                           <Option value="scheduled">Scheduled</Option>
                           <Option value="completed">Completed</Option>
-                          <Option value="cancelled">Cancelled</Option>
+                          <Option value="rejected">Rejected</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -622,23 +698,15 @@ const TestSchedulePage = () => {
         }}
       />
 
-      <ModalMdCenter
+      <TestDetailPage
         open={detailModalData.visible}
-        onCancel={() => setDetailModalData({ visible: false, assignmentId: null })}
-        title="Test Assignment Details"
-        width={1200}
-      >
-        {detailModalData.assignmentId && (
-          <TestDetailPage 
-            assignmentId={detailModalData.assignmentId} 
-            refresh={detailModalData.refresh} 
-            onClose={() => {
-              setDetailModalData({ visible: false, assignmentId: null });
-              handleRefreshAll(); // ✅ Force table & calendar refresh
-            }}
-          />
-        )}
-      </ModalMdCenter>
+        assignmentId={detailModalData.assignmentId}
+        refresh={detailModalData.refresh}
+        onClose={() => {
+          setDetailModalData({ visible: false, assignmentId: null });
+          handleRefreshAll();
+        }}
+      />
 
       <TestAssignmentModal
         open={createModalVisible}
@@ -651,6 +719,17 @@ const TestSchedulePage = () => {
           setCreateModalVisible(false);
           setSelectedApplicant(null);
           handleRefreshAll();
+        }}
+      />
+
+      <InterviewModal
+        open={interviewModalData.visible}
+        applicant={interviewModalData.applicant}
+        job={interviewModalData.job}
+        onCancel={() => setInterviewModalData({ visible: false, applicant: null, job: null })}
+        onSuccess={() => {
+          setInterviewModalData({ visible: false, applicant: null, job: null });
+          handleRefreshAll(); // Refresh data
         }}
       />
 

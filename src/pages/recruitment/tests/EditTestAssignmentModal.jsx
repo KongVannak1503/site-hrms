@@ -3,12 +3,13 @@ import { Modal, Form, Select, DatePicker, InputNumber, Input, message } from 'an
 import dayjs from 'dayjs';
 import { getAllTestTypesApi } from '../../../services/testTypeService';
 import { updateTestAssignmentApi } from '../../../services/testAssignmentService';
-
-const { Option } = Select;
+import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) => {
   const [form] = Form.useForm();
   const [testTypes, setTestTypes] = useState([]);
+  const { content } = useAuth();
 
   useEffect(() => {
     const fetchAndSetForm = async () => {
@@ -21,8 +22,8 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
             (t) => typeof t.test_type === 'object' ? t.test_type._id : t.test_type
           ) || [];
 
-          // ✅ Only set values after testTypes are loaded
           form.setFieldsValue({
+            applicant_name: testAssignment.extendedProps?.applicant?.full_name_en || '',
             test_type: testTypeIds,
             start_at: dayjs(testAssignment.start),
             duration_min: testAssignment.extendedProps?.duration,
@@ -37,19 +38,8 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
     fetchAndSetForm();
   }, [open, testAssignment]);
 
-  const fetchTestTypes = async () => {
+  const handleSubmit = async (values) => {
     try {
-      const data = await getAllTestTypesApi();
-      setTestTypes(data);
-    } catch {
-      message.error('Failed to load test types');
-    }
-  };
-
-  const handleOk = async () => {
-    try {
-      const values = await form.validateFields();
-
       const payload = {
         test_type: values.test_type,
         start_at: values.start_at,
@@ -57,10 +47,7 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
         location: values.location
       };
 
-      console.log('Payload to update:', payload);
-
       await updateTestAssignmentApi(testAssignment.id, payload);
-
       message.success('Test assignment updated successfully');
       form.resetFields();
       onSuccess();
@@ -78,17 +65,16 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
         form.resetFields();
         onCancel();
       }}
-      onOk={handleOk}
-      okText="Update"
+      footer={null}
       maskClosable={false}
     >
-      <Form form={form} layout="vertical">
-        <Form.Item label="Applicant Name">
-          <Input value={testAssignment?.extendedProps?.applicant?.full_name_en || 'N/A'} disabled />
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Form.Item label={content['applicantName'] || 'Applicant Name'} name="applicant_name">
+          <Input disabled />
         </Form.Item>
 
         <Form.Item
-          label="Test Type(s)"
+          label={content['testType'] || 'Test Type(s)'}
           name="test_type"
           rules={[{ required: true, message: 'Please select at least one test type' }]}
         >
@@ -102,19 +88,32 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
         </Form.Item>
 
         <Form.Item
-          label="Start Time"
+          label={content['startOn'] || 'Start Time'}
           name="start_at"
           rules={[{ required: true, message: 'Please choose a start time' }]}
         >
           <DatePicker showTime style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item label="Duration (minutes)" name="duration_min">
-          <InputNumber min={1} placeholder="e.g. 60" style={{ width: '100%' }} />
+        <Form.Item
+          label={content['duration'] || 'Duration (minutes)'}
+          name="duration_min"
+          rules={[{ required: true, message: 'Please enter duration' }]}
+        >
+          <InputNumber min={1} style={{ width: '100%' }} placeholder="e.g. 60" />
         </Form.Item>
 
-        <Form.Item label="Location" name="location">
+        <Form.Item label={content['location'] || 'Location'} name="location">
           <Input placeholder="Room 101, Lab A, etc." />
+        </Form.Item>
+
+        <Form.Item className="text-right">
+          <button type="button" onClick={onCancel} className={Styles.btnCancel}>
+            {content['cancel'] || 'Cancel'}
+          </button>
+          <button type="submit" className={Styles.btnUpdate}>
+            {content['update'] || 'Update'}
+          </button>
         </Form.Item>
       </Form>
     </Modal>
