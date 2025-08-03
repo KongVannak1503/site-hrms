@@ -266,7 +266,7 @@ const UsersPage = () => {
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['user']}`}</button>
                     </div>
                 </div>
                 <Table

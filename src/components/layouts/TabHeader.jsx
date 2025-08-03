@@ -6,6 +6,8 @@ export const useShowTabHeader = () => {
 
     return (
         location.pathname.startsWith('/employee/') ||
-        location.pathname.startsWith('/employee/create')
+        location.pathname.startsWith('/employee/create') ||
+        location.pathname.startsWith('/appraisal/employee/')
+
     );
 };

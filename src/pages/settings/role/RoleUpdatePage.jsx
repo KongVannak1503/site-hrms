@@ -6,7 +6,7 @@ import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { getRoleApi, updateRoleApi } from '../../../services/roleApi';
 import { getPermissionsApi } from '../../../services/permissionApi';
 
-const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
+const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
     const { content } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,18 +22,18 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
                     getRoleApi(roleId)
                 ]);
 
-                setCurrentRoleName(roleResponse.name);
+                setCurrentRoleName(roleName);
 
                 // Filter permissions to only those allowed for current role
                 const filteredPermissions = permResponse.filter(perm =>
-                    perm.roles?.includes(roleResponse.name)
+                    perm.roles?.includes(roleName)
                 );
 
                 setPermissions(filteredPermissions);
 
                 // Prepare initial form values
                 const initialValues = {
-                    role: roleResponse.name
+                    role: roleResponse.role
                 };
 
                 // Populate permission actions in form initial values
@@ -56,7 +56,6 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const roleName = values.role;
 
             const permissionsData = permissions
                 .map((perm) => {
@@ -73,11 +72,12 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
 
             const formData = {
                 name: roleName,
+                role: values.role,
                 permissions: permissionsData
             };
 
             const response = await updateRoleApi(roleId, formData);
-            message.success('✅ Role updated successfully!');
+            message.success('Role updated successfully!');
             onUserUpdated(response.data);
         } catch (error) {
             console.error('❌ Error updating role:', error);
@@ -101,6 +101,19 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
                     label={content['role']}
                 >
                     <Input value={currentRoleName} disabled /> {/* disable editing role name */}
+                </Form.Item>
+                <Form.Item
+                    name="role"
+                    label={content['name']}
+
+                    rules={[{
+                        required: true,
+                        message: `${content['please']}${content['enter']}${content['role']}`
+                            .toLowerCase()
+                            .replace(/^./, str => str.toUpperCase())
+                    }]}
+                >
+                    <Input />
                 </Form.Item>
             </div>
 

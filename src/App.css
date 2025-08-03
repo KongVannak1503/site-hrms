@@ -321,3 +321,8 @@ a.btnDownload:hover {
   border-color: var(--layout-sider-background) !important;
   color: var(--layout-sider-background) !important;
 }
+
+
+.ant-menu-item-group-title {
+  margin-top: 16px;
+}

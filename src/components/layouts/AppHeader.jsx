@@ -1,5 +1,5 @@
-import { BulbOutlined, DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Dropdown, Layout, Select, Space } from 'antd'
+import { BellOutlined, BulbOutlined, DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
+import { Avatar, Badge, Button, Dropdown, Layout, Select, Space } from 'antd'
 import { useAuth } from '../../contexts/AuthContext'
 import { logout } from '../../utils/auth'
 import { MdMenu } from "react-icons/md";
@@ -74,6 +74,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                 {/* You can optionally change button behavior or style if isMobile is true */}
             </div>
             <div className='flex items-center'>
+
                 {/* <div>
                     <button>
                         <span className={Styles.btnInfoSm}>
@@ -81,6 +82,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                         </span>
                     </button>
                 </div> */}
+
                 <Select
                     value={language}
                     onChange={setLanguage}
@@ -103,6 +105,11 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                         />
                     </Select.Option>
                 </Select>
+                <div className='mr-4'>
+                    <Badge className={`${Styles.btnHeaderIcon}`} size="default" style={{ borderRadius: 50 }} count={5} offset={[3, 10]}>
+                        <Avatar shape="circle" icon={<BellOutlined style={{ fontSize: '15px', fontWeight: 'bold' }} />} size={45} />
+                    </Badge>
+                </div>
                 {/* 
                 <Button className='mx-2 !text-gray-700 dark:!text-gray-400'
                     type="text"
@@ -119,7 +126,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                     <a onClick={(e) => e.preventDefault()}>
                         <Space className='pt-4'>
                             <img
-                                className="w-[45px] h-[45px] rounded-full object-cover"
+                                className="w-[43px] h-[43px] rounded-full object-cover"
                                 src={`${uploadUrl}/${identity?.employeeId?.image_url?.path}`}
                                 alt="photo"
                             />

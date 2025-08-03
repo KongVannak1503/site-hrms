@@ -24,6 +24,7 @@ export const logout = async () => {
     try {
         await logoutUser();
         sessionStorage.removeItem('token');
+        localStorage.removeItem('token');
         return window.location.href = '/login';
     } catch (err) {
         console.error('Logout failed', err);

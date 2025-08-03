@@ -14,7 +14,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(() => {
-        const savedToken = sessionStorage.getItem('token');
+        const savedToken = localStorage.getItem('token');
         attachTokenToApi(savedToken);
         return savedToken;
     });
@@ -32,15 +32,30 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
 
         if (token) {
-            sessionStorage.setItem('token', token);
+            attachTokenToApi(token);
+
+            if (token) {
+                localStorage.setItem('token', token);
+            } else {
+                localStorage.removeItem('token');
+            }
             try {
                 const decoded = jwtDecode(token);
+                const currentTime = Date.now() / 1000;
+                if (decoded.exp < currentTime) {
+                    console.warn("Token expired");
+                    setToken(null);
+                    setUser(null);
+                    localStorage.removeItem('token');
+                    return;
+                }
                 setUser(decoded);
             } catch (e) {
                 console.error("Invalid token:", e);
             }
         } else {
             sessionStorage.removeItem('token');
+            localStorage.removeItem('token');
             setUser(null);
         }
 
@@ -64,7 +79,15 @@ export const AuthProvider = ({ children }) => {
                 const resUser = await getUserApi(user.id);
                 if (isMounted) setIdentity(resUser);
             } catch (error) {
-                console.error('Error fetching user:', error);
+                if (error?.response?.status === 401) {
+                    console.warn('Unauthorized: Token may be invalid or expired.');
+                    setIdentity(null);
+                    setToken(null);
+                    setUser(null);
+                    localStorage.removeItem('token');
+                } else {
+                    console.error('Error fetching user:', error);
+                }
             }
         };
         fetchData();

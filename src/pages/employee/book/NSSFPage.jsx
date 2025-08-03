@@ -1,8 +1,8 @@
 import { Upload, Button, message, Card, Table, Tag, Space, Tooltip, Input, DatePicker, Select } from 'antd';
-import { CloudDownloadOutlined, FileTextOutlined, FormOutlined, UploadOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, CloudDownloadOutlined, FileTextOutlined, FormOutlined, UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { createEpmNssfApi, createEpmUploadApi, deleteEpmNssfApi, deleteEpmNssfDocApi, deleteEpmUploadApi, getEpmUploadApi, getEpmUploadNssfApi, getEpmUploadNssfDocApi } from '../../../services/employeeApi';
+import { createEpmNssfApi, createEpmUploadApi, deleteEpmNssfApi, deleteEpmNssfDocApi, deleteEpmUploadApi, getEpmUploadApi, getEpmUploadNssfApi, getEpmUploadNssfDocApi, updateEmpNssfApi } from '../../../services/employeeApi';
 import EmployeeNav from '../EmployeeNav';
 import { Styles } from '../../../utils/CsStyle';
 import { useEffect } from 'react';
@@ -128,13 +128,16 @@ const NSSFPage = () => {
             // Call your API to update here
             // await updateEpmNssfApi(editedRow._id, editedRow);
 
+
             const updated = users.map(item =>
                 item._id === editedRow._id ? editedRow : item
             );
-            setUsers(updated);
-            setFilteredData(updated);
+            console.log(updated);
+            updateEmpNssfApi(updated);
+            // setUsers(updated);
+            // setFilteredData(updated);
 
-            setEditingRowKey(null);
+            // setEditingRowKey(null);
             message.success('Updated successfully');
         } catch (err) {
             console.error(err);
@@ -309,7 +312,7 @@ const NSSFPage = () => {
                         onChange={(e) =>
                             setEditedRow({ ...editedRow, claimOther: e.target.value })
                         }
-                        autoSize={{ minRows: 1, maxRows: 4 }}
+                        autoSize={{ minRows: 1, maxRows: 5 }}
                     />
                 ) : (
                     <span>{text}</span>
@@ -323,13 +326,13 @@ const NSSFPage = () => {
                     {editingRowKey === record._id ? (
                         <>
                             <Tooltip title={content['save']}>
-                                <button className={Styles.btnSave} onClick={onSave}>
-                                    <i className="fas fa-check text-green-600" />
+                                <button className={Styles.btnEdit} onClick={onSave}>
+                                    <CheckOutlined />
                                 </button>
                             </Tooltip>
                             <Tooltip title={content['cancel']}>
-                                <button className={Styles.btnCancel} onClick={onCancel}>
-                                    <i className="fas fa-times text-red-600" />
+                                <button className={`${Styles.btnDelete}`} onClick={onCancel}>
+                                    <CloseOutlined />
                                 </button>
                             </Tooltip>
                         </>

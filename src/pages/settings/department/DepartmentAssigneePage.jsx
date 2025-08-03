@@ -19,8 +19,7 @@ const DepartmentAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
                 const response = await getDepartmentApi(dataId);
 
                 form.setFieldsValue({
-                    manager: response.manager || [],
-                    employee: response.employee || [],
+                    manager: response.manager || []
                 });
             } catch (error) {
                 console.error("Error fetching department:", error);
@@ -33,8 +32,7 @@ const DepartmentAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
     const handleFinish = async (values) => {
         try {
             const formData = {
-                manager: values.manager,
-                employee: values.employee
+                manager: values.manager
             };
 
             const response = await assignDepartmentApi(dataId, formData);
@@ -82,32 +80,7 @@ const DepartmentAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
             </Form.Item>
 
             {/* Employee Multi-Select */}
-            <Form.Item
-                name="employee"
-                label={content['employee']}
-                rules={[{
-                    required: true,
-                    message: `${content['selectA']}${content['employee']}`
-                        .toLowerCase()
-                        .replace(/^./, str => str.toUpperCase())
-                }]}
-            >
-                <Select
-                    mode="multiple"
-                    showSearch
-                    optionFilterProp="children"
-                    style={{ width: '100%' }}
-                    filterOption={(input, option) =>
-                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                >
-                    {employees.map((employee) => (
-                        <Select.Option key={employee._id} value={employee._id}>
-                            {`${employee.last_name_kh} ${employee.first_name_kh}`}
-                        </Select.Option>
-                    ))}
-                </Select>
-            </Form.Item>
+
 
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>

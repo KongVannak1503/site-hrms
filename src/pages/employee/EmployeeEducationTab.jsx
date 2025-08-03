@@ -33,7 +33,6 @@ const EmployeeEducationTab = () => {
         try {
             const resLanguages = await getLanguagesApi();
             setLanguages(resLanguages);
-            console.log(resLanguages);
         } catch (error) {
             console.error("Failed to fetch languages:", error);
         }
