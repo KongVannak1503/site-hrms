@@ -50,8 +50,38 @@ import EmployeePositionPage from './pages/employee/position/EmployeePositionPage
 import SubPayrollPage from './pages/employee/payroll/sub-payroll/SubPayrollPage'
 import InterviewPage from './pages/recruitment/interviews/InterviewPage'
 import EmployeeTimeLinePage from './pages/employee/payroll/EmployeeTimeLinePage'
+import { useAuth } from './contexts/AuthContext'
+import { ADMIN, EMPLOYEE, MANAGER } from './data/Type'
+import RolesMainPage from './pages/settings/role/RolesMainPage'
+import EmployeeManagerPage from './pages/employee/EmployeeManagerPage'
+import KpiPage from './pages/appraisals/KpiPage'
+import KpiTemplateBuilder from './pages/appraisals/KpiTemplateBuilder'
+import KpiTemplateBuilderEditPage from './pages/appraisals/KpiTemplateBuilderEditPage'
+import AppraisalMonthPage from './pages/appraisals/appraisal_month/AppraisalMonthPage'
+import EmployeeAppraisalPage from './pages/employee/book/Appraisal/EmployeeAppraisalPage'
+import AppraisalYearPage from './pages/appraisals/appraisal_year/AppraisalYearPage'
+import AppraisalYearListPage from './pages/appraisals/appraisal_year/AppraisalYearListPage'
+import AppraisalYearFormPage from './pages/appraisals/appraisal_year/AppraisalYearFormPage'
+import KpiMonthPage from './pages/appraisals/kpi-month/KpiMonthPage'
+import KpiTemplateMonthBuilder from './pages/appraisals/kpi-month/KpiTemplateMonthBuilder'
+import KpiTemplateBuilderMonthEditPage from './pages/appraisals/kpi-month/KpiTemplateBuilderMonthEditPage'
+import AppraisalMonthListPage from './pages/appraisals/appraisal_month/AppraisalMonthListPage'
+import AppraisalMonthFormPage from './pages/appraisals/appraisal_month/AppraisalMonthFormPage'
+import KpiDayPage from './pages/appraisals/kpi-day/KpiDayPage'
+import KpiTemplateDayBuilder from './pages/appraisals/kpi-day/KpiTemplateDayBuilder'
+import KpiTemplateBuilderDayEditPage from './pages/appraisals/kpi-day/KpiTemplateBuilderDayEditPage'
+import AppraisalDayPage from './pages/appraisals/appraisal_day/AppraisalDayPage'
+import AppraisalDayListPage from './pages/appraisals/appraisal_day/AppraisalDayListPage'
+import AppraisalDayFormPage from './pages/appraisals/appraisal_day/AppraisalDayFormPage'
+import AppraisalYearListEmpPage from './pages/appraisals/appraisal_year_emp/AppraisalYearListEmpPage'
+import AppraisalYearFormEmpPage from './pages/appraisals/appraisal_year_emp/AppraisalYearFormEmpPage'
+import FullScreenLoader from './components/loading/FullScreenLoader'
+import AppraisalEmployeePage from './pages/appraisals/employee/AppraisalEmployeePage'
+import AppraisalEmployeeListPage from './pages/appraisals/employee/AppraisalEmployeeListPage'
+import AppraisalEmployeeFormPage from './pages/appraisals/employee/AppraisalEmployeeFormPage'
 
 function App() {
+  const { identity, isLoading } = useAuth();
   return (
     <Router>
       <Routes>
@@ -79,28 +109,169 @@ function App() {
             <Route path="/test-schedules/:id" element={<TestDetailPage />} />
             <Route path="/test-types" element={<TestTypePage />} />
 
-            <Route path='/interview-schedules' element={<InterviewPage />}/>
+            <Route path='/interview-schedules' element={<InterviewPage />} />
+
+            <Route path="/employee/kpi/appraisal/:id" element={<EmployeeAppraisalPage />} />
 
             {/* Employee */}
-            <Route path="/employee" element={<EmployeePage />} />
-            <Route path="/employee/document1" element={<EmployeeDocumentPage />} />
-            <Route path="/employee/profile/:id" element={<EmployeeUpdatePage />} />
-            <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
-            <Route path="/employee/education/:id" element={<EmployeeEducationTab />} />
-            <Route path="/employee/history/:id" element={<EmployeeHistoryPage />} />
-            <Route path="/employee/document/:id" element={<EmployeeDocumentPages />} />
-            <Route path="/employee/book/:id" element={<EmployeeBookPage />} />
-            <Route path="/employee/law/:id" element={<LaborLawPage />} />
-            <Route path="/employee/nssf/:id" element={<NSSFPage />} />
-            <Route path="/employee/position/:id" element={<EmployeePositionPage />} />
-            <Route path="/employee/time-line/:id" element={<EmployeeTimeLinePage />} />
-            <Route path="/employee/document-list/:id" element={<DocumentList />} />
-            <Route path="/employee/create" element={<EmployeeCreatePage />} />
-            <Route path="/payroll" element={<PayrollPage />} />
-            <Route path="/payroll/:id" element={<SubPayrollPage />} />
-            <Route path="/test" element={<Test />} />
-            <Route path="/table" element={<TableSample />} />
+            {identity?.role?.name === ADMIN && (
+              <>
+                <Route path="/employee" element={<EmployeePage />} />
+                {/* Appraisal */}
+                <Route
+                  path="/appraisal/kpi"
+                  element={
+                    <KpiPage />
+                  } />
+                <Route
+                  path="/appraisal/kpi/year/form"
+                  element={
+                    <KpiTemplateBuilder />
+                  } />
+                <Route
+                  path="/appraisal/kpi/year/update/:id"
+                  element={
+                    <KpiTemplateBuilderEditPage />
+                  } />
+                <Route
+                  path="/appraisal/month"
+                  element={
+                    <AppraisalMonthPage />
+                  } />
+                <Route
+                  path="/appraisal/year"
+                  element={
+                    <AppraisalYearPage />
+                  } />
+                <Route
+                  path="/appraisal/year/:id"
+                  element={
+                    <AppraisalYearListPage />
+                  } />
+                <Route
+                  path="/appraisal/year/:mainId/form/:id"
+                  element={
+                    <AppraisalYearFormPage />
+                  } />
+                {/* month */}
+                <Route
+                  path="/appraisal/kpi/month"
+                  element={
+                    <KpiMonthPage />
+                  } />
 
+                <Route
+                  path="/appraisal/employee"
+                  element={
+                    <AppraisalEmployeePage />
+                  } />
+                <Route
+                  path="/appraisal/employee/list/:mainId"
+                  element={
+                    <AppraisalEmployeeListPage />
+                  } />
+                <Route
+                  path="/appraisal/employee/:mainId/form/:id"
+                  element={
+                    <AppraisalEmployeeFormPage />
+                  } />
+
+                <Route
+                  path="/appraisal/kpi/month/form"
+                  element={
+                    <KpiTemplateMonthBuilder />
+                  } />
+                <Route
+                  path="/appraisal/kpi/month/update/:id"
+                  element={
+                    <KpiTemplateBuilderMonthEditPage />
+                  } />
+                <Route
+                  path="/appraisal/month/:id"
+                  element={
+                    <AppraisalMonthListPage />
+                  } />
+                <Route
+                  path="/appraisal/month/:mainId/form/:id"
+                  element={
+                    <AppraisalMonthFormPage />
+                  } />
+                {/*End Month */}
+
+                {/* Day */}
+                <Route
+                  path="/appraisal/kpi/day"
+                  element={
+                    <KpiDayPage />
+                  } />
+
+                <Route
+                  path="/appraisal/kpi/day/form"
+                  element={
+                    <KpiTemplateDayBuilder />
+                  } />
+                <Route
+                  path="/appraisal/kpi/day/update/:id"
+                  element={
+                    <KpiTemplateBuilderDayEditPage />
+                  } />
+                <Route
+                  path="/appraisal/day"
+                  element={
+                    <AppraisalDayPage />
+                  } />
+                <Route
+                  path="/appraisal/day/:id"
+                  element={
+                    <AppraisalDayListPage />
+                  } />
+                <Route
+                  path="/appraisal/day/:mainId/form/:id"
+                  element={
+                    <AppraisalDayFormPage />
+                  } />
+                {/* End Day */}
+              </>
+            )}
+            {identity?.role?.name === MANAGER && (
+              <Route path="/employee" element={<EmployeeManagerPage />} />
+            )}
+
+            {identity?.role?.name === EMPLOYEE && (
+              <>
+                <Route
+                  path="/appraisal/year/:id"
+                  element={
+                    <AppraisalYearListEmpPage />
+                  } />
+                <Route
+                  path="/appraisal/year/:mainId/form/:id"
+                  element={
+                    <AppraisalYearFormEmpPage />
+                  } />
+              </>
+            )}
+            <>
+              <Route path="/employee" element={<EmployeePage />} />
+              <Route path="/employee/document1" element={<EmployeeDocumentPage />} />
+              <Route path="/employee/profile/:id" element={<EmployeeUpdatePage />} />
+              <Route path="/employee/update/:id" element={<EmployeeUpdatePage />} />
+              <Route path="/employee/education/:id" element={<EmployeeEducationTab />} />
+              <Route path="/employee/history/:id" element={<EmployeeHistoryPage />} />
+              <Route path="/employee/document/:id" element={<EmployeeDocumentPages />} />
+              <Route path="/employee/book/:id" element={<EmployeeBookPage />} />
+              <Route path="/employee/law/:id" element={<LaborLawPage />} />
+              <Route path="/employee/nssf/:id" element={<NSSFPage />} />
+              <Route path="/employee/position/:id" element={<EmployeePositionPage />} />
+              <Route path="/employee/time-line/:id" element={<EmployeeTimeLinePage />} />
+              <Route path="/employee/document-list/:id" element={<DocumentList />} />
+              <Route path="/employee/create" element={<EmployeeCreatePage />} />
+              <Route path="/payroll" element={<PayrollPage />} />
+              <Route path="/payroll/:id" element={<SubPayrollPage />} />
+              <Route path="/test" element={<Test />} />
+              <Route path="/table" element={<TableSample />} />
+            </>
+            {/*  */}
             {/* Appraisal */}
             <Route path="/appraisal" element={<TableSample />} />
 
@@ -115,9 +286,14 @@ function App() {
             <Route
               path="/setting/user/role"
               element={
-                <RolesPage />
+                <RolesMainPage />
               } />
 
+            <Route
+              path="/setting/user/role/:action"
+              element={
+                <RolesPage />
+              } />
             <Route
               path="/setting/categories"
               element={
@@ -175,10 +351,11 @@ function App() {
               element={
                 <UploadForm />
               } />
+
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Authorized />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={isLoading ? <FullScreenLoader /> : <NotFound />} />
       </Routes>
     </Router>
   )

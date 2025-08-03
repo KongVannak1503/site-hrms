@@ -5,7 +5,7 @@ import { createRoleApi, existNameRoleApi } from '../../../services/roleApi'
 import { Styles } from '../../../utils/CsStyle'
 import { useAuth } from '../../../contexts/AuthContext'
 
-const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
+const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
     const { content } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [roleNameError, setRoleNameError] = useState('');
@@ -17,11 +17,14 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
             try {
                 const response = await getPermissionsApi();
                 const initialValues = {};
-                response.forEach(role => {
-                    if (role.name === 'dashboard') {
-                        initialValues[`actions-${role.name}`] = [...role.actions];
-                    }
-                });
+                if (roleName) {
+                    response.forEach((perm) => {
+                        // Only assign actions that this role is allowed to have
+                        // const availableToRole = perm.roles.includes(roleName);
+                        initialValues[`actions-${perm.name}`] = []; // show permission but not checked
+
+                    });
+                }
 
                 setPermissions(response);
                 form.setFieldsValue(initialValues);
@@ -55,7 +58,7 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const roleName = values.role;
+            const role = values.role;
 
             const permissionsData = permissions
                 .map((perm) => {
@@ -72,6 +75,7 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
 
             const formData = {
                 name: roleName,
+                role: role,
                 permissions: permissionsData,
                 isActive: true,
             };
@@ -99,6 +103,11 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Form.Item
+                    label={content['name']}
+                >
+                    <Input value={roleName} disabled />
+                </Form.Item>
+                <Form.Item
                     name="role"
                     label={content['role']}
 
@@ -110,26 +119,29 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input onChange={handleRoleNameChange} size="large" />
+                    <Input onChange={handleRoleNameChange} />
                 </Form.Item>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {permissions.length > 0 && permissions.map((role, index) => (
-                    <div key={index}>
-                        <h3 className='text-lg font-semibold capitalize'>{role.name}</h3>
-                        <Form.Item
-                            name={`actions-${role.name}`}
-                            label="Actions"
-                        >
-                            <Checkbox.Group>
-                                {role.actions.map((action, i) => (
-                                    <Checkbox key={i} value={action}>{action}</Checkbox>
-                                ))}
-                            </Checkbox.Group>
-                        </Form.Item>
-                    </div>
-                ))}
+                {permissions.length > 0 && permissions
+                    .filter((perm) => perm.roles.includes(roleName)) // only show permissions allowed for this role
+                    .map((perm, index) => (
+                        <div key={index}>
+                            <h3 className='text-lg font-semibold capitalize'>{perm.name}</h3>
+                            <Form.Item
+                                name={`actions-${perm.name}`}
+                                label="Actions"
+                            >
+                                <Checkbox.Group>
+                                    {perm.actions.map((action, i) => (
+                                        <Checkbox key={i} value={action}>{action}</Checkbox>
+                                    ))}
+                                </Checkbox.Group>
+                            </Form.Item>
+                        </div>
+                    ))}
+
 
             </div>
 

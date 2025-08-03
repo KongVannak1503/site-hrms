@@ -171,7 +171,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                         <Select size='large'>
                             {roles.map((role) => (
                                 <Select.Option key={role._id} value={role._id}>
-                                    {role.name}
+                                    {role.role}
                                 </Select.Option>
                             ))}
                         </Select>

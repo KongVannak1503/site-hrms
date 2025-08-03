@@ -3,13 +3,11 @@ import { Card, Upload, Form, Input, Select, DatePicker, Button, Tabs } from 'ant
 import { FaRegImages } from 'react-icons/fa';
 import { PlusOutlined, MinusCircleOutlined, FormOutlined } from '@ant-design/icons';
 import { nationalityOption } from '../../data/Nationality';
-import CityUpdatePage from '../settings/employee/city/CityUpdatePage';
-import CityCreatePage from '../settings/employee/city/CityCreatePage';
-import ModalMdCenter from '../../components/modals/ModalMdCenter';
 import { bloodTypeOptions, typeEmpStatusOptions } from '../../data/Type';
 
 
 const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages, language }) => {
+    console.log(position);
 
     return (
         <div>
@@ -104,7 +102,7 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
                 </div >
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Form.Item name="date_of_birth" label={content['dateOfBirth']}><DatePicker className="w-full" /></Form.Item>
+                    <Form.Item name="date_of_birth" label={content['dateOfBirth']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['dateOfBirth']}` }]}><DatePicker className="w-full" /></Form.Item>
                     <Form.Item name="nationality" label={content['nationality']}>
                         <Select
                             showSearch
@@ -126,16 +124,16 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Form.Item name="joinDate" label={content['joinDate']}><DatePicker className="w-full" /></Form.Item>
+                    <Form.Item name="joinDate" label={content['joinDate']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['joinDate']}` }]}><DatePicker className="w-full" /></Form.Item>
                     <Form.Item
                         label={content['department']}
                     >
-                        <Input className='text-default' disabled value={position?.positionId?.title} />
+                        <Input className='text-default' disabled value={language == 'khmer' ? position?.positionId?.department?.title_kh : position?.positionId?.department?.title_en} />
                     </Form.Item>
                     <Form.Item
                         label={content['role']}
                     >
-                        <Input className='text-default' disabled value={position?.positionId?.title} />
+                        <Input className='text-default' disabled value={language == 'khmer' ? position?.positionId?.title_kh : position?.positionId?.title_en} />
                     </Form.Item>
                     <Form.Item name="status" label={content['status']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['status']}` }]}>
                         <Select>

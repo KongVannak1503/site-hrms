@@ -16,118 +16,184 @@ import Logo from '../../assets/log_usea.png';
 import LogoTitle from '../../assets/usea-title-1.png';
 import { useAuth } from '../../contexts/AuthContext';
 import moment from 'moment';
+import { ADMIN, EMPLOYEE, MANAGER } from '../../data/Type';
 const { Search } = Input;
 
 const AppSider = ({ collapsed }) => {
-    const { content } = useAuth();
+    const { content, identity } = useAuth();
     const [options, setOptions] = useState([]);
     const [searchText, setSearchText] = useState('');
-
     const navigate = useNavigate()
     const location = useLocation()
+    let employeeItems = [];
 
-    const employeeItems = [
-        {
-            key: '/',
-            icon: <AppstoreOutlined />,
-            label: content['dashboard'],
-        },
-        {
-            key: 'recruiter',
-            icon: <VideoCameraOutlined />,
-            label: content['recruiter'],
-            children: [
-                { key: '/job-postings', label: content['jobPostings'] },
-                { key: '/applicants', label: content['applicants'] },
-                { key: '/test-schedules', label: content['testSchedule'] },
-                { key: '/interview-schedules', label: content['interviewSchedule'] },
-                { key: '/test-types', label: content['testType'] },
+    if (identity?.role?.name == ADMIN) {
+        employeeItems = [
 
-            ],
-        },
-        {
-            key: '/employees',
-            icon: <LuUsers />,
-            label: content['employees'],
-            children: [
-                { key: '/employee', label: content['employee'] },
-                { key: '/payroll', label: content['payroll'] },
-            ]
-        },
-        {
-            key: '/appraisals',
-            icon: <LuClipboardPen />,
-            label: content['appraisal'],
-            children: [
-                { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
-                { key: '/payroll', label: "វាយតម្លៃការងារប្រចាំថ្ងៃ" },
-                { key: '/payroll', label: "វាយតម្លៃការងារប្រចាំខែ" },
-                { key: '/payroll', label: "វាយតម្លៃការងារប្រចាំឆ្នាំ" },
-            ]
-        },
-        {
-            key: '/awarding',
-            icon: <LuGift />,
-            label: content['awarding'],
-            children: [
-                { key: '/employee', label: "ការលើកទឹកចិត្ដ" },
-                { key: '/payroll', label: "ប្រភេទលើកទឹកចិត្ដ" },
-            ]
-        },
-        {
-            key: '/reports',
-            icon: <LuChartNoAxesCombined />,
-            label: content['report'],
-            children: [
-                { key: '/employee', label: "របាយការណ៍ជ្រើសរើសបុគ្គលិក" },
-                { key: '/payroll', label: "របាយការណ៍បុគ្គលិក" },
-                { key: '/payroll', label: "របាយការណ៍វាយតម្លៃការងារ" },
+            {
+                key: '/',
+                icon: <AppstoreOutlined />,
+                label: content['dashboard'],
+            },
+            {
+                type: 'group',
+                label: <span className='!mt-4' style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10, }}>{content['recruiter']}</span>,
+            },
+            {
+                key: 'recruiter',
+                icon: <VideoCameraOutlined />,
+                label: content['recruiter'],
+                children: [
+                    { key: '/job-postings', label: content['jobPostings'] },
+                    { key: '/applicants', label: content['applicants'] },
+                    { key: '/test-schedules', label: content['testSchedule'] },
+                    { key: '/interview-schedules', label: content['interviewSchedule'] },
+                    { key: '/test-types', label: content['testType'] },
 
-            ]
-        },
-    ]
+                ],
+            },
+            {
+                type: 'group',
+                label: <span style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10 }}>{content['employee']}</span>,
+            },
+            {
+                key: '/employees',
+                icon: <LuUsers />,
+                label: content['employees'],
+                children: [
+                    { key: '/employee', label: content['employee'] },
+                    { key: '/payroll', label: content['payroll'] },
+                ]
+            },
+            {
+                type: 'group',
+                label: <span style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10 }}>ការវាយតម្លែ & លើកទឹកចិត្ត</span>,
+            },
+            {
+                key: '/appraisals',
+                icon: <LuClipboardPen />,
+                label: content['appraisal'],
+                children: [
+                    {
+                        key: '/appraisal/kpi', label: content['kpi']
+                    },
+                    { key: '/appraisal/employee', label: "វាយតម្លៃបុគ្គលិក" },
+                    { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
+                    { key: '/appraisal/day', label: content['appraisalDay'] },
+                    { key: '/appraisal/month', label: content['appraisalMonth'] },
+                    { key: '/appraisal/year', label: content['appraisalYear'] },
+                ]
+            },
+            {
+                key: '/awarding',
+                icon: <LuGift />,
+                label: content['awarding'],
+                children: [
+                    { key: '/employee/bonus', label: "ការលើកទឹកចិត្ដ" },
+                    { key: '/payroll/bonus', label: "ប្រភេទលើកទឹកចិត្ដ" },
+                ]
+            },
 
-    const settingsMenuItem = [
-        {
-            type: 'group',
-            label: <span style={{ fontWeight: 'bold', color: '#fff', fontSize: 12, paddingLeft: 10 }}>Settings</span>,
-        },
-        {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: content['settings'], children: [
-                {
-                    key: '/setting/user', label: `${content['user']} & ${content['role']}`, children: [
-                        { key: '/setting/user/index', label: content['users'] },
-                        { key: '/setting/user/role', label: content['roles'] },
-                    ]
-                },
-                {
-                    key: '/setting/employees', label: content['employees'], children: [
-                        { key: '/setting/employee/level', label: content['level'] },
-                        { key: '/setting/employee/city', label: content['city'] },
-                        { key: '/setting/employee/district', label: content['district'] },
-                        { key: '/setting/employee/commune', label: content['commune'] },
-                        { key: '/setting/employee/village', label: content['village'] },
-                    ]
-                },
-                { key: '/setting/positions', label: content['positions'] },
-                { key: '/setting/categories', label: content['categories'] },
-                { key: '/setting/job-types', label: content['jobType'] },
-                { key: '/setting/departments', label: content['departments'] },
-                { key: '/setting/organization', label: content['organizations'] },
+            {
+                type: 'group',
+                label: <span style={{ fontWeight: 'bold', fontSize: 12, paddingLeft: 10 }}>{content['settings']}</span>,
+            },
+            {
+                key: '/reports',
+                icon: <LuChartNoAxesCombined />,
+                label: content['report'],
+                children: [
+                    { key: '/recruitment/report', label: "របាយការណ៍ជ្រើសរើសបុគ្គលិក" },
+                    { key: '/employee/report', label: "របាយការណ៍បុគ្គលិក" },
+                    { key: '/performance/report', label: "របាយការណ៍វាយតម្លៃការងារ" },
 
+                ]
+            },
+            {
+                key: 'settings',
+                icon: <SettingOutlined />,
+                label: content['settings'], children: [
+                    {
+                        key: '/setting/user', label: `${content['user']} & ${content['role']}`, children: [
+                            { key: '/setting/user/index', label: content['users'] },
+                            { key: '/setting/user/role', label: content['roles'] },
+                        ]
+                    },
+                    {
+                        key: '/setting/employees', label: content['employees'], children: [
+                            { key: '/setting/employee/level', label: content['level'] },
+                            { key: '/setting/employee/city', label: content['city'] },
+                            { key: '/setting/employee/district', label: content['district'] },
+                            { key: '/setting/employee/commune', label: content['commune'] },
+                            { key: '/setting/employee/village', label: content['village'] },
+                        ]
+                    },
+                    { key: '/setting/positions', label: content['positions'] },
+                    { key: '/setting/categories', label: content['categories'] },
+                    { key: '/setting/job-types', label: content['jobType'] },
+                    { key: '/setting/departments', label: content['departments'] },
+                    { key: '/setting/organization', label: content['organizations'] },
+                ],
+            },
+        ]
+    }
 
-            ],
-        },
-    ]
+    if (identity?.role?.name == MANAGER) {
+        employeeItems = [
+            {
+                key: '/',
+                icon: <AppstoreOutlined />,
+                label: content['dashboard'],
+            },
+            {
+                key: `/employee`,
+                icon: <LuUsers />,
+                label: content['employees'],
+                // children: [
+                //     { key: `/employee/update/${identity?.employeeId?._id || 'me'}`, label: content['employee'] },
+                // ]
+            },
+        ];
+    }
 
-    // 🔍 Flatten all route items to search through
-    const allRoutes = [
-        ...employeeItems.flatMap(item => item.children || [item]),
-        // ...recruitmentItems,
-        ...settingsMenuItem.flatMap(item => item.children || [item])
-    ];
+    if (identity?.role?.name == EMPLOYEE) {
+        employeeItems = [
+            {
+                key: '/',
+                icon: <AppstoreOutlined />,
+                label: content['dashboard'],
+            },
+            {
+                key: `/employee/update/${identity?.employeeId?._id || 'me'}`,
+                icon: <LuUsers />,
+                label: content['employees'],
+                // children: [
+                //     { key: `/employee/update/${identity?.employeeId?._id || 'me'}`, label: content['employee'] },
+                // ]
+            },
+            {
+                key: '/appraisals',
+                icon: <LuClipboardPen />,
+                label: content['appraisal'],
+                children: [
+                    { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
+                    { key: `/appraisal/day/${identity?.employeeId?._id}`, label: content['appraisalDay'] },
+                    { key: '/appraisal/month', label: content['appraisalMonth'] },
+                    { key: `/appraisal/year/${identity?.employeeId?._id}`, label: content['appraisalYear'] },
+                ]
+            },
+        ];
+    }
+    // const settingsMenuItem = [
+
+    // ]
+
+    // // 🔍 Flatten all route items to search through
+    // const allRoutes = [
+    //     ...employeeItems.flatMap(item => item.children || [item]),
+    //     // ...recruitmentItems,
+    //     ...settingsMenuItem.flatMap(item => item.children || [item])
+    // ];
 
     const handleSearch = (value) => {
         const searchValue = value.toLowerCase().trim();
@@ -137,14 +203,14 @@ const AppSider = ({ collapsed }) => {
             return;
         }
 
-        const matched = allRoutes
-            .filter(route => route.label.toLowerCase().includes(searchValue))
-            .map(route => ({
-                value: route.key,
-                label: route.label,
-            }));
+        // const matched = allRoutes
+        //     .filter(route => route.label.toLowerCase().includes(searchValue))
+        //     .map(route => ({
+        //         value: route.key,
+        //         label: route.label,
+        //     }));
 
-        setOptions(matched);
+        // setOptions(matched);
     };
 
     const handleSelect = (key) => {
@@ -161,6 +227,11 @@ const AppSider = ({ collapsed }) => {
             }}
         />
     );
+
+    const filterGroupItems = (items) => {
+        if (!collapsed) return items;
+        return items.filter(item => item.type !== 'group');
+    };
 
     return (
         <>
@@ -225,25 +296,26 @@ const AppSider = ({ collapsed }) => {
             </div>
 
             {/* Main menu */}
+
             <Menu
                 theme='dark'
                 className='!border-r !border-gray-200'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}
-                items={employeeItems}
+                items={filterGroupItems(employeeItems)}
             />
 
 
             {/* Settings menu with top border */}
-            <Menu
+            {/* <Menu
                 theme='dark'
                 className=' !border-gray-200 !border-r !border-l-0 !border-b-0'
                 mode="inline"
                 selectedKeys={[location.pathname]}
                 onClick={(e) => navigate(e.key)}
                 items={settingsMenuItem}
-            />
+            /> */}
         </>
     )
 }

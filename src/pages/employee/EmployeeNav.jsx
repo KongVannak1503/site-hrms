@@ -20,6 +20,7 @@ const EmployeeNav = () => {
         { key: 'law', label: content['contract'], path: `/employee/law/${id}` },
         { key: 'nssf', label: content['nssf'], path: `/employee/nssf/${id}` },
         { key: 'time-line', label: content['timeLine'], path: `/employee/time-line/${id}` },
+        { key: 'appraisal', label: content['kpi'], path: `/employee/kpi/appraisal/${id}` },
     ];
 
     // Determine current tab based on location.pathname

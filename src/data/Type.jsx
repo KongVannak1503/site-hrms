@@ -45,3 +45,9 @@ export const typeEmployeePositionOptions = [
     { id: "2", name_en: 'President', name_kh: 'សាកលវិទ្យាធិការ' },
     { id: "3", name_en: 'Vice President', name_kh: 'សាកលវិទ្យាធិការរង' },
 ];
+
+
+export const ADMIN = "admin";
+export const UPPER_MANAGER = "upper manager";
+export const MANAGER = "manager";
+export const EMPLOYEE = "employee";

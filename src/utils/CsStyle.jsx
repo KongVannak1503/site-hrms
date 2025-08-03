@@ -13,9 +13,12 @@ export const Styles = {
     btnCancel: "mr-2 px-4 py-2 cursor-pointer rounded text-white bg-gray-500 hover:bg-gray-600 transition duration-200",
     headTitle: "text-xl font-semibold",
     btnEdit: "flex items-center justify-center shadow hover:bg-yellow-400 hover:text-white cursor-pointer rounded-full hover:bg-red-700 transition duration-200 w-[30px] h-[30px]",
+    btnIconSave: "flex items-center justify-center shadow hover:bg-red-400 hover:text-white cursor-pointer rounded-full hover:bg-red-700 transition duration-200 w-[30px] h-[30px]",
 
     btnView: "flex items-center justify-center shadow hover:bg-blue-500 hover:text-white cursor-pointer rounded-full transition duration-200 w-[30px] h-[30px]",
+    btnLgView: "px-4 py-2 cursor-pointer rounded text-white bg-blue-500 hover:bg-blue-400 transition duration-200",
     btnDownload: "btnDownload flex items-center justify-center shadow hover:bg-[#1fc8e3] hover:text-white cursor-pointer rounded-full transition duration-200 w-[30px] h-[30px]",
+    btnHeaderIcon: "flex items-center justify-center shadow hover:bg-[#1fc8e3] bg-[#17a2b8] text-white cursor-pointer rounded-full transition duration-200",
 
     btnDelete: "flex items-center justify-center shadow hover:bg-red-600 hover:text-white rounded-full hover:bg-red-700 transition duration-200 w-[30px] h-[30px]",
     btnSecondary: "border border-[#d9d9d9] text-[#595959] bg-white px-4 py-1.5 rounded hover:border-[#17a2b8] hover:text-[#17a2b8] transition-all duration-200 cursor-pointer",

@@ -24,6 +24,7 @@ const LoginPage = () => {
         try {
             const res = await LoginUser(username, password);
             const accessToken = res.data.accessToken;
+            localStorage.setItem('token', accessToken);
             setToken(accessToken);
             attachTokenToApi(accessToken);
             navigate('/');

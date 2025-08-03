@@ -19,10 +19,12 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import RoleUpdatePage from './RoleUpdatePage';
 import { useAuth } from '../../../contexts/AuthContext';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import { deleteRoleApi, getRolesApi } from '../../../services/roleApi';
+import { deleteRoleApi, getRolesByNameApi } from '../../../services/roleApi';
+import { useParams } from 'react-router-dom';
 
 function RolesPage() {
     const { isLoading, content } = useAuth();
+    const { action } = useParams();
     const [roles, setRoles] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredRoles, setFilteredRoles] = useState([]);
@@ -60,14 +62,15 @@ function RolesPage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['roles'] }
+        { breadcrumbName: content['roles'], path: '/setting/user/role' },
+        { breadcrumbName: action, }
     ];
 
     useEffect(() => {
         document.title = content['roles'];
         const fetchData = async () => {
             try {
-                const response = await getRolesApi();
+                const response = await getRolesByNameApi(action);
                 if (Array.isArray(response)) {
                     setRoles(response);
                     setFilteredRoles(response);
@@ -117,8 +120,8 @@ function RolesPage() {
     const columns = [
         {
             title: content['role'],
-            dataIndex: "name",
-            key: "name",
+            dataIndex: "role",
+            key: "role",
             render: (text) => <span>{text}</span>,
         },
 
@@ -238,10 +241,10 @@ function RolesPage() {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <p className='text-default text-sm font-bold'>{content['roles']}</p>
+                        <p className='text-default text-sm font-bold'>{action}</p>
                         <h5 className='text-lg font-semibold'></h5>
                     </div>
-
+                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
                 </div>
                 <Table
                     scroll={{ x: 'max-content' }}
@@ -275,9 +278,9 @@ function RolesPage() {
                     }
                 >
                     {actionForm === 'create' ? (
-                        <RoleCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <RoleCreatePage form={form} roleName={action} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <RoleUpdatePage onUserUpdated={handleUpdate} roleId={selectedRoleId} onCancel={closeDrawer} />
+                        <RoleUpdatePage onUserUpdated={handleUpdate} roleName={action} roleId={selectedRoleId} onCancel={closeDrawer} />
                     )}
                 </ModalLgCenter>
 
