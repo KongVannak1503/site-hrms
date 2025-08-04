@@ -54,7 +54,7 @@ export default function AppraisalEmployeeFormPage() {
             const resEmp = await getEmployeeApi(mainId);
             setEmployee(resEmp);
             // 2. Get individual scores
-            const resInd = await getKpiIndividualDayApi(mainId, resAppraisal.kpiTemplate);
+            const resInd = await getKpiIndividualDayApi(mainId, id, resAppraisal.kpiTemplate);
             if (resInd) {
                 setIndividual(resInd);
 

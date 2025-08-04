@@ -65,8 +65,8 @@ import AppraisalYearFormPage from './pages/appraisals/appraisal_year/AppraisalYe
 import KpiMonthPage from './pages/appraisals/kpi-month/KpiMonthPage'
 import KpiTemplateMonthBuilder from './pages/appraisals/kpi-month/KpiTemplateMonthBuilder'
 import KpiTemplateBuilderMonthEditPage from './pages/appraisals/kpi-month/KpiTemplateBuilderMonthEditPage'
-import AppraisalMonthListPage from './pages/appraisals/appraisal_month/AppraisalMonthListPage'
-import AppraisalMonthFormPage from './pages/appraisals/appraisal_month/AppraisalMonthFormPage'
+// import AppraisalMonthListPage from './pages/appraisals/appraisal_month/AppraisalMonthListPage'
+// import AppraisalMonthFormPage from './pages/appraisals/appraisal_month/AppraisalMonthFormPage'
 import KpiDayPage from './pages/appraisals/kpi-day/KpiDayPage'
 import KpiTemplateDayBuilder from './pages/appraisals/kpi-day/KpiTemplateDayBuilder'
 import KpiTemplateBuilderDayEditPage from './pages/appraisals/kpi-day/KpiTemplateBuilderDayEditPage'
@@ -186,7 +186,7 @@ function App() {
                   element={
                     <KpiTemplateBuilderMonthEditPage />
                   } />
-                <Route
+                {/* <Route
                   path="/appraisal/month/:id"
                   element={
                     <AppraisalMonthListPage />
@@ -195,7 +195,7 @@ function App() {
                   path="/appraisal/month/:mainId/form/:id"
                   element={
                     <AppraisalMonthFormPage />
-                  } />
+                  } /> */}
                 {/*End Month */}
 
                 {/* Day */}
