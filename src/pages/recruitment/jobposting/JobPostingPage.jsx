@@ -36,6 +36,7 @@ const JobPostingPage = () => {
     ];
 
     useEffect(() => {
+      document.title = `${content['jobPosting']} | USEA`
         const fetchJobs = async () => {
         try {
             const res = await getJobPostingsApi();
@@ -46,7 +47,7 @@ const JobPostingPage = () => {
         }
         };
         fetchJobs();
-    }, []);
+    }, [content]);
 
   const handleSearch = (value) => {
     setSearchTerm(value);
@@ -89,8 +90,9 @@ const JobPostingPage = () => {
   };
 
   const handleView = (job) => {
-    setSelectedJob(job);
-    setViewDrawerVisible(true);
+    // setSelectedJob(job);
+    // setViewDrawerVisible(true);
+    navigate(`/job-postings/view/${job._id}`);
   };
 
   const handleCloseDrawer = () => {
@@ -254,6 +256,7 @@ const JobPostingPage = () => {
                       setFilteredJobs(jobs);
                     }
                   }}
+                  placeholder={[content['startDate'], content['endDate']]}
                 />
               </div>
 

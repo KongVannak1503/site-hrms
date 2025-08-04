@@ -79,6 +79,8 @@ import FullScreenLoader from './components/loading/FullScreenLoader'
 import AppraisalEmployeePage from './pages/appraisals/employee/AppraisalEmployeePage'
 import AppraisalEmployeeListPage from './pages/appraisals/employee/AppraisalEmployeeListPage'
 import AppraisalEmployeeFormPage from './pages/appraisals/employee/AppraisalEmployeeFormPage'
+import JobPostingDetailPage from './pages/recruitment/jobposting/JobPostingDetailPage'
+import ApplicantDetailPage from './pages/recruitment/applicants/ApplicantDetailPage'
 
 function App() {
   const { identity, isLoading } = useAuth();
@@ -100,10 +102,12 @@ function App() {
             <Route path="/job-postings" element={<JobPostingPage />} />
             <Route path="/job-postings/create" element={<CreateJobPostingPage />} />
             <Route path="/job-postings/edit/:id" element={<UpdateJobPostingPage />} />
+            <Route path="/job-postings/view/:id" element={<JobPostingDetailPage />} />
 
             <Route path="/applicants" element={<ApplicantPage />} />
             <Route path="/applicants/create" element={<CreateApplicantPage />} />
             <Route path="/applicants/edit/:id" element={<EditApplicantPage />} />
+            <Route path="/applicants/view/:id" element={<ApplicantDetailPage />} />
 
             <Route path="/test-schedules" element={<TestSchedulePage />} />
             <Route path="/test-schedules/:id" element={<TestDetailPage />} />

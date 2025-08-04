@@ -25,6 +25,7 @@ import TestAssignmentModal from './TestAssignmentModal';
 import showCustomConfirm from '../../../utils/showCustomConfirm';
 import InterviewModal from '../interviews/InterviewModal';
 import { getAllInterviewsApi } from '../../../services/interviewApi';
+import DateDisplayBox from '../../../utils/DateDisplayBox';
 
 const TestSchedulePage = () => {
   const { isLoading, content } = useAuth();
@@ -69,8 +70,9 @@ const TestSchedulePage = () => {
   ];
 
   useEffect(() => {
+    document.title = `${content['testSchedule']} | USEA`
     fetchEvents();
-  }, []);
+  }, [content]);
 
   useEffect(() => {
     fetchTableData();
@@ -553,7 +555,7 @@ const TestSchedulePage = () => {
 
             <div className="w-full lg:w-1/4">
               {selectedEvent ? (
-                <Card className="shadow" title="Test Schedule">
+                <Card className="shadow" title={content['testSchedule']}>
                   {todayTests.length === 0 ? (
                     <p>No test scheduled today.</p>
                   ) : (
@@ -564,14 +566,15 @@ const TestSchedulePage = () => {
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex gap-3">
-                            <div className="border rounded text-center px-2 py-1 w-12">
-                              <div className="text-xs text-gray-700">
+                            {/* <div className="w-14 h-14 bg-[#f0f2f5] rounded-lg flex flex-col items-center justify-center shadow-sm">
+                              <div className="text-xs text-gray-600 uppercase">
                                 {dayjs(selectedEvent.start).format('MMM')}
                               </div>
-                              <div className="text-lg font-bold">
+                              <div className="text-xl font-bold text-[#333] leading-none">
                                 {dayjs(selectedEvent.start).format('DD')}
                               </div>
-                            </div>
+                            </div> */}
+                            <DateDisplayBox date={selectedEvent.start} />
 
                             <div>
                               <h3 className="text-base font-semibold">
@@ -617,7 +620,7 @@ const TestSchedulePage = () => {
                   )}
                 </Card>
               ) : (
-                <Card title="Test Schedule" className="shadow">
+                <Card title={content['testSchedule']} className="shadow">
                   <p>No test scheduled today.</p>
                 </Card>
               )}
@@ -635,7 +638,7 @@ const TestSchedulePage = () => {
                   <Row gutter={16}>
                     <Col span={4}>
                       <Form.Item name="status" >
-                        <Select allowClear placeholder="Select status">
+                        <Select allowClear placeholder={content['allStatus']}>
                           <Option value="scheduled">Scheduled</Option>
                           <Option value="completed">Completed</Option>
                           <Option value="rejected">Rejected</Option>
@@ -645,7 +648,7 @@ const TestSchedulePage = () => {
 
                     <Col span={8}>
                       <Form.Item name="dateRange">
-                        <RangePicker style={{ width: '100%' }} />
+                        <RangePicker style={{ width: '100%' }} placeholder={[content['startDate'], content['endDate']]}/>
                       </Form.Item>
                     </Col>
                   </Row>
@@ -653,7 +656,7 @@ const TestSchedulePage = () => {
 
                 <Col xs={24} sm={24} md={6} lg={6} xl={6}>
                   <Form.Item name="keyword">
-                    <Input.Search placeholder="Search by name or job title" allowClear />
+                    <Input placeholder={content['searchAction']} allowClear />
                   </Form.Item>
                 </Col>
               </Row>

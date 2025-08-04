@@ -10,6 +10,7 @@ import {
 import { Content } from 'antd/es/layout/layout';
 import { Styles } from '../../../utils/CsStyle';
 import {
+  CloudDownloadOutlined,
   EyeOutlined, FormOutlined, PlusOutlined
 } from '@ant-design/icons';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
@@ -17,11 +18,12 @@ import {
   deleteApplicantApi,
   getApplicantsApi
 } from '../../../services/applicantApi';
-import uploadUrl from '../../../services/uploadApi';
+import uploadUrl, { handleDownload } from '../../../services/uploadApi';
 import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
 import { updateJobApplicationStatus } from '../../../services/jobApplicationApi';
 import TestAssignmentModal from '../tests/testAssignmentModal';
 import InterviewModal from '../interviews/InterviewModal';
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 
@@ -46,8 +48,9 @@ const ApplicantPage = () => {
   });
 
   useEffect(() => {
+    document.title = `${content['applicants']} | USEA`
     fetchApplicants();
-  }, []);
+  }, [content]);
 
   const fetchApplicants = async () => {
     setLoading(true);
@@ -157,11 +160,11 @@ const ApplicantPage = () => {
         /> : '-'
     },
     {
-      title: 'Full Name (KH)',
+      title: `${content['fullName']} (KH)`,
       dataIndex: 'full_name_kh',
     },
     {
-      title: 'Full Name (EN)',
+      title: `${content['fullName']} (EN)`,
       dataIndex: 'full_name_en',
     },
     {
@@ -179,8 +182,8 @@ const ApplicantPage = () => {
     },
     {
       title: content['appliedDate'] || 'Applied Date',
-      dataIndex: ['job_application_id', 'applied_date'],
-      render: (date) => date ? dayjs(date).format('YYYY-MM-DD') : '-'
+      dataIndex: 'applied_date',
+      render: (date) => date ? dayjs(date).format('DD-MM-YYYY') : '-'
     },
     {
       title: content['status'],
@@ -210,14 +213,32 @@ const ApplicantPage = () => {
       title: content['action'],
       render: (_, record) => (
         <Space>
+          {record.cv && (
+            <Tooltip title={content['download']}>
+              <button
+                className={Styles.btnDownload}
+                onClick={() =>
+                  handleDownload(`uploads/applicants/${encodeURIComponent(record.cv)}`, record.cv)
+                }
+              >
+                <CloudDownloadOutlined />
+              </button>
+            </Tooltip>
+          )}
+
+          <Tooltip title={content['view']}>
+            <button
+              className={Styles.btnView}
+              onClick={() => navigate(`/applicants/view/${record._id}`)}
+            >
+              <EyeOutlined />
+            </button>
+          </Tooltip>
+
           <Tooltip title={content['edit']}>
             <button className={Styles.btnEdit} onClick={() => handleUpdate(record._id)}><FormOutlined /></button>
           </Tooltip>
-          {record.cv && (
-            <Tooltip title="View CV">
-              <a className={Styles.btnView} href={`${uploadUrl}/uploads/applicants/${record.cv}`} target="_blank"><EyeOutlined /></a>
-            </Tooltip>
-          )}
+
           {ConfirmDeleteButton({
             onConfirm: () => handleDelete(record._id),
             tooltip: content['delete'],

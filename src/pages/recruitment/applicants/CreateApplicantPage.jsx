@@ -181,7 +181,7 @@ const CreateApplicantPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="Upload CV"
+                    label={content['uploadCV']}
                     name="cv"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
@@ -200,7 +200,7 @@ const CreateApplicantPage = () => {
                     <Row gutter={16}>
                       <Col xs={24} md={12}>
                         <Form.Item
-                          label="Job Posting"
+                          label={content['job']}
                           name="job_posting_id"
                           rules={[{ required: true, message: 'Please select a job posting' }]}
                         >
@@ -227,7 +227,7 @@ const CreateApplicantPage = () => {
 
                       <Col xs={24} md={12}>
                         <Form.Item
-                          label="Applied Date"
+                          label={content['appliedDate']}
                           name="applied_date"
                           rules={[{ required: true, message: 'Please select applied date' }]}
                         >
@@ -237,19 +237,19 @@ const CreateApplicantPage = () => {
                     </Row>
                   </Col>
 
-                  <Col xs={24} md={12}><Form.Item label="Full Name (Khmer)" name="full_name_kh" rules={[{ required: true }]}><Input /></Form.Item></Col>
-                  <Col xs={24} md={12}><Form.Item label="Full Name (English)" name="full_name_en" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={`${content['fullName']} (KH)`} name="full_name_kh" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={`${content['fullName']} (EN)`} name="full_name_en" rules={[{ required: true }]}><Input /></Form.Item></Col>
 
-                  <Col xs={24} md={8}><Form.Item label="Gender" name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Date of Birth" name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Marital Status" name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['gender']} name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['dateOfBirth']} name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['maritalStatus']} name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
 
-                  <Col xs={24} md={12}><Form.Item label="Phone Number" name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
-                  <Col xs={24} md={12}><Form.Item label="Email" name="email" rules={[{ type: 'email' }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={content['phone']} name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={content['email']} name="email" rules={[{ type: 'email' }]}><Input /></Form.Item></Col>
 
                   <Col xs={24} md={8}>
                     <Form.Item
-                      label="Province"
+                      label={content['province']}
                       name="current_province"
                       rules={[{ required: true }]}
                     >
@@ -266,9 +266,9 @@ const CreateApplicantPage = () => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col xs={24} md={8}><Form.Item label="District" name="current_district"><Input /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Commune" name="current_commune"><Input /></Form.Item></Col>
-                  <Col xs={24}><Form.Item label="Village" name="current_village"><Input /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['district']} name="current_district"><Input /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['commune']} name="current_commune"><Input /></Form.Item></Col>
+                  <Col xs={24}><Form.Item label={content['village']} name="current_village"><Input /></Form.Item></Col>
                 </Row>
               </Col>
             </Row>
@@ -277,7 +277,7 @@ const CreateApplicantPage = () => {
             <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
               style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
               <button onClick={handleCancel} className={Styles.btnCancel}>{content['cancel']}</button>
-              <button type="submit" className={Styles.btnCreate}>Save</button>
+              <button type="submit" className={Styles.btnCreate}>{content['save']}</button>
             </div>
           </Form>
         </Card>

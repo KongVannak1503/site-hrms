@@ -136,14 +136,14 @@ const UpdateJobPostingPage = () => {
       </div>
 
       <div className="mt-4 mb-4">
-        <Card title="Edit Job Posting">
+        <Card title={content['editJobPosting']}>
           <Form layout="vertical" form={form} onFinish={onFinish}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Form.Item label="Job Title" name="job_title" className="md:col-span-2" rules={[{ required: true }]}>
+              <Form.Item label={content['jobTitle']} name="job_title" className="md:col-span-2" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
 
-              <Form.Item label="Department" name="department" rules={[{ required: true }]}>
+              <Form.Item label={content['department']} name="department" rules={[{ required: true }]}>
                 <Select
                   placeholder="Select Department"
                   onChange={value => setSelectedDepartment(value)}
@@ -157,7 +157,7 @@ const UpdateJobPostingPage = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item label="Position" name="position" rules={[{ required: true }]}>
+              <Form.Item label={content['position']} name="position" rules={[{ required: true }]}>
                 <Select placeholder="Select Position" allowClear>
                     {positions.map(pos => (
                         <Option key={pos._id} value={pos._id}>
@@ -167,11 +167,11 @@ const UpdateJobPostingPage = () => {
                 </Select>
               </Form.Item>
 
-                <Form.Item label="Quantity Available" name="quantity_available" rules={[{ required: true }]}>
+                <Form.Item label={content['pax']} name="quantity_available" rules={[{ required: true }]}>
                     <InputNumber min={1} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item label="Job Type" name="job_type" rules={[{ required: true }]}>
+                <Form.Item label={content['jobType']} name="job_type" rules={[{ required: true }]}>
                     <Select placeholder="Select Job Type" allowClear>
                         {jobTypes.map(type => (
                             <Option key={type._id} value={type._id}>
@@ -182,7 +182,7 @@ const UpdateJobPostingPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Responsibilities"
+                  label={content['responsibilities']}
                   name="responsibilities"
                   rules={[{ required: true, message: 'Please enter responsibilities' }]}
                 >
@@ -197,7 +197,7 @@ const UpdateJobPostingPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Requirements"
+                  label={content['requirements']}
                   name="requirements"
                   rules={[{ required: true, message: 'Please enter requirements' }]}
                 >
@@ -211,15 +211,15 @@ const UpdateJobPostingPage = () => {
                   />
                 </Form.Item>
 
-                <Form.Item label="Open Date" name="open_date" rules={[{ required: true }]}>
+                <Form.Item label={content['openDate']} name="open_date" rules={[{ required: true }]}>
                     <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item label="Close Date" name="close_date" rules={[{ required: true }]}>
+                <Form.Item label={content['closeDate']} name="close_date" rules={[{ required: true }]}>
                     <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item label="Status" name="status" rules={[{ required: true }]}>
+                <Form.Item label={content['status']} name="status" rules={[{ required: true }]}>
                   <Select placeholder="Select Status">
                     <Option value="Draft">
                       <span>
@@ -275,9 +275,9 @@ const UpdateJobPostingPage = () => {
                     className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                     style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
                 >
-                    <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>Cancel</button>
+                    <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>{content['cancel']}</button>
                     <button type="primary" htmlType="submit" className={`${Styles.btnUpdate}`}>
-                        Update
+                        {content['update']}
                     </button>
                 </div>
           </Form>

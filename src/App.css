@@ -15,6 +15,11 @@ label {
   font-family: 'Siemreap', sans-serif !important;
 }
 
+.kh-title {
+  font-family: 'Siemreap', sans-serif !important;
+}
+
+
 .customTableHeader .ant-table-thead>tr>th {
   background-color: var(--layout-sider-background);
   color: var(--layout-sider-color);

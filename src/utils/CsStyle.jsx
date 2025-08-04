@@ -15,7 +15,7 @@ export const Styles = {
     btnEdit: "flex items-center justify-center shadow hover:bg-yellow-400 hover:text-white cursor-pointer rounded-full hover:bg-red-700 transition duration-200 w-[30px] h-[30px]",
     btnIconSave: "flex items-center justify-center shadow hover:bg-red-400 hover:text-white cursor-pointer rounded-full hover:bg-red-700 transition duration-200 w-[30px] h-[30px]",
 
-    btnView: "flex items-center justify-center shadow hover:bg-blue-500 hover:text-white cursor-pointer rounded-full transition duration-200 w-[30px] h-[30px]",
+    btnView: "flex items-center justify-center shadow hover:bg-blue-400 hover:text-white cursor-pointer rounded-full transition duration-200 w-[30px] h-[30px]",
     btnLgView: "px-4 py-2 cursor-pointer rounded text-white bg-blue-500 hover:bg-blue-400 transition duration-200",
     btnDownload: "btnDownload flex items-center justify-center shadow hover:bg-[#1fc8e3] hover:text-white cursor-pointer rounded-full transition duration-200 w-[30px] h-[30px]",
     btnHeaderIcon: "flex items-center justify-center shadow hover:bg-[#1fc8e3] bg-[#17a2b8] text-white cursor-pointer rounded-full transition duration-200",
