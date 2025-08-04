@@ -1,25 +1,37 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
-import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { Avatar, Button, DatePicker, Form, Input, message, Select, Space, Table, Tag, Tooltip } from 'antd';
 import { EyeOutlined, FileTextOutlined, FormOutlined, PlusOutlined, RightCircleOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import { deleteEmployeeApi, getEmployeesApi } from '../../../services/employeeApi';
 import uploadUrl from '../../../services/uploadApi';
-import { formatDateTime } from '../../../utils/utils';
+import { formatDate, formatDateTime } from '../../../utils/utils';
 import StatusTag from '../../../components/style/StatusTag';
 import { Styles } from '../../../utils/CsStyle';
 import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import ModalMdCenter from '../../../components/modals/ModalMdCenter';
+import AppraisalDayCreatePage from './AppraisalDayCreatePage';
+import { deleteAppraisalApi, getAppraisalsApi } from '../../../services/AppraisalApi';
+import AppraisalDayUpdatePage from './AppraisalDayUpdatePage';
+import { getDepartmentsApi } from '../../../services/departmentApi';
 
 const AppraisalMonthPage = () => {
     const { isLoading, content, language } = useAuth();
     const [users, setUsers] = useState([]);
+    const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
+    const [actionForm, setActionForm] = useState('create');
     const [selectedUserId, setSelectedUserId] = useState(null);
+    const [departments, setDepartments] = useState([]);
+    const [searchFilters, setSearchFilters] = useState({
+        text: '',
+        date: '',
+        department: '',
+    });
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
@@ -33,16 +45,26 @@ const AppraisalMonthPage = () => {
         setSelectedRowKeys(newSelectedRowKeys);
     }
 
+    const [form] = Form.useForm();
+
+    const closeDrawer = () => {
+        form.resetFields();
+        setOpen(false);
+    };
+
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisalMonth'] }
+        { breadcrumbName: content['appraisalDay'] }
     ];
 
     useEffect(() => {
-        document.title = content['appraisalMonth'];
+        document.title = content['appraisalDay'];
         const fetchData = async () => {
             try {
-                const response = await getEmployeesApi();
+                const res = await getDepartmentsApi();
+                setDepartments(res)
+                const response = await getAppraisalsApi();
+                console.log(response)
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -62,51 +84,128 @@ const AppraisalMonthPage = () => {
         fetchData();
     }, [content]);
 
-    const handleSearch = (value) => {
-        const term = value.trim().toLowerCase();
-        if (!term) {
-            setFilteredData(users);
-        } else {
-            const filtered = users.filter((base) =>
-                (base.first_name_en || '').toLowerCase().includes(term) ||
-                (base.first_name_kh || '').toLowerCase().includes(term) ||
-                (base.last_name_en || '').toLowerCase().includes(term) ||
-                (base.last_name_kh || '').toLowerCase().includes(term)
-            );
-            setFilteredData(filtered);
+    const handleSearch = (type, value) => {
+        const updatedFilters = { ...searchFilters, [type]: value };
+        setSearchFilters(updatedFilters);
+
+        const term = updatedFilters.text.trim().toLowerCase();
+        const date = updatedFilters.date;
+        const department = updatedFilters.department;
+
+        const filtered = users.filter((base) => {
+            const matchText =
+                (base.department?.title_en || '').toLowerCase().includes(term) ||
+                (base.department?.title_kh || '').toLowerCase().includes(term) ||
+                (base.startDate || '').toLowerCase().includes(term) ||
+                (base.kpiTemplate?.name || '').toLowerCase().includes(term);
+
+            const matchDate = !date || (base.startDate || '').includes(date);
+            const matchDepartment =
+                !department ||
+                (department === 'all' && base.department === null) ||
+                base.department?._id === department;
+
+            return matchText && matchDate && matchDepartment;
+        });
+
+        setFilteredData(filtered);
+    };
+
+    const showCreateDrawer = () => {
+        setActionForm('create');
+        setSelectedUserId(null);
+        setOpen(true);
+    };
+
+    const showUpdateDrawer = (userId) => {
+        setActionForm('update');
+        setSelectedUserId(userId);
+        setOpen(true);
+    };
+    const handleDelete = async (id) => {
+        try {
+            await deleteAppraisalApi(id); // call the API
+            const updatedUsers = users.filter(role => role._id !== id);
+            setUsers(updatedUsers);
+            setFilteredData(updatedUsers);
+            message.success(content['deleteSuccessFully']);
+        } catch (error) {
+            console.error('Delete failed:', error);
+            message.error(content['failedToDelete']);
         }
     };
-    const handleEntrain = (id) => {
-        navigate(`/appraisal/month/${id}`);
+
+    const handleAddCreated = async (newUser) => {
+        try {
+            if (!newUser || !newUser._id) {
+                console.error("New object does not contain _id:", newUser);
+                return;
+            }
+            setFilteredData((prevData) => [newUser, ...prevData]);
+            setUsers((prevData) => [newUser, ...prevData]);
+
+            setOpen(false);
+
+        } catch (error) {
+            console.error("Error adding:", error);
+        }
+    };
+    const handleUpdate = (updatedRole) => {
+        if (!updatedRole || !updatedRole._id) {
+            console.error("Updated   object does not contain _id:", updatedRole);
+            return;
+        }
+        setUsers((prevRoles) =>
+            prevRoles.map(role => (role._id === updatedRole._id ? updatedRole : role))
+        );
+        setFilteredData((prevFiltered) =>
+            prevFiltered.map(role => (role._id === updatedRole._id ? updatedRole : role))
+        );
+
+        setOpen(false);
     };
 
     const columns = [
         {
-            title: content['image'],
-            dataIndex: "image_url",
-            key: "image_url",
-            render: (text, record) =>
-                <img
-                    src={`${uploadUrl}/${record.image_url?.path}`}
-                    alt="photo"
-                    className="w-[70px] h-[80px] rounded object-cover"
-                />
-        },
-        {
             title: content['name'],
             dataIndex: "name",
             key: "name",
-            render: (text, record) =>
-                <div>
-                    <p>{language == 'khmer' ? record.name_kh : record.name_en}</p>
-                </div>,
+            render: (_, text) => <p>{text.kpiTemplate?.name}</p>,
         },
-
         {
-            title: content['status'],
-            dataIndex: "isActive",
-            key: "isActive",
-            render: (value) => <StatusTag value={value} />,
+            title: content['department'],
+            dataIndex: "department",
+            key: "department",
+            render: (text, record) => {
+                const departmentName =
+                    language === 'khmer'
+                        ? record.department?.title_kh
+                        : record.department?.title_en;
+                const departmentAll = language === 'khmer' ? 'ទាំងអស់'
+                    : 'All';
+                return (
+                    <div>
+                        <p>{record.department ? departmentName : departmentAll}</p>
+                    </div>
+                );
+            },
+        },
+        {
+            title: content['date'],
+            dataIndex: "startDate",
+            key: "startDate",
+            render: (text) => <div>
+                <span>{formatDate(text)}</span>
+            </div>,
+        },
+        {
+            title: content['createdAt'],
+            dataIndex: "createdAt",
+            key: "createdAt",
+            render: (text, record) => <div>
+                <span>{formatDateTime(text)}</span>
+                <p>{record.createdBy ? `Created by: ${record.createdBy?.username}` : ''}</p>
+            </div>,
         },
         {
             title: (
@@ -117,15 +216,23 @@ const AppraisalMonthPage = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
-                    <Tooltip title={content['entrain']}>
+                    <Tooltip title={content['edit']}>
                         <button
-                            className={Styles.btnDownload}
+                            className={Styles.btnEdit}
                             shape="circle"
-                            onClick={() => handleEntrain(record._id)}
+                            onClick={() => showUpdateDrawer(record._id)}
                         >
-                            <RightCircleOutlined />
+                            <FormOutlined />
                         </button>
                     </Tooltip>
+                    {ConfirmDeleteButton({
+                        onConfirm: () => handleDelete(record._id),
+                        tooltip: content['delete'],
+                        title: content['confirmDelete'],
+                        okText: content['yes'],
+                        cancelText: content['no'],
+                        description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
+                    })}
                 </Space>
             ),
         },
@@ -175,7 +282,7 @@ const AppraisalMonthPage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisalMonth']}</h1>
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisalDay']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
@@ -188,21 +295,43 @@ const AppraisalMonthPage = () => {
                 }}
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
-                    <div className='mb-3 sm:mb-1'>
-                        <p className='text-default text-sm font-bold'>
-                            {content['employees']}
-                        </p>
-                        {/* <h5 className='text-lg font-semibold'>{content['employees']}</h5> */}
-                    </div>
                     <div className='flex items-center gap-3'>
-                        <div>
-                            <Input
-                                // size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
-                        </div>
+                        <Input
+                            style={{ width: '150px' }}
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch('text', e.target.value)}
+                        />
+
+                        <DatePicker
+                            style={{ width: '150px' }}
+                            placeholder={`${content['date']}`}
+                            onChange={(date, dateString) => handleSearch('date', dateString)}
+                        />
+
+                        <Select
+                            showSearch
+                            allowClear
+                            optionFilterProp="children"
+                            style={{ width: '150px' }}
+                            onChange={(value) => handleSearch('department', value)}
+                            placeholder={content['department']}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            <Select.Option value='all'>
+                                {language === 'khmer' ? 'ទាំងអស់' : 'All'}
+                            </Select.Option>
+                            {departments.map((department) => (
+                                <Select.Option key={department._id || department.id} value={department._id}>
+                                    {language === 'khmer' ? department.title_kh : department.title_en}
+                                </Select.Option>
+                            ))}
+                        </Select>
+
                     </div>
+
+                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisalDay']}`}</button>
                 </div>
                 <Table
                     className='custom-pagination custom-checkbox-table'
@@ -226,6 +355,22 @@ const AppraisalMonthPage = () => {
                     }}
                 />
 
+                <ModalMdCenter
+                    open={open}
+                    onOk={() => setOpen(false)}
+                    onCancel={closeDrawer}
+                    title={
+                        actionForm === 'create'
+                            ? `${content['create']} ${content['newStart']} ${content['appraisalDay']}${content['newEnd']}`
+                            : `${content['update']} ${content['appraisalDay']}`
+                    }
+                >
+                    {actionForm === 'create' ? (
+                        <AppraisalDayCreatePage onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                    ) : (
+                        < AppraisalDayUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                    )}
+                </ModalMdCenter>
 
 
             </Content >

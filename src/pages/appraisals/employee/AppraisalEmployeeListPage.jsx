@@ -16,6 +16,7 @@ import EmployeeNav from '../../employee/EmployeeNav';
 import AppraisalNav from './AppraisalNav';
 import { getAppraisalsApi, getAppraisalsByDepartmentApi } from '../../../services/AppraisalApi';
 import StatusTag from '../../../components/style/StatusTag';
+import TypeTag from '../../../components/style/TypeTag';
 
 const AppraisalEmployeeListPage = () => {
     const { mainId } = useParams();
@@ -41,6 +42,8 @@ const AppraisalEmployeeListPage = () => {
                 const resEmp = await getEmployeeApi(mainId);
                 setEmployee(resEmp);
                 const response = await getAppraisalsByDepartmentApi(resEmp?.positionId?.department?._id);
+                console.log(response);
+
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -111,6 +114,12 @@ const AppraisalEmployeeListPage = () => {
             dataIndex: "isActive",
             key: "isActive",
             render: (text) => <StatusTag value={text} />
+        },
+        {
+            title: content['type'],
+            dataIndex: "type",
+            key: "type",
+            render: (text) => <TypeTag value={text} />
         },
 
         {

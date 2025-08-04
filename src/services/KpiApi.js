@@ -163,8 +163,8 @@ export const updateKpiIndividualDayApi = async (id, userData) => {
     return res.data;
 };
 
-export const getKpiIndividualDayApi = async (employee, templateId) => {
-    const res = await api.get(`/kpi/individual/day/${employee}/form/${templateId}`);
+export const getKpiIndividualDayApi = async (employee, dayId, templateId) => {
+    const res = await api.get(`/kpi/individual/${employee}/day/${dayId}/form/${templateId}`);
     return res.data;
 };
 // end day
