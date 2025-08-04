@@ -29,8 +29,9 @@ const TestTypePage = () => {
     ];
 
     useEffect(() => {
+        document.title = `${content['testType']} | USEA`
         fetchTestTypes();
-    }, []);
+    }, [content]);
 
     const fetchTestTypes = async () => {
         setLoading(true);

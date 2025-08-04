@@ -16,6 +16,7 @@ import uploadUrl from '../../../services/uploadApi';
 import EditInterviewModal from './EditInterviewModal';
 import RescheduleModal from './InterviewRescheduleModal';
 import InterviewResultModal from './InterviewResultModal';
+import DateDisplayBox from '../../../utils/DateDisplayBox';
 
 const InterviewPage = () => {
   const { isLoading, content } = useAuth();
@@ -52,8 +53,9 @@ const InterviewPage = () => {
   );
 
   useEffect(() => {
+    document.title = `${content['interviewSchedule']} | USEA`
     fetchInterviews();
-  }, []);
+  }, [content]);
 
   const fetchInterviews = async () => {
     try {
@@ -85,7 +87,7 @@ const InterviewPage = () => {
       const todayEvent = formattedEvents.find(ev => dayjs(ev.start).isSame(today, 'day'));
       setSelectedEvent(todayEvent || null);
     } catch (err) {
-      console.error('❌ Failed to fetch interviews:', err);
+      console.error('Failed to fetch interviews:', err);
     }
   };
 
@@ -310,14 +312,15 @@ const InterviewPage = () => {
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex gap-3">
-                            <div className="border rounded text-center px-2 py-1 w-12">
+                            {/* <div className="border rounded text-center px-2 py-1 w-12">
                               <div className="text-xs text-gray-700">
                                 {dayjs(selectedEvent.start).format('MMM')}
                               </div>
                               <div className="text-lg font-bold">
                                 {dayjs(selectedEvent.start).format('DD')}
                               </div>
-                            </div>
+                            </div>  */}
+                            <DateDisplayBox date={selectedEvent.start} />
 
                             <div>
                               <h3 className="text-base font-semibold">
@@ -398,7 +401,7 @@ const InterviewPage = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item name="status">
-                        <Select allowClear placeholder="Select Status">
+                        <Select allowClear placeholder={content['allStatus']}>
                           <Select.Option value="scheduled">Scheduled</Select.Option>
                           <Select.Option value="completed">Completed</Select.Option>
                           <Select.Option value="cancelled">Cancelled</Select.Option>
@@ -408,7 +411,7 @@ const InterviewPage = () => {
 
                     <Col span={10}>
                       <Form.Item name="dateRange">
-                        <DatePicker.RangePicker style={{ width: '100%' }} />
+                        <DatePicker.RangePicker style={{ width: '100%' }} placeholder={[content['startDate'], content['endDate']]}/>
                       </Form.Item>
                     </Col>
                   </Row>
@@ -416,7 +419,7 @@ const InterviewPage = () => {
 
                 <Col xs={24} sm={24} md={6} lg={6} xl={6}>
                   <Form.Item name="keyword">
-                    <Input.Search placeholder="Search by applicant or job" allowClear />
+                    <Input placeholder={content['searchAction']} allowClear />
                   </Form.Item>
                 </Col>
               </Row>

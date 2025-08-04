@@ -4,6 +4,7 @@ export const getJobPostingsApi = async () => {
     const res = await api.get('/job-postings');
     return res.data;
 };
+
 export const getJobPostingApi = async (id) => {
     const res = await api.get(`/job-postings/${id}`);
     return res.data;

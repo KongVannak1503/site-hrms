@@ -37,7 +37,7 @@ const AppSider = ({ collapsed }) => {
             },
             {
                 type: 'group',
-                label: <span className='!mt-4' style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10, }}>{content['recruiter']}</span>,
+                label: <span className='!mt-4 font-medium tracking-wide' style={{ color: 'whitesmoke', fontSize: 13, paddingLeft: 10, }}>{content['recruiter']}</span>,
             },
             {
                 key: 'recruiter',

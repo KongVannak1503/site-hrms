@@ -229,7 +229,7 @@ const EditApplicantPage = () => {
                   </Form.Item>
                 </div>
 
-                <Form.Item label="Upload CV">
+                <Form.Item label={content['uploadCV']}>
                   <Upload
                     name="cv"
                     beforeUpload={() => false}
@@ -245,7 +245,7 @@ const EditApplicantPage = () => {
                 <Row gutter={16}>
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="Job Posting"
+                      label={content['job']}
                       name="job_posting_id"
                       rules={[{ required: true }]}
                     >
@@ -264,7 +264,7 @@ const EditApplicantPage = () => {
 
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="Applied Date"
+                      label={content['appliedDate']}
                       name="applied_date"
                       rules={[{ required: true }]}
                     >
@@ -275,17 +275,17 @@ const EditApplicantPage = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col xs={24} md={12}><Form.Item label="Full Name (Khmer)" name="full_name_kh" rules={[{ required: true }]}><Input /></Form.Item></Col>
-                  <Col xs={24} md={12}><Form.Item label="Full Name (English)" name="full_name_en" rules={[{ required: true }]}><Input /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Gender" name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Date of Birth" name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Marital Status" name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
-                  <Col xs={24} md={12}><Form.Item label="Phone Number" name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
-                  <Col xs={24} md={12}><Form.Item label="Email" name="email"><Input type="email" /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Province" name="current_province" rules={[{ required: true }]}>{loadingProvinces ? <Spin size="small" /> : <Select showSearch placeholder="Select province">{provinces.map((prov) => (<Option key={prov._id || prov.id} value={prov.name || prov.province_name}>{prov.name || prov.province_name}</Option>))}</Select>}</Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="District" name="current_district"><Input /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label="Commune" name="current_commune"><Input /></Form.Item></Col>
-                  <Col xs={24}><Form.Item label="Village" name="current_village"><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={`${content['fullName']} (KH)`} name="full_name_kh" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={`${content['fullName']} (EN)`} name="full_name_en" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['gender']} name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['dateOfBirth']} name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['maritalStatus']} name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={content['phone']} name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                  <Col xs={24} md={12}><Form.Item label={content['email']} name="email"><Input type="email" /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['province']} name="current_province" rules={[{ required: true }]}>{loadingProvinces ? <Spin size="small" /> : <Select showSearch placeholder="Select province">{provinces.map((prov) => (<Option key={prov._id || prov.id} value={prov.name || prov.province_name}>{prov.name || prov.province_name}</Option>))}</Select>}</Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['district']} name="current_district"><Input /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['commune']} name="current_commune"><Input /></Form.Item></Col>
+                  <Col xs={24}><Form.Item label={content['village']} name="current_village"><Input /></Form.Item></Col>
                 </Row>
               </Col>
             </Row>
