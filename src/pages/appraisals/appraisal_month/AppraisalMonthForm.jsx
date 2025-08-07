@@ -1,10 +1,10 @@
-// components/forms/AppraisalDayForm.js
+// components/forms/AppraisalMonthForm.js
 import React from 'react';
 import { Form, Input, Select, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { Styles } from '../../../utils/CsStyle';
 
-const AppraisalDayForm = ({
+const AppraisalMonthForm = ({
     content,
     language,
     departments = [],
@@ -31,7 +31,7 @@ const AppraisalDayForm = ({
             </div>
             <Form.Item
                 name="announcementDay"
-                label={content['toDate'] || 'ថ្ងៃជួនដំណឹង'}
+                label={content['announcementDay'] || 'ថ្ងៃជួនដំណឹង'}
                 rules={[{ required: true, message: 'Please select a start date' }]}
             >
                 <Input type='number' />
@@ -103,4 +103,4 @@ const AppraisalDayForm = ({
     );
 };
 
-export default AppraisalDayForm;
+export default AppraisalMonthForm;

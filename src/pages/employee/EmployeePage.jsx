@@ -19,6 +19,9 @@ import { useNavigate } from 'react-router-dom';
 import StatusTag from '../../components/style/StatusTag';
 import ModalMdCenter from '../../components/modals/ModalMdCenter';
 import EmployeeAssigneePage from './EmployeeAssigneePage';
+import EmployeeViewPage from './EmployeeViewPage';
+import ModalLgRight from '../../components/modals/ModalLgRight';
+import ModalXlRight from '../../components/modals/ModalXlRight';
 
 const EmployeePage = () => {
     const { isLoading, content, language } = useAuth();
@@ -32,6 +35,15 @@ const EmployeePage = () => {
         pageSize: 10,
         total: 0,
     });
+    const [visible, setVisible] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+
+    const handleOpen = (id) => {
+        setSelectedId(id);
+        setVisible(true);
+    };
+    const handleClose = () => setVisible(false);
+
     const navigate = useNavigate();
 
     const [form] = Form.useForm();
@@ -200,7 +212,7 @@ const EmployeePage = () => {
                             type="primary"
                             shape="circle"
                             className={Styles.btnDownload}
-                            onClick={() => showAssignDrawer(record._id)}
+                            onClick={() => handleOpen(record._id)}
                         >
                             <UserSwitchOutlined />
                         </button>
@@ -366,7 +378,13 @@ const EmployeePage = () => {
                         <EmployeeAssigneePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
-
+                <ModalXlRight
+                    title="Employee Form"
+                    visible={visible}
+                    onClose={handleClose}
+                >
+                    <EmployeeViewPage id={selectedId} />
+                </ModalXlRight>
                 {/* <ModalLgCenter
                     open={open}
                     onOk={() => setOpen(false)}

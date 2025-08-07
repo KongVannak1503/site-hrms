@@ -15,6 +15,10 @@ label {
   font-family: 'Siemreap', sans-serif !important;
 }
 
+.bg-default-light {
+  background-color: var(--table-check-color) !important;
+}
+
 .kh-title {
   font-family: 'Siemreap', sans-serif !important;
 }
@@ -162,7 +166,8 @@ a.btnDownload:hover {
 
 /* Change border and hover of pagination items */
 .custom-pagination .ant-pagination-item {
-  border: 1px solid var(--layout-sider-background) !important;
+  border: 1px solid gray !important;
+  color: gray !important;
 }
 
 .custom-pagination .ant-pagination-item:hover,
@@ -173,7 +178,8 @@ a.btnDownload:hover {
 
 /* For normal (not active) page numbers */
 .custom-pagination .ant-pagination-item a {
-  color: var(--layout-sider-background) !important;
+  /* color: var(--layout-sider-background) !important; */
+  color: gray !important;
 }
 
 /* For hover */

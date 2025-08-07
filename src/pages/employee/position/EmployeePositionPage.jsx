@@ -22,6 +22,7 @@ const EmployeePositionPage = () => {
     const [form] = Form.useForm();
     const { id } = useParams();
     const [fileList, setFileList] = useState([]);
+    const [file, setFile] = useState(null);
     const [filteredData, setFilteredData] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingRecord, setEditingRecord] = useState(null);
@@ -50,15 +51,15 @@ const EmployeePositionPage = () => {
             appointedDate: record.joinDate ? moment(record.joinDate) : null,
         });
 
-        // Prepare fileList from existing documents (no originFileObj)
-        const preparedFiles = (record.documents || []).map((doc, index) => ({
+        const preparedFiles = (record.documents ? [record.documents] : []).map((doc, index) => ({
             uid: index.toString(),
             name: doc.name,
             status: 'done',
-            url: doc.path,  // for download link
-            originFileObj: null, // no new file uploaded yet
+            url: `/${doc.path}`,  // Ensure full path or absolute URL
+            originFileObj: null,
         }));
-        setFileList(preparedFiles);
+        setFileList(preparedFiles); // ✅ Fix here
+        setFile(null);
     };
 
     const handleCancel = () => {
@@ -66,6 +67,10 @@ const EmployeePositionPage = () => {
         setFileList([]);
         setIsEditing(false);
         setEditingRecord(null);
+    };
+
+    const handleFileChange = ({ file }) => {
+        setFile(file); // This captures the file object
     };
 
     const handleFinish = async (values) => {
@@ -76,24 +81,20 @@ const EmployeePositionPage = () => {
             formData.append('name', values.name);
             formData.append('joinDate', values.appointedDate ? values.appointedDate.format('YYYY-MM-DD') : '');
 
-            // Append new uploaded files only
-            fileList.forEach(file => {
-                if (file.originFileObj) {
-                    formData.append('documents', file.originFileObj);
-                }
-            });
+            formData.append('file', file);
+            if (fileList.length > 0 && fileList[0].originFileObj) {
+                formData.append('file', fileList[0].originFileObj);
+            }
 
-            // Prepare old documents JSON to keep if no new files uploaded
-            const existingDocuments = fileList
-                .filter(file => !file.originFileObj)
-                .map(file => ({
-                    name: file.name,
-                    path: file.url,
-                    extension: file.name.split('.').pop(),
-                    // add any other fields backend expects here
-                }));
-
-            formData.append('existingDocumentsJson', JSON.stringify(existingDocuments));
+            // Pass existing documents info if needed
+            if (!file && fileList.length > 0) {
+                const existingDoc = {
+                    name: fileList[0].name,
+                    path: fileList[0].url.replace(/^\//, ''),  // remove leading slash if needed
+                    extension: fileList[0].name.split('.').pop(),
+                };
+                formData.append('existingDocumentsJson', JSON.stringify(existingDoc));
+            }
 
             if (isEditing && editingRecord) {
                 // Update API call - pass editingRecord._id
@@ -135,11 +136,11 @@ const EmployeePositionPage = () => {
         },
         {
             title: content['document'],
-            render: (_, record) => <span>{record.documents?.[0]?.name || '-'}</span>,
+            render: (_, record) => <span>{record.documents?.name || '-'}</span>,
         },
         {
             title: content['size'],
-            render: (_, record) => <span>{record.documents?.[0]?.size || '-'}</span>,
+            render: (_, record) => <span>{record.documents?.size || '-'}</span>,
         },
         {
             title: content['createdAt'],
@@ -158,7 +159,7 @@ const EmployeePositionPage = () => {
                     <Tooltip title={content['download']}>
                         <a
                             className={Styles.btnDownload}
-                            onClick={() => handleDownload(record.documents?.[0]?.path, record.documents?.[0]?.name)}
+                            onClick={() => handleDownload(record.documents?.path, record.documents?.name)}
                         >
                             <CloudDownloadOutlined />
                         </a>
@@ -227,13 +228,22 @@ const EmployeePositionPage = () => {
                             <DatePicker className="w-full" />
                         </Form.Item>
                     </div>
-
-                    <Upload
+                    {/* <Upload
                         multiple={false}
                         beforeUpload={() => false}
                         fileList={fileList}
                         onChange={({ file }) => setFileList(file ? [file] : [])}
                         accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+                    >
+                        <button type="button" className={`${Styles.btnSecondary} mt-3`}>
+                            <PaperClipOutlined /> Select File
+                        </button>
+                    </Upload> */}
+
+                    <Upload
+                        beforeUpload={() => false}
+                        onChange={handleFileChange}
+                        maxCount={1}
                     >
                         <button type="button" className={`${Styles.btnSecondary} mt-3`}>
                             <PaperClipOutlined /> Select File

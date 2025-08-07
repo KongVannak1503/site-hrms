@@ -4,10 +4,20 @@ import { FaRegImages } from 'react-icons/fa';
 import { PlusOutlined, MinusCircleOutlined, FormOutlined } from '@ant-design/icons';
 import { nationalityOption } from '../../data/Nationality';
 import { bloodTypeOptions, typeEmpStatusOptions } from '../../data/Type';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 
-const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages, language }) => {
-    console.log(position);
+const EmployeePersonalTab = ({ position, positions, showCreateDrawer, content, fileList, handleChange, previewUrl, genderOptions, cities, districts, communes, villages, language }) => {
+    console.log(positions);
+    const [selectedDepartment, setSelectedDepartment] = useState([]);
+
+    useEffect(() => {
+        if (position?.positionId?.department) {
+            const dept = position.positionId.department;
+            setSelectedDepartment(language === 'khmer' ? dept.title_kh : dept.title_en);
+        }
+    }, [position, language]);
 
     return (
         <div>
@@ -125,16 +135,42 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Form.Item name="joinDate" label={content['joinDate']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['joinDate']}` }]}><DatePicker className="w-full" /></Form.Item>
-                    <Form.Item
-                        label={content['department']}
-                    >
-                        <Input className='text-default' disabled value={language == 'khmer' ? position?.positionId?.department?.title_kh : position?.positionId?.department?.title_en} />
+                    <Form.Item label={content['department']}>
+                        <Input className='text-default' disabled value={selectedDepartment} />
                     </Form.Item>
                     <Form.Item
+                        name="positionId"
                         label={content['role']}
+                        rules={[{
+                            required: true,
+                            message: `${content['selectA']}${content['role']}`
+                                .toLowerCase()
+                                .replace(/^./, str => str.toUpperCase())
+                        }]}
                     >
-                        <Input className='text-default' disabled value={language == 'khmer' ? position?.positionId?.title_kh : position?.positionId?.title_en} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            onChange={(value) => {
+                                const selectedPosition = positions.find(pos => pos._id === value);
+                                const dept = selectedPosition?.department;
+                                setSelectedDepartment(
+                                    language === 'khmer' ? dept?.title_kh : dept?.title_en
+                                );
+                            }}
+                        >
+                            {positions.map((position) => (
+                                <Select.Option key={position._id} value={position._id}>
+                                    {language === 'khmer' ? position.title_kh : position.title_en}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
+
                     <Form.Item name="status" label={content['status']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['status']}` }]}>
                         <Select>
                             {typeEmpStatusOptions.map(option => (
@@ -150,38 +186,20 @@ const EmployeePersonalTab = ({ position, showCreateDrawer, content, fileList, ha
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Form.Item name="city" label={content['province']}>
-                        <div className="flex items-center gap-2">
-                            <Select
-                                showSearch
-                                optionFilterProp="children"
-                                style={{ width: '100%' }}
-                                filterOption={(input, option) =>
-                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                            >
-                                {cities.map((city) => (
-                                    <Select.Option key={city._id || city.id} value={city._id}>
-                                        <div className="flex justify-between items-center">
-                                            <span>{city.name}</span>
-                                            <span
-                                                className=" hover:text-blue-600 ml-2"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    showCreateDrawer('update', city._id); // your update modal
-                                                }}
-                                            >
-                                                <FormOutlined />
-                                            </span>
-                                        </div>
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                            <PlusOutlined
-                                className="text-blue-500 cursor-pointer hover:text-blue-600"
-                                onClick={() => showCreateDrawer('create', '')}
-                            />
-                        </div>
-
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {cities.map((city) => (
+                                <Select.Option key={city._id || city.id} value={city._id}>
+                                    {city.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                     <Form.Item name="district" label={content['district']}>
                         <Input />

@@ -22,6 +22,7 @@ import EmployeeNav from './EmployeeNav';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 import CityCreatePage from '../settings/employee/city/CityCreatePage';
 import ModalMdCenter from '../../components/modals/ModalMdCenter';
+import { getPositionsApi } from '../../services/positionApi';
 
 const EmployeeUpdatePage = () => {
     const { id } = useParams();
@@ -39,6 +40,7 @@ const EmployeeUpdatePage = () => {
     const [villages, setVillages] = useState([]);
     const [levels, setLevels] = useState([]);
     const [position, setPosition] = useState([]);
+    const [positions, setPositions] = useState([]);
     const [activeTab, setActiveTab] = useState('personal');
     const [open, setOpen] = useState(false);
     const [actionForm, setActionForm] = useState('create');
@@ -76,7 +78,7 @@ const EmployeeUpdatePage = () => {
         const fetchInitialData = async () => {
             try {
                 const response = await getEmployeeApi(id);
-                setPosition(response)
+                setPosition(response);
                 if (response?.image_url?.path) {
                     setPreviewUrl(uploadUrl + "/" + response.image_url.path);
                 }
@@ -102,15 +104,16 @@ const EmployeeUpdatePage = () => {
                     emergency_contact: response.emergency_contact,
                     family_members: response.family_member,
                     city: response.city?._id || response.city,
-                    district: response.district?._id || response.district,
-                    commune: response.commune?._id || response.commune,
-                    village: response.village?._id || response.village,
+                    positionId: response.positionId?._id || response.positionId,
+                    district: response.district,
+                    commune: response.commune,
+                    village: response.village,
 
                     // present
                     present_city: response.present_city?._id || response.present_city,
-                    present_district: response.present_district?._id || response.present_district,
-                    present_commune: response.present_commune?._id || response.present_commune,
-                    present_village: response.present_village?._id || response.present_village,
+                    present_district: response.present_district,
+                    present_commune: response.present_commune,
+                    present_village: response.present_village,
 
                     staff_relationships: response.staff_relationships?.map(item => ({
                         ...item,
@@ -144,6 +147,8 @@ const EmployeeUpdatePage = () => {
             try {
                 const resDepartments = await getDepartmentsApi();
                 setDepartments(resDepartments);
+                const resPositions = await getPositionsApi();
+                setPositions(resPositions);
 
                 const resCities = await getCitiesViewApi();
                 setCities(resCities);
@@ -175,7 +180,6 @@ const EmployeeUpdatePage = () => {
 
     const handleFinish = async (values) => {
         try {
-            console.log(values);
 
             const formData = new FormData();
             const safeAppend = (key, value) => {
@@ -201,14 +205,15 @@ const EmployeeUpdatePage = () => {
             formData.append('nationality', values.nationality || '');
             formData.append('maritalStatus', values.maritalStatus || '');
             safeAppend('city', values.city);
-            safeAppend('district', values.district);
-            safeAppend('commune', values.commune);
-            safeAppend('village', values.village);
+            formData.append('district', values.district);
+            formData.append('commune', values.commune);
+            formData.append('village', values.village);
+            formData.append('positionId', values.positionId);
             // present
             safeAppend('present_city', values.present_city);
-            safeAppend('present_district', values.present_district);
-            safeAppend('present_commune', values.present_commune);
-            safeAppend('present_village', values.present_village);
+            formData.append('present_district', values.present_district);
+            formData.append('present_commune', values.present_commune);
+            formData.append('present_village', values.present_village);
             formData.append('isActive', values.isActive ?? true);
 
             // Nested objects (stringify before sending)
@@ -279,6 +284,7 @@ const EmployeeUpdatePage = () => {
                         villages={villages}
                         showCreateDrawer={showCreateDrawer}
                         position={position}
+                        positions={positions}
                         language={language}
                     />
                 </div>

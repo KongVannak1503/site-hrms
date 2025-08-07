@@ -27,6 +27,14 @@ const AppSider = ({ collapsed }) => {
     const location = useLocation()
     let employeeItems = [];
 
+    const getSelectedKey = (pathname) => {
+        if (pathname.startsWith('/employee')) return '/employee';
+        if (pathname.startsWith('/appraisal/day/')) return '/appraisal/day/employee';
+        if (pathname.startsWith('/appraisal/day/employee')) return '/appraisal/day';
+        return pathname; // fallback to exact match
+    };
+
+
     if (identity?.role?.name == ADMIN) {
         employeeItems = [
 
@@ -77,22 +85,34 @@ const AppSider = ({ collapsed }) => {
                     {
                         key: '/appraisal/kpi', label: content['kpi']
                     },
-                    { key: '/appraisal/employee', label: "វាយតម្លៃបុគ្គលិក" },
+                    // { key: '/appraisal/employee', label: "វាយតម្លៃបុគ្គលិក" },
                     { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
-                    { key: '/appraisal/day', label: content['appraisalDay'] },
-                    { key: '/appraisal/month', label: content['appraisalMonth'] },
+                    {
+                        key: '/appraisal/days', label: content['appraisalDay'],
+                        children: [
+                            { key: '/appraisal/day/employee', label: content['employees'] },
+                            { key: '/appraisal/day', label: `${content['create']} ${content['appraisal']}` },
+                        ]
+                    },
+                    {
+                        key: '/appraisal/months', label: content['appraisalMonth'],
+                        children: [
+                            { key: '/appraisal/month/employee', label: content['employees'] },
+                            { key: '/appraisal/month', label: `${content['create']} ${content['appraisal']}` },
+                        ]
+                    },
                     { key: '/appraisal/year', label: content['appraisalYear'] },
                 ]
             },
-            {
-                key: '/awarding',
-                icon: <LuGift />,
-                label: content['awarding'],
-                children: [
-                    { key: '/employee/bonus', label: "ការលើកទឹកចិត្ដ" },
-                    { key: '/payroll/bonus', label: "ប្រភេទលើកទឹកចិត្ដ" },
-                ]
-            },
+            // {
+            //     key: '/awarding',
+            //     icon: <LuGift />,
+            //     label: content['awarding'],
+            //     children: [
+            //         { key: '/employee/bonus', label: "ការលើកទឹកចិត្ដ" },
+            //         { key: '/payroll/bonus', label: "ប្រភេទលើកទឹកចិត្ដ" },
+            //     ]
+            // },
 
             {
                 type: 'group',
@@ -119,17 +139,19 @@ const AppSider = ({ collapsed }) => {
                             { key: '/setting/user/role', label: content['roles'] },
                         ]
                     },
-                    {
-                        key: '/setting/employees', label: content['employees'], children: [
-                            { key: '/setting/employee/level', label: content['level'] },
-                            { key: '/setting/employee/city', label: content['city'] },
-                            { key: '/setting/employee/district', label: content['district'] },
-                            { key: '/setting/employee/commune', label: content['commune'] },
-                            { key: '/setting/employee/village', label: content['village'] },
-                        ]
-                    },
+                    { key: '/setting/employee/level', label: content['level'] },
+                    { key: '/setting/employee/city', label: content['city'] },
+                    // {
+                    //     key: '/setting/employees', label: content['employees'], children: [
+                    //         { key: '/setting/employee/level', label: content['level'] },
+                    //         { key: '/setting/employee/city', label: content['city'] },
+                    //         { key: '/setting/employee/district', label: content['district'] },
+                    //         { key: '/setting/employee/commune', label: content['commune'] },
+                    //         { key: '/setting/employee/village', label: content['village'] },
+                    //     ]
+                    // },
                     { key: '/setting/positions', label: content['positions'] },
-                    { key: '/setting/categories', label: content['categories'] },
+                    // { key: '/setting/categories', label: content['categories'] },
                     { key: '/setting/job-types', label: content['jobType'] },
                     { key: '/setting/departments', label: content['departments'] },
                     { key: '/setting/organization', label: content['organizations'] },
@@ -301,7 +323,7 @@ const AppSider = ({ collapsed }) => {
                 theme='dark'
                 className='!border-r !border-gray-200'
                 mode="inline"
-                selectedKeys={[location.pathname]}
+                selectedKeys={[getSelectedKey(location.pathname)]}
                 onClick={(e) => navigate(e.key)}
                 items={filterGroupItems(employeeItems)}
             />

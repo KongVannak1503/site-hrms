@@ -14,10 +14,10 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
-import AppraisalDayCreatePage from './AppraisalDayCreatePage';
-import { deleteAppraisalApi, getAppraisalsApi } from '../../../services/AppraisalApi';
-import AppraisalDayUpdatePage from './AppraisalDayUpdatePage';
 import { getDepartmentsApi } from '../../../services/departmentApi';
+import { deleteAppraisalMonthApi, getAppraisalMonthsApi } from '../../../services/AppraisalApi';
+import AppraisalMonthCreatePage from './AppraisalMonthCreatePage';
+import AppraisalMonthUpdatePage from './AppraisalMonthUpdatePage';
 
 const AppraisalMonthPage = () => {
     const { isLoading, content, language } = useAuth();
@@ -54,16 +54,16 @@ const AppraisalMonthPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisalDay'] }
+        { breadcrumbName: content['appraisalMonth'] }
     ];
 
     useEffect(() => {
-        document.title = content['appraisalDay'];
+        document.title = content['appraisalMonth'];
         const fetchData = async () => {
             try {
                 const res = await getDepartmentsApi();
                 setDepartments(res)
-                const response = await getAppraisalsApi();
+                const response = await getAppraisalMonthsApi();
                 console.log(response)
                 if (Array.isArray(response)) {
                     setUsers(response);
@@ -124,7 +124,7 @@ const AppraisalMonthPage = () => {
     };
     const handleDelete = async (id) => {
         try {
-            await deleteAppraisalApi(id); // call the API
+            await deleteAppraisalMonthApi(id); // call the API
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
@@ -282,7 +282,7 @@ const AppraisalMonthPage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisalDay']}</h1>
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisalMonth']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
@@ -331,7 +331,7 @@ const AppraisalMonthPage = () => {
 
                     </div>
 
-                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisalDay']}`}</button>
+                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisalMonth']}`}</button>
                 </div>
                 <Table
                     className='custom-pagination custom-checkbox-table'
@@ -361,14 +361,14 @@ const AppraisalMonthPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['appraisalDay']}${content['newEnd']}`
-                            : `${content['update']} ${content['appraisalDay']}`
+                            ? `${content['create']} ${content['newStart']} ${content['appraisalMonth']}${content['newEnd']}`
+                            : `${content['update']} ${content['appraisalMonth']}`
                     }
                 >
                     {actionForm === 'create' ? (
-                        <AppraisalDayCreatePage onUserCreated={handleAddCreated} onCancel={closeDrawer} />
+                        <AppraisalMonthCreatePage onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        < AppraisalDayUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        < AppraisalMonthUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalMdCenter>
 
