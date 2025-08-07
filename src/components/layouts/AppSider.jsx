@@ -43,10 +43,10 @@ const AppSider = ({ collapsed }) => {
                 icon: <AppstoreOutlined />,
                 label: content['dashboard'],
             },
-            {
-                type: 'group',
-                label: <span className='!mt-4 font-medium tracking-wide' style={{ color: 'whitesmoke', fontSize: 13, paddingLeft: 10, }}>{content['recruiter']}</span>,
-            },
+            // {
+            //     type: 'group',
+            //     label: <span className='!mt-4 font-medium tracking-wide' style={{ color: 'whitesmoke', fontSize: 13, paddingLeft: 10, }}>{content['recruiter']}</span>,
+            // },
             {
                 key: 'recruiter',
                 icon: <VideoCameraOutlined />,
@@ -60,10 +60,10 @@ const AppSider = ({ collapsed }) => {
 
                 ],
             },
-            {
-                type: 'group',
-                label: <span style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10 }}>{content['employee']}</span>,
-            },
+            // {
+            //     type: 'group',
+            //     label: <span style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10 }}>{content['employee']}</span>,
+            // },
             {
                 key: '/employees',
                 icon: <LuUsers />,
@@ -73,10 +73,10 @@ const AppSider = ({ collapsed }) => {
                     { key: '/payroll', label: content['payroll'] },
                 ]
             },
-            {
-                type: 'group',
-                label: <span style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10 }}>ការវាយតម្លែ & លើកទឹកចិត្ត</span>,
-            },
+            // {
+            //     type: 'group',
+            //     label: <span style={{ fontWeight: 'bold', color: 'whitesmoke', fontSize: 12, paddingLeft: 10 }}>ការវាយតម្លែ & លើកទឹកចិត្ត</span>,
+            // },
             {
                 key: '/appraisals',
                 icon: <LuClipboardPen />,
@@ -114,10 +114,10 @@ const AppSider = ({ collapsed }) => {
             //     ]
             // },
 
-            {
-                type: 'group',
-                label: <span style={{ fontWeight: 'bold', fontSize: 12, paddingLeft: 10 }}>{content['settings']}</span>,
-            },
+            // {
+            //     type: 'group',
+            //     label: <span style={{ fontWeight: 'bold', fontSize: 12, paddingLeft: 10 }}>{content['settings']}</span>,
+            // },
             {
                 key: '/reports',
                 icon: <LuChartNoAxesCombined />,

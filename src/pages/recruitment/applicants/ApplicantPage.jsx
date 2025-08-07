@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   Form, Input, Table, Tag, Select,
   Tooltip, Space, message,
-  Modal
+  Modal,
+  notification
 } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { Styles } from '../../../utils/CsStyle';
@@ -24,6 +25,9 @@ import { updateJobApplicationStatus } from '../../../services/jobApplicationApi'
 import TestAssignmentModal from '../tests/testAssignmentModal';
 import InterviewModal from '../interviews/InterviewModal';
 import dayjs from 'dayjs';
+import showCustomConfirm from '../../../utils/showCustomConfirm';
+import { cancelTestAssignmentApi } from '../../../services/testAssignmentService';
+import { updateInterviewDecisionApi } from '../../../services/interviewApi';
 
 const { Option } = Select;
 
@@ -91,11 +95,11 @@ const ApplicantPage = () => {
   const validTransitions = {
     applied: ['shortlisted'],
     shortlisted: ['test'],
-    test: ['interview'],
+    test: ['interview', 'rejected'],
     interview: ['hired', 'reserve', 'rejected'],
     hired: [],
     reserve: [],
-    rejected: []
+    rejected: [],
   };
 
   const handleStatusChange = async (jobAppId, newStatus, oldStatus, applicantData) => {
@@ -103,7 +107,96 @@ const ApplicantPage = () => {
       message.warning(`Cannot change status from ${oldStatus} to ${newStatus}`);
       return;
     }
-    
+
+    // ✅ Rejection from test or interview → confirm first
+    if (['test', 'interview'].includes(oldStatus) && newStatus === 'rejected') {
+      const stageLabel = oldStatus === 'test' ? 'Test Stage' : 'Interview Stage';
+      const confirmLabel = content['yes'] || 'Yes';
+      const cancelLabel = content['no'] || 'No';
+
+      showCustomConfirm({
+        title: `Reject Applicant (${stageLabel})`,
+        content: `Are you sure you want to reject this applicant from the ${stageLabel}?`,
+        okButton: (
+          <button
+            onClick={async () => {
+              try {
+                await updateJobApplicationStatus(jobAppId, newStatus);
+
+                // ✅ Cancel test if rejected from test
+                const testId = applicantData.test_assignment_id;
+                if (oldStatus === 'test' && testId) {
+                  await cancelTestAssignmentApi(testId);
+                }
+
+                // ✅ Mark interview as completed if rejected from interview
+                const interviewId = applicantData.interview_id;
+                if (oldStatus === 'interview' && interviewId) {
+                  await updateInterviewDecisionApi(interviewId, 'rejected');
+                }
+
+                notification.success({
+                  message: 'Applicant Rejected',
+                  description: `The applicant was rejected successfully from ${stageLabel}.`,
+                  placement: 'topRight'
+                });
+
+                fetchApplicants();
+                Modal.destroyAll();
+              } catch {
+                notification.error({
+                  message: 'Update Failed',
+                  description: `Failed to reject applicant from ${stageLabel}.`,
+                  placement: 'topRight'
+                });
+              }
+            }}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
+          >
+            {confirmLabel}
+          </button>
+        ),
+        cancelButton: (
+          <button
+            onClick={() => Modal.destroyAll()}
+            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
+          >
+            {cancelLabel}
+          </button>
+        )
+      });
+
+      return;
+    }
+
+    // ✅ Confirmation when finalizing from interview (hired/reserve)
+    if (oldStatus === 'interview' && ['hired', 'reserve'].includes(newStatus)) {
+      Modal.confirm({
+        title: `Confirm ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
+        content: `Are you sure you want to mark this applicant as ${newStatus}?`,
+        okText: 'Yes',
+        cancelText: 'No',
+        onOk: async () => {
+          try {
+            await updateJobApplicationStatus(jobAppId, newStatus);
+
+            const interviewId = applicantData.interview_id;
+            if (interviewId) {
+              await updateInterviewDecisionApi(interviewId, newStatus);
+            }
+
+            message.success(`Status updated to ${newStatus}`);
+            fetchApplicants();
+          } catch {
+            message.error(`Failed to update status to ${newStatus}`);
+          }
+        }
+      });
+
+      return;
+    }
+
+    // ✅ Shortlisted confirmation
     if (oldStatus === 'applied' && newStatus === 'shortlisted') {
       Modal.confirm({
         title: 'Confirm Shortlisting',
@@ -120,13 +213,22 @@ const ApplicantPage = () => {
           }
         }
       });
-    } else if (oldStatus === 'shortlisted' && newStatus === 'test') {
+
+      return;
+    }
+
+    // ✅ Move to test → open modal
+    if (oldStatus === 'shortlisted' && newStatus === 'test') {
       setTestModalData({
         visible: true,
         jobAppId,
         applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id }
       });
-    } else if (oldStatus === 'test' && newStatus === 'interview') {
+      return;
+    }
+
+    // ✅ Move to interview → check test is completed
+    if (oldStatus === 'test' && newStatus === 'interview') {
       if (applicantData.test_assignment_status !== 'completed') {
         message.warning('Cannot move to interview before completing the test.');
         return;
@@ -138,14 +240,17 @@ const ApplicantPage = () => {
         applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id },
         job: applicantData.job_application_id?.job_id || applicantData.job_id,
       });
-    } else {
-      try {
-        await updateJobApplicationStatus(jobAppId, newStatus);
-        message.success(`Status updated to ${newStatus}`);
-        fetchApplicants();
-      } catch {
-        message.error('Failed to update status');
-      }
+
+      return;
+    }
+
+    // ✅ Default change (without modals)
+    try {
+      await updateJobApplicationStatus(jobAppId, newStatus);
+      message.success(`Status updated to ${newStatus}`);
+      fetchApplicants();
+    } catch {
+      message.error('Failed to update status');
     }
   };
 
@@ -297,7 +402,10 @@ const ApplicantPage = () => {
             ...pagination,
             showSizeChanger: true,
             pageSizeOptions: ['10', '20', '50', '100'],
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+            locale: {
+              items_per_page: content['page'],
+            },
             onChange: (page, size) => setPagination({ ...pagination, current: page, pageSize: size })
           }}
           loading={loading}

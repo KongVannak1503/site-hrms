@@ -22,6 +22,8 @@ const TestTypePage = () => {
         pageSize: 10,
         total: 0,
     });
+    const [searchText, setSearchText] = useState('');
+    const [filteredTestTypes, setFilteredTestTypes] = useState([]);
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
@@ -38,6 +40,7 @@ const TestTypePage = () => {
         try {
             const data = await getAllTestTypesApi();
             setTestTypes(data);
+            setFilteredTestTypes(data);
         } catch (err) {
             message.error('Failed to fetch test types');
         } finally {
@@ -89,12 +92,28 @@ const TestTypePage = () => {
         }
     };
 
+    const normalizeText = (text) => text?.toLowerCase().normalize("NFC").trim() || '';
+
+    const handleSearch = (e) => {
+        const value = normalizeText(e.target.value);
+        setSearchText(value);
+
+        const filtered = testTypes.filter(item =>
+            normalizeText(item.name_kh).includes(value) ||
+            normalizeText(item.name_en).includes(value) ||
+            normalizeText(item.description).includes(value)
+        );
+
+        setFilteredTestTypes(filtered);
+    };
+
+
     const columns = [
-        { title: 'Name (KH)', dataIndex: 'name_kh' },
-        { title: 'Name (EN)', dataIndex: 'name_en' },
-        { title: 'Description', dataIndex: 'description' },
+        { title: `${content['name']} (KH)`, dataIndex: 'name_kh' },
+        { title: `${content['name']} (EN)`, dataIndex: 'name_en' },
+        { title: content['description'], dataIndex: 'description' },
         {
-            title: 'Actions',
+            title: content['action'],
             render: (_, record) => (
                 <Space>
                     <Tooltip title={content['edit']}>
@@ -128,9 +147,14 @@ const TestTypePage = () => {
             </div>
             <Content className="border border-gray-200 bg-white p-5 rounded-md mt-4">
                 <div className='flex flex-col sm:flex-row justify-between items-center mb-4'>
-                    <h5 className='text-lg font-semibold'>Test types</h5>
+                    <h5 className='text-lg font-semibold'>{content['testType']}</h5>
                     <div className='flex gap-3 mt-2 sm:mt-0'>
-                        <Input placeholder={content['searchAction']} allowClear />
+                        <Input 
+                            placeholder={content['searchAction']} 
+                            allowClear 
+                            value={searchText}
+                            onChange={handleSearch}
+                        />
                         <button onClick={openCreateModal} className={Styles.btnCreate}>
                             <PlusOutlined /> {`${content['create']} ${content['testType']}`}
                         </button>
@@ -141,7 +165,7 @@ const TestTypePage = () => {
                     className='custom-pagination custom-checkbox-table'
                     scroll={{ x: 'max-content' }}
                     columns={columns}
-                    dataSource={testTypes}
+                    dataSource={filteredTestTypes}
                     rowKey="_id"
                     loading={loading}
                     pagination={{
@@ -149,6 +173,9 @@ const TestTypePage = () => {
                         showSizeChanger: true,
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                        locale: {
+                            items_per_page: content['page'],
+                        },
                         onChange: (page, pageSize) => {
                             setPagination({ ...pagination, current: page, pageSize });
                         }

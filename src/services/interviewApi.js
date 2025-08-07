@@ -75,6 +75,11 @@ export const updateInterviewResultApi = async (id, interviewData) => {
   return res.data;
 };
 
+export const updateInterviewDecisionApi = async (id, decision) => {
+  const res = await api.put(`/interview/${id}/decision`, { decision });
+  return res.data;
+};
+
 // ✅ Cancel interview
 export const cancelInterviewApi = async (id) => {
   const res = await api.put(`/interview/${id}/cancel`);
