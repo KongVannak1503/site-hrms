@@ -6,17 +6,21 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Avatar, Button, Card, Col, DatePicker, Dropdown, Form, Input, Row, Select, Table, Tag } from 'antd';
+import { Avatar, Button, Card, Col, DatePicker, Dropdown, Form, Input, message, Modal, notification, Row, Select, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
-import { getAllInterviewsApi } from '../../../services/interviewApi';
+import { getAllInterviewsApi, updateInterviewDecisionApi } from '../../../services/interviewApi';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { FaList, FaRegCalendar } from 'react-icons/fa6';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import uploadUrl from '../../../services/uploadApi';
 import EditInterviewModal from './EditInterviewModal';
 import RescheduleModal from './InterviewRescheduleModal';
 import InterviewResultModal from './InterviewResultModal';
 import DateDisplayBox from '../../../utils/DateDisplayBox';
+import { Styles } from '../../../utils/CsStyle';
+import { getAllTestAssignmentsApi } from '../../../services/testAssignmentService';
+import InterviewModal from './InterviewModal';
+import showCustomConfirm from '../../../utils/showCustomConfirm';
 
 const InterviewPage = () => {
   const { isLoading, content } = useAuth();
@@ -42,6 +46,15 @@ const InterviewPage = () => {
     visible: false,
     interview: null
   });
+
+  const [interviewModalData, setInterviewModalData] = useState({
+    visible: false,
+    applicant: null,
+    job: null
+  });
+
+  const [loadingEligible, setLoadingEligible] = useState(false);
+  const [eligibleApplicants, setEligibleApplicants] = useState([]);
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
@@ -77,6 +90,7 @@ const InterviewPage = () => {
           status: item.status,
           interviewers: item.interviewers || [],
           interview_id: item._id,
+          final_decision: item.final_decision,
         }
       }));
 
@@ -109,6 +123,86 @@ const InterviewPage = () => {
 
     return matchesStatus && matchesDate && matchesKeyword;
   });
+
+  const handleOpenApplicantSelector = async () => {
+    try {
+      setLoadingEligible(true);
+      const tests = await getAllTestAssignmentsApi();
+      const completedTests = tests.filter(t => t.status === 'completed');
+
+      const interviewKeys = new Set(interviews.map(i => `${i.applicant_id?._id}_${i.job_id?._id}`));
+      const eligible = completedTests.filter(t => {
+        const key = `${t.applicant_id?._id}_${t.job_id?._id}`;
+        return !interviewKeys.has(key);
+      });
+
+      setEligibleApplicants(eligible); // Can be empty ✅
+      setInterviewModalData({ visible: true, applicant: null, job: null }); // Always show modal ✅
+    } catch (err) {
+      console.error('Failed to load eligible applicants', err);
+      message.error('Failed to load eligible applicants');
+    } finally {
+      setLoadingEligible(false);
+    }
+  };
+
+  const handleDecision = async (interviewId, decision) => {
+    try {
+      const decisionText = {
+        hired: 'Hired',
+        reserve: 'Reserve',
+        rejected: 'Rejected'
+      };
+
+      showCustomConfirm({
+        title: `Confirm ${decisionText[decision]}`,
+        content: `Are you sure you want to mark this applicant as "${decisionText[decision]}"?`,
+        okButton: (
+          <button
+            onClick={async () => {
+              try {
+                await updateInterviewDecisionApi(interviewId, decision);
+                notification.success({
+                  message: 'Decision Updated',
+                  description: `Applicant has been marked as ${decisionText[decision]}.`,
+                  placement: 'topRight'
+                });
+                fetchInterviews(); // refresh list
+                Modal.destroyAll(); // manually close
+              } catch (err) {
+                console.error(`Failed to update decision:`, err);
+                notification.error({
+                  message: 'Update Failed',
+                  description: `Failed to mark applicant as ${decisionText[decision]}.`,
+                  placement: 'topRight'
+                });
+              }
+            }}
+            className={`px-4 py-2 rounded text-white cursor-pointer ${
+              decision === 'hired'
+                ? 'bg-green-600 hover:bg-green-700'
+                : decision === 'reserve'
+                ? 'bg-yellow-500 hover:bg-yellow-600'
+                : 'bg-red-600 hover:bg-red-700'
+            }`}
+          >
+            {content['yes'] || 'Yes'}
+          </button>
+        ),
+        cancelButton: (
+          <button
+            onClick={() => Modal.destroyAll()}
+            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
+          >
+            {content['no'] || 'No'}
+          </button>
+        )
+      });
+    } catch (err) {
+      console.error(`Failed to update decision:`, err);
+      message.error(`Failed to mark as ${decision}`);
+    }
+  }
 
   const columns = [
     {
@@ -196,6 +290,65 @@ const InterviewPage = () => {
       }
     },
     {
+      title: content['decision'],
+      key: 'decision',
+      align: 'center',
+      render: (_, record) => {
+        const status = record.extendedProps?.status;
+        const decision = record.extendedProps?.final_decision;
+
+        const colorMap = {
+          hired: 'green',
+          reserve: 'gold',
+          rejected: 'red'
+        };
+
+        const labelMap = {
+          hired: content['hired'] || 'Hired',
+          reserve: content['reserve'] || 'Reserve',
+          rejected: content['reject'] || 'Rejected'
+        };
+
+        // ✅ Show decision tag if already made
+        if (decision) {
+          return (
+            <Tag color={colorMap[decision]} className="font-semibold">
+              {labelMap[decision]}
+            </Tag>
+          );
+        }
+
+        // Pending if not completed yet
+        if (status !== 'completed') {
+          return <span className="text-gray-400 italic">Pending</span>;
+        }
+
+        // Show decision buttons
+        return (
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleDecision(record.id, 'hired')}
+              className="bg-green-600 text-white px-2 py-1 text-xs rounded hover:bg-green-700 cursor-pointer"
+            >
+              {labelMap['hired']}
+            </button>
+            <button
+              onClick={() => handleDecision(record.id, 'reserve')}
+              className="bg-yellow-500 text-white px-2 py-1 text-xs rounded hover:bg-yellow-600 cursor-pointer"
+            >
+              {labelMap['reserve']}
+            </button>
+            <button
+              onClick={() => handleDecision(record.id, 'rejected')}
+              className="bg-red-600 text-white px-2 py-1 text-xs rounded hover:bg-red-700 cursor-pointer"
+            >
+              {labelMap['rejected']}
+            </button>
+          </div>
+        );
+      }
+    },
+    {
       title: content['action'],
       render: (_, record) => (
         <Dropdown
@@ -265,6 +418,15 @@ const InterviewPage = () => {
                 }`}
               >
                 <FaList />
+              </button>
+            </div>
+
+            <div className='flex items-center gap-3 mt-4 sm:mt-0'>
+              <button 
+                className={Styles.btnCreate}
+                onClick={() => handleOpenApplicantSelector()}
+              >
+                  <PlusOutlined /> {`${content['create']} ${content['interviewSchedule']}`}
               </button>
             </div>
           </div>
@@ -435,7 +597,10 @@ const InterviewPage = () => {
                 ...pagination,
                 showSizeChanger: true,
                 pageSizeOptions: ['10', '20', '50', '100'],
-                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                locale: {
+                  items_per_page: content['page'],
+                },
                 onChange: (page, size) => setPagination({ ...pagination, current: page, pageSize: size })
               }}
             />
@@ -443,6 +608,20 @@ const InterviewPage = () => {
         )}
         
       </div>
+
+      <InterviewModal
+        open={interviewModalData.visible}
+        eligibleApplicants={eligibleApplicants}
+        onCancel={() => {
+          setInterviewModalData({ visible: false, applicant: null, job: null });
+          setEligibleApplicants([]);
+        }}
+        onSuccess={() => {
+          setInterviewModalData({ visible: false, applicant: null, job: null });
+          setEligibleApplicants([]);
+          fetchInterviews(); // Refresh
+        }}
+      />
 
       <EditInterviewModal
         open={editModalData.visible}

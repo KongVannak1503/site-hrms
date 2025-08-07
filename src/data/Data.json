@@ -48,7 +48,7 @@
         "items": "Items",
         "item": "Item",
         "of": "of",
-        "page": "page",
+        "page": "/ page",
         "newStart": "new",
         "newEnd": "",
 
@@ -196,6 +196,7 @@
         "averageScore": "Average Score",
         "startOn": "Start On",
         "location": "Location",
+        "decision": "Decision",
         
 
         "interviews": "Interviews",
@@ -301,7 +302,7 @@
         "items": "ធាតុ",
         "item": "ធាតុ",
         "of": "នៃ",
-        "page": "ទំព័រ",
+        "page": "/ ទំព័រ",
         "newStart": "",
         "newEnd": "ថ្មី",
         "city": "ក្រុង",
@@ -352,7 +353,7 @@
         "confirmDelete": "បញ្ជាក់ក្នុងការលុប",
         "areYouSureToDelete": "តើអ្នកប្រាកដក្នុងការលុប",
         "action": "សកម្មភាព",
-        "yes": "យលព្រម",
+        "yes": "យល់ព្រម",
         "no": "ទេ",
         "login": "ចូលប្រើប្រាស់",
         "loginToSystem": "ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស", 
@@ -399,6 +400,7 @@
         "averageScore": "ពិន្ទុមធ្យមភាគ",
         "startOn": "ចាប់ផ្ដើម",
         "location": "ទីកន្លែង",
+        "decision": "ការសម្រេចចិត្ដ",
 
         "interviews": "ការសម្ភាសន៍",
         "interviewSchedule": "កាលវិភាគសម្ភាសន៍",

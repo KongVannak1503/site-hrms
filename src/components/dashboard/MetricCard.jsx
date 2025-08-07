@@ -1,0 +1,81 @@
+import { motion } from 'framer-motion';
+import {
+  UserGroupIcon,
+  BuildingOfficeIcon,
+  BriefcaseIcon,
+  UserPlusIcon,
+} from '@heroicons/react/24/outline';
+import { ArrowUpRightIcon, ArrowDownRightIcon } from '@heroicons/react/24/solid';
+
+const iconMap = {
+  'Total Employees': {
+    icon: UserGroupIcon,
+    bg: 'bg-blue-100',
+    color: 'text-blue-500',
+  },
+  Departments: {
+    icon: BuildingOfficeIcon,
+    bg: 'bg-green-100',
+    color: 'text-green-500',
+  },
+  Positions: {
+    icon: BriefcaseIcon,
+    bg: 'bg-purple-100',
+    color: 'text-purple-500',
+  },
+  Applicants: {
+    icon: UserPlusIcon,
+    bg: 'bg-pink-100',
+    color: 'text-pink-500',
+  },
+};
+
+const MetricCard = ({ title, count, changePercent, comparisonText }) => {
+  const iconInfo = iconMap[title] || {};
+  const isPositive = changePercent >= 0;
+
+  return (
+    <motion.div
+      className="bg-white p-5 rounded-2xl shadow hover:shadow-md transition duration-300"
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 300 }}
+    >
+      <div className="flex items-center gap-4">
+        {/* Icon */}
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className={`rounded-full p-2 ${iconInfo.bg} ${iconInfo.color}`}
+        >
+          {iconInfo.icon && <iconInfo.icon className="h-6 w-6" />}
+        </motion.div>
+
+        {/* Main Metric */}
+        <div>
+          <p className="text-xl font-semibold text-gray-800">{count.toLocaleString()}</p>
+          <p className="text-sm text-gray-500">{title}</p>
+        </div>
+      </div>
+
+      {/* Footer Comparison */}
+      {/* <div className="flex items-center justify-between mt-4 text-sm">
+        <span
+          className={`flex items-center font-medium ${
+            isPositive ? 'text-green-600' : 'text-red-500'
+          }`}
+        >
+          {isPositive ? (
+            <ArrowUpRightIcon className="h-4 w-4 mr-1" />
+          ) : (
+            <ArrowDownRightIcon className="h-4 w-4 mr-1" />
+          )}
+          {changePercent}%
+        </span>
+        <span className="text-gray-400">{comparisonText || 'vs last 30 days'}</span>
+      </div> */}
+    </motion.div>
+  );
+};
+
+export default MetricCard;

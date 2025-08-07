@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import { Button, Dropdown, message, Card, Table, Avatar, Tooltip, Space, Form, Col, Row, DatePicker, Select, Input, Modal, notification } from 'antd';
+import { Button, Dropdown, message, Card, Table, Avatar, Tooltip, Space, Form, Col, Row, DatePicker, Select, Input, Modal, notification, Tag } from 'antd';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -257,7 +257,7 @@ const TestSchedulePage = () => {
           }}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
         >
-          Yes
+          {content['yes']}
         </button>
       ),
       cancelButton: (
@@ -265,7 +265,7 @@ const TestSchedulePage = () => {
           onClick={() => Modal.destroyAll()}
           className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
         >
-          No
+          {content['no']}
         </button>
       )
     });
@@ -376,24 +376,24 @@ const TestSchedulePage = () => {
         );
       }
     },
-    {
-      title: content['attactFile'],
-      dataIndex: 'attachment',
-      render: (file) =>
-        file ? (
-          <a
-            href={`${uploadUrl}/uploads/test-assignments/${encodeURIComponent(file)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Tooltip title="View File">
-              <PaperClipOutlined style={{ fontSize: 18 }} />
-            </Tooltip>
-          </a>
-        ) : (
-          '-'
-        ),
-    },
+    // {
+    //   title: content['attactFile'],
+    //   dataIndex: 'attachment',
+    //   render: (file) =>
+    //     file ? (
+    //       <a
+    //         href={`${uploadUrl}/uploads/test-assignments/${encodeURIComponent(file)}`}
+    //         target="_blank"
+    //         rel="noopener noreferrer"
+    //       >
+    //         <Tooltip title="View File">
+    //           <PaperClipOutlined style={{ fontSize: 18 }} />
+    //         </Tooltip>
+    //       </a>
+    //     ) : (
+    //       '-'
+    //     ),
+    // },
     {
       title: content['status'],
       dataIndex: 'status',
@@ -408,44 +408,59 @@ const TestSchedulePage = () => {
       }
     },
     {
-      title: content['action'],
-      key: 'action',
+      title: content['decision'],
+      key: 'decision',
       align: 'center',
       render: (_, record) => {
         if (record.status === 'rejected') {
           return (
-            <div className="flex justify-center items-center h-full">
-              <span className="text-gray-400 italic">Rejected</span>
-            </div>
+            <Tag color="red">
+              {content['rejected'] || 'Rejected'}
+            </Tag>
           );
         }
 
-        const canScheduleInterview = record.status === 'completed' && !record.has_interview;
+        if (record.has_interview) {
+          return (
+            <Tag color="green">
+              {content['interview'] || 'Interview'}
+            </Tag>
+          );
+        }
+
+        if (record.status !== 'completed') {
+          return <Tag color="default">{content['pending'] || 'Pending'}</Tag>;
+        }
 
         return (
-          <div className="flex justify-center items-center gap-2 h-full">
-            {/* ✅ Interview Button or ✔ Icon */}
-            {record.has_interview ? (
-              <Tooltip>
-                <span className="text-green-600 text-lg font-bold">✔</span>
-              </Tooltip>
-            ) : (
-              <Tooltip>
-                <button
-                  className={`${Styles.btnSecondary} ${
-                    !canScheduleInterview ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                  disabled={!canScheduleInterview}
-                  onClick={() => {
-                    if (canScheduleInterview) handleMoveToInterview(record);
-                  }}
-                >
-                  Interview
-                </button>
-              </Tooltip>
-            )}
+          <div className='flex gap-2'>
+            <button
+              onClick={() => handleMoveToInterview(record)}
+              className={`bg-black text-white px-2 py-1 text-xs rounded hover:bg-gray-800 cursor-pointer ${
+                record.has_interview ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={record.has_interview}
+            >
+              Interview
+            </button>
 
-            {/* ✅ Dropdown Actions */}
+            <button
+              onClick={() => handleReject(record._id)}
+              className="bg-red-600 text-white px-2 py-1 text-xs rounded hover:bg-red-700 cursor-pointer"
+            >
+              Rejected
+            </button>
+          </div>
+        );
+      }
+    },
+    {
+      title: content['action'],
+      key: 'action',
+      align: 'center',
+      render: (_, record) => {
+        return (
+          <div className="flex justify-center items-center gap-2 h-full">
             <Dropdown
               placement="bottomRight"
               trigger={['click']}
@@ -455,7 +470,7 @@ const TestSchedulePage = () => {
                     key: 'view',
                     label: (
                       <div onClick={() => openDetailModal(record._id)} className="flex items-center gap-2 cursor-pointer">
-                        {content['view']} View
+                        View
                       </div>
                     )
                   },
@@ -467,14 +482,14 @@ const TestSchedulePage = () => {
                     key: 'reschedule',
                     label: <div onClick={() => handleReschedule(record)}>Reschedule</div>
                   },
-                  {
-                    key: 'reject',
-                    label: (
-                      <span onClick={() => handleReject(record._id)} className="text-red-500">
-                        Rejected
-                      </span>
-                    )
-                  }
+                  // {
+                  //   key: 'reject',
+                  //   label: (
+                  //     <span onClick={() => handleReject(record._id)} className="text-red-500">
+                  //       Rejected
+                  //     </span>
+                  //   )
+                  // }
                 ]
               }}
             >
@@ -523,7 +538,7 @@ const TestSchedulePage = () => {
               <button 
                 className={Styles.btnCreate}
                 onClick={() => {
-                  setSelectedApplicant(null); // reset previous
+                  setSelectedApplicant(null);
                   setCreateModalVisible(true);
                 }}
               >
@@ -673,7 +688,10 @@ const TestSchedulePage = () => {
                 ...pagination,
                 showSizeChanger: true,
                 pageSizeOptions: ['10', '20', '50', '100'],
-                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                locale: {
+                  items_per_page: content['page'],
+                },
                 onChange: (page, size) => setPagination({ ...pagination, current: page, pageSize: size })
               }}
             />
@@ -732,7 +750,7 @@ const TestSchedulePage = () => {
         onCancel={() => setInterviewModalData({ visible: false, applicant: null, job: null })}
         onSuccess={() => {
           setInterviewModalData({ visible: false, applicant: null, job: null });
-          handleRefreshAll(); // Refresh data
+          handleRefreshAll();
         }}
       />
 
