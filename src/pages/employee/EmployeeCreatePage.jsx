@@ -15,6 +15,7 @@ import { getDistrictsViewApi } from '../../services/DistrictApi';
 import { getCommunesViewApi } from '../../services/communeApi';
 import { getVillagesViewApi } from '../../services/villageApi';
 import { useNavigate } from 'react-router-dom';
+import { getPositionsApi } from '../../services/positionApi';
 
 const EmployeeCreatePage = () => {
     const { content, language } = useAuth();
@@ -31,6 +32,7 @@ const EmployeeCreatePage = () => {
     const { TabPane } = Tabs;
     const [file, setFile] = useState(null);
     const [activeTab, setActiveTab] = useState('personal');
+    const [positions, setPositions] = useState([]);
 
     useEffect(() => {
     }, [content]);
@@ -50,6 +52,9 @@ const EmployeeCreatePage = () => {
             try {
                 const resDepartments = await getDepartmentsApi();
                 setDepartments(resDepartments);
+
+                const resEmpPosition = await getPositionsApi();
+                setPositions(resEmpPosition);
 
                 const resCities = await getCitiesViewApi();
                 setCities(resCities);
@@ -111,14 +116,14 @@ const EmployeeCreatePage = () => {
             formData.append('maritalStatus', values.maritalStatus);
             // Optional ObjectId fields (skip if invalid)
             safeAppend('city', values.city);
-            safeAppend('district', values.district);
-            safeAppend('commune', values.commune);
-            safeAppend('village', values.village);
+            formData.append('district', values.district);
+            formData.append('commune', values.commune);
+            formData.append('village', values.village);
 
             safeAppend('present_city', values.present_city);
-            safeAppend('present_district', values.present_district);
-            safeAppend('present_commune', values.present_commune);
-            safeAppend('present_village', values.present_village);
+            formData.append('present_district', values.present_district);
+            formData.append('present_commune', values.present_commune);
+            formData.append('present_village', values.present_village);
 
             formData.append('isActive', values.isActive ?? true);
 
@@ -181,6 +186,7 @@ const EmployeeCreatePage = () => {
                 <div style={{ display: activeTab === 'personal' ? 'block' : 'none' }}>
                     <EmployeePersonalTab
                         fileList={fileList}
+                        positions={positions}
                         content={content}
                         handleChange={handleChange}
                         previewUrl={previewUrl}

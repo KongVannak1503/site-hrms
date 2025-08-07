@@ -356,7 +356,7 @@ const EmployeeEducationTab = () => {
                     </Card>
 
 
-                    <hr className='my-3 border-0' />
+                    {/* <hr className='my-3 border-0' />
 
                     <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['generalEducation']}</p>} >
 
@@ -381,7 +381,6 @@ const EmployeeEducationTab = () => {
                                         <tbody>
                                             {fields.map(({ key, name, ...restField }, index) => (
                                                 <tr key={key} className="hover:bg-[#f0fbfd] transition">
-                                                    {/* Name */}
                                                     <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
@@ -468,7 +467,6 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    {/* Remove button */}
                                                     <td className={`px-3 ${index === 0 ? 'pt-0' : 'flex justify-start'}`}>
                                                         <Button
                                                             type="text"
@@ -497,11 +495,9 @@ const EmployeeEducationTab = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Card>
-                    <hr className='my-3 border-0' />
+                    </Card> */}
+                    {/* <hr className='my-3 border-0' />
                     <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['vocationalTraining']}</p>} >
-                        {/* Table headers */}
-
                         <Form.List name="vocational_training">
                             {(fields, { add, remove }) => (
                                 <>
@@ -522,7 +518,6 @@ const EmployeeEducationTab = () => {
                                         <tbody>
                                             {fields.map(({ key, name, ...restField }, index) => (
                                                 <tr key={key} className="hover:bg-[#f0fbfd] transition">
-                                                    {/* Name */}
                                                     <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
@@ -600,7 +595,6 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    {/* Remove button */}
                                                     <td className={`px-3 ${index === 0 ? 'pt-0' : 'flex justify-start'}`}>
                                                         <Button
                                                             type="text"
@@ -630,8 +624,6 @@ const EmployeeEducationTab = () => {
                     </Card>
                     <hr className='my-3 border-0' />
                     <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['trainingShortCourse']}</p>} >
-                        {/* Table headers */}
-
                         <Form.List name="short_course">
                             {(fields, { add, remove }) => (
                                 <>
@@ -652,7 +644,6 @@ const EmployeeEducationTab = () => {
                                         <tbody>
                                             {fields.map(({ key, name, ...restField }, index) => (
                                                 <tr key={key} className="hover:bg-[#f0fbfd] transition">
-                                                    {/* Name */}
                                                     <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
                                                         <Form.Item
                                                             {...restField}
@@ -730,7 +721,6 @@ const EmployeeEducationTab = () => {
                                                         </Form.Item>
                                                     </td>
 
-                                                    {/* Remove button */}
                                                     <td className={`px-3 ${index === 0 ? 'pt-0' : 'flex justify-start'}`}>
                                                         <Button
                                                             type="text"
@@ -757,7 +747,7 @@ const EmployeeEducationTab = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Card>
+                    </Card> */}
 
                 </div>
 

@@ -76,11 +76,18 @@ import AppraisalDayFormPage from './pages/appraisals/appraisal_day/AppraisalDayF
 import AppraisalYearListEmpPage from './pages/appraisals/appraisal_year_emp/AppraisalYearListEmpPage'
 import AppraisalYearFormEmpPage from './pages/appraisals/appraisal_year_emp/AppraisalYearFormEmpPage'
 import FullScreenLoader from './components/loading/FullScreenLoader'
-import AppraisalEmployeePage from './pages/appraisals/employee/AppraisalEmployeePage'
-import AppraisalEmployeeListPage from './pages/appraisals/employee/AppraisalEmployeeListPage'
-import AppraisalEmployeeFormPage from './pages/appraisals/employee/AppraisalEmployeeFormPage'
 import JobPostingDetailPage from './pages/recruitment/jobposting/JobPostingDetailPage'
 import ApplicantDetailPage from './pages/recruitment/applicants/ApplicantDetailPage'
+import AppraisalEmployeePage from './pages/appraisals/appraisal_day/AppraisalEmployeePage'
+import AppraisalEmployeeListPage from './pages/appraisals/appraisal_day/AppraisalEmployeeListPage'
+import AppraisalEmployeeFormPage from './pages/appraisals/appraisal_day/AppraisalEmployeeFormPage'
+import AppraisalAdminFormPage from './pages/appraisals/appraisal_day/AppraisalAdminFormPage'
+import AppraisalManagerFormPage from './pages/appraisals/appraisal_day/AppraisalManagerFormPage'
+import AppraisalMonthEmployeeFormPage from './pages/appraisals/appraisal_month/AppraisalMonthEmployeeFormPage'
+import AppraisalMonthAdminFormPage from './pages/appraisals/appraisal_month/AppraisalMonthAdminFormPage'
+import AppraisalMonthManagerFormPage from './pages/appraisals/appraisal_month/AppraisalMonthManagerFormPage'
+import AppraisalMonthEmployeePage from './pages/appraisals/appraisal_month/AppraisalMonthEmployeePage'
+import AppraisalMonthEmployeeListPage from './pages/appraisals/appraisal_month/AppraisalMonthEmployeeListPage'
 
 function App() {
   const { identity, isLoading } = useAuth();
@@ -165,21 +172,56 @@ function App() {
                   } />
 
                 <Route
-                  path="/appraisal/employee"
+                  path="/appraisal/day/employee"
                   element={
                     <AppraisalEmployeePage />
                   } />
                 <Route
-                  path="/appraisal/employee/list/:mainId"
+                  path="/appraisal/day/employee/list/:mainId"
                   element={
                     <AppraisalEmployeeListPage />
                   } />
                 <Route
-                  path="/appraisal/employee/:mainId/form/:id"
+                  path="/appraisal/day/admin/:mainId/form/:id"
+                  element={
+                    <AppraisalAdminFormPage />
+                  } />
+                <Route
+                  path="/appraisal/day/manager/:mainId/form/:id"
+                  element={
+                    <AppraisalManagerFormPage />
+                  } />
+                <Route
+                  path="/appraisal/day/employee/:mainId/form/:id"
                   element={
                     <AppraisalEmployeeFormPage />
                   } />
-
+                {/* month */}
+                <Route
+                  path="/appraisal/month/employee"
+                  element={
+                    <AppraisalMonthEmployeePage />
+                  } />
+                <Route
+                  path="/appraisal/month/employee/list/:mainId"
+                  element={
+                    <AppraisalMonthEmployeeListPage />
+                  } />
+                <Route
+                  path="/appraisal/month/admin/:mainId/form/:id"
+                  element={
+                    <AppraisalMonthAdminFormPage />
+                  } />
+                <Route
+                  path="/appraisal/month/manager/:mainId/form/:id"
+                  element={
+                    <AppraisalMonthManagerFormPage />
+                  } />
+                <Route
+                  path="/appraisal/month/employee/:mainId/form/:id"
+                  element={
+                    <AppraisalMonthEmployeeFormPage />
+                  } />
                 <Route
                   path="/appraisal/kpi/month/form"
                   element={
