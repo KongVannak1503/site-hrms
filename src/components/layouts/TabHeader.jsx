@@ -7,9 +7,9 @@ export const useShowTabHeader = () => {
     return (
         location.pathname.startsWith('/employee/') ||
         location.pathname.startsWith('/employee/create') ||
-        location.pathname.startsWith('/appraisal/day/employee/') ||
-        location.pathname.startsWith('/appraisal/day/manager/') ||
-        location.pathname.startsWith('/appraisal/day/admin/')
+        location.pathname.startsWith('/appraisal/month/employee/') ||
+        location.pathname.startsWith('/appraisal/month/manager/') ||
+        location.pathname.startsWith('/appraisal/month/admin/')
 
     );
 };

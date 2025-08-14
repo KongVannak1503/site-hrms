@@ -36,7 +36,7 @@ const AppraisalMonthForm = ({
             >
                 <Input type='number' />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
                 name="department"
                 label={content['department']}
                 rules={[{
@@ -63,7 +63,7 @@ const AppraisalMonthForm = ({
                         </Select.Option>
                     ))}
                 </Select>
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
                 name="kpiTemplate"

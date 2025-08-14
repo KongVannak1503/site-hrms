@@ -356,7 +356,7 @@ const EmployeeEducationTab = () => {
                     </Card>
 
 
-                    {/* <hr className='my-3 border-0' />
+                    <hr className='my-3 border-0' />
 
                     <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['generalEducation']}</p>} >
 
@@ -495,7 +495,7 @@ const EmployeeEducationTab = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Card> */}
+                    </Card>
                     {/* <hr className='my-3 border-0' />
                     <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['vocationalTraining']}</p>} >
                         <Form.List name="vocational_training">
@@ -621,7 +621,7 @@ const EmployeeEducationTab = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Card>
+                    </Card> */}
                     <hr className='my-3 border-0' />
                     <Card className='overflow-x-auto' title={<p className='text-default text-sm font-bold'>{content['trainingShortCourse']}</p>} >
                         <Form.List name="short_course">
@@ -747,7 +747,7 @@ const EmployeeEducationTab = () => {
                                 </>
                             )}
                         </Form.List>
-                    </Card> */}
+                    </Card>
 
                 </div>
 

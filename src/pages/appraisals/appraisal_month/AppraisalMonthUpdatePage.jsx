@@ -27,7 +27,7 @@ const AppraisalMonthUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
                     ...response,
                     startDate: response.startDate ? dayjs(response.startDate) : null,
                     endDate: response.endDate ? dayjs(response.endDate) : null,
-                    department: response.department || 'all', // optional fallback
+                    // department: response.department || 'all', // optional fallback
                     kpiTemplate: response.kpiTemplate,
                     announcementDay: response.announcementDay,
                 });
@@ -41,11 +41,11 @@ const AppraisalMonthUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const { startDate, kpiTemplate, announcementDay, department } = values;
+            const { startDate, kpiTemplate, announcementDay } = values;
 
             const formData = {
                 kpiTemplate,
-                department,
+                // department,
                 announcementDay,
                 startDate: startDate ? startDate.format('YYYY-MM-DD') : null,
             };

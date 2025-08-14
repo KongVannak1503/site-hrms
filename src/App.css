@@ -8,6 +8,21 @@
   --table-check-color: rgba(11, 154, 176, 0.15);
 }
 
+@font-face {
+  font-family: 'Mool1';
+  src: url('./assets/fonts/Moul-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.khmer-header {
+  font-family: "Moul", serif;
+  font-weight: 400;
+  font-size: 13px;
+  font-style: normal;
+  /* for 'end' */
+}
+
 input,
 select,
 textarea,

@@ -19,7 +19,7 @@ export const ConfirmDeleteButton = ({
             cancelText={cancelText}
         >
             <Tooltip title={tooltip}>
-                <button className={Styles.btnDelete} >
+                <button type='button' className={Styles.btnDelete} >
                     <DeleteOutlined />
                 </button>
             </Tooltip>

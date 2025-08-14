@@ -176,6 +176,7 @@
 
         "applicants": "Applicants",
         "fullName": "Full Name",
+        "nameFull": "Full Name",
         "uploadCV": "Upload CV",
         "cv": "CV",
         "detailInfo": "Detail Info",
@@ -210,6 +211,8 @@
         "appraisal": "Appraisal",
 
         "awarding": "Awarding",
+        "profile": "Profile",
+        "signOut":"Sign Out",
 
         "report": "Reports",
         "timeLine": "Time Line",
@@ -380,6 +383,7 @@
 
         "applicants": "បេក្ខជនដាក់ពាក្យ",
         "fullName": "គោត្ដនាម-នាម",
+        "nameFull": "ឈ្មោះពេញ",
         "uploadCV": "បញ្ចូល CV",
         "cv": "ពាក្យស្នើសុំការងារ",
         "detailInfo": "ព័ត៌មានលម្អិត",
@@ -414,6 +418,8 @@
         "appraisal": "ការវាយតម្លៃការងារ",
 
         "awarding": "ការលើកទឹកចិត្ដ",
+        "profile": "ប្រវត្តិរូប",
+        "signOut": "ចាកចេញ",
 
         "report": "របាយការណ៍",
 
