@@ -73,6 +73,20 @@ const EmployeePositionPage = () => {
         setFile(file); // This captures the file object
     };
 
+    const handleDelete = async (id) => {
+        // try {
+        //     await deleteEpmPosi(id); // call the API
+        //     const updatedUsers = users.filter(role => role._id !== id);
+        //     setUsers(updatedUsers);
+        //     setFilteredData(updatedUsers);
+        //     message.success('Deleted successfully');
+        // } catch (error) {
+        //     console.error('Delete failed:', error);
+        //     message.error('Failed to delete');
+        // }
+    };
+
+
     const handleFinish = async (values) => {
         try {
             const formData = new FormData();
@@ -170,6 +184,7 @@ const EmployeePositionPage = () => {
                         </button>
                     </Tooltip>
                     {ConfirmDeleteButton({
+                        onConfirm: () => handleDelete(record._id),
                         tooltip: content['delete'],
                         title: content['confirmDelete'],
                         okText: content['yes'],

@@ -10,6 +10,10 @@ export const getAllEmployeesApi = async () => {
     const res = await api.get('/employees/all');
     return res.data;
 };
+export const getAllEmployeesNotManagerApi = async () => {
+    const res = await api.get('/employees/notManager');
+    return res.data;
+};
 
 export const getEmployeesManagerApi = async () => {
     const res = await api.get('/employees/manager');

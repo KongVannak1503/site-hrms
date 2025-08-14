@@ -28,8 +28,14 @@ import { typeEmpStatusOptions } from '../../data/Type';
 import '../../components/style/Tap.css';
 import TabProfile from './tab/TabProfile';
 import TabPosition from './tab/TabPosition';
+import { Content } from 'antd/es/layout/layout';
+import TabEducation from './tab/TabEducation';
+import TabHistory from './tab/TabHistory';
+import TabDocument from './tab/TabDocument';
+import TabTimeLine from './tab/TabTimeLine';
 
-const EmployeeViewPage = ({ id }) => {
+const EmployeeViewPage = () => {
+    const { id } = useParams();
     const { content, language } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
@@ -115,92 +121,127 @@ const EmployeeViewPage = ({ id }) => {
             tab: content['position'] || 'Position',
         },
         {
+            key: 'education',
+            tab: content['education'] || 'Education',
+        },
+        {
+            key: 'history',
+            tab: content['employmentHistory'] || 'History',
+        },
+        {
             key: 'documents',
             tab: content['document'] || 'Documents',
         },
         {
             key: 'activity',
-            tab: 'Activity',
+            tab: content['timeLine'] || 'Time Line',
         },
     ];
 
     const contentList = {
         profile: <TabProfile employee={employee} />,
         position: <TabPosition id={id} />,
-        documents: <div>📁 Documents Content</div>,
-        activity: <div>📊 Activity Content</div>,
+        education: <TabEducation id={id} />,
+        history: <TabHistory id={id} />,
+        documents: <TabDocument id={id} />,
+        activity: <TabTimeLine id={id} />,
     };
 
+
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['employees'] }
+    ];
     return (
-        <div className="flex flex-col">
+        <div style={{ margin: 24, }}>
+            <div className="flex justify-between mb-3">
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />ព័ត៌មានបុគ្គលិក</h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
 
-            <div className="flex gap-4">
-                <div className="w-[250px]">
-                    <Card className='shadow'>
-                        <div className="flex justify-center">
-                            <img
-                                src={previewUrl}
-                                alt="photo"
-                                className="w-[100px] h-[110px] rounded object-cover"
-                            />
-                        </div>
-                        <div className="text-center">
-                            <div className="text-base font-semibold mt-5">
-                                {language == 'khmer' ? employee?.name_kh : employee?.name_en}
-                            </div>
-                            <p className='py-3'>
-                                {language == 'khmer' ? employee?.positionId?.title_kh : employee?.positionId?.title_en}
-                            </p>
-                            <p>
-                                <span className='px-5 font-semibold text-white rounded text-default bg-default-light'> {language === 'kh'
-                                    ? typeEmpStatusOptions.find(opt => opt.id === employee?.status)?.name_kh
-                                    : typeEmpStatusOptions.find(opt => opt.id === employee?.status)?.name_en}
-                                </span>
-                            </p>
-                        </div>
-                        <Divider />
-                        <div className='flex flex-col gap-1'>
-                            <p><IdcardOutlined className='mr-2' /> {employee?.employee_id}</p>
-                            <p><MailOutlined className='mr-2' /> {employee?.email}</p>
-                            <p><PhoneOutlined className='mr-2' /> {employee?.phone}</p>
-                        </div>
-                        <Divider />
-                        <div className='flex flex-col gap-1'>
-                            <p className='text-gray-400 text-xs flex justify-between items-center'><span>{content['department']}</span><MdKeyboardArrowRight /> </p>
-                            <p> {language == 'khmer' ? employee?.positionId?.department?.title_kh : employee?.positionId?.department?.title_en}</p>
-                            <p className='text-gray-400 text-xs pt-2 flex justify-between items-center mb-1'>{content['manager']} <MdKeyboardArrowRight /></p>
-                            {managers.map((manager) => {
-                                const imagePath = manager?.image_url?.path;
-                                const fullImageUrl = imagePath ? `${uploadUrl}/${imagePath}` : null;
-
-                                return (
-                                    <div className='flex items-center gap-2'>
-                                        <Avatar
-                                            key={manager._id}
-                                            src={fullImageUrl}
-                                            alt={manager?.name_en}
-                                        >
-                                            {manager?.name_en?.charAt(0)}
-                                        </Avatar>
-                                        <p>{language == 'khmer' ? manager?.name_kh : manager?.name_en}</p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </Card>
-
-                </div>
-                <div className="flex-1 overflow-x-auto">
-                    <Card
-                        className="shadow custom-tabs"
-                        tabList={tabList}
-                        activeTabKey={activeTab}
-                        onTabChange={(key) => setActiveTab(key)}
-                    >
-                        {contentList[activeTab]}
-                    </Card>
-                </div>
             </div>
+            <Content
+                className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
+                style={{
+                    padding: 24,
+                    borderRadius: 8,
+                    marginTop: 10,
+                }}
+            >
+                <p className='text-default text-sm font-bold'>{content['detailInfo'] || 'ព័ត៌មានលម្អិត'}</p>
+                <Divider className='!mt-4 !mb-7' />
+                <div className="flex flex-col">
+
+                    <div className="flex gap-6">
+                        <div className="w-[300px]">
+                            <Card className='shadow'>
+                                <div className="flex justify-center">
+                                    <img
+                                        src={previewUrl}
+                                        alt="photo"
+                                        className="w-[100px] h-[110px] rounded object-cover"
+                                    />
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-base font-semibold mt-5">
+                                        {language == 'khmer' ? employee?.name_kh : employee?.name_en}
+                                    </div>
+                                    <p className='py-3'>
+                                        {language == 'khmer' ? employee?.positionId?.title_kh : employee?.positionId?.title_en}
+                                    </p>
+                                    <p>
+                                        <span className='px-5 font-semibold text-white rounded text-default bg-default-light'> {language === 'kh'
+                                            ? typeEmpStatusOptions.find(opt => opt.id === employee?.status)?.name_kh
+                                            : typeEmpStatusOptions.find(opt => opt.id === employee?.status)?.name_en}
+                                        </span>
+                                    </p>
+                                </div>
+                                <Divider />
+                                <div className='flex flex-col gap-1'>
+                                    <p><IdcardOutlined className='mr-2' /> {employee?.employee_id}</p>
+                                    <p><MailOutlined className='mr-2' /> {employee?.email}</p>
+                                    <p><PhoneOutlined className='mr-2' /> {employee?.phone}</p>
+                                </div>
+                                <Divider />
+                                <div className='flex flex-col gap-1'>
+                                    <p className='text-gray-400 text-xs flex justify-between items-center'><span>{content['department']}</span><MdKeyboardArrowRight /> </p>
+                                    <p> {language == 'khmer' ? employee?.positionId?.department?.title_kh : employee?.positionId?.department?.title_en}</p>
+                                    <p className='text-gray-400 text-xs pt-2 flex justify-between items-center mb-1'>{content['manager']} <MdKeyboardArrowRight /></p>
+                                    {managers.map((manager) => {
+                                        const imagePath = manager?.image_url?.path;
+                                        const fullImageUrl = imagePath ? `${uploadUrl}/${imagePath}` : null;
+
+                                        return (
+                                            <div className='flex items-center gap-2'>
+                                                <Avatar
+                                                    key={manager._id}
+                                                    src={fullImageUrl}
+                                                    alt={manager?.name_en}
+                                                >
+                                                    {manager?.name_en?.charAt(0)}
+                                                </Avatar>
+                                                <p>{language == 'khmer' ? manager?.name_kh : manager?.name_en}</p>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </Card>
+
+                        </div>
+                        <div className="flex-1 overflow-x-auto">
+                            <Card
+                                className="shadow custom-tabs"
+                                tabList={tabList}
+                                activeTabKey={activeTab}
+                                onTabChange={(key) => setActiveTab(key)}
+                            >
+                                <div style={{ fontSize: 5 }}>
+                                    {contentList[activeTab]}
+                                </div>
+                            </Card>
+                        </div>
+                    </div>
+                </div >
+            </Content>
         </div >
     );
 };

@@ -86,22 +86,24 @@ const AppSider = ({ collapsed }) => {
                         key: '/appraisal/kpi', label: content['kpi']
                     },
                     // { key: '/appraisal/employee', label: "វាយតម្លៃបុគ្គលិក" },
-                    { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
-                    {
-                        key: '/appraisal/days', label: content['appraisalDay'],
-                        children: [
-                            { key: '/appraisal/day/employee', label: content['employees'] },
-                            { key: '/appraisal/day', label: `${content['create']} ${content['appraisal']}` },
-                        ]
-                    },
-                    {
-                        key: '/appraisal/months', label: content['appraisalMonth'],
-                        children: [
-                            { key: '/appraisal/month/employee', label: content['employees'] },
-                            { key: '/appraisal/month', label: `${content['create']} ${content['appraisal']}` },
-                        ]
-                    },
-                    { key: '/appraisal/year', label: content['appraisalYear'] },
+                    // { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
+                    { key: '/appraisal/employee', label: content['employees'] },
+                    { key: '/appraisal', label: `${content['create']} ${content['appraisal']}` },
+                    // {
+                    //     key: '/appraisal/days', label: content['appraisalDay'],
+                    //     children: [
+                    //         { key: '/appraisal/day/employee', label: content['employees'] },
+                    //         { key: '/appraisal/day', label: `${content['create']} ${content['appraisal']}` },
+                    //     ]
+                    // },
+                    // {
+                    //     key: '/appraisal/months', label: content['appraisalMonth'],
+                    //     children: [
+                    //         { key: '/appraisal/month/employee', label: content['employees'] },
+                    //         { key: '/appraisal/month', label: `${content['create']} ${content['appraisal']}` },
+                    //     ]
+                    // },
+                    // { key: '/appraisal/year', label: content['appraisalYear'] },
                 ]
             },
             // {
@@ -198,7 +200,7 @@ const AppSider = ({ collapsed }) => {
                 icon: <LuClipboardPen />,
                 label: content['appraisal'],
                 children: [
-                    { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
+                    // { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
                     { key: `/appraisal/day/${identity?.employeeId?._id}`, label: content['appraisalDay'] },
                     { key: '/appraisal/month', label: content['appraisalMonth'] },
                     { key: `/appraisal/year/${identity?.employeeId?._id}`, label: content['appraisalYear'] },

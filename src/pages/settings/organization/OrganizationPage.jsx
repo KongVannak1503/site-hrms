@@ -6,7 +6,6 @@ import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { useEffect } from 'react';
-import CategoryUpdatePage from './CategoryUpdatePage';
 import OrganizationCreatePage from './OrganizationCreatePage';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -15,6 +14,7 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import { Styles } from '../../../utils/CsStyle';
 import { formatDateTime } from '../../../utils/utils';
 import { deleteOrganizationApi, getOrganizationsApi } from '../../../services/organizationApi';
+import OrganizationUpdatePage from './OrganizationUpdatePage';
 
 const OrganizationPage = () => {
     const { isLoading, content } = useAuth();
@@ -116,7 +116,24 @@ const OrganizationPage = () => {
             key: "name",
             render: (text) => <span>{text}</span>,
         },
-
+        {
+            title: content['nameFull'],
+            dataIndex: "fullname",
+            key: "fullname",
+            render: (text) => <span>{text}</span>,
+        },
+        {
+            title: content['email'],
+            dataIndex: "email",
+            key: "email",
+            render: (text) => <span>{text}</span>,
+        },
+        {
+            title: content['phone'],
+            dataIndex: "phone",
+            key: "phone",
+            render: (text) => <span>{text}</span>,
+        },
         {
             title: content['createdAt'],
             dataIndex: "createdAt",
@@ -209,35 +226,73 @@ const OrganizationPage = () => {
             },
         ],
     };
-    const handleAddCreated = async (newUser) => {
-        try {
-            if (!newUser || !newUser._id) {
-                console.error("New object does not contain _id:", newUser);
-                return;
-            }
-            setFilteredData((prevData) => [newUser, ...prevData]);
-            setUsers((prevData) => [newUser, ...prevData]);
-
-            setOpen(false);
-
-        } catch (error) {
-            console.error("Error adding:", error);
-        }
-    };
-    const handleUpdate = (updatedRole) => {
-        if (!updatedRole || !updatedRole._id) {
-            console.error("Updated   object does not contain _id:", updatedRole);
+    const handleAddCreated = (newOrg) => {
+        if (!newOrg || !newOrg._id) {
+            console.error("New organization missing _id:", newOrg);
             return;
         }
-        setUsers((prevRoles) =>
-            prevRoles.map(role => (role._id === updatedRole._id ? updatedRole : role))
-        );
-        setFilteredData((prevFiltered) =>
-            prevFiltered.map(role => (role._id === updatedRole._id ? updatedRole : role))
-        );
+
+        // Set all other organizations inactive, only newOrg is active
+        setUsers((prev) => {
+            return prev.map(org => ({
+                ...org,
+                isActive: org._id === newOrg._id // only new one active
+                    ? true
+                    : false,
+            }));
+        });
+
+        setFilteredData((prev) => {
+            // If filteredData is different from users, also update similarly
+            return prev.map(org => ({
+                ...org,
+                isActive: org._id === newOrg._id
+                    ? true
+                    : false,
+            }));
+        });
+
+        // Add the new org at the front of the list (optional)
+        setUsers((prev) => [newOrg, ...prev]);
+        setFilteredData((prev) => [newOrg, ...prev]);
 
         setOpen(false);
     };
+
+    const handleUpdate = (updatedOrg) => {
+        if (!updatedOrg || !updatedOrg._id) {
+            console.error("Updated object does not contain _id:", updatedOrg);
+            return;
+        }
+
+        setUsers((prevOrgs) => {
+            // Map through previous orgs
+            return prevOrgs.map(org => {
+                // Set the updated org with new data
+                if (org._id === updatedOrg._id) return updatedOrg;
+
+                // If the updated org isActive true, set others to false
+                if (updatedOrg.isActive) {
+                    return { ...org, isActive: false };
+                }
+
+                return org;
+            });
+        });
+
+        setFilteredData((prevFiltered) => {
+            return prevFiltered.map(org => {
+                if (org._id === updatedOrg._id) return updatedOrg;
+                if (updatedOrg.isActive) {
+                    return { ...org, isActive: false };
+                }
+                return org;
+            });
+        });
+
+        setOpen(false);
+    };
+
 
 
     if (isLoading) {
@@ -271,6 +326,7 @@ const OrganizationPage = () => {
                     </div>
                 </div>
                 <Table
+                    className="custom-pagination custom-checkbox-table"
                     scroll={{ x: 'max-content' }}
                     rowSelection={rowSelection}
                     columns={columns}
@@ -304,7 +360,7 @@ const OrganizationPage = () => {
                     {actionForm === 'create' ? (
                         <OrganizationCreatePage form={form} onUserCreated={handleAddCreated} onCancel={closeDrawer} />
                     ) : (
-                        <CategoryUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
+                        <OrganizationUpdatePage onUserUpdated={handleUpdate} dataId={selectedUserId} onCancel={closeDrawer} />
                     )}
                 </ModalLgCenter>
 

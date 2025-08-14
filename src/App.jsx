@@ -88,6 +88,8 @@ import AppraisalMonthAdminFormPage from './pages/appraisals/appraisal_month/Appr
 import AppraisalMonthManagerFormPage from './pages/appraisals/appraisal_month/AppraisalMonthManagerFormPage'
 import AppraisalMonthEmployeePage from './pages/appraisals/appraisal_month/AppraisalMonthEmployeePage'
 import AppraisalMonthEmployeeListPage from './pages/appraisals/appraisal_month/AppraisalMonthEmployeeListPage'
+import EmployeeViewPage from './pages/employee/EmployeeViewPage'
+import EpmReportPdf from './pages/employee/report/EpmReportPdf'
 
 function App() {
   const { identity, isLoading } = useAuth();
@@ -128,6 +130,7 @@ function App() {
             {identity?.role?.name === ADMIN && (
               <>
                 <Route path="/employee" element={<EmployeePage />} />
+                <Route path="/employee/view/:id" element={<EmployeeViewPage />} />
                 {/* Appraisal */}
                 <Route
                   path="/appraisal/kpi"
@@ -145,7 +148,7 @@ function App() {
                     <KpiTemplateBuilderEditPage />
                   } />
                 <Route
-                  path="/appraisal/month"
+                  path="/appraisal"
                   element={
                     <AppraisalMonthPage />
                   } />
@@ -198,15 +201,16 @@ function App() {
                   } />
                 {/* month */}
                 <Route
-                  path="/appraisal/month/employee"
+                  path="/appraisal/employee"
                   element={
                     <AppraisalMonthEmployeePage />
                   } />
                 <Route
-                  path="/appraisal/month/employee/list/:mainId"
+                  path="/appraisal/employee/list/:mainId"
                   element={
                     <AppraisalMonthEmployeeListPage />
                   } />
+
                 <Route
                   path="/appraisal/month/admin/:mainId/form/:id"
                   element={
@@ -319,7 +323,7 @@ function App() {
             </>
             {/*  */}
             {/* Appraisal */}
-            <Route path="/appraisal" element={<TableSample />} />
+            {/* <Route path="/appraisal" element={<TableSample />} /> */}
 
             {/* Awarding */}
             <Route path="/awarding" element={<TableSample />} />
@@ -400,6 +404,11 @@ function App() {
 
           </Route>
         </Route>
+        <Route
+          path="/employee/exportPdf"
+          element={
+            <EpmReportPdf />
+          } />
         <Route path="/unauthorized" element={<Authorized />} />
         <Route path="*" element={isLoading ? <FullScreenLoader /> : <NotFound />} />
       </Routes>

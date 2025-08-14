@@ -13,7 +13,7 @@ import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { getEmployeeApi } from '../../../services/employeeApi';
 import EmployeeNav from '../../employee/EmployeeNav';
 import AppraisalNav from './AppraisalNav';
-import { getAppraisalMonthsApi, getAppraisalsByDepartmentApi } from '../../../services/AppraisalApi';
+import { getAppraisalActiveMonthsApi, getAppraisalMonthsApi, getAppraisalsByDepartmentApi } from '../../../services/AppraisalApi';
 import StatusTag from '../../../components/style/StatusTag';
 import TypeTag from '../../../components/style/TypeTag';
 
@@ -35,13 +35,12 @@ const AppraisalMonthEmployeeListPage = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = content['appraisalDay'];
+        document.title = content['appraisal'];
         const fetchData = async () => {
             try {
                 const resEmp = await getEmployeeApi(mainId);
                 setEmployee(resEmp);
-                const response = await getAppraisalMonthsApi(resEmp?.positionId?.department?._id);
-                console.log(response);
+                const response = await getAppraisalActiveMonthsApi(mainId);
 
                 if (Array.isArray(response)) {
                     setUsers(response);
@@ -71,8 +70,8 @@ const AppraisalMonthEmployeeListPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisal'], path: '/appraisal/employee' },
-        { breadcrumbName: content['appraisalDay'] },
+        { breadcrumbName: content['employee'], path: '/appraisal/employee' },
+        { breadcrumbName: content['appraisal'] },
         { breadcrumbName: language == 'khmer' ? employee?.name_kh : employee?.name_en },
     ];
 
@@ -93,9 +92,15 @@ const AppraisalMonthEmployeeListPage = () => {
 
     const columns = [
         {
-            title: content['date'],
+            title: content['startDate'],
             dataIndex: "startDate",
             key: "startDate",
+            render: (text) => <span>{formatDateTime(text)}</span>
+        },
+        {
+            title: content['toDate'],
+            dataIndex: "endDate",
+            key: "endDate",
             render: (text) => <span>{formatDateTime(text)}</span>
         },
 
@@ -110,8 +115,8 @@ const AppraisalMonthEmployeeListPage = () => {
         },
         {
             title: content['status'],
-            dataIndex: "isActive",
-            key: "isActive",
+            dataIndex: "status",
+            key: "status",
             render: (text) => <StatusTag value={text} />
         },
         {
@@ -185,7 +190,7 @@ const AppraisalMonthEmployeeListPage = () => {
         navigate('/appraisal/kpi/form');
     };
     const handleUpdate = (mainId, id) => {
-        navigate(`/appraisal/month/admin/${mainId}/form/${id}`);
+        navigate(`/appraisal/month/manager/${mainId}/form/${id}`);
     };
 
 

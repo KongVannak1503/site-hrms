@@ -31,15 +31,14 @@ const AppraisalMonthCreatePage = ({ onCancel, onUserCreated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const { startDate, endDate, kpiTemplate, department, announcementDay } = values;
+            const { startDate, endDate, kpiTemplate, announcementDay } = values;
             const formData = {
                 kpiTemplate,
-                department,
+                // department,
                 endDate,
                 announcementDay,
                 startDate: startDate ? startDate.format('YYYY-MM-DD') : null,
             };
-            console.log(values);
 
             const response = await createAppraisalMonthApi(formData);
             message.success(content['createSuccessFully']);

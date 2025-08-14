@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
 import { Avatar, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { EyeOutlined, FormOutlined, PlusOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import { EyeOutlined, FileTextOutlined, FormOutlined, PlusOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import EmployeeCreatePage from './EmployeeCreatePage';
@@ -76,8 +76,8 @@ const EmployeePage = () => {
         setSelectedUserId(userId);
         setOpen(true);
     };
-    const handleView = (userId) => {
-        navigate(`/employee/update/${userId}`);
+    const handleView = (id) => {
+        navigate(`/employee/view/${id}`);
     };
 
     const breadcrumbItems = [
@@ -212,7 +212,7 @@ const EmployeePage = () => {
                             type="primary"
                             shape="circle"
                             className={Styles.btnDownload}
-                            onClick={() => handleOpen(record._id)}
+                            onClick={() => handleView(record._id)}
                         >
                             <UserSwitchOutlined />
                         </button>
@@ -318,7 +318,7 @@ const EmployeePage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មានបុគ្គលិក</h1>
+                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />ព័ត៌មានបុគ្គលិក</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>

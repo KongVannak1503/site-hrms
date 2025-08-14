@@ -29,7 +29,7 @@ const { Title } = Typography;
 
 export default function AppraisalMonthManagerFormPage() {
     const { mainId, id } = useParams();
-    const { content, language } = useAuth();
+    const { content, language, isLoading } = useAuth();
     const [loading, setLoading] = useState(true);
     const [template, setTemplates] = useState(null);
     const [appraisal, setAppraisal] = useState(null);
@@ -40,7 +40,7 @@ export default function AppraisalMonthManagerFormPage() {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = content['appraisalDay']
+        document.title = content['appraisal']
         fetchTemplates();
     }, [content]);
 
@@ -132,8 +132,8 @@ export default function AppraisalMonthManagerFormPage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisalDay'], path: "/appraisal/day" },
-        { breadcrumbName: content['kpiDay'], path: `/appraisal/employee/list/${mainId}` },
+        { breadcrumbName: content['employee'], path: "/appraisal/employee" },
+        { breadcrumbName: content['appraisal'], path: `/appraisal/employee/list/${mainId}` },
         { breadcrumbName: language == 'khmer' ? employee?.name_kh : employee?.name_en },
     ];
 
@@ -152,7 +152,7 @@ export default function AppraisalMonthManagerFormPage() {
                 paddingRight: 20,
             }}>
                 <div className="flex justify-between mb-6">
-                    <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisalDay']}</h1>
+                    <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
                     <CustomBreadcrumb items={breadcrumbItems} />
 
                 </div>

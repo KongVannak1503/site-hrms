@@ -1,24 +1,40 @@
-import React, { useEffect } from 'react';
-import { Form, Input, Row, Col, Switch, message, Select, Card, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Switch, message, Upload, Typography } from 'antd';
 import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
-import { Typography } from 'antd';
-import { useState } from 'react';
-import { createOrganizationApi } from '../../../services/organizationApi';
+import { createOrganizationApi, getOrganizationApi, updateOrganizationApi } from '../../../services/organizationApi';
+import uploadUrl from '../../../services/uploadApi';
 
-
-const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
+const OrganizationUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();
-
-    const { Text } = Typography;
     const [fileList, setFileList] = useState([]);
     const [previewUrl, setPreviewUrl] = useState(null);
-    useEffect(() => {
-        form.resetFields();
-    }, [content]);
+    const [imageUrl, setImageUrl] = useState(null);
+    const [form] = Form.useForm();
 
     useEffect(() => {
-        // Clean up preview URL to avoid memory leaks
+        const fetchInitialData = async () => {
+            try {
+                const response = await getOrganizationApi(dataId);
+                setImageUrl(response.documents?.path);
+                form.setFieldsValue({
+                    name: response.name,
+                    fullname: response.fullname,
+                    email: response.email,
+                    phone: response.phone,
+                    social_media: response.social_media,
+                    website_name: response.website_name,
+                    description: response.description,
+                    isActive: response.isActive,
+                });
+            } catch (error) {
+                message.error(content['failedToLoad']);
+            }
+        };
+        fetchInitialData();
+    }, [dataId, content, form, imageUrl]);
+
+    useEffect(() => {
         return () => {
             if (previewUrl) {
                 URL.revokeObjectURL(previewUrl);
@@ -27,9 +43,7 @@ const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
     }, [previewUrl]);
 
     const handleChange = ({ fileList: newFileList }) => {
-        // Only keep the latest file
         const latestFileList = newFileList.slice(-1);
-
         setFileList(latestFileList);
 
         if (latestFileList[0]?.originFileObj) {
@@ -39,37 +53,47 @@ const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
             setPreviewUrl(null);
         }
     };
+
     const handleFinish = async (values) => {
         try {
-            const { name, fullname, email, phone, social_media, website_name, description, isActive } = values;
-            // Create a FormData instance to send file + fields
             const formData = new FormData();
-            formData.append('fullname', fullname);
-            formData.append('name', name);
-            formData.append('email', email);
-            formData.append('phone', phone);
-            formData.append('social_media', social_media);
-            formData.append('website_name', website_name);
-            formData.append('description', description);
-            formData.append('isActive', isActive);
+            formData.append('name', values.name);
+            formData.append('fullname', values.fullname);
+            formData.append('email', values.email);
+            formData.append('phone', values.phone);
+            formData.append('social_media', values.social_media);
+            formData.append('website_name', values.website_name);
+            formData.append('description', values.description || '');
+            formData.append('isActive', values.isActive);
 
-            // Append the file if selected
+            // Append uploaded file if any
             if (fileList.length > 0 && fileList[0].originFileObj) {
                 formData.append('file', fileList[0].originFileObj);
             }
 
-            const response = await createOrganizationApi(formData);
-            message.success(content['createSuccessFully']);
+            // Append existing document info if file has URL (no new upload)
+            if (fileList.length > 0 && fileList[0].url) {
+                const existingDoc = {
+                    name: fileList[0].name,
+                    path: fileList[0].url.replace(/^\//, ''),
+                    extension: fileList[0].name.split('.').pop(),
+                };
+                formData.append('existingDocumentsJson', JSON.stringify(existingDoc));
+            }
 
-            onUserCreated(response.data);
-            form.resetFields();
+            // Call API to update organization
+            const response = await updateOrganizationApi(dataId, formData);
+            message.success(content['updateSuccessFully']);
+
+            onUserUpdated(response.data);
         } catch (error) {
-            console.error('Error creating User:', error);
+            console.error('Error updating organization:', error);
             message.error(content['failedToSave']);
         }
     };
 
-
+    const defaultImage = "https://cdn-icons-png.freepik.com/256/12783/12783710.png?semt=ais_hybrid";
+    const mainImage = imageUrl ? uploadUrl + "/" + imageUrl : defaultImage;
 
     return (
         <Form
@@ -77,54 +101,47 @@ const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
             onFinish={handleFinish}
             layout="vertical"
             autoComplete="off"
-            initialValues={{
-                isActive: true
-            }}
+            initialValues={{ isActive: true }}
         >
             <div className="grid w-full min-w-0 grid-cols-1 md:grid-cols-4 gap-10">
                 <div className="col-span-1">
-                    <div>
-                        <div>
-                            <label className="text-sm font-semibold text-gray-700">{content['logo']}</label>
+                    <label className="text-sm font-semibold text-gray-700">{content['logo']}</label>
+                    <Upload
+                        listType="picture"
+                        maxCount={1}
+                        accept="image/*"
+                        onChange={handleChange}
+                        fileList={fileList}
+                        beforeUpload={() => false}
+                    >
+                        <div className="border mt-2 border-dashed bg-gray-50 hover:bg-gray-100 p-4 rounded-lg cursor-pointer hover:border-blue-500 w-[200px] h-[100px] overflow-hidden flex justify-center items-center">
+                            {previewUrl ? (
+                                <div className="relative">
+                                    <img
+                                        src={previewUrl}
+                                        alt="Uploaded"
+                                        width={200}
+                                        height={100}
+                                        className="max-w-full max-h-full object-cover"
+                                    />
+                                    <p className="absolute bottom-4 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
+                                        {content['uploadImage']}
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="relative">
+                                    <img
+                                        width={100}
+                                        src={mainImage}
+                                        alt="Placeholder Icon"
+                                    />
+                                    <p className="absolute bottom-2 right-[-40px] bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
+                                        {content['uploadImage']}
+                                    </p>
+                                </div>
+                            )}
                         </div>
-                        <Upload
-                            listType="picture"
-                            maxCount={1}
-                            accept="image/*"
-                            onChange={handleChange}
-                            fileList={fileList}
-                            beforeUpload={() => false} // Prevent auto upload for demo, handle manually
-                        >
-                            <div className="border mt-2 border-dashed bg-gray-50 hover:bg-gray-100 p-4 rounded-lg cursor-pointer hover:border-blue-500 w-[200px] h-[100px] overflow-hidden flex justify-center items-center">
-                                {previewUrl ? (
-                                    <div className="relative">
-                                        <img
-                                            src={previewUrl}
-                                            alt="Uploaded"
-                                            width={200} height={100}
-                                            className="max-w-full max-h-full object-cover"
-                                        />
-                                        <p className="absolute bottom-4 right-1 bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
-                                            {content['uploadImage']}
-                                        </p>
-                                    </div>
-
-                                ) : (
-                                    <div className="relative">
-                                        <img
-                                            width={100}
-                                            src="https://cdn-icons-png.freepik.com/256/12783/12783710.png?semt=ais_hybrid"
-                                            alt="Placeholder Icon"
-                                        />
-                                        <p className="absolute bottom-2 right-[-40px] bg-white border border-gray-400 rounded shadow-sm py-1 px-2 whitespace-nowrap">
-                                            {content['uploadImage']}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-
-                        </Upload>
-                    </div>
+                    </Upload>
                 </div>
                 <div className="md:col-span-3">
                     <div className="grid w-full min-w-0 grid-cols-1 md:grid-cols-2 gap-4">
@@ -218,14 +235,14 @@ const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
                         <button type="button" onClick={onCancel} className={Styles.btnCancel}>
                             Cancel
                         </button>
-                        <button type="submit" className={Styles.btnCreate} >
+                        <button type="submit" className={Styles.btnCreate}>
                             Submit
                         </button>
                     </div>
                 </div>
             </div>
-        </Form >
+        </Form>
     );
 };
 
-export default OrganizationCreatePage;
+export default OrganizationUpdatePage;

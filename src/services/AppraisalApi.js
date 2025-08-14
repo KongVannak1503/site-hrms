@@ -87,6 +87,11 @@ export const getAppraisalMonthsApi = async () => {
     return res.data;
 };
 
+export const getAppraisalActiveMonthsApi = async (employee) => {
+    const res = await api.get(`/appraisals/activeMonth/${employee}`);
+    return res.data;
+};
+
 
 export const getAppraisalMonthApi = async (id) => {
     const res = await api.get(`/appraisals/month/${id}`);

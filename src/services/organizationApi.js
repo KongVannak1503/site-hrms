@@ -10,6 +10,11 @@ export const getOrganizationApi = async (id) => {
     return res.data;
 };
 
+export const getOrganizationActiveApi = async () => {
+    const res = await api.get(`/organizations/active`);
+    return res.data;
+};
+
 export const createOrganizationApi = async (userData) => {
     const res = await api.post(`/organizations`, userData);
     return res.data;

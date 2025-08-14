@@ -11,7 +11,7 @@ const AppraisalNav = () => {
     const { mainId, id } = useParams();
 
     const tabs = [
-        { key: 'profile', label: content['admin'] || 'Admin', path: `/appraisal/month/admin/${mainId}/form/${id}` },
+        // { key: 'profile', label: content['admin'] || 'Admin', path: `/appraisal/month/admin/${mainId}/form/${id}` },
         { key: 'position', label: content['manager'] || 'Manager', path: `/appraisal/month/manager/${mainId}/form/${id}` },
         { key: 'education', label: content['employees'], path: `/appraisal/month/employee/${mainId}/form/${id}` }
     ];

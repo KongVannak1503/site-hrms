@@ -54,11 +54,11 @@ const AppraisalMonthPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisalMonth'] }
+        { breadcrumbName: content['appraisal'] }
     ];
 
     useEffect(() => {
-        document.title = content['appraisalMonth'];
+        document.title = content['appraisal'];
         const fetchData = async () => {
             try {
                 const res = await getDepartmentsApi();
@@ -173,27 +173,17 @@ const AppraisalMonthPage = () => {
             render: (_, text) => <p>{text.kpiTemplate?.name}</p>,
         },
         {
-            title: content['department'],
-            dataIndex: "department",
-            key: "department",
-            render: (text, record) => {
-                const departmentName =
-                    language === 'khmer'
-                        ? record.department?.title_kh
-                        : record.department?.title_en;
-                const departmentAll = language === 'khmer' ? 'ទាំងអស់'
-                    : 'All';
-                return (
-                    <div>
-                        <p>{record.department ? departmentName : departmentAll}</p>
-                    </div>
-                );
-            },
-        },
-        {
-            title: content['date'],
+            title: content['startDate'],
             dataIndex: "startDate",
             key: "startDate",
+            render: (text) => <div>
+                <span>{formatDate(text)}</span>
+            </div>,
+        },
+        {
+            title: content['endDate'],
+            dataIndex: "endDate",
+            key: "endDate",
             render: (text) => <div>
                 <span>{formatDate(text)}</span>
             </div>,
@@ -308,7 +298,7 @@ const AppraisalMonthPage = () => {
                             onChange={(date, dateString) => handleSearch('date', dateString)}
                         />
 
-                        <Select
+                        {/* <Select
                             showSearch
                             allowClear
                             optionFilterProp="children"
@@ -327,11 +317,11 @@ const AppraisalMonthPage = () => {
                                     {language === 'khmer' ? department.title_kh : department.title_en}
                                 </Select.Option>
                             ))}
-                        </Select>
+                        </Select> */}
 
                     </div>
 
-                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisalMonth']}`}</button>
+                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisal']}`}</button>
                 </div>
                 <Table
                     className='custom-pagination custom-checkbox-table'
@@ -361,8 +351,8 @@ const AppraisalMonthPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['appraisalMonth']}${content['newEnd']}`
-                            : `${content['update']} ${content['appraisalMonth']}`
+                            ? `${content['create']} ${content['newStart']} ${content['appraisal']}${content['newEnd']}`
+                            : `${content['update']} ${content['appraisal']}`
                     }
                 >
                     {actionForm === 'create' ? (

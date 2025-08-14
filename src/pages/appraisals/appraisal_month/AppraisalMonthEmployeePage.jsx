@@ -6,7 +6,7 @@ import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import { getEmployeesApi } from '../../../services/employeeApi';
+import { getAllEmployeesNotManagerApi, getEmployeesApi } from '../../../services/employeeApi';
 import uploadUrl from '../../../services/uploadApi';
 import StatusTag from '../../../components/style/StatusTag';
 import { Styles } from '../../../utils/CsStyle';
@@ -34,14 +34,16 @@ const AppraisalMonthEmployeePage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisal'] }
+        { breadcrumbName: content['employee'] }
     ];
 
     useEffect(() => {
         document.title = `${content['appraisal']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getEmployeesApi();
+                const response = await getAllEmployeesNotManagerApi();
+                console.log(response);
+
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -76,7 +78,7 @@ const AppraisalMonthEmployeePage = () => {
         }
     };
     const handleEntrain = (id) => {
-        navigate(`/appraisal/month/employee/list/${id}`);
+        navigate(`/appraisal/employee/list/${id}`);
     };
 
     const columns = [
@@ -187,12 +189,11 @@ const AppraisalMonthEmployeePage = () => {
                 }}
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
-                    <div className='mb-3 sm:mb-1'>
+                    {/* <div className='mb-3 sm:mb-1'>
                         <p className='text-default text-sm font-bold'>
                             {content['employees']}
                         </p>
-                        {/* <h5 className='text-lg font-semibold'>{content['employees']}</h5> */}
-                    </div>
+                    </div> */}
                     <div className='flex items-center gap-3'>
                         <div>
                             <Input
