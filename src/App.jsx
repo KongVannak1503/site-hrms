@@ -90,6 +90,10 @@ import AppraisalMonthEmployeePage from './pages/appraisals/appraisal_month/Appra
 import AppraisalMonthEmployeeListPage from './pages/appraisals/appraisal_month/AppraisalMonthEmployeeListPage'
 import EmployeeViewPage from './pages/employee/EmployeeViewPage'
 import EpmReportPdf from './pages/employee/report/EpmReportPdf'
+import ReportTest from './pages/employee/report/ReportTest'
+import ReportTestDocx from './pages/employee/report/ReportTestDocx'
+import ReportEmployeePage from './pages/employee/report/employee/ReportEmployeePage'
+import ReportRecruitmentPage from './pages/employee/report/recruitment/ReportRecruitmentPage'
 
 function App() {
   const { identity, isLoading } = useAuth();
@@ -402,6 +406,17 @@ function App() {
                 <UploadForm />
               } />
 
+            <Route
+              path="/report/employee"
+              element={
+                <ReportEmployeePage />
+              } />
+            <Route
+              path="/report/recruitment"
+              element={
+                <ReportRecruitmentPage />
+              } />
+
           </Route>
         </Route>
         <Route
@@ -409,6 +424,12 @@ function App() {
           element={
             <EpmReportPdf />
           } />
+        <Route
+          path="/test-report"
+          element={
+            <ReportTest />
+          } />
+
         <Route path="/unauthorized" element={<Authorized />} />
         <Route path="*" element={isLoading ? <FullScreenLoader /> : <NotFound />} />
       </Routes>

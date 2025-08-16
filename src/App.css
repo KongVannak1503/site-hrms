@@ -352,3 +352,21 @@ a.btnDownload:hover {
 .ant-menu-item-group-title {
   margin-top: 16px;
 }
+
+.docx-wrapper {
+  background-color: white !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+.docx-wrapper>section.docx {
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+section.docx>footer {
+  min-height: auto !important;
+  margin-bottom: 0 !important;
+  border-top: 1px solid gray;
+  color: gray;
+}
