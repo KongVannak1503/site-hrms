@@ -125,9 +125,9 @@ const AppSider = ({ collapsed }) => {
                 icon: <LuChartNoAxesCombined />,
                 label: content['report'],
                 children: [
-                    { key: '/recruitment/report', label: "របាយការណ៍ជ្រើសរើសបុគ្គលិក" },
-                    { key: '/employee/report', label: "របាយការណ៍បុគ្គលិក" },
-                    { key: '/performance/report', label: "របាយការណ៍វាយតម្លៃការងារ" },
+                    { key: '/report/recruitment', label: `${content['report']}${content['recruiter']}` },
+                    { key: '/report/employee', label: `${content['report']}${content['Employee']}` },
+                    { key: '/performance/report', label: `${content['report']}${content['appraisal']}` },
 
                 ]
             },

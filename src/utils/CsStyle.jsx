@@ -30,6 +30,9 @@ export const Styles = {
         hired: "text-white bg-[#52c41a] hover:bg-[#73d13d] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
         reserve: "text-white bg-[#2f54eb] hover:bg-[#597ef7] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
         rejected: "text-white bg-[#f5222d] hover:bg-[#ff4d4f] px-4 py-1.5 rounded transition duration-200 cursor-pointer",
-    }
+    },
+    btnWord: "px-4 py-1.5 cursor-pointer rounded text-white bg-blue-500 hover:bg-blue-400 transition duration-200 whitespace-nowrap",
+    btnExcel: "px-4 py-1.5 cursor-pointer rounded text-white bg-green-500 hover:bg-green-400 transition duration-200 whitespace-nowrap",
+    btnPrint: "px-4 py-1.5 cursor-pointer rounded text-white bg-red-500 hover:bg-red-400 transition duration-200 whitespace-nowrap",
 
 }

@@ -10,63 +10,6 @@ export default function EmployeeReport() {
         { id: 3, name: "David Lee", department: "Finance", position: "Accountant", status: "Inactive" },
     ];
 
-    const generatePDF = () => {
-        const doc = new jsPDF();
-
-        // If you want Khmer font support, you must embed custom font here (advanced)
-        // For now, let's assume default font and UTF-8 support for Khmer (may not render perfectly)
-
-        // Add logo (convert your Logo import to base64 or URL)
-        // Example with base64:
-        // doc.addImage(logoBase64, 'PNG', x, y, width, height);
-        // For now, skip or add if you have base64 string
-
-        // Add Khmer headers (adjust x,y)
-        doc.setFontSize(14);
-        doc.text("ព្រះរាជាណាចក្រកម្ពុជា", 105, 20, { align: "center" });
-        doc.text("ជាតិ សាសនា ព្រះមហាក្សត្រ", 105, 30, { align: "center" });
-        doc.text("323", 105, 40, { align: "center" });
-
-        // Add University name (Khmer and English)
-        doc.setFontSize(16);
-        doc.text("សាកលវិទ្យាល័យ សៅស៍អ៊ីសថ៍អេយសៀ", 105, 60, { align: "center" });
-        doc.text("UNIVERSITY OF SOUTH-EAST ASIA", 105, 70, { align: "center" });
-
-        // Draw a line below header
-        doc.setLineWidth(0.5);
-        doc.line(15, 75, 195, 75); // horizontal line
-
-        // Prepare table data
-        const headers = [
-            "ID", "Employee ID", "Employee", "Email", "Position", "Department",
-            "Mobile", "Joining Date", "Manager", "Status"
-        ];
-        const rows = employees.map(emp => [
-            emp.id,
-            emp.employeeId || "N/A",
-            emp.name,
-            emp.email || "N/A",
-            emp.position,
-            emp.department,
-            emp.mobile || "N/A",
-            emp.joiningDate || "N/A",
-            emp.manager || "N/A",
-            emp.status,
-        ]);
-
-        // Add table with autoTable
-        autoTable(doc, {
-            head: [headers],
-            body: rows,
-            startY: 80,
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [41, 128, 185], textColor: 255 },
-            margin: { left: 15, right: 15 },
-        });
-
-        // Save file
-        doc.save("employee_report.pdf");
-    };
 
     return (
         <div style={{ padding: 20 }}>
