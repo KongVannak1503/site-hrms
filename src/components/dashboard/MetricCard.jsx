@@ -35,7 +35,7 @@ const MetricCard = ({ title, count }) => {
 
   return (
     <motion.div
-      className="bg-white p-5 rounded-2xl shadow hover:shadow-md transition duration-300"
+      className="bg-white p-5 rounded-[5px] shadow hover:shadow-md transition duration-300"
       whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
@@ -45,7 +45,7 @@ const MetricCard = ({ title, count }) => {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className={`rounded-full p-2 ${iconInfo.bg} ${iconInfo.color}`}
+          className={`rounded-[5px] p-2 ${iconInfo.bg} ${iconInfo.color}`}
         >
           {iconInfo.icon && <iconInfo.icon className="h-6 w-6" />}
         </motion.div>

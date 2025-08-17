@@ -106,11 +106,11 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                         />
                     </Select.Option>
                 </Select>
-                <div className='mr-4'>
+                {/* <div className='mr-4'>
                     <Badge className={`${Styles.btnHeaderIcon}`} size="default" style={{ borderRadius: 50 }} count={5} offset={[3, 10]}>
                         <Avatar shape="circle" icon={<BellOutlined style={{ fontSize: '15px', fontWeight: 'bold' }} />} size={45} />
                     </Badge>
-                </div>
+                </div> */}
                 {/* 
                 <Button className='mx-2 !text-gray-700 dark:!text-gray-400'
                     type="text"
