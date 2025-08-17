@@ -15,6 +15,14 @@
   font-style: normal;
 }
 
+/* New Tacteing font */
+@font-face {
+  font-family: 'Tacteing';
+  src: url('./assets/fonts/TACTENG.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .khmer-header {
   font-family: "Moul", serif;
   font-weight: 400;
@@ -369,4 +377,25 @@ section.docx>footer {
   margin-bottom: 0 !important;
   border-top: 1px solid gray;
   color: gray;
+}
+
+/* Add this CSS globally or in your component */
+@media print {
+  body * {
+    visibility: hidden;
+    /* hide everything */
+  }
+
+  #docx-preview,
+  #docx-preview * {
+    visibility: visible;
+    /* only show the print container */
+  }
+
+  #docx-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
 }

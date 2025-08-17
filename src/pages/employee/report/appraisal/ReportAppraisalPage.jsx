@@ -22,16 +22,14 @@ import { useAuth } from "../../../../contexts/AuthContext";
 import CustomBreadcrumb from "../../../../components/breadcrumb/CustomBreadcrumb";
 import { Styles } from '../../../../utils/CsStyle';
 import { Button, Input, DatePicker, Select } from "antd";
-import { getEmployeesApi } from "../../../../services/employeeApi";
 import { typeEmpStatusOptions } from "../../../../data/Type";
-import moment from "moment";
 import { getDepartmentsApi } from "../../../../services/departmentApi";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { getReportEmployeesApi } from "../../../../services/reportApi";
+import { getReportRecruitmentApi } from "../../../../services/reportApi";
 import * as XLSX from "xlsx";
 
-export default function ReportEmployeePage() {
+export default function ReportAppraisalPage() {
     const { content, language } = useAuth()
     const previewRef = useRef(null);
     const [docBlob, setDocBlob] = useState(null);
@@ -49,15 +47,13 @@ export default function ReportEmployeePage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: `${content['report']}${content['Employee']}` }
+        { breadcrumbName: `${content['report']}${content['recruiter']}` }
     ];
     useEffect(() => {
-        document.title = `${content['report']}${content['Employee']} | USEA`;
+        document.title = `${content['report']}${content['recruiter']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getReportEmployeesApi();
-                console.log(response);
-
+                const response = await getReportRecruitmentApi();
                 const res = await getDepartmentsApi();
                 setDepartments(res);
 
@@ -82,8 +78,8 @@ export default function ReportEmployeePage() {
         return found.name_kh;
     };
 
-    const handleSearch = (value, dates, dept = selectedDept) => {
-        const term = value?.trim().toLowerCase() || "";
+    const handleSearch = (value = '', dates = [], dept = null) => {
+        const term = value.trim().toLowerCase();
 
         // If no search term, no date range, and no department, show all users
         if (!term && (!dates || dates.length === 0) && !dept) {
@@ -94,6 +90,7 @@ export default function ReportEmployeePage() {
         const filtered = users.filter((emp) => {
             // Text filter
             const matchesText =
+                !term ||
                 (emp.first_name_en || '').toLowerCase().includes(term) ||
                 (emp.first_name_kh || '').toLowerCase().includes(term) ||
                 (emp.last_name_en || '').toLowerCase().includes(term) ||
@@ -101,17 +98,17 @@ export default function ReportEmployeePage() {
 
             // Date filter
             let matchesDate = true;
-            if (dates && dates.length === 2) {
+            if (dates && dates.length === 2 && emp.applied_date) {
                 const start = dates[0].startOf('day').toDate();
                 const end = dates[1].endOf('day').toDate();
-                const joinDate = new Date(emp.joinDate);
-                matchesDate = joinDate >= start && joinDate <= end;
+                const appliedDate = new Date(emp.applied_date);
+                matchesDate = appliedDate >= start && appliedDate <= end;
             }
 
             // Department filter
             let matchesDept = true;
             if (dept) {
-                matchesDept = String(emp?.positionId?.department?._id) === String(dept);
+                matchesDept = String(emp?.department) === String(dept);
             }
 
             return matchesText && matchesDate && matchesDept;
@@ -169,7 +166,6 @@ export default function ReportEmployeePage() {
                                         ],
                                         alignment: AlignmentType.CENTER,
                                     }),
-
                                     new Paragraph({
                                         children: [new ImageRun({ data: logoBuffer, transformation: { width: 80, height: 80 } })],
                                         alignment: AlignmentType.LEFT,
@@ -208,11 +204,12 @@ export default function ReportEmployeePage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: 'ID', font: "Siemreap", size: 24, color: "#002060", bold: true })],
+                                children: [new TextRun({ text: 'ល.រ', font: "Siemreap", size: 24, color: "#002060", bold: true })],
                                 alignment: AlignmentType.CENTER,
 
                             })
                         ],
+                        rowSpan: 2,
                         width: { size: 8, type: WidthType.PERCENTAGE },
                         margins: { top: 100, bottom: 100, left: 100, right: 10 }
                     }),
@@ -221,10 +218,15 @@ export default function ReportEmployeePage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "បុគ្គលិក", font: "Siemreap", size: 24, color: "#002060", bold: true })],
+                                children: [new TextRun({ text: 'គោត្តនាម-នាម', font: "Siemreap", size: 24, color: "#002060", bold: true })],
+                                alignment: AlignmentType.CENTER,
+
                             })
                         ],
-                        width: { size: 10, type: WidthType.PERCENTAGE },
+                        rowSpan: 2,
+                        width: {
+                            size: 15, type: WidthType.PERCENTAGE
+                        },
                         margins: { top: 100, bottom: 100, left: 100, right: 10 }
                     }),
                     new TableCell({
@@ -233,33 +235,11 @@ export default function ReportEmployeePage() {
                         children: [
                             new Paragraph({
                                 children: [new TextRun({ text: "ភេទ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
-                                alignment: AlignmentType.CENTER,
-                            })
-                        ],
-                        margins: { top: 100, bottom: 100, left: 100, right: 10 }
-                    }),
-                    new TableCell({
-                        verticalAlign: "center",
-                        shading: { fill: "D9E1F2" },
-                        children: [
-                            new Paragraph({
-                                children: [new TextRun({ text: "នាយកដ្ឋាន", font: "Siemreap", size: 24, color: "#002060", bold: true })],
 
                             })
                         ],
-                        width: { size: 10, type: WidthType.PERCENTAGE },
-                        margins: { top: 100, bottom: 100, left: 100, right: 10 }
-                    }),
-                    new TableCell({
-                        verticalAlign: "center",
-                        shading: { fill: "D9E1F2" },
-                        children: [
-                            new Paragraph({
-                                children: [new TextRun({ text: "តួនាទី", font: "Siemreap", size: 24, color: "#002060", bold: true })],
-
-                            })
-                        ],
-                        width: { size: 12, type: WidthType.PERCENTAGE },
+                        rowSpan: 2,
+                        width: { size: 5, type: WidthType.PERCENTAGE },
                         margins: { top: 100, bottom: 100, left: 100, right: 10 }
                     }),
                     new TableCell({
@@ -271,6 +251,8 @@ export default function ReportEmployeePage() {
 
                             })
                         ],
+                        rowSpan: 2,
+                        width: { size: 15, type: WidthType.PERCENTAGE },
                         margins: { top: 100, bottom: 100, left: 100, right: 10 }
                     }),
                     new TableCell({
@@ -282,117 +264,87 @@ export default function ReportEmployeePage() {
 
                             })
                         ],
+                        rowSpan: 2,
+                        width: { size: 12, type: WidthType.PERCENTAGE },
+                        margins: { top: 100, bottom: 100, left: 100, right: 10 }
+                    }),
+
+                    new TableCell({
+                        verticalAlign: "center",
+                        shading: { fill: "D9E1F2" },
+                        children: [
+                            new Paragraph({
+                                children: [new TextRun({ text: "លទ្ធផលវាយតម្លៃ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
+                                alignment: AlignmentType.CENTER,
+                            })
+                        ],
+                        columnSpan: 2,
                         width: { size: 10, type: WidthType.PERCENTAGE },
                         margins: { top: 100, bottom: 100, left: 100, right: 10 }
                     }),
-                    new TableCell({
-                        verticalAlign: "center",
-                        shading: { fill: "D9E1F2" },
-                        children: [
-                            new Paragraph({
-                                children: [new TextRun({ text: "ថ្ងៃចូលធ្វើការ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
-                                alignment: AlignmentType.CENTER,
 
-                            })
-                        ],
-                        width: { size: 10, type: WidthType.PERCENTAGE },
-                        margins: { top: 100, bottom: 100, left: 100, right: 10 },
-                        style: "NoWrap"
-                    }),
-                    new TableCell({
-                        verticalAlign: "center",
-                        shading: { fill: "D9E1F2" },
-                        children: [
-                            new Paragraph({
-                                children: [new TextRun({ text: "អ្នកគ្រប់គ្រង", font: "Siemreap", size: 24, color: "#002060", bold: true })],
-
-                            })
-                        ],
-                        width: { size: 10, type: WidthType.PERCENTAGE },
-                        margins: { top: 100, bottom: 100, left: 100, right: 10 }
-                    }),
-                    new TableCell({
-                        verticalAlign: "center",
-                        shading: { fill: "D9E1F2" },
-                        children: [
-                            new Paragraph({
-                                children: [new TextRun({ text: "ស្ថានភាព", font: "Siemreap", size: 24, color: "#002060", bold: true })],
-                                alignment: AlignmentType.CENTER,
-                                // remove style: "NoWrap"
-                            })
-                        ],
-                        width: { size: 10, type: WidthType.PERCENTAGE }, // keep this
-                        margins: { top: 100, bottom: 100, left: 100, right: 10 },
-                    }),
                 ]
             });
+            const headerRow2 = new TableRow({
+                children: [
+                    new TableCell({
+                        verticalAlign: "center",
+                        shading: { fill: "D9E1F2" },
+                        children: [
+                            new Paragraph({
+                                children: [new TextRun({ text: 'ស្វ័យរង្វាយតម្លៃ', font: "Siemreap", size: 24, color: "#002060", bold: true })],
+                                alignment: AlignmentType.CENTER,
 
+                            })
+                        ],
+                        width: {
+                            size: 12, type: WidthType.PERCENTAGE
+                        },
+                        margins: { top: 100, bottom: 100, left: 100, right: 10 }
+                    }),
+                    new TableCell({
+                        verticalAlign: "center",
+                        shading: { fill: "D9E1F2" },
+                        children: [
+                            new Paragraph({
+                                children: [new TextRun({ text: "អ្នកគ្រប់គ្រងវាយតម្លៃ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
 
+                            })
+                        ],
+                        width: { size: 15, type: WidthType.PERCENTAGE },
+                        margins: { top: 100, bottom: 100, left: 100, right: 10 }
+                    }),
+                ],
+            });
             // Employee rows (same style)
-            const rows = filteredData.map(emp =>
+            const rows = filteredData.map((emp, index) =>
                 new TableRow({
                     children: [
-                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp.employee_id.toString(), font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.name_kh, font: "Siemreap", size: 24, color: "#002060", })] })] }),
-                        new TableCell({
-                            width: { size: 5, type: WidthType.PERCENTAGE }, // keep consistent
-                            verticalAlign: "center",
-                            children: [
-                                new Paragraph({
-                                    children: [
-                                        new TextRun({ text: emp.gender, font: "Siemreap", size: 24, color: "#002060", })
-                                    ],
-                                    alignment: AlignmentType.CENTER,
-                                    style: "NoWrap" // prevent auto-expand
-                                })
-                            ]
-                        }),
+                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: (index + 1).toString(), font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.full_name_kh, font: "Siemreap", size: 24, color: "#002060", })] })] }),
+                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: "ប្រុស", font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.email, font: "Siemreap", size: 24, color: "#002060", })] })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, width: { size: 5000, type: WidthType.DXA }, children: [new Paragraph({ children: [new TextRun({ text: emp?.phone_no, font: "Siemreap", size: 24, color: "#002060", })] })] }),
 
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.positionId?.department.title_kh, font: "Siemreap", size: 24, color: "#002060", })] })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp.positionId?.title_kh, font: "Siemreap", size: 24, color: "#002060", })] })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp.email, font: "Siemreap", size: 24, color: "#002060", })] })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, width: { size: 5, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: emp.phone, font: "Siemreap", size: 24, color: "#002060", })] })] }),
                         new TableCell({
-                            verticalAlign: "center",
-                            margins: { top: 100, bottom: 100, left: 50, right: 10 },
-                            children: [new Paragraph({
+                            verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({
                                 children: [new TextRun({
-                                    text: new Date(emp.joinDate).toLocaleDateString('en-GB', {
-                                        day: '2-digit',   // 16
-                                        month: 'short',   // Aug
-                                        year: 'numeric'   // 2025
-                                    }), font: "Siemreap", size: 24, color: "#002060",
-                                })], alignment: AlignmentType.CENTER
+                                    text: "500"
+                                    , font: "Siemreap", size: 24, color: "#002060",
+                                })],
+                                alignment: AlignmentType.CENTER
                             })]
                         }),
                         new TableCell({
                             verticalAlign: "center",
                             margins: { top: 100, bottom: 100, left: 50, right: 10 },
-                            children: [
-                                new Paragraph({
-                                    children: [
-                                        new TextRun({
-                                            text: emp.positionId?.department?.manager?.map(m => m.name_kh).join(', ') || '',
-                                            font: "Siemreap",
-                                            size: 24,
-                                            color: "#002060"
-                                        })
-                                    ]
-                                })
-                            ]
+                            children: [new Paragraph({
+                                children: [new TextRun({
+                                    text: "500"
+                                    , font: "Siemreap", size: 24, color: "#002060",
+                                })], alignment: AlignmentType.CENTER
+                            })]
                         }),
-                        new TableCell({
-                            verticalAlign: "center",
-                            margins: { top: 100, bottom: 100, left: 100, right: 10 },
-                            children: [
-                                new Paragraph({
-                                    children: [
-                                        new TextRun({ text: getStatusName(emp.status), font: "Siemreap", size: 24, color: "#002060", })
-                                    ],
-                                    alignment: AlignmentType.CENTER
-                                })
-                            ]
-                        })
 
                     ]
                 })
@@ -400,13 +352,13 @@ export default function ReportEmployeePage() {
 
             const employeeTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: [headerRow, ...rows],
+                rows: [headerRow, headerRow2, ...rows]
             });
 
             const doc = new Document({
                 sections: [
                     {
-                        properties: { page: { size: { orientation: PageOrientation.LANDSCAPE } } },
+                        properties: { page: { size: { orientation: PageOrientation.PORTRAIT } } },
                         footers: {
                             default: new Footer({
                                 children: [
@@ -492,60 +444,72 @@ export default function ReportEmployeePage() {
     const handleDownloadExcel = () => {
         if (!filteredData || filteredData.length === 0) return;
 
-        // Build raw data (including header row)
-        const worksheetData = [
-            [
-                "ID",
-                "បុគ្គលិក",
-                "ភេទ",
-                "នាយកដ្ឋាន",
-                "តួនាទី",
-                "អ៊ីម៉ែល",
-                "លេខទូរស័ព្ទ",
-                "ថ្ងៃចូលធ្វើការ",
-                "អ្នកគ្រប់គ្រង",
-                "ស្ថានភាព"
-            ],
-            ...filteredData.map(emp => [
-                emp.employee_id ?? "",
-                emp.name_kh ?? "",
-                emp.gender ?? "",
-                emp?.positionId?.department?.title_kh ?? "",
-                emp?.positionId?.title_kh ?? "",
-                emp.email ?? "",
-                emp.phone ?? "",
-                emp.joinDate ? new Date(emp.joinDate).toLocaleDateString("en-GB") : "",
-                emp?.positionId?.department?.manager?.map(m => m.name_kh).join(", ") ?? "",
-                getStatusName(emp.status) ?? "",
-            ])
+        // 1. Prepare header row
+        const headerRow = [
+            "នាយកដ្ឋាន",       // Department
+            "មុខតំណែងដាក់ពាក្យ", // Job Title
+            "អ្នកដាក់ពាក្យ",     // Applicant Name
+            "ភេទ",             // Gender
+            "ថ្ងៃដាក់ពាក្យ",   // Applied Date
+            "អ៊ីម៉ែល",          // Email
+            "លេខទូរស័ព្ទ",   // Phone
+            "ស្ថានភាព"         // Status
         ];
 
-        // Create worksheet
+        // 2. Build data rows
+        const dataRows = filteredData.map(emp => [
+            emp.department ?? "",
+            emp.job_title ?? "",
+            emp.full_name_kh ?? "",
+            emp.gender ?? "",
+            emp.applied_date
+                ? new Date(emp.applied_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                : "",
+            emp.email ?? "",
+            emp.phone_no ?? "",
+            emp.status ?? ""
+        ]);
+
+        const worksheetData = [headerRow, ...dataRows];
+
+        // 3. Create worksheet
         const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
-        // Apply styles to header row (row 1)
-        const headerStyle = {
-            fill: { fgColor: { rgb: "D9E1F2" } }, // light blue background
-            font: { bold: true, color: { rgb: "000000" }, sz: 12 },
-            alignment: { horizontal: "center", vertical: "center" },
-            border: {
-                top: { style: "thin", color: { rgb: "000000" } },
-                bottom: { style: "thin", color: { rgb: "000000" } },
-                left: { style: "thin", color: { rgb: "000000" } },
-                right: { style: "thin", color: { rgb: "000000" } },
-            },
-        };
-
-        const headerCells = ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1"]; // Include last column
+        // 4. Apply header style (light blue background, bold, centered)
+        const headerCells = Object.keys(worksheet).filter(cell => cell.startsWith("A1") || cell.startsWith("B1") || cell.startsWith("C1") || cell.startsWith("D1") || cell.startsWith("E1") || cell.startsWith("F1") || cell.startsWith("G1") || cell.startsWith("H1"));
         headerCells.forEach(cell => {
-            if (worksheet[cell]) worksheet[cell].s = headerStyle;
+            if (worksheet[cell]) {
+                worksheet[cell].s = {
+                    fill: { fgColor: { rgb: "D9E1F2" } },
+                    font: { bold: true, color: { rgb: "000000" }, sz: 12 },
+                    alignment: { horizontal: "center", vertical: "center" },
+                    border: {
+                        top: { style: "thin", color: { rgb: "000000" } },
+                        bottom: { style: "thin", color: { rgb: "000000" } },
+                        left: { style: "thin", color: { rgb: "000000" } },
+                        right: { style: "thin", color: { rgb: "000000" } },
+                    }
+                };
+            }
         });
 
-        // Create workbook and append sheet
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Employees");
+        // 5. Set column widths for Khmer text
+        worksheet['!cols'] = [
+            { wch: 20 }, // Department
+            { wch: 25 }, // Job Title
+            { wch: 25 }, // Applicant Name
+            { wch: 10 }, // Gender
+            { wch: 15 }, // Applied Date
+            { wch: 25 }, // Email
+            { wch: 15 }, // Phone
+            { wch: 15 }, // Status
+        ];
 
-        // Write file
+        // 6. Create workbook
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
+
+        // 7. Save file
         const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array", cellStyles: true });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
         saveAs(blob, "employee_report.xlsx");
@@ -565,6 +529,7 @@ export default function ReportEmployeePage() {
         pdf.autoPrint();
         window.open(pdf.output("bloburl")); // opens PDF without browser header/footer
     };
+
     return (
         <div style={{ padding: 20, paddingTop: 0 }}>
             <div className="mb-3 flex justify-between">
@@ -600,7 +565,7 @@ export default function ReportEmployeePage() {
                             }}
                         >
                             {departments.map((dept) => (
-                                <Select.Option key={dept._id} value={dept._id}>
+                                <Select.Option key={dept.title_kh} value={dept.title_kh}>
                                     {dept.title_kh}
                                 </Select.Option>
                             ))}
@@ -618,8 +583,9 @@ export default function ReportEmployeePage() {
                 <div style={{ overflowX: 'auto' }}>
                     <div
                         ref={previewRef}
+                        id="docx-preview"
                         className="docx-preview"
-                        style={{ minWidth: '1200px' }}
+                        style={{ minWidth: '800px' }}
                     />
                 </div>
             </div>

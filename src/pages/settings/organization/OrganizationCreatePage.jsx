@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { createOrganizationApi } from '../../../services/organizationApi';
 
 
-const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
+const OrganizationCreatePage = ({ form, onCreated }) => {
     const { content } = useAuth();
 
     const { Text } = Typography;
@@ -60,8 +60,9 @@ const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
 
             const response = await createOrganizationApi(formData);
             message.success(content['createSuccessFully']);
-
-            onUserCreated(response.data);
+            if (onCreated) {
+                onCreated(response);
+            }
             form.resetFields();
         } catch (error) {
             console.error('Error creating User:', error);
@@ -215,9 +216,6 @@ const OrganizationCreatePage = ({ form, onCancel, onUserCreated }) => {
                         <Switch />
                     </Form.Item>
                     <div className="text-end mt-3">
-                        <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                            Cancel
-                        </button>
                         <button type="submit" className={Styles.btnCreate} >
                             Submit
                         </button>
