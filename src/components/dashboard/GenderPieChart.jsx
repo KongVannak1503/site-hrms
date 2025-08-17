@@ -8,7 +8,7 @@ const GenderPieChart = () => {
     labels: ['Male', 'Female'],
     datasets: [
       {
-        data: [90, 55],
+        data: [62, 45],
         backgroundColor: ['#6366F1', '#F472B6'],
         borderWidth: 1,
       },

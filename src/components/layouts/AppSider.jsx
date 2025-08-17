@@ -140,7 +140,7 @@ const AppSider = ({ collapsed }) => {
                         ]
                     },
                     { key: '/setting/employee/level', label: content['level'] },
-                    { key: '/setting/employee/city', label: content['city'] },
+                    { key: '/setting/employee/city', label: content['province'] },
                     // {
                     //     key: '/setting/employees', label: content['employees'], children: [
                     //         { key: '/setting/employee/level', label: content['level'] },
