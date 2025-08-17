@@ -51,3 +51,13 @@ export const ADMIN = "admin";
 export const UPPER_MANAGER = "upper manager";
 export const MANAGER = "manager";
 export const EMPLOYEE = "employee";
+
+export const STATUS_OPTIONS = [
+    { value: 'applied', label: 'Applied', color: '#3B82F6' },        // Blue
+    { value: 'shortlisted', label: 'Shortlisted', color: '#10B981' }, // Green
+    { value: 'test', label: 'Test', color: '#F59E0B' },               // Orange
+    { value: 'interview', label: 'Interview', color: '#8B5CF6' },     // Purple
+    { value: 'hired', label: 'Hired', color: '#22C55E' },             // Green
+    { value: 'reserve', label: 'Reserve', color: '#0EA5E9' },         // Light Blue
+    { value: 'rejected', label: 'Rejected', color: '#EF4444' },       // Red
+];

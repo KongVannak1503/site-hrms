@@ -5,14 +5,16 @@ import MetricCard from '../../components/dashboard/MetricCard';
 import { useAuth } from '../../contexts/AuthContext';
 import FullScreenLoader from '../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
+import RecentAppraisalComp from '../../components/dashboard/RecentAppraisalComp';
+import RecentRecruitmentComp from '../../components/dashboard/RecentRecruitmentComp';
 
 const Dashboard = () => {
-    const {isLoading, content} = useAuth();
-    useEffect(() => {
-        document.title = `${content['dashboard']} | USEA`
-    }, [content]);
+  const { isLoading, content } = useAuth();
+  useEffect(() => {
+    document.title = `${content['dashboard']} | USEA`
+  }, [content]);
 
-    if (isLoading) return <FullScreenLoader />;
+  if (isLoading) return <FullScreenLoader />;
   return (
     <div className="p-0.5 space-y-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between">
@@ -29,9 +31,18 @@ const Dashboard = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DepartmentBarChart />
-        <GenderPieChart />
+      <div className="grid grid-cols-12 gap-6">
+        <div className="col-span-7">
+          <DepartmentBarChart />
+          <div className='py-3' />
+          <GenderPieChart />
+        </div>
+        <div className="col-span-5">
+          <RecentAppraisalComp />
+          <div className='py-3' />
+          <RecentRecruitmentComp />
+        </div>
+
       </div>
     </div>
   );
