@@ -54,8 +54,6 @@ export default function ReportRecruitmentPage() {
         const fetchData = async () => {
             try {
                 const response = await getReportRecruitmentApi();
-                console.log(response);
-
                 const res = await getDepartmentsApi();
                 setDepartments(res);
 
@@ -137,13 +135,36 @@ export default function ReportRecruitmentPage() {
                             new TableCell({
                                 children: [
                                     new Paragraph({
-                                        children: [new TextRun({ text: "ព្រះរាជាណាចក្រកម្ពុជា", font: "Moul", size: 24 })],
+                                        children: [new TextRun({ text: "ព្រះរាជាណាចក្រកម្ពុជា", font: "Moul", size: 24, color: "#002060", })],
                                         spacing: { before: 500, after: 200 },
                                         alignment: AlignmentType.CENTER
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ text: "ជាតិ សាសនា ព្រះមហាក្សត្រ", font: "Moul", size: 24 })],
+                                        children: [new TextRun({ text: "ជាតិ សាសនា ព្រះមហាក្សត្រ", font: "Moul", size: 24, color: "#002060", })],
                                         alignment: AlignmentType.CENTER
+                                    }),
+                                    new Paragraph({
+                                        children: [
+                                            new TextRun({
+                                                text: "\u0033",   // second icon (replace with correct Unicode for your icon)
+                                                font: "Tacteing",
+                                                size: 32,
+                                                color: "#002060",
+                                            }),
+                                            new TextRun({
+                                                text: "\u0032",   // first icon
+                                                font: "Tacteing",
+                                                size: 32,
+                                                color: "#002060",
+                                            }),
+                                            new TextRun({
+                                                text: "\u0033",   // second icon (replace with correct Unicode for your icon)
+                                                font: "Tacteing",
+                                                size: 32,
+                                                color: "#002060",
+                                            }),
+                                        ],
+                                        alignment: AlignmentType.CENTER,
                                     }),
                                     new Paragraph({
                                         children: [new ImageRun({ data: logoBuffer, transformation: { width: 80, height: 80 } })],
@@ -152,11 +173,11 @@ export default function ReportRecruitmentPage() {
                                         spacing: { before: 0, after: 0 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ text: "សាកលវិទ្យាល័យ សៅស៍អ៊ីសថ៍អេយសៀ", font: "Moul", size: 24 })],
+                                        children: [new TextRun({ text: "សាកលវិទ្យាល័យ សៅស៍អ៊ីសថ៍អេយសៀ", font: "Moul", size: 24, color: "#002060", })],
                                         alignment: AlignmentType.LEFT
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ text: "UNIVERSITY OF SOUTH-EAST ASIA", font: "Times New Roman", size: 22 })],
+                                        children: [new TextRun({ text: "UNIVERSITY OF SOUTH-EAST ASIA", font: "Times New Roman", size: 22, color: "#002060", })],
                                         alignment: AlignmentType.LEFT,
                                         indent: { left: 550 },
                                     }),
@@ -183,7 +204,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: 'នាយកដ្ឋាន', font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: 'នាយកដ្ឋាន', font: "Siemreap", size: 24, color: "#002060", bold: true })],
                                 alignment: AlignmentType.CENTER,
 
                             })
@@ -196,7 +217,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: 'មុខតំណែងដាក់ពាក្យ', font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: 'មុខតំណែងដាក់ពាក្យ', font: "Siemreap", size: 24, color: "#002060", bold: true })],
                                 alignment: AlignmentType.CENTER,
 
                             })
@@ -211,7 +232,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "អ្នកដាក់ពាក្យ", font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: "អ្នកដាក់ពាក្យ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
 
                             })
                         ],
@@ -223,7 +244,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "ភេទ", font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: "ភេទ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
                                 alignment: AlignmentType.CENTER,
                             })
                         ],
@@ -236,7 +257,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "ថ្ងៃដាក់ពាក្យ", font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: "ថ្ងៃដាក់ពាក្យ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
 
                             })
                         ],
@@ -248,7 +269,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "អ៊ីម៉ែល", font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: "អ៊ីម៉ែល", font: "Siemreap", size: 24, color: "#002060", bold: true })],
 
                             })
                         ],
@@ -260,7 +281,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "លេខទូរស័ព្ទ", font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: "លេខទូរស័ព្ទ", font: "Siemreap", size: 24, color: "#002060", bold: true })],
 
                             })
                         ],
@@ -272,7 +293,7 @@ export default function ReportRecruitmentPage() {
                         shading: { fill: "D9E1F2" },
                         children: [
                             new Paragraph({
-                                children: [new TextRun({ text: "ស្ថានភាព", font: "Siemreap", size: 24 })],
+                                children: [new TextRun({ text: "ស្ថានភាព", font: "Siemreap", size: 24, color: "#002060", bold: true })],
                                 alignment: AlignmentType.CENTER,
 
                             })
@@ -284,19 +305,25 @@ export default function ReportRecruitmentPage() {
                 ]
             });
 
-
+            function capitalizeWords(str) {
+                if (!str) return "";
+                return str
+                    .split(" ")
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ");
+            }
             // Employee rows (same style)
             const rows = filteredData.map(emp =>
                 new TableRow({
                     children: [
-                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp?.department.toString(), font: "Siemreap", size: 24 })], alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp?.job_title.toString(), font: "Siemreap", size: 24 })], alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.full_name_kh, font: "Siemreap", size: 24 })] })] }),
+                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp?.department.toString(), font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
+                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp?.job_title.toString(), font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.full_name_kh, font: "Siemreap", size: 24, color: "#002060", })] })] }),
                         new TableCell({
                             verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({
                                 children: [new TextRun({
                                     text: emp?.gender
-                                    , font: "Siemreap", size: 24
+                                    , font: "Siemreap", size: 24, color: "#002060",
                                 })],
                                 alignment: AlignmentType.CENTER
                             })]
@@ -310,14 +337,14 @@ export default function ReportRecruitmentPage() {
                                         day: '2-digit',   // 16
                                         month: 'short',   // Aug
                                         year: 'numeric'   // 2025
-                                    }), font: "Siemreap", size: 24
+                                    }), font: "Siemreap", size: 24, color: "#002060",
                                 })], alignment: AlignmentType.CENTER
                             })]
                         }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.email, font: "Siemreap", size: 24 })] })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, width: { size: 5000, type: WidthType.DXA }, children: [new Paragraph({ children: [new TextRun({ text: emp?.phone_no, font: "Siemreap", size: 24 })] })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.email, font: "Siemreap", size: 24, color: "#002060", })] })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, width: { size: 5000, type: WidthType.DXA }, children: [new Paragraph({ children: [new TextRun({ text: emp?.phone_no, font: "Siemreap", size: 24, color: "#002060", })] })] }),
 
-                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp.status ?? "", font: "Siemreap", size: 24 })], alignment: AlignmentType.CENTER })] }),
+                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: capitalizeWords(emp.status ?? ""), font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
                     ]
                 })
             );
@@ -330,21 +357,35 @@ export default function ReportRecruitmentPage() {
             const doc = new Document({
                 sections: [
                     {
-                        properties: { page: { size: { orientation: PageOrientation.PORTRAIT } } },
+                        properties: { page: { size: { orientation: PageOrientation.LANDSCAPE } } },
                         footers: {
                             default: new Footer({
                                 children: [
                                     new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text:
-                                                    `Address: Wat Bo Village, SangKat Salakamroek, Siem Reap Municipality, Cambodia (Opposite Angkor High School)
-Website: www.usea.edu.kh | Email: info@usea.edu.kh | Facebook: University of South-East Asia
-Tel: 063 900 090, 092 42 99 66, 077 6678 73`,
-                                                font: "Times New Roman",
-                                                size: 20,
-                                            }),
-                                        ],
+                                        children: [new TextRun({
+                                            text: "អាសយដ្ឋានៈ ភូមិវត្តបូព៌ សង្កាត់សាលាកំរើក ក្រុងសៀមរាប ខេត្តសៀមរាប(ទល់មុខវិទ្យាល័យ អង្គរ)",
+                                            font: "Siemreap",
+                                            size: 16, color: "#002060",
+                                        })],
+                                        spacing: {
+                                            before: 300,  // space before paragraph (in twentieths of a point, 200 = 10pt)
+                                        },
+                                        alignment: AlignmentType.CENTER,
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({
+                                            text: "ទូរស័ព្ទៈ ០៦៣ ៩០០ ០៩០ - ០១៧ ៣៨៦ ៦៧៨ - ០៩០ ៩០៥ ៩០២ - ០៧០ ៤០៨ ៤៣៨",
+                                            font: "Siemreap",
+                                            size: 16, color: "#002060",
+                                        })],
+                                        alignment: AlignmentType.CENTER,
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({
+                                            text: "គេហទំព័រៈ www.usea.edu.kh  អ៊ីម៉ែលៈ info@usea.edu.kh ហ្វេសប៊ុកៈ University of South-East ",
+                                            font: "Siemreap",
+                                            size: 16, color: "#002060",
+                                        })],
                                         alignment: AlignmentType.CENTER,
                                     }),
                                 ],
@@ -472,6 +513,22 @@ Tel: 063 900 090, 092 42 99 66, 077 6678 73`,
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
         saveAs(blob, "employee_report.xlsx");
     };
+
+    const handlePrintPDF = async () => {
+        if (!previewRef.current) return;
+
+        const canvas = await html2canvas(previewRef.current);
+        const imgData = canvas.toDataURL("image/png");
+
+        const pdf = new jsPDF("p", "pt", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.autoPrint();
+        window.open(pdf.output("bloburl")); // opens PDF without browser header/footer
+    };
+
     return (
         <div style={{ padding: 20, paddingTop: 0 }}>
             <div className="mb-3 flex justify-between">
@@ -519,12 +576,13 @@ Tel: 063 900 090, 092 42 99 66, 077 6678 73`,
                         <button onClick={handleDownloadExcel} className={`${Styles.btnExcel}`}>
                             <ExceptionOutlined /> {`${content['excel'] || 'Excel'}`}
                         </button>
-                        <button onClick={handleDownloadPDF} className={`${Styles.btnPrint}`}> <PrinterOutlined /> {`${content['print'] || 'Print'}`}</button>
+                        <button onClick={handlePrintPDF} className={`${Styles.btnPrint}`}> <PrinterOutlined /> {`${content['print'] || 'Print'}`}</button>
                     </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                     <div
                         ref={previewRef}
+                        id="docx-preview"
                         className="docx-preview"
                         style={{ minWidth: '1200px' }}
                     />

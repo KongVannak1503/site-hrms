@@ -5,7 +5,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { createOrganizationApi, getOrganizationApi, updateOrganizationApi } from '../../../services/organizationApi';
 import uploadUrl from '../../../services/uploadApi';
 
-const OrganizationUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
+const OrganizationUpdatePage = ({ dataId }) => {
     const { content } = useAuth();
     const [fileList, setFileList] = useState([]);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -84,8 +84,6 @@ const OrganizationUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             // Call API to update organization
             const response = await updateOrganizationApi(dataId, formData);
             message.success(content['updateSuccessFully']);
-
-            onUserUpdated(response.data);
         } catch (error) {
             console.error('Error updating organization:', error);
             message.error(content['failedToSave']);
@@ -232,9 +230,6 @@ const OrganizationUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
                         <Switch />
                     </Form.Item>
                     <div className="text-end mt-3">
-                        <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                            Cancel
-                        </button>
                         <button type="submit" className={Styles.btnCreate}>
                             Submit
                         </button>

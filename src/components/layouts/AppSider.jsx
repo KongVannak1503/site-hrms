@@ -56,8 +56,6 @@ const AppSider = ({ collapsed }) => {
                     { key: '/applicants', label: content['applicants'] },
                     { key: '/test-schedules', label: content['testSchedule'] },
                     { key: '/interview-schedules', label: content['interviewSchedule'] },
-                    { key: '/test-types', label: content['testType'] },
-
                 ],
             },
             // {
@@ -70,7 +68,7 @@ const AppSider = ({ collapsed }) => {
                 label: content['employees'],
                 children: [
                     { key: '/employee', label: content['employee'] },
-                    { key: '/payroll', label: content['payroll'] },
+                    { key: '/payroll', label: content['seniorityPayment'] },
                 ]
             },
             // {
@@ -88,7 +86,7 @@ const AppSider = ({ collapsed }) => {
                     // { key: '/appraisal/employee', label: "វាយតម្លៃបុគ្គលិក" },
                     // { key: '/appraisal', label: "វាយតម្លៃការងារបណ្ដោះអាសន្ន" },
                     { key: '/appraisal/employee', label: content['employees'] },
-                    { key: '/appraisal', label: `${content['create']} ${content['appraisal']}` },
+                    { key: '/appraisal', label: `${content['appraisal']}` },
                     // {
                     //     key: '/appraisal/days', label: content['appraisalDay'],
                     //     children: [
@@ -127,7 +125,7 @@ const AppSider = ({ collapsed }) => {
                 children: [
                     { key: '/report/recruitment', label: `${content['report']}${content['recruiter']}` },
                     { key: '/report/employee', label: `${content['report']}${content['Employee']}` },
-                    { key: '/performance/report', label: `${content['report']}${content['appraisal']}` },
+                    { key: '/report/appraisal', label: `${content['report']}${content['appraisal']}` },
 
                 ]
             },
@@ -156,6 +154,7 @@ const AppSider = ({ collapsed }) => {
                     // { key: '/setting/categories', label: content['categories'] },
                     { key: '/setting/job-types', label: content['jobType'] },
                     { key: '/setting/departments', label: content['departments'] },
+                    { key: '/setting/test-types', label: content['testType'] },
                     { key: '/setting/organization', label: content['organizations'] },
                 ],
             },

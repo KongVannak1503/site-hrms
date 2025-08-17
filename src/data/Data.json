@@ -94,6 +94,7 @@
         "maritalStatus": "Marital Status",
         "presentAddress": "Present Address",
         "permanentAddress": "Permanent Address",
+        "seniorityPayment": "Seniority Payment",
 
         "enter": "Enter ",
         "new": "New ",
@@ -423,7 +424,7 @@
         "signOut": "ចាកចេញ",
 
         "report": "របាយការណ៍",
-
+        "seniorityPayment": "ការទូទាត់ប្រាក់បំណាច់ឆ្នាំ",
         "employeeID": "អត្តលេខ/ID",
         "gender": "ភេទ",
         "dateOfBirth": "ថ្ងៃ ខែ ឆ្នាំកំណើត",

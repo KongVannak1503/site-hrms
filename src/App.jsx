@@ -94,6 +94,7 @@ import ReportTest from './pages/employee/report/ReportTest'
 import ReportTestDocx from './pages/employee/report/ReportTestDocx'
 import ReportEmployeePage from './pages/employee/report/employee/ReportEmployeePage'
 import ReportRecruitmentPage from './pages/employee/report/recruitment/ReportRecruitmentPage'
+import ReportAppraisalPage from './pages/employee/report/appraisal/ReportAppraisalPage'
 
 function App() {
   const { identity, isLoading } = useAuth();
@@ -124,7 +125,7 @@ function App() {
 
             <Route path="/test-schedules" element={<TestSchedulePage />} />
             <Route path="/test-schedules/:id" element={<TestDetailPage />} />
-            <Route path="/test-types" element={<TestTypePage />} />
+            <Route path="/setting/test-types" element={<TestTypePage />} />
 
             <Route path='/interview-schedules' element={<InterviewPage />} />
 
@@ -416,7 +417,11 @@ function App() {
               element={
                 <ReportRecruitmentPage />
               } />
-
+            <Route
+              path="/report/appraisal"
+              element={
+                <ReportAppraisalPage />
+              } />
           </Route>
         </Route>
         <Route
