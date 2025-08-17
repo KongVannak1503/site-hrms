@@ -30,9 +30,8 @@ const iconMap = {
   },
 };
 
-const MetricCard = ({ title, count, changePercent, comparisonText }) => {
+const MetricCard = ({ title, count }) => {
   const iconInfo = iconMap[title] || {};
-  const isPositive = changePercent >= 0;
 
   return (
     <motion.div
@@ -57,23 +56,6 @@ const MetricCard = ({ title, count, changePercent, comparisonText }) => {
           <p className="text-sm text-gray-500">{title}</p>
         </div>
       </div>
-
-      {/* Footer Comparison */}
-      {/* <div className="flex items-center justify-between mt-4 text-sm">
-        <span
-          className={`flex items-center font-medium ${
-            isPositive ? 'text-green-600' : 'text-red-500'
-          }`}
-        >
-          {isPositive ? (
-            <ArrowUpRightIcon className="h-4 w-4 mr-1" />
-          ) : (
-            <ArrowDownRightIcon className="h-4 w-4 mr-1" />
-          )}
-          {changePercent}%
-        </span>
-        <span className="text-gray-400">{comparisonText || 'vs last 30 days'}</span>
-      </div> */}
     </motion.div>
   );
 };

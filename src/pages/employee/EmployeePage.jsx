@@ -207,14 +207,14 @@ const EmployeePage = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
-                    <Tooltip title={content['assignManager']}>
+                    <Tooltip title={content['view']}>
                         <button
                             type="primary"
                             shape="circle"
                             className={Styles.btnDownload}
                             onClick={() => handleView(record._id)}
                         >
-                            <UserSwitchOutlined />
+                            <EyeOutlined />
                         </button>
                     </Tooltip>
                     <Tooltip title={content['edit']}>

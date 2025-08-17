@@ -103,16 +103,17 @@ const ApplicantPage = () => {
   };
 
   const handleStatusChange = async (jobAppId, newStatus, oldStatus, applicantData) => {
+    const confirmLabel = content['yes'] || 'Yes';
+    const cancelLabel = content['no'] || 'No';
+
     if (!validTransitions[oldStatus]?.includes(newStatus)) {
       message.warning(`Cannot change status from ${oldStatus} to ${newStatus}`);
       return;
     }
 
-    // ✅ Rejection from test or interview → confirm first
+    // ✅ Reject from test or interview
     if (['test', 'interview'].includes(oldStatus) && newStatus === 'rejected') {
       const stageLabel = oldStatus === 'test' ? 'Test Stage' : 'Interview Stage';
-      const confirmLabel = content['yes'] || 'Yes';
-      const cancelLabel = content['no'] || 'No';
 
       showCustomConfirm({
         title: `Reject Applicant (${stageLabel})`,
@@ -123,21 +124,17 @@ const ApplicantPage = () => {
               try {
                 await updateJobApplicationStatus(jobAppId, newStatus);
 
-                // ✅ Cancel test if rejected from test
-                const testId = applicantData.test_assignment_id;
-                if (oldStatus === 'test' && testId) {
-                  await cancelTestAssignmentApi(testId);
+                if (oldStatus === 'test' && applicantData.test_assignment_id) {
+                  await cancelTestAssignmentApi(applicantData.test_assignment_id);
                 }
 
-                // ✅ Mark interview as completed if rejected from interview
-                const interviewId = applicantData.interview_id;
-                if (oldStatus === 'interview' && interviewId) {
-                  await updateInterviewDecisionApi(interviewId, 'rejected');
+                if (oldStatus === 'interview' && applicantData.interview_id) {
+                  await updateInterviewDecisionApi(applicantData.interview_id, 'rejected');
                 }
 
                 notification.success({
                   message: 'Applicant Rejected',
-                  description: `The applicant was rejected successfully from ${stageLabel}.`,
+                  description: `The applicant was rejected from ${stageLabel}.`,
                   placement: 'topRight'
                 });
 
@@ -151,7 +148,7 @@ const ApplicantPage = () => {
                 });
               }
             }}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             {confirmLabel}
           </button>
@@ -159,7 +156,7 @@ const ApplicantPage = () => {
         cancelButton: (
           <button
             onClick={() => Modal.destroyAll()}
-            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
+            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300"
           >
             {cancelLabel}
           </button>
@@ -169,65 +166,99 @@ const ApplicantPage = () => {
       return;
     }
 
-    // ✅ Confirmation when finalizing from interview (hired/reserve)
+    // ✅ Final decision from interview (hired/reserve)
     if (oldStatus === 'interview' && ['hired', 'reserve'].includes(newStatus)) {
-      Modal.confirm({
+      if (applicantData.interview_status !== 'completed') {
+        message.warning('Cannot finalize decision until the interview is marked as completed.');
+        return;
+      }
+
+      showCustomConfirm({
         title: `Confirm ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
         content: `Are you sure you want to mark this applicant as ${newStatus}?`,
-        okText: 'Yes',
-        cancelText: 'No',
-        onOk: async () => {
-          try {
-            await updateJobApplicationStatus(jobAppId, newStatus);
+        okButton: (
+          <button
+            onClick={async () => {
+              try {
+                await updateJobApplicationStatus(jobAppId, newStatus);
+                if (applicantData.interview_id) {
+                  await updateInterviewDecisionApi(applicantData.interview_id, newStatus);
+                }
 
-            const interviewId = applicantData.interview_id;
-            if (interviewId) {
-              await updateInterviewDecisionApi(interviewId, newStatus);
-            }
-
-            message.success(`Status updated to ${newStatus}`);
-            fetchApplicants();
-          } catch {
-            message.error(`Failed to update status to ${newStatus}`);
-          }
-        }
+                message.success(`Status updated to ${newStatus}`);
+                fetchApplicants();
+                Modal.destroyAll();
+              } catch {
+                message.error(`Failed to update status to ${newStatus}`);
+              }
+            }}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            {confirmLabel}
+          </button>
+        ),
+        cancelButton: (
+          <button
+            onClick={() => Modal.destroyAll()}
+            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300"
+          >
+            {cancelLabel}
+          </button>
+        )
       });
 
       return;
     }
 
-    // ✅ Shortlisted confirmation
+    // ✅ Shortlisted from applied
     if (oldStatus === 'applied' && newStatus === 'shortlisted') {
-      Modal.confirm({
+      showCustomConfirm({
         title: 'Confirm Shortlisting',
         content: 'Are you sure you want to mark this applicant as Shortlisted?',
-        okText: 'Yes',
-        cancelText: 'No',
-        onOk: async () => {
-          try {
-            await updateJobApplicationStatus(jobAppId, newStatus);
-            message.success('Status updated to Shortlisted');
-            fetchApplicants();
-          } catch {
-            message.error('Failed to update status');
-          }
-        }
+        okButton: (
+          <button
+            onClick={async () => {
+              try {
+                await updateJobApplicationStatus(jobAppId, newStatus);
+                message.success('Status updated to Shortlisted');
+                fetchApplicants();
+                Modal.destroyAll();
+              } catch {
+                message.error('Failed to update status');
+              }
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            {confirmLabel}
+          </button>
+        ),
+        cancelButton: (
+          <button
+            onClick={() => Modal.destroyAll()}
+            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300"
+          >
+            {cancelLabel}
+          </button>
+        )
       });
 
       return;
     }
 
-    // ✅ Move to test → open modal
+    // ✅ Move to test: open test assignment modal
     if (oldStatus === 'shortlisted' && newStatus === 'test') {
       setTestModalData({
         visible: true,
         jobAppId,
-        applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id }
+        applicant: {
+          ...applicantData,
+          job_id: applicantData.job_application_id?.job_id || applicantData.job_id,
+        },
       });
       return;
     }
 
-    // ✅ Move to interview → check test is completed
+    // ✅ Move to interview: only if test is completed
     if (oldStatus === 'test' && newStatus === 'interview') {
       if (applicantData.test_assignment_status !== 'completed') {
         message.warning('Cannot move to interview before completing the test.');
@@ -237,14 +268,17 @@ const ApplicantPage = () => {
       setInterviewModalData({
         visible: true,
         jobAppId,
-        applicant: { ...applicantData, job_id: applicantData.job_application_id?.job_id || applicantData.job_id },
+        applicant: {
+          ...applicantData,
+          job_id: applicantData.job_application_id?.job_id || applicantData.job_id,
+        },
         job: applicantData.job_application_id?.job_id || applicantData.job_id,
       });
 
       return;
     }
 
-    // ✅ Default change (without modals)
+    // ✅ Fallback: directly update if no special handling needed
     try {
       await updateJobApplicationStatus(jobAppId, newStatus);
       message.success(`Status updated to ${newStatus}`);
