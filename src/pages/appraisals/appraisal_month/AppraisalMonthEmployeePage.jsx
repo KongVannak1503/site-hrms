@@ -176,7 +176,7 @@ const AppraisalMonthEmployeePage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
@@ -216,6 +216,9 @@ const AppraisalMonthEmployeePage = () => {
                         showSizeChanger: true,
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                        locale: {
+                            items_per_page: content['page'],
+                        },
                         onChange: (page, pageSize) => {
                             setPagination({
                                 ...pagination,

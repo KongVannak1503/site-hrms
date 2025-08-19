@@ -36,11 +36,11 @@ const DepartmentAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
             };
 
             const response = await assignDepartmentApi(dataId, formData);
-            message.success('Updated successfully!');
+            message.success(content['updateSuccessFully']);
             onUserUpdated(response.data);
         } catch (error) {
             console.error('Error updating Department:', error);
-            message.error('Failed to update Department');
+            message.error(content['failedToUpdate']);
         }
     };
 

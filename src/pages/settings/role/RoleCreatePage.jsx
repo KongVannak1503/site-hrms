@@ -81,7 +81,7 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
             };
 
             const response = await createRoleApi(formData);
-            message.success('Role created successfully!');
+            message.success(content['createSuccessFully']);
             onUserCreated(response.data);
 
             // Optional: Reset form or navigate after success
@@ -89,7 +89,7 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
 
         } catch (error) {
             console.error('Error creating role:', error);
-            message.error('Failed to create role');
+            message.error(content['failedToCreate']);
         }
     };
 

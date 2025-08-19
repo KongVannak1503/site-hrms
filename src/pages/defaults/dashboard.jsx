@@ -18,7 +18,7 @@ const Dashboard = () => {
   return (
     <div className="p-0.5 space-y-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មាន{content['home']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'>{content['home']}</h1>
         <CustomBreadcrumb items={[{ breadcrumbName: content['home'], path: '/' }]} />
       </div>
 

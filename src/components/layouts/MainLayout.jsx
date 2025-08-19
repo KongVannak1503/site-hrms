@@ -37,11 +37,12 @@ const MainLayout = () => {
                 onCollapse={(collapse) => setCollapsed(collapse)}
                 onBreakpoint={(broken) => setCollapsed(broken)}
                 trigger={null}
-                className='!border-r contain-bg-sidebar !border-gray-200 dark:!border-r dark:!border-gray-800'
+                className='!border-r !border-gray-200'
                 style={{
                     position: isMobile ? 'fixed' : 'fixed',
                     top: 0,
                     left: 0,
+                    backgroundColor: "#fff",
                     height: '100vh',
                     zIndex: 1000,
                     overflow: 'auto',
@@ -51,7 +52,7 @@ const MainLayout = () => {
             </Sider>
             {isMobile && !collapsed && (
                 <div
-                    className="fixed inset-0 bg-[rgba(0,0,0,0.45)] transition-opacity duration-300 "
+                    className="fixed inset-0 transition-opacity duration-300 "
                     style={
                         { zIndex: 999, }
                     }

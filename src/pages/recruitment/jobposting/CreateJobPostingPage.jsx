@@ -97,7 +97,7 @@ const CreateJobPostingPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+        <h1 className='text-xl font-extrabold text-[#002060]'>
           ព័ត៌មាន{content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
@@ -225,48 +225,48 @@ const CreateJobPostingPage = () => {
                 <Select>
                   <Option value="Draft">
                     <span>
-                        <span
-                          style={{
-                            height: 10,
-                            width: 10,
-                            backgroundColor: 'orange',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: 8,
-                          }}
-                        />
-                        Draft
-                      </span>
+                      <span
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: 'orange',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          marginRight: 8,
+                        }}
+                      />
+                      Draft
+                    </span>
                   </Option>
                   <Option value="Open">
                     <span>
-                        <span
-                          style={{
-                            height: 10,
-                            width: 10,
-                            backgroundColor: 'green',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: 8,
-                          }}
-                        />
-                        Open
-                      </span>
+                      <span
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: 'green',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          marginRight: 8,
+                        }}
+                      />
+                      Open
+                    </span>
                   </Option>
                   <Option value="Close">
                     <span>
-                        <span
-                          style={{
-                            height: 10,
-                            width: 10,
-                            backgroundColor: 'red',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: 8,
-                          }}
-                        />
-                        Close
-                      </span>
+                      <span
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: 'red',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          marginRight: 8,
+                        }}
+                      />
+                      Close
+                    </span>
                   </Option>
                 </Select>
               </Form.Item>

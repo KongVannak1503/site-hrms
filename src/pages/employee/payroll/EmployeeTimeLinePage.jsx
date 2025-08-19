@@ -92,7 +92,7 @@ const EmployeeTimeLinePage = () => {
                                 return (
                                     <Timeline.Item
                                         key={bonus._id}
-                                        dot={<ClockCircleOutlined style={{ fontSize: 20, color: '#17a2b8' }} />}
+                                        dot={<ClockCircleOutlined style={{ fontSize: 20, color: '#002060' }} />}
                                     >
                                         <div style={{ fontWeight: 'bold', marginBottom: 30, paddingTop: 2 }}>{payDate}</div>
 

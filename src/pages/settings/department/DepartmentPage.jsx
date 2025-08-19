@@ -67,7 +67,7 @@ const DepartmentPage = () => {
     ];
 
     useEffect(() => {
-        document.title = content['departments'];
+        document.title = `${content['departments']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getDepartmentsApi();
@@ -406,8 +406,12 @@ const DepartmentPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['department']}${content['newEnd']}`
-                            : `${content['update']} ${content['department']}`
+                            ? `${content['create']} ${content['newStart'] || ''} ${content['department'] || ''} ${content['newEnd'] || ''}`.trim()
+                            : actionForm === 'update'
+                                ? `${content['update']} ${content['department'] || ''}`.trim()
+                                : actionForm === 'assignee'
+                                    ? `${content['assignee'] || "Assignee"} ${content['department'] || ''}`.trim()
+                                    : ''
                     }
                 >
                     {actionForm === 'create' && (

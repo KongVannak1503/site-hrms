@@ -40,7 +40,7 @@ export default function AppraisalMonthEmployeeFormPage() {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = content['appraisal']
+        document.title = `${content['appraisal']} | USEA`
         fetchTemplates();
     }, [content]);
 
@@ -152,7 +152,7 @@ export default function AppraisalMonthEmployeeFormPage() {
                 paddingRight: 20,
             }}>
                 <div className="flex justify-between mb-6">
-                    <h1 className='text-xl font-extrabold text-[#17a2b8]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
+                    <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
                     <CustomBreadcrumb items={breadcrumbItems} />
 
                 </div>

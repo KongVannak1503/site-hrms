@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import CityCreatePage from './CityCreatePage';
@@ -14,6 +14,7 @@ import { ConfirmDeleteButton } from '../../../../components/button/ConfirmDelete
 import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
 import ModalMdCenter from '../../../../components/modals/ModalMdCenter';
+import StatusTag from '../../../../components/style/StatusTag';
 
 const CityPage = () => {
     const { isLoading, content } = useAuth();
@@ -58,7 +59,7 @@ const CityPage = () => {
     ];
 
     useEffect(() => {
-        document.title = content['cities'];
+        document.title = `${content['cities']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getCitiesApi();
@@ -130,14 +131,9 @@ const CityPage = () => {
             dataIndex: "isActive",
             key: "isActive",
             render: (text) => {
-                const isActive = Boolean(text); // ensure it's a boolean
-                const color = isActive ? 'geekblue' : 'volcano';
-                const label = isActive ? 'ACTIVE' : 'INACTIVE';
 
                 return (
-                    <Tag color={color} key={String(text)}>
-                        {label}
-                    </Tag>
+                    <StatusTag value={text} />
                 );
             }
         },
@@ -245,7 +241,11 @@ const CityPage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="flex justify-between">
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['cities']}</h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
+
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -256,17 +256,16 @@ const CityPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['cities']}</h5>
+                        <Input
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
-                            <Input
-                                size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
+
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['city']}`}</button>
                     </div>
                 </div>
                 <Table

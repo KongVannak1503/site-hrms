@@ -282,7 +282,7 @@ const EmployeeManagerPage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មានបុគ្គលិក</h1>
+                <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មានបុគ្គលិក</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>

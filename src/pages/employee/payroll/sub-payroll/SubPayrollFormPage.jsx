@@ -50,6 +50,7 @@ const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
             };
 
             const response = await createSubBonusApi(dataId, formData);
+
             message.success('Updated successfully!');
             onUserUpdated(response.data);
         } catch (error) {

@@ -20,7 +20,7 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
                 });
             } catch (error) {
                 console.error("Error fetching department:", error);
-                message.error("Failed to load department data");
+                message.error(content['failedToUpdate']);
             }
         };
         fetchInitialData();
@@ -36,11 +36,11 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
             };
 
             const response = await updateDepartmentApi(dataId, formData);
-            message.success('Updated successfully!');
+            message.success(content['updateSuccessFully']);
             onUserUpdated(response.data);
         } catch (error) {
             console.error('Error updating Department:', error);
-            message.error('Failed to update Department');
+            message.error(content['failedToUpdate']);
         }
     };
 

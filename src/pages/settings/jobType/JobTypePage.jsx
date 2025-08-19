@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import UserCreate from './UserCreate'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import ModalMdCenter from '../../../components/modals/ModalMdCenter';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
@@ -60,7 +60,7 @@ const JobTypePage = () => {
     ];
 
     useEffect(() => {
-        document.title = content['jobType'];
+        document.title = `${content['jobType']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getJobTypesApi();
@@ -242,7 +242,11 @@ const JobTypePage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="flex justify-between">
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['jobType']}</h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
+
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -253,15 +257,14 @@ const JobTypePage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['jobType']}</h5>
+                        <Input
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
-                            <Input
-                                size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
+
                         </div>
                         <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['jobType']}`}</button>
                     </div>
