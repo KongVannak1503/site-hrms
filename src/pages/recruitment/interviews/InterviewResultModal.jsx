@@ -154,72 +154,72 @@ const InterviewResultModal = ({ open, interview, onCancel, onSuccess }) => {
       )
     },
     {
-    title: content['attactFile'],
-    render: (_, __, index) => (
-      <>
-        <Form.Item
-          name={`attachments_${index}`}
-          valuePropName="fileList"
-          getValueFromEvent={(e) => {
-            if (Array.isArray(e)) return e;
-            return e?.fileList
-              ? e.fileList.map(f => ({
+      title: content['attactFile'],
+      render: (_, __, index) => (
+        <>
+          <Form.Item
+            name={`attachments_${index}`}
+            valuePropName="fileList"
+            getValueFromEvent={(e) => {
+              if (Array.isArray(e)) return e;
+              return e?.fileList
+                ? e.fileList.map(f => ({
                   ...f,
                   originFileObj: f.originFileObj || f,
                 }))
-              : [];
-          }}
-        >
-          <Upload
-            beforeUpload={() => false}
-            multiple
-            listType="text"
-            accept="application/pdf,image/*"
-            maxCount={5}
+                : [];
+            }}
           >
-            <Button icon={<UploadOutlined />}>
-              {content['uploadAttachment'] || 'Upload'}
-            </Button>
-          </Upload>
-        </Form.Item>
+            <Upload
+              beforeUpload={() => false}
+              multiple
+              listType="text"
+              accept="application/pdf,image/*"
+              maxCount={5}
+            >
+              <Button icon={<UploadOutlined />}>
+                {content['uploadAttachment'] || 'Upload'}
+              </Button>
+            </Upload>
+          </Form.Item>
 
-        <Form.Item noStyle shouldUpdate={(prev, curr) => prev[`attachments_${index}`] !== curr[`attachments_${index}`]}>
-          {({ getFieldValue }) => {
-            const fileList = getFieldValue(`attachments_${index}`) || [];
-            return (
-              <div className="grid grid-cols-1 gap-2 mt-2">
-                {fileList.map((file, i) => {
-                  const rawPath = (file.url || file.response?.path || file.name || '').replace(/\\/g, '/');
-                  const cleanFilename = rawPath.replace(/^.*[\\/]/, '');
-                  const fileUrl = `${uploadUrl}/uploads/interview-attachments/${cleanFilename}`;
-                  const fileExt = cleanFilename.split('.').pop()?.toLowerCase();
-                  const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(fileExt);
-                  const isPdf = fileExt === 'pdf';
+          <Form.Item noStyle shouldUpdate={(prev, curr) => prev[`attachments_${index}`] !== curr[`attachments_${index}`]}>
+            {({ getFieldValue }) => {
+              const fileList = getFieldValue(`attachments_${index}`) || [];
+              return (
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  {fileList.map((file, i) => {
+                    const rawPath = (file.url || file.response?.path || file.name || '').replace(/\\/g, '/');
+                    const cleanFilename = rawPath.replace(/^.*[\\/]/, '');
+                    const fileUrl = `${uploadUrl}/uploads/interview-attachments/${cleanFilename}`;
+                    const fileExt = cleanFilename.split('.').pop()?.toLowerCase();
+                    const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(fileExt);
+                    const isPdf = fileExt === 'pdf';
 
-                  return (
-                    <div key={i} className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded text-sm text-gray-800 shadow-sm">
-                      {isImage && <img src={fileUrl} alt="" className="w-6 h-6 object-cover rounded" />}
-                      {isPdf && <UploadOutlined className="text-red-500" />}
-                      {!isImage && !isPdf && <UploadOutlined className="text-gray-500" />}
-                      <a
-                        href={fileUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="truncate hover:underline max-w-[180px]"
-                        title={cleanFilename}
-                      >
-                        {cleanFilename}
-                      </a>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          }}
-        </Form.Item>
-      </>
-    )
-  }
+                    return (
+                      <div key={i} className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded text-sm text-gray-800 shadow-sm">
+                        {isImage && <img src={fileUrl} alt="" className="w-6 h-6 object-cover rounded" />}
+                        {isPdf && <UploadOutlined className="text-red-500" />}
+                        {!isImage && !isPdf && <UploadOutlined className="text-gray-500" />}
+                        <a
+                          href={fileUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="truncate hover:underline max-w-[180px]"
+                          title={cleanFilename}
+                        >
+                          {cleanFilename}
+                        </a>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }}
+          </Form.Item>
+        </>
+      )
+    }
   ];
 
   const data = interviewData?.interviewers?.map((_, idx) => ({ key: idx })) || [];
@@ -310,7 +310,7 @@ const InterviewResultModal = ({ open, interview, onCancel, onSuccess }) => {
             <button
               type="button"
               onClick={handleSave}
-              className="bg-[#17a2b8] text-white px-4 py-2 rounded hover:bg-[#138496]"
+              className="bg-[#002060] text-white px-4 py-2 rounded hover:bg-[#138496]"
               disabled={saving}
             >
               {saving ? 'Saving...' : content['save']}

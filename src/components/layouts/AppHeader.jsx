@@ -60,11 +60,11 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
 
 
     return (
-        <Header className='flex justify-between !bg-white !border-b !border-gray-200' style={{ padding: 0, paddingRight: 10, height: 56, overflow: 'hidden' }}>
+        <Header className='flex justify-between !border-b !border-gray-200' style={{ padding: 0, paddingRight: 10, height: 56, overflow: 'hidden', backgroundColor: "#002060" }}>
             <div>
                 <Button
                     type="text"
-                    className='text-gray-700 dark:!text-gray-400 flex items-center !pt-2'
+                    className='flex items-center !pt-2 !text-white'
                     icon={<MdMenu size={25} />}
                     onClick={toggle}
                     style={{
@@ -131,7 +131,7 @@ const AppHeader = ({ collapsed, toggle, isMobile }) => {
                                 src={`${uploadUrl}/${identity?.employeeId?.image_url?.path}`}
                                 alt="photo"
                             />
-                            <span className="mr-1 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">{identity?.username}</span>
+                            <span className="mr-1 block text-theme-sm font-medium  !text-white">{identity?.username}</span>
                         </Space>
                     </a>
                 </Dropdown>

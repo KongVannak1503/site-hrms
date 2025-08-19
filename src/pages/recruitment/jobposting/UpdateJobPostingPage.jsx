@@ -104,21 +104,21 @@ const UpdateJobPostingPage = () => {
 
   const onFinish = async (values) => {
     try {
-        // Combine form values + quill contents
-        const formData = {
-            ...values,
-            responsibilities,
-            requirements,
-            open_date: values.open_date?.toISOString(),
-            close_date: values.close_date?.toISOString(),
-        };
+      // Combine form values + quill contents
+      const formData = {
+        ...values,
+        responsibilities,
+        requirements,
+        open_date: values.open_date?.toISOString(),
+        close_date: values.close_date?.toISOString(),
+      };
 
-        await updateJobPostingApi(id, formData);
-        message.success('Job posting updated successfully');
-        navigate('/job-postings');
+      await updateJobPostingApi(id, formData);
+      message.success('Job posting updated successfully');
+      navigate('/job-postings');
     } catch (err) {
-        console.error('Update failed:', err);
-        message.error('Failed to update job posting');
+      console.error('Update failed:', err);
+      message.error('Failed to update job posting');
     }
   };
 
@@ -129,10 +129,10 @@ const UpdateJobPostingPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-          <h1 className='text-xl font-extrabold text-[#17a2b8]'>
-              ព័ត៌មាន{content['jobPosting']}
-          </h1>
-          <CustomBreadcrumb items={breadcrumbItems} />
+        <h1 className='text-xl font-extrabold text-[#002060]'>
+          ព័ត៌មាន{content['jobPosting']}
+        </h1>
+        <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 
       <div className="mt-4 mb-4">
@@ -159,127 +159,127 @@ const UpdateJobPostingPage = () => {
 
               <Form.Item label={content['position']} name="position" rules={[{ required: true }]}>
                 <Select placeholder="Select Position" allowClear>
-                    {positions.map(pos => (
-                        <Option key={pos._id} value={pos._id}>
-                        {pos.title}
-                        </Option>
-                    ))}
+                  {positions.map(pos => (
+                    <Option key={pos._id} value={pos._id}>
+                      {pos.title}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
 
-                <Form.Item label={content['pax']} name="quantity_available" rules={[{ required: true }]}>
-                    <InputNumber min={1} style={{ width: '100%' }} />
-                </Form.Item>
+              <Form.Item label={content['pax']} name="quantity_available" rules={[{ required: true }]}>
+                <InputNumber min={1} style={{ width: '100%' }} />
+              </Form.Item>
 
-                <Form.Item label={content['jobType']} name="job_type" rules={[{ required: true }]}>
-                    <Select placeholder="Select Job Type" allowClear>
-                        {jobTypes.map(type => (
-                            <Option key={type._id} value={type._id}>
-                            {type.title}
-                            </Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-
-                <Form.Item
-                  label={content['responsibilities']}
-                  name="responsibilities"
-                  rules={[{ required: true, message: 'Please enter responsibilities' }]}
-                >
-                  <ReactQuill
-                    theme="snow"
-                    value={responsibilities}
-                    onChange={(value) => {
-                      setResponsibilities(value);
-                      form.setFieldsValue({ responsibilities: value });
-                    }}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label={content['requirements']}
-                  name="requirements"
-                  rules={[{ required: true, message: 'Please enter requirements' }]}
-                >
-                  <ReactQuill
-                    theme="snow"
-                    value={requirements}
-                    onChange={(value) => {
-                      setRequirements(value);
-                      form.setFieldsValue({ requirements: value });
-                    }}
-                  />
-                </Form.Item>
-
-                <Form.Item label={content['openDate']} name="open_date" rules={[{ required: true }]}>
-                    <DatePicker style={{ width: '100%' }} />
-                </Form.Item>
-
-                <Form.Item label={content['closeDate']} name="close_date" rules={[{ required: true }]}>
-                    <DatePicker style={{ width: '100%' }} />
-                </Form.Item>
-
-                <Form.Item label={content['status']} name="status" rules={[{ required: true }]}>
-                  <Select placeholder="Select Status">
-                    <Option value="Draft">
-                      <span>
-                        <span
-                          style={{
-                            height: 10,
-                            width: 10,
-                            backgroundColor: 'orange',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: 8,
-                          }}
-                        />
-                        Draft
-                      </span>
+              <Form.Item label={content['jobType']} name="job_type" rules={[{ required: true }]}>
+                <Select placeholder="Select Job Type" allowClear>
+                  {jobTypes.map(type => (
+                    <Option key={type._id} value={type._id}>
+                      {type.title}
                     </Option>
-                    <Option value="Open">
-                      <span>
-                        <span
-                          style={{
-                            height: 10,
-                            width: 10,
-                            backgroundColor: 'green',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: 8,
-                          }}
-                        />
-                        Open
-                      </span>
-                    </Option>
-                    <Option value="Close">
-                      <span>
-                        <span
-                          style={{
-                            height: 10,
-                            width: 10,
-                            backgroundColor: 'red',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: 8,
-                          }}
-                        />
-                        Close
-                      </span>
-                    </Option>
-                  </Select>
-                </Form.Item>
+                  ))}
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                label={content['responsibilities']}
+                name="responsibilities"
+                rules={[{ required: true, message: 'Please enter responsibilities' }]}
+              >
+                <ReactQuill
+                  theme="snow"
+                  value={responsibilities}
+                  onChange={(value) => {
+                    setResponsibilities(value);
+                    form.setFieldsValue({ responsibilities: value });
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label={content['requirements']}
+                name="requirements"
+                rules={[{ required: true, message: 'Please enter requirements' }]}
+              >
+                <ReactQuill
+                  theme="snow"
+                  value={requirements}
+                  onChange={(value) => {
+                    setRequirements(value);
+                    form.setFieldsValue({ requirements: value });
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item label={content['openDate']} name="open_date" rules={[{ required: true }]}>
+                <DatePicker style={{ width: '100%' }} />
+              </Form.Item>
+
+              <Form.Item label={content['closeDate']} name="close_date" rules={[{ required: true }]}>
+                <DatePicker style={{ width: '100%' }} />
+              </Form.Item>
+
+              <Form.Item label={content['status']} name="status" rules={[{ required: true }]}>
+                <Select placeholder="Select Status">
+                  <Option value="Draft">
+                    <span>
+                      <span
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: 'orange',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          marginRight: 8,
+                        }}
+                      />
+                      Draft
+                    </span>
+                  </Option>
+                  <Option value="Open">
+                    <span>
+                      <span
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: 'green',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          marginRight: 8,
+                        }}
+                      />
+                      Open
+                    </span>
+                  </Option>
+                  <Option value="Close">
+                    <span>
+                      <span
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: 'red',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          marginRight: 8,
+                        }}
+                      />
+                      Close
+                    </span>
+                  </Option>
+                </Select>
+              </Form.Item>
 
             </div>
 
-                <div 
-                    className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
-                    style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
-                >
-                    <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>{content['cancel']}</button>
-                    <button type="primary" htmlType="submit" className={`${Styles.btnUpdate}`}>
-                        {content['update']}
-                    </button>
-                </div>
+            <div
+              className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
+              style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}
+            >
+              <button type="button" onClick={handleCancel} className={`${Styles.btnCancel}`}>{content['cancel']}</button>
+              <button type="primary" htmlType="submit" className={`${Styles.btnUpdate}`}>
+                {content['update']}
+              </button>
+            </div>
           </Form>
         </Card>
       </div>

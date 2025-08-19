@@ -170,7 +170,7 @@ const EmployeeEducationTab = () => {
                             {(fields, { add, remove }) => (
                                 <>
                                     <table className="table-auto w-full">
-                                        <thead className="bg-[#17a2b8] text-left text-gray-200 font-semibold rounded-t-md">
+                                        <thead className="bg-[#002060] text-left text-gray-200 font-semibold rounded-t-md">
                                             <tr className='pt-3 border-b'>
                                                 <th rowSpan={2} className="min-w-[150px] px-3 py-2 text-center first:rounded-tl-md last:rounded-tr-md">
                                                     {content['languages']}
@@ -181,7 +181,7 @@ const EmployeeEducationTab = () => {
                                                 <th colSpan={3} className="px-3 py-2 text-center">{content['listen']}</th>
                                                 <th rowSpan={2} className="px-3 py-2 w-12 first:rounded-tl-md last:rounded-tr-md"></th>
                                             </tr>
-                                            <tr className="text-center bg-[#17a2b8]">
+                                            <tr className="text-center bg-[#002060]">
                                                 <th className="pt-1 pb-3 px-1">{content['poor']}</th>
                                                 <th className="pt-1 pb-3 px-1">{content['fair']}</th>
                                                 <th className="pt-1 pb-3 px-1">{content['good']}</th>

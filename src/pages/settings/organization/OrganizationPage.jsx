@@ -59,7 +59,7 @@ const OrganizationPage = () => {
     ];
 
     useEffect(() => {
-        document.title = content['organizations'];
+        document.title = `${content['organizations']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getOrganizationsApi();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import UserCreate from './UserCreate'
 import { Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
-import { FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import ModalLgCenter from '../../../components/modals/ModalLgCenter';
 import ModalLgRight from '../../../components/modals/ModalLgRight';
 import { Content } from 'antd/es/layout/layout';
@@ -60,7 +60,7 @@ const UsersPage = () => {
     ];
 
     useEffect(() => {
-        document.title = content['users'];
+        document.title = `${content['users']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getUsersApi();
@@ -104,7 +104,7 @@ const UsersPage = () => {
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
-            message.success('Role deleted successfully');
+            message.success(content['deleteSuccessFully']);
         } catch (error) {
             console.error('Delete failed:', error);
             message.error('Failed to delete role');
@@ -246,7 +246,11 @@ const UsersPage = () => {
 
     return (
         <div>
-            <CustomBreadcrumb items={breadcrumbItems} />
+            <div className="flex justify-between">
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['users']}</h1>
+                <CustomBreadcrumb items={breadcrumbItems} />
+
+            </div>
             <Content
                 className=" border border-gray-200 bg-white p-5 dark:border-gray-800 dark:!bg-white/[0.03] md:p-6"
                 style={{
@@ -257,15 +261,12 @@ const UsersPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['users']}</h5>
+                        <Input
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
                     </div>
                     <div className='flex items-center gap-3'>
-                        <div>
-                            <Input
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
-                        </div>
                         <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['user']}`}</button>
                     </div>
                 </div>
@@ -300,8 +301,8 @@ const UsersPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['role']}`
-                            : `${content['update']} ${content['role']}`
+                            ? `${content['create']} ${content['new']} ${content['user']}`
+                            : `${content['update']} ${content['user']}`
                     }
                 >
                     {actionForm === 'create' ? (

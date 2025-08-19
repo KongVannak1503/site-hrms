@@ -117,7 +117,7 @@ const CreateApplicantPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+        <h1 className='text-xl font-extrabold text-[#002060]'>
           ព័ត៌មាន{content['applicants']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />

@@ -17,12 +17,12 @@ const DepartmentCreatePage = ({ form, onCancel, onUserCreated }) => {
             const formData = { title_en, title_kh, description, isActive };
 
             const response = await createDepartmentApi(formData);
-            message.success('Created successfully!');
+            message.success(content['createSuccessFully']);
             onUserCreated(response.data);
             form.resetFields();
         } catch (error) {
             console.error('Error creating Department:', error);
-            message.error('Failed to create Department');
+            message.error(content['failedToCreate']);
         }
     };
 

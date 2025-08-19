@@ -35,7 +35,7 @@ const AppraisalMonthEmployeeListPage = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = content['appraisal'];
+        document.title = `${content['appraisal']} | USEA`;
         const fetchData = async () => {
             try {
                 const resEmp = await getEmployeeApi(mainId);
@@ -244,6 +244,9 @@ const AppraisalMonthEmployeeListPage = () => {
                             showSizeChanger: true,
                             pageSizeOptions: ['10', '20', '50', '100'],
                             showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                            locale: {
+                                items_per_page: content['page'],
+                            },
                             onChange: (page, pageSize) => {
                                 setPagination({
                                     ...pagination,

@@ -13,7 +13,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const DepartmentBarChart = () => {
   const datasets = [
-    { label: 'HR', data: [20], backgroundColor: '#3B82F6', borderRadius: 3 },
+    { label: 'HR', data: [20], backgroundColor: '#002060', borderRadius: 3 },
     { label: 'IT', data: [40], backgroundColor: '#10B981', borderRadius: 3 },
     { label: 'Finance', data: [15], backgroundColor: '#F59E0B', borderRadius: 3 },
     { label: 'Marketing', data: [25], backgroundColor: '#EF4444', borderRadius: 3 },

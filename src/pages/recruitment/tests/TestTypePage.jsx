@@ -109,8 +109,8 @@ const TestTypePage = () => {
 
 
     const columns = [
-        { title: `${content['name']} (KH)`, dataIndex: 'name_kh' },
-        { title: `${content['name']} (EN)`, dataIndex: 'name_en' },
+        { title: `${content['nameKh']}`, dataIndex: 'name_kh' },
+        { title: `${content['nameEn']}`, dataIndex: 'name_en' },
         { title: content['description'], dataIndex: 'description' },
         {
             title: content['action'],
@@ -140,7 +140,7 @@ const TestTypePage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+                <h1 className='text-xl font-extrabold text-[#002060]'>
                     ព័ត៌មាន{content['testType']}
                 </h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
@@ -149,9 +149,9 @@ const TestTypePage = () => {
                 <div className='flex flex-col sm:flex-row justify-between items-center mb-4'>
                     <h5 className='text-lg font-semibold'>{content['testType']}</h5>
                     <div className='flex gap-3 mt-2 sm:mt-0'>
-                        <Input 
-                            placeholder={content['searchAction']} 
-                            allowClear 
+                        <Input
+                            placeholder={content['searchAction']}
+                            allowClear
                             value={searchText}
                             onChange={handleSearch}
                         />
@@ -191,13 +191,13 @@ const TestTypePage = () => {
                     maskClosable={false}
                 >
                     <Form form={form} layout="vertical" name="testTypeForm">
-                        <Form.Item name="name_kh" label="Name (KH)" rules={[{ required: true }]}>
+                        <Form.Item name="name_kh" label={content['nameKh']} rules={[{ required: true }]}>
                             <Input />
                         </Form.Item>
-                        <Form.Item name="name_en" label="Name (EN)" rules={[{ required: true }]}>
+                        <Form.Item name="name_en" label={content['nameEn']} rules={[{ required: true }]}>
                             <Input />
                         </Form.Item>
-                        <Form.Item name="description" label="Description">
+                        <Form.Item name="description" label={content['description']}>
                             <Input.TextArea rows={3} />
                         </Form.Item>
                     </Form>

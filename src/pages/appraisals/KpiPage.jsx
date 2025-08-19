@@ -29,7 +29,7 @@ const KpiPage = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = content['cities'];
+        document.title = `${content['kpi']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getAllKpiApi();
@@ -61,11 +61,11 @@ const KpiPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['kpiYear'] }
+        { breadcrumbName: content['kpi'] }
     ];
 
     useEffect(() => {
-        document.title = content['kpiYear'];
+        document.title = `${content['kpi']} | USEA`;
 
     }, [content]);
 
@@ -224,7 +224,7 @@ const KpiPage = () => {
     return (
         <div>
             <div className="mb-3 flex justify-between">
-                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['kpiYear']}</p>
+                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['kpi']}</p>
                 <CustomBreadcrumb items={breadcrumbItems} />
             </div>
             <Content
@@ -262,6 +262,9 @@ const KpiPage = () => {
                         showSizeChanger: true,
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                        locale: {
+                            items_per_page: content['page'],
+                        },
                         onChange: (page, pageSize) => {
                             setPagination({
                                 ...pagination,

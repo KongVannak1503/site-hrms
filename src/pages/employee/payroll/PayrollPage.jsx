@@ -56,11 +56,11 @@ const PayrollPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['payroll'] }
+        { breadcrumbName: content['seniorityPayment'] }
     ];
 
     useEffect(() => {
-        document.title = content['payroll'];
+        document.title = content['seniorityPayment'];
         const fetchData = async () => {
             try {
                 const response = await getBonusesApi();
@@ -256,17 +256,17 @@ const PayrollPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['payroll']}</h5>
+                        {/* <h5 className='text-lg font-semibold'>{content['seniorityPayment']}</h5> */}
+                        <Input
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
-                            <Input
-                                size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
+
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['payroll']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['seniorityPayment']}`}</button>
                     </div>
                 </div>
                 <Table
@@ -280,6 +280,9 @@ const PayrollPage = () => {
                         showSizeChanger: true,
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                        locale: {
+                            items_per_page: content['page'],
+                        },
                         onChange: (page, pageSize) => {
                             setPagination({
                                 ...pagination,
@@ -296,8 +299,8 @@ const PayrollPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['payroll']}${content['newEnd']}`
-                            : `${content['update']} ${content['payroll']}`
+                            ? `${content['create']} ${content['newStart']} ${content['seniorityPayment']}${content['newEnd']}`
+                            : `${content['update']} ${content['seniorityPayment']}`
                     }
                 >
                     {actionForm === 'create' ? (

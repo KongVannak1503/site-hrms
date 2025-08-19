@@ -260,7 +260,7 @@ const AppSider = ({ collapsed }) => {
         <>
             {/* Logo section */}
             <div
-                className='contain-bg-sidebar !border-r !border-gray-200'
+                // className='contain-bg-sidebar !border-r !border-gray-200'
                 style={{ textAlign: 'center', padding: '10px 16px 16px' }}
             >
                 <img
@@ -321,8 +321,8 @@ const AppSider = ({ collapsed }) => {
             {/* Main menu */}
 
             <Menu
-                theme='dark'
-                className='!border-r !border-gray-200'
+                theme='light    '
+                // className='!border-r !border-gray-200'
                 mode="inline"
                 selectedKeys={[getSelectedKey(location.pathname)]}
                 onClick={(e) => navigate(e.key)}

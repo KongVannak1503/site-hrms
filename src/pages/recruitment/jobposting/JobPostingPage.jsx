@@ -16,38 +16,38 @@ import uploadUrl from '../../../services/uploadApi';
 const { Option } = Select;
 
 const JobPostingPage = () => {
-    const { isLoading, content } = useAuth();
-    const [jobs, setJobs] = useState([]);
-    const [filteredJobs, setFilteredJobs] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedJob, setSelectedJob] = useState(null);
-    const [viewDrawerVisible, setViewDrawerVisible] = useState(false);
-    const navigate = useNavigate();
-    const [pagination, setPagination] = useState({
-        current: 1,
-        pageSize: 10,
-        total: 0,
-    });
-    const { RangePicker } = DatePicker;
+  const { isLoading, content } = useAuth();
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [viewDrawerVisible, setViewDrawerVisible] = useState(false);
+  const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const { RangePicker } = DatePicker;
 
-    const breadcrumbItems = [
-        { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['jobPosting'] }
-    ];
+  const breadcrumbItems = [
+    { breadcrumbName: content['home'], path: '/' },
+    { breadcrumbName: content['jobPosting'] }
+  ];
 
-    useEffect(() => {
-      document.title = `${content['jobPosting']} | USEA`
-        const fetchJobs = async () => {
-        try {
-            const res = await getJobPostingsApi();
-            setJobs(res);
-            setFilteredJobs(res);
-        } catch (err) {
-            message.error('Failed to fetch job postings');
-        }
-        };
-        fetchJobs();
-    }, [content]);
+  useEffect(() => {
+    document.title = `${content['jobPosting']} | USEA`
+    const fetchJobs = async () => {
+      try {
+        const res = await getJobPostingsApi();
+        setJobs(res);
+        setFilteredJobs(res);
+      } catch (err) {
+        message.error('Failed to fetch job postings');
+      }
+    };
+    fetchJobs();
+  }, [content]);
 
   const handleSearch = (value) => {
     setSearchTerm(value);
@@ -118,10 +118,10 @@ const JobPostingPage = () => {
       key: 'position',
     },
     {
-        title: content['pax'],
-        dataIndex: 'quantity_available',
-        key: 'quantity',
-        render: (qty) => <span className="font-semibold">{qty}</span>,
+      title: content['pax'],
+      dataIndex: 'quantity_available',
+      key: 'quantity',
+      render: (qty) => <span className="font-semibold">{qty}</span>,
     },
     {
       title: content['jobType'],
@@ -148,51 +148,51 @@ const JobPostingPage = () => {
           style={{ width: 120 }}
           onChange={(value) => handleStatusChange(record._id, value)}
         >
-            <Option value="Draft">
-                <span>
-                    <span
-                        style={{
-                        height: 10,
-                        width: 10,
-                        backgroundColor: 'orange',
-                        borderRadius: '50%',
-                        display: 'inline-block',
-                        marginRight: 8,
-                        }}
-                    />
-                    Draft
-                </span>
-            </Option>
-            <Option value="Open">
-                <span>
-                    <span
-                        style={{
-                        height: 10,
-                        width: 10,
-                        backgroundColor: 'green',
-                        borderRadius: '50%',
-                        display: 'inline-block',
-                        marginRight: 8,
-                        }}
-                    />
-                    Open
-                </span>
-            </Option>
-            <Option value="Close">
-                <span>
-                    <span
-                        style={{
-                        height: 10,
-                        width: 10,
-                        backgroundColor: 'red',
-                        borderRadius: '50%',
-                        display: 'inline-block',
-                        marginRight: 8,
-                        }}
-                    />
-                    Close
-                </span>
-            </Option>
+          <Option value="Draft">
+            <span>
+              <span
+                style={{
+                  height: 10,
+                  width: 10,
+                  backgroundColor: 'orange',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                  marginRight: 8,
+                }}
+              />
+              Draft
+            </span>
+          </Option>
+          <Option value="Open">
+            <span>
+              <span
+                style={{
+                  height: 10,
+                  width: 10,
+                  backgroundColor: 'green',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                  marginRight: 8,
+                }}
+              />
+              Open
+            </span>
+          </Option>
+          <Option value="Close">
+            <span>
+              <span
+                style={{
+                  height: 10,
+                  width: 10,
+                  backgroundColor: 'red',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                  marginRight: 8,
+                }}
+              />
+              Close
+            </span>
+          </Option>
         </Select>
       ),
     },
@@ -201,26 +201,26 @@ const JobPostingPage = () => {
       key: 'actions',
       render: (_, record) => (
         <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
-            <Tooltip title={content['view']}>
-                <button className={Styles.btnView} onClick={() => handleView(record)}>
-                    <EyeOutlined />
-                </button>
-            </Tooltip>
+          <Tooltip title={content['view']}>
+            <button className={Styles.btnView} onClick={() => handleView(record)}>
+              <EyeOutlined />
+            </button>
+          </Tooltip>
 
-            <Tooltip title={content['edit']}>
-                <button className={Styles.btnEdit} onClick={() => navigate(`/job-postings/edit/${record._id}`)} >
-                    <FormOutlined />
-                </button>
-            </Tooltip>
+          <Tooltip title={content['edit']}>
+            <button className={Styles.btnEdit} onClick={() => navigate(`/job-postings/edit/${record._id}`)} >
+              <FormOutlined />
+            </button>
+          </Tooltip>
 
-            {ConfirmDeleteButton({
-                onConfirm: () => handleDelete(record._id),
-                tooltip: content['delete'],
-                title: content['confirmDelete'],
-                okText: content['yes'],
-                cancelText: content['no'],
-                description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
-            })}
+          {ConfirmDeleteButton({
+            onConfirm: () => handleDelete(record._id),
+            tooltip: content['delete'],
+            title: content['confirmDelete'],
+            okText: content['yes'],
+            cancelText: content['no'],
+            description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
+          })}
         </Space>
       )
     }
@@ -231,98 +231,98 @@ const JobPostingPage = () => {
   return (
     <div>
       <div className="flex justify-between mb-4">
-        <h1 className='text-xl font-extrabold text-[#17a2b8]'>
+        <h1 className='text-xl font-extrabold text-[#002060]'>
           ព័ត៌មាន{content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 
-    <Content className="border border-gray-200 bg-white p-5 rounded-md mt-4">
+      <Content className="border border-gray-200 bg-white p-5 rounded-md mt-4">
         <div className='flex flex-col sm:flex-row justify-between items-center mb-4'>
-            <div className='flex flex-wrap gap-4 items-end'>
-              {/* Duration filter */}
-              <div className='flex flex-col'>
-                <RangePicker
-                  format="YYYY-MM-DD"
-                  onChange={(dates) => {
-                    if (dates) {
-                      const [start, end] = dates;
-                      const filtered = jobs.filter(job => {
-                        const open = dayjs(job.open_date);
-                        return open.isAfter(start) && open.isBefore(end);
-                      });
-                      setFilteredJobs(filtered);
-                    } else {
-                      setFilteredJobs(jobs);
-                    }
-                  }}
-                  placeholder={[content['startDate'], content['endDate']]}
-                />
-              </div>
-
-              {/* Department filter */}
-              <div className='flex flex-col'>
-                <Select
-                  placeholder= {content['allDepartment']}
-                  allowClear
-                  style={{ minWidth: 150 }}
-                  onChange={(value) => {
-                    const filtered = jobs.filter(job =>
-                      value ? job.department?._id === value : true
-                    );
+          <div className='flex flex-wrap gap-4 items-end'>
+            {/* Duration filter */}
+            <div className='flex flex-col'>
+              <RangePicker
+                format="YYYY-MM-DD"
+                onChange={(dates) => {
+                  if (dates) {
+                    const [start, end] = dates;
+                    const filtered = jobs.filter(job => {
+                      const open = dayjs(job.open_date);
+                      return open.isAfter(start) && open.isBefore(end);
+                    });
                     setFilteredJobs(filtered);
-                  }}
-                >
-                  {[...new Set(jobs.map(job => job.department?._id))].map(id => {
-                    const dept = jobs.find(j => j.department?._id === id)?.department;
-                    return (
-                      <Option key={id} value={id}>
-                        {dept?.title}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div>
-
-              {/* Status filter */}
-              <div className='flex flex-col'>
-                <Select
-                  placeholder={content['allStatus']}
-                  allowClear
-                  style={{ minWidth: 120 }}
-                  onChange={(status) => {
-                    const filtered = jobs.filter(job =>
-                      status ? job.status === status : true
-                    );
-                    setFilteredJobs(filtered);
-                  }}
-                >
-                  <Option value="Draft">Draft</Option>
-                  <Option value="Open">Open</Option>
-                  <Option value="Close">Close</Option>
-                </Select>
-              </div>
+                  } else {
+                    setFilteredJobs(jobs);
+                  }
+                }}
+                placeholder={[content['startDate'], content['endDate']]}
+              />
             </div>
 
-            <div className='flex gap-3 mt-4 sm:mt-0'>
-                <Input
-                    placeholder={content['searchAction']}
-                    allowClear
-                    onChange={(e) => handleSearch(e.target.value)}
-                />
-                <button onClick={() => navigate('/job-postings/create')} className={Styles.btnCreate}>
-                    <PlusOutlined /> {`${content['create']} ${content['jobPosting']}`}
-                </button>
+            {/* Department filter */}
+            <div className='flex flex-col'>
+              <Select
+                placeholder={content['allDepartment']}
+                allowClear
+                style={{ minWidth: 150 }}
+                onChange={(value) => {
+                  const filtered = jobs.filter(job =>
+                    value ? job.department?._id === value : true
+                  );
+                  setFilteredJobs(filtered);
+                }}
+              >
+                {[...new Set(jobs.map(job => job.department?._id))].map(id => {
+                  const dept = jobs.find(j => j.department?._id === id)?.department;
+                  return (
+                    <Option key={id} value={id}>
+                      {dept?.title}
+                    </Option>
+                  );
+                })}
+              </Select>
             </div>
+
+            {/* Status filter */}
+            <div className='flex flex-col'>
+              <Select
+                placeholder={content['allStatus']}
+                allowClear
+                style={{ minWidth: 120 }}
+                onChange={(status) => {
+                  const filtered = jobs.filter(job =>
+                    status ? job.status === status : true
+                  );
+                  setFilteredJobs(filtered);
+                }}
+              >
+                <Option value="Draft">Draft</Option>
+                <Option value="Open">Open</Option>
+                <Option value="Close">Close</Option>
+              </Select>
+            </div>
+          </div>
+
+          <div className='flex gap-3 mt-4 sm:mt-0'>
+            <Input
+              placeholder={content['searchAction']}
+              allowClear
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+            <button onClick={() => navigate('/job-postings/create')} className={Styles.btnCreate}>
+              <PlusOutlined /> {`${content['create']} ${content['jobPosting']}`}
+            </button>
+          </div>
         </div>
-    
-      <Table
-        className='custom-pagination custom-checkbox-table'
-        columns={columns}
-        scroll={{ x: 'max-content' }}
-        dataSource={filteredJobs}
-        rowKey="_id"
-        pagination={{
+
+        <Table
+          className='custom-pagination custom-checkbox-table'
+          columns={columns}
+          scroll={{ x: 'max-content' }}
+          dataSource={filteredJobs}
+          rowKey="_id"
+          pagination={{
             ...pagination,
             showSizeChanger: true,
             pageSizeOptions: ['10', '20', '50', '100'],
@@ -331,20 +331,20 @@ const JobPostingPage = () => {
               items_per_page: content['page'],
             },
             onChange: (page, pageSize) => {
-                setPagination({
-                    ...pagination,
-                    current: page,
-                    pageSize: pageSize,
-                });
+              setPagination({
+                ...pagination,
+                current: page,
+                pageSize: pageSize,
+              });
             }
-        }}
-      />
-    </Content>
+          }}
+        />
+      </Content>
 
       {/* Drawer for View */}
       <Drawer
         title={
-          <div className="text-xl font-bold text-[#17a2b8]">
+          <div className="text-xl font-bold text-[#002060]">
             {selectedJob?.job_title} - {selectedJob?.department?.title}
           </div>
         }
@@ -372,14 +372,14 @@ const JobPostingPage = () => {
             <div className="border-t pt-2">
               <div className="mb-3">
                 <strong>Responsibilities:</strong>
-                <div className="prose max-w-none mt-2 border p-3 bg-gray-50 rounded-md" 
-                    dangerouslySetInnerHTML={{ __html: selectedJob.responsibilities || '<p>-</p>' }} />
+                <div className="prose max-w-none mt-2 border p-3 bg-gray-50 rounded-md"
+                  dangerouslySetInnerHTML={{ __html: selectedJob.responsibilities || '<p>-</p>' }} />
               </div>
 
               <div className="mt-4">
                 <strong>Requirements:</strong>
                 <div className="prose max-w-none mt-2 border p-3 bg-gray-50 rounded-md"
-                    dangerouslySetInnerHTML={{ __html: selectedJob.requirements || '<p>-</p>' }} />
+                  dangerouslySetInnerHTML={{ __html: selectedJob.requirements || '<p>-</p>' }} />
               </div>
             </div>
           </div>

@@ -77,11 +77,11 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
             };
 
             const response = await updateRoleApi(roleId, formData);
-            message.success('Role updated successfully!');
+            message.success(content['createSuccessFully']);
             onUserUpdated(response.data);
         } catch (error) {
             console.error('❌ Error updating role:', error);
-            message.error('Failed to update role');
+            message.error(content['failedToUpdate']);
         }
     };
 

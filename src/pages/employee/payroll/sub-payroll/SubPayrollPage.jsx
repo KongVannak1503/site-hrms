@@ -34,8 +34,8 @@ const SubPayrollPage = () => {
     });
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['payroll'], path: '/payroll' },
-        { breadcrumbName: content['payroll'] },
+        { breadcrumbName: content['seniorityPayment'], path: '/payroll' },
+        { breadcrumbName: content['Employee'] },
     ];
 
     const [form] = Form.useForm();
@@ -197,7 +197,7 @@ const SubPayrollPage = () => {
                             shape="circle"
                             onClick={() => showUpdateDrawer(record._id)}
                         >
-                            <DollarOutlined />
+                            <FormOutlined />
                         </button>
                     </Tooltip>
                 </Space>
@@ -257,20 +257,54 @@ const SubPayrollPage = () => {
             console.error("Error adding:", error);
         }
     };
-    const handleUpdate = (updatedRole) => {
-        if (!updatedRole || !updatedRole._id) {
-            console.error("Updated   object does not contain _id:", updatedRole);
-            return;
-        }
-        setUsers((prevRoles) =>
-            prevRoles.map(role => (role._id === updatedRole._id ? updatedRole : role))
+    const handleUpdate = (updatedSubBonus) => {
+        if (!updatedSubBonus || !updatedSubBonus._id) return;
+
+        // Ensure bonusId is an object
+        const formattedSubBonus = {
+            ...updatedSubBonus,
+            bonusId: { _id: updatedSubBonus.bonusId }
+        };
+
+        setUsers(prevUsers =>
+            prevUsers.map(user => {
+                if (user._id === selectedUserId) {
+                    const newSubBonus = [...user.subBonus];
+                    const index = newSubBonus.findIndex(sb => sb._id === formattedSubBonus._id);
+
+                    if (index !== -1) {
+                        newSubBonus[index] = formattedSubBonus;
+                    } else {
+                        newSubBonus.push(formattedSubBonus);
+                    }
+
+                    return { ...user, subBonus: newSubBonus };
+                }
+                return user;
+            })
         );
-        setFilteredData((prevFiltered) =>
-            prevFiltered.map(role => (role._id === updatedRole._id ? updatedRole : role))
+
+        setFilteredData(prevFiltered =>
+            prevFiltered.map(user => {
+                if (user._id === selectedUserId) {
+                    const newSubBonus = [...user.subBonus];
+                    const index = newSubBonus.findIndex(sb => sb._id === formattedSubBonus._id);
+
+                    if (index !== -1) {
+                        newSubBonus[index] = formattedSubBonus;
+                    } else {
+                        newSubBonus.push(formattedSubBonus);
+                    }
+
+                    return { ...user, subBonus: newSubBonus };
+                }
+                return user;
+            })
         );
 
         setOpen(false);
     };
+
 
 
     if (isLoading) {
@@ -280,7 +314,7 @@ const SubPayrollPage = () => {
     return (
         <>
             <div className="mb-3 flex justify-between">
-                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['payroll']}</p>
+                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['seniorityPayment']}</p>
                 <CustomBreadcrumb items={breadcrumbItems} />
             </div>
             <Content
@@ -321,7 +355,7 @@ const SubPayrollPage = () => {
                     </div>
                     <div className='flex items-center gap-3'>
 
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['payroll']}`}</button>
+                        {/* <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['payroll']}`}</button> */}
                     </div>
                 </div>
                 <Table
@@ -336,6 +370,9 @@ const SubPayrollPage = () => {
                         showSizeChanger: true,
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showTotal: (total, range) => `${range[0]}-${range[1]} ${content['of']} ${total} ${content['items']}`,
+                        locale: {
+                            items_per_page: content['page'],
+                        },
                         onChange: (page, pageSize) => {
                             setPagination({
                                 ...pagination,
@@ -354,8 +391,8 @@ const SubPayrollPage = () => {
                 onCancel={closeDrawer}
                 title={
                     actionForm === 'create'
-                        ? `${content['create']} ${content['newStart']} ${content['payroll']}${content['newEnd']}`
-                        : `${content['update']} ${content['payroll']}`
+                        ? `${content['create']} ${content['newStart']} ${content['seniorityPayment']}${content['newEnd']}`
+                        : `${content['update']} ${content['seniorityPayment']}`
                 }
             >
                 {actionForm === 'create' ? (

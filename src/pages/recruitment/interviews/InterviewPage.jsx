@@ -77,9 +77,8 @@ const InterviewPage = () => {
 
       const formattedEvents = data.map(item => ({
         id: item._id,
-        title: `${item.applicant_id?.full_name_en || 'Unnamed'} - ${
-          item.job_id?.job_title || 'No Title'
-        }`,
+        title: `${item.applicant_id?.full_name_en || 'Unnamed'} - ${item.job_id?.job_title || 'No Title'
+          }`,
         start: item.start_at,
         color: item.status === 'cancelled' ? '#e3342f' : undefined,
         extendedProps: {
@@ -178,13 +177,12 @@ const InterviewPage = () => {
                 });
               }
             }}
-            className={`px-4 py-2 rounded text-white cursor-pointer ${
-              decision === 'hired'
+            className={`px-4 py-2 rounded text-white cursor-pointer ${decision === 'hired'
                 ? 'bg-green-600 hover:bg-green-700'
                 : decision === 'reserve'
-                ? 'bg-yellow-500 hover:bg-yellow-600'
-                : 'bg-red-600 hover:bg-red-700'
-            }`}
+                  ? 'bg-yellow-500 hover:bg-yellow-600'
+                  : 'bg-red-600 hover:bg-red-700'
+              }`}
           >
             {content['yes'] || 'Yes'}
           </button>
@@ -393,7 +391,7 @@ const InterviewPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មាន{content['interviewSchedule']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មាន{content['interviewSchedule']}</h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 
@@ -404,29 +402,27 @@ const InterviewPage = () => {
             <div className="flex border rounded-md overflow-hidden">
               <button
                 onClick={() => setViewMode('calendar')}
-                className={`px-3 py-2 text-sm cursor-pointer ${
-                  viewMode === 'calendar' ? 'bg-black text-white' : 'bg-white text-gray-800'
-                }`}
+                className={`px-3 py-2 text-sm cursor-pointer ${viewMode === 'calendar' ? 'bg-black text-white' : 'bg-white text-gray-800'
+                  }`}
               >
                 <FaRegCalendar />
               </button>
 
               <button
                 onClick={() => setViewMode('table')}
-                className={`px-3 py-2 text-sm cursor-pointer ${
-                  viewMode === 'table' ? 'bg-black text-white' : 'bg-white text-gray-800'
-                }`}
+                className={`px-3 py-2 text-sm cursor-pointer ${viewMode === 'table' ? 'bg-black text-white' : 'bg-white text-gray-800'
+                  }`}
               >
                 <FaList />
               </button>
             </div>
 
             <div className='flex items-center gap-3 mt-4 sm:mt-0'>
-              <button 
+              <button
                 className={Styles.btnCreate}
                 onClick={() => handleOpenApplicantSelector()}
               >
-                  <PlusOutlined /> {`${content['create']} ${content['interviewSchedule']}`}
+                <PlusOutlined /> {`${content['create']} ${content['interviewSchedule']}`}
               </button>
             </div>
           </div>
@@ -436,40 +432,40 @@ const InterviewPage = () => {
       <div className='mt-4'>
         {viewMode === 'calendar' ? (
           <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-3/4 bg-white p-4 rounded-md shadow">
-            <FullCalendar 
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              headerToolbar={{
-                left: 'prev today next',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-              }}
-              events={events}
-              eventClick={({ event }) => {
-                setSelectedEvent(event);
+            <div className="w-full lg:w-3/4 bg-white p-4 rounded-md shadow">
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                headerToolbar={{
+                  left: 'prev today next',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }}
+                events={events}
+                eventClick={({ event }) => {
+                  setSelectedEvent(event);
 
-                const interviewId = event.extendedProps?.interview_id;
-                const interview = interviews.find(i => i._id === interviewId);
+                  const interviewId = event.extendedProps?.interview_id;
+                  const interview = interviews.find(i => i._id === interviewId);
 
-                if (interview) {
-                  setResultModalData({ visible: true, interview });
-                }
-              }}
-              height="auto"
-              contentHeight="auto"
-            />
-          </div>
+                  if (interview) {
+                    setResultModalData({ visible: true, interview });
+                  }
+                }}
+                height="auto"
+                contentHeight="auto"
+              />
+            </div>
 
-          <div className="w-full lg:w-1/4">
+            <div className="w-full lg:w-1/4">
               {selectedEvent ? (
                 <Card title={content['interviewSchedule']} className="shadow">
                   {todayTests.length === 0 ? (
                     <p>No interivew scheduled today.</p>
                   ) : (
                     todayTests.map((selectedEvent, index) => (
-                      <div 
-                        key={selectedEvent.id} 
+                      <div
+                        key={selectedEvent.id}
                         className="mb-4 pb-4 border-b border-b-gray-300 last:border-b-0"
                       >
                         <div className="flex justify-between items-start">
@@ -549,8 +545,8 @@ const InterviewPage = () => {
                   <p>No interview scheduled today.</p>
                 </Card>
               )}
+            </div>
           </div>
-        </div>
         ) : (
           <div className="bg-white p-4 rounded-md shadow mt-4">
             <Form
@@ -573,7 +569,7 @@ const InterviewPage = () => {
 
                     <Col span={10}>
                       <Form.Item name="dateRange">
-                        <DatePicker.RangePicker style={{ width: '100%' }} placeholder={[content['startDate'], content['endDate']]}/>
+                        <DatePicker.RangePicker style={{ width: '100%' }} placeholder={[content['startDate'], content['endDate']]} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -606,7 +602,7 @@ const InterviewPage = () => {
             />
           </div>
         )}
-        
+
       </div>
 
       <InterviewModal

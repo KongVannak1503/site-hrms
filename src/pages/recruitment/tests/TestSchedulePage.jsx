@@ -60,7 +60,7 @@ const TestSchedulePage = () => {
     setDetailModalData({
       visible: true,
       assignmentId,
-      refresh: Date.now() 
+      refresh: Date.now()
     });
   };
 
@@ -92,10 +92,9 @@ const TestSchedulePage = () => {
 
       const today = new Date();
 
-       const formatted = data.map(item => {
-        const title = `${item?.applicant_id?.full_name_en || 'Unknown'} - ${
-          item?.test_type_scores?.map(t => t.test_type?.name_en).join(', ')
-        }`;
+      const formatted = data.map(item => {
+        const title = `${item?.applicant_id?.full_name_en || 'Unknown'} - ${item?.test_type_scores?.map(t => t.test_type?.name_en).join(', ')
+          }`;
 
         return {
           id: item._id,
@@ -204,9 +203,9 @@ const TestSchedulePage = () => {
 
       const matchesDate = filters.dateRange
         ? (
-            dayjs(item.start_at).isSameOrAfter(dayjs(filters.dateRange[0]), 'day') &&
-            dayjs(item.start_at).isSameOrBefore(dayjs(filters.dateRange[1]), 'day')
-          )
+          dayjs(item.start_at).isSameOrAfter(dayjs(filters.dateRange[0]), 'day') &&
+          dayjs(item.start_at).isSameOrBefore(dayjs(filters.dateRange[1]), 'day')
+        )
         : true;
 
       return matchesKeyword && matchesStatus && matchesDate;
@@ -280,13 +279,13 @@ const TestSchedulePage = () => {
 
     const test_type_scores = isCalendarEvent
       ? data.extendedProps?.test_type_scores?.map(t => ({
-          test_type: t.test_type?._id || t.test_type, // normalize to string ID
-          score: t.score || 0
-        }))
+        test_type: t.test_type?._id || t.test_type, // normalize to string ID
+        score: t.score || 0
+      }))
       : data.test_type_scores?.map(t => ({
-          test_type: t.test_type?._id || t.test_type,
-          score: t.score || 0
-        })) || [];
+        test_type: t.test_type?._id || t.test_type,
+        score: t.score || 0
+      })) || [];
 
     return {
       id: data.id || data._id,
@@ -436,9 +435,8 @@ const TestSchedulePage = () => {
           <div className='flex gap-2'>
             <button
               onClick={() => handleMoveToInterview(record)}
-              className={`bg-black text-white px-2 py-1 text-xs rounded hover:bg-gray-800 cursor-pointer ${
-                record.has_interview ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className={`bg-black text-white px-2 py-1 text-xs rounded hover:bg-gray-800 cursor-pointer ${record.has_interview ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               disabled={record.has_interview}
             >
               Interview
@@ -506,7 +504,7 @@ const TestSchedulePage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#17a2b8]'>ព័ត៌មាន{content['testSchedule']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មាន{content['testSchedule']}</h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 
@@ -517,38 +515,36 @@ const TestSchedulePage = () => {
             <div className="flex border rounded-md overflow-hidden">
               <button
                 onClick={() => setViewMode('calendar')}
-                className={`px-3 py-2 text-sm cursor-pointer ${
-                  viewMode === 'calendar' ? 'bg-black text-white' : 'bg-white text-gray-800'
-                }`}
+                className={`px-3 py-2 text-sm cursor-pointer ${viewMode === 'calendar' ? 'bg-black text-white' : 'bg-white text-gray-800'
+                  }`}
               >
                 <FaRegCalendar />
               </button>
 
               <button
                 onClick={() => setViewMode('table')}
-                className={`px-3 py-2 text-sm cursor-pointer ${
-                  viewMode === 'table' ? 'bg-black text-white' : 'bg-white text-gray-800'
-                }`}
+                className={`px-3 py-2 text-sm cursor-pointer ${viewMode === 'table' ? 'bg-black text-white' : 'bg-white text-gray-800'
+                  }`}
               >
                 <FaList />
               </button>
             </div>
 
             <div className='flex items-center gap-3 mt-4 sm:mt-0'>
-              <button 
+              <button
                 className={Styles.btnCreate}
                 onClick={() => {
                   setSelectedApplicant(null);
                   setCreateModalVisible(true);
                 }}
               >
-                  <PlusOutlined /> {`${content['create']} ${content['testSchedule']}`}
+                <PlusOutlined /> {`${content['create']} ${content['testSchedule']}`}
               </button>
             </div>
           </div>
         </Content>
       </div>
-      
+
       <div className='mt-4'>
         {viewMode === 'calendar' ? (
           <div className="flex flex-col lg:flex-row gap-6">
@@ -575,8 +571,8 @@ const TestSchedulePage = () => {
                     <p>No test scheduled today.</p>
                   ) : (
                     todayTests.map((selectedEvent, index) => (
-                      <div 
-                        key={selectedEvent.id} 
+                      <div
+                        key={selectedEvent.id}
                         className="mb-4 pb-4 border-b border-b-gray-300 last:border-b-0"
                       >
                         <div className="flex justify-between items-start">
@@ -663,7 +659,7 @@ const TestSchedulePage = () => {
 
                     <Col span={8}>
                       <Form.Item name="dateRange">
-                        <RangePicker style={{ width: '100%' }} placeholder={[content['startDate'], content['endDate']]}/>
+                        <RangePicker style={{ width: '100%' }} placeholder={[content['startDate'], content['endDate']]} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -676,8 +672,8 @@ const TestSchedulePage = () => {
                 </Col>
               </Row>
             </Form>
-            
-            <Table 
+
+            <Table
               className='custom-pagination custom-checkbox-table'
               loading={isLoading}
               scroll={{ x: 'max-content' }}

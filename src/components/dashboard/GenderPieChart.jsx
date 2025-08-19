@@ -9,7 +9,7 @@ const GenderPieChart = () => {
     datasets: [
       {
         data: [62, 45],
-        backgroundColor: ['blue', '#F59E0B'],
+        backgroundColor: ['#002060', '#F59E0B'],
         borderWidth: 1,
       },
     ],
@@ -27,7 +27,7 @@ const GenderPieChart = () => {
 
       ctx.save();
       ctx.font = 'bold 18px Arial';
-      ctx.fillStyle = '#17a2b8'; // dark text
+      ctx.fillStyle = '#002060'; // dark text
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(`បុគ្គលិកសរុប: ${totalEmployees}`, centerX, centerY);

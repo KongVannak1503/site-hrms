@@ -59,7 +59,7 @@ const EducationLevelPage = () => {
     ];
 
     useEffect(() => {
-        document.title = content['level'];
+        document.title = `${content['level']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getEducationLevelsApi();
@@ -250,17 +250,16 @@ const EducationLevelPage = () => {
             >
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
-                        <h5 className='text-lg font-semibold'>{content['cities']}</h5>
+                        <Input
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
-                            <Input
-                                size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
+
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['role']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['level']}`}</button>
                     </div>
                 </div>
                 <Table
@@ -293,8 +292,8 @@ const EducationLevelPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['city']}${content['newEnd']}`
-                            : `${content['update']} ${content['city']}`
+                            ? `${content['create']} ${content['newStart']} ${content['level']}${content['newEnd']}`
+                            : `${content['update']} ${content['level']}`
                     }
                 >
                     {actionForm === 'create' ? (

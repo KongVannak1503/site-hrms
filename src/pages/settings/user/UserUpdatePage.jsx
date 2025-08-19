@@ -77,7 +77,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input size="large" />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     name="email"
@@ -89,7 +89,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input size="large" />
+                    <Input />
                 </Form.Item>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -118,7 +118,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                     name="password"
                     label={content['password']}
                 >
-                    <Input size="large" type="password" />
+                    <Input type="password" />
                 </Form.Item>
                 <Form.Item name="confirm" label={`${`${content['confirm']}${content['password']}`}`} dependencies={['password']} rules={[{
                     required: true,
@@ -130,7 +130,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                         return Promise.resolve();
                     }
                 }]}>
-                    <Input.Password size='large' />
+                    <Input.Password />
                 </Form.Item>
                 {/* <Form.Item
                     name="confirm"
@@ -152,7 +152,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                     ]}
                     label={content['confirm']}
                 >
-                    <Input size="large" type="password" />
+                    <Input  type="password" />
                 </Form.Item> */}
 
             </div>
@@ -168,7 +168,7 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
                                 .replace(/^./, str => str.toUpperCase())
                         }]}
                     >
-                        <Select size='large'>
+                        <Select >
                             {roles.map((role) => (
                                 <Select.Option key={role._id} value={role._id}>
                                     {role.role}

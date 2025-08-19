@@ -67,7 +67,7 @@ function RolesPage() {
     ];
 
     useEffect(() => {
-        document.title = content['roles'];
+        document.title = `${content['roles']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getRolesByNameApi(action);
