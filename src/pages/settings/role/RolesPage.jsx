@@ -62,8 +62,7 @@ function RolesPage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['roles'], path: '/setting/user/role' },
-        { breadcrumbName: action, }
+        { breadcrumbName: content['roles'], path: '/setting/user/role' }
     ];
 
     useEffect(() => {

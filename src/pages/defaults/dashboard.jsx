@@ -7,11 +7,29 @@ import FullScreenLoader from '../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 import RecentAppraisalComp from '../../components/dashboard/RecentAppraisalComp';
 import RecentRecruitmentComp from '../../components/dashboard/RecentRecruitmentComp';
+import { getDashboardApi, getDashboardDepartmentChartApi } from '../../services/dashboardApi';
+import { useState } from 'react';
 
 const Dashboard = () => {
   const { isLoading, content } = useAuth();
+  const [dashStatus, setDashStatus] = useState(0);
+  const [departments, setDepartments] = useState(0);
+
   useEffect(() => {
     document.title = `${content['dashboard']} | USEA`
+    const fetchData = async () => {
+      try {
+        const res = await getDashboardApi();
+        setDashStatus(res)
+        const depart = await getDashboardDepartmentChartApi();
+        console.log(depart);
+
+        setDepartments(depart)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
   }, [content]);
 
   if (isLoading) return <FullScreenLoader />;
@@ -24,16 +42,16 @@ const Dashboard = () => {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard title="Total Employees" count={100} />
-        <MetricCard title="Departments" count={4} />
-        <MetricCard title="Positions" count={25} />
-        <MetricCard title="Applicants" count={12} />
+        <MetricCard title="Total Employees" count={dashStatus.totalEmployees} />
+        <MetricCard title="Departments" count={dashStatus.departments} />
+        <MetricCard title="Positions" count={dashStatus.positions} />
+        <MetricCard title="Applicants" count={dashStatus.applicants} />
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-7">
-          <DepartmentBarChart />
+          <DepartmentBarChart departments={departments} />
           <div className='py-3' />
           <GenderPieChart />
         </div>

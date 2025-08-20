@@ -15,6 +15,7 @@ import { getPositionsApi } from '../../../services/positionApi';
 import { typeLaborLawOptions } from '../../../data/Type';
 import { createEpmLaborLawsApi, deleteEpmLaborLawApi, getEpmUploadLaborLawApi } from '../../../services/employeeApi';
 import moment from 'moment';
+import { tableHeaderComponents } from '../../../components/table/tableHeaderComponents';
 
 const LaborLawPage = () => {
     const { content, language } = useAuth();
@@ -264,6 +265,7 @@ const LaborLawPage = () => {
                         dataSource={filteredData}
                         rowKey="_id"
                         pagination={false}
+                        components={tableHeaderComponents}
                     />
                 </Card>
             </div>

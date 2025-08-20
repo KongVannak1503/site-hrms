@@ -114,6 +114,18 @@ const AppraisalMonthEmployeeListPage = () => {
             </div>,
         },
         {
+            title: content['manager'],
+            dataIndex: "managerScore",
+            key: "managerScore",
+            render: (text) => "500"
+        },
+        {
+            title: content['employee'],
+            dataIndex: "employeeScore",
+            key: "employeeScore",
+            render: (text) => "500"
+        },
+        {
             title: content['status'],
             dataIndex: "status",
             key: "status",

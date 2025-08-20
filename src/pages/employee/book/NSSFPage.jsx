@@ -14,6 +14,7 @@ import uploadUrl, { handleDownload } from '../../../services/uploadApi';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { typeNssfOptions } from '../../../data/Type';
 import moment from 'moment';
+import { tableHeaderComponents } from '../../../components/table/tableHeaderComponents';
 
 const NSSFPage = () => {
     const { content } = useAuth();
@@ -179,12 +180,7 @@ const NSSFPage = () => {
             render: (_, text) => <span>{text.title}</span>,
         },
 
-        {
-            title: content['extension'],
-            dataIndex: "extension",
-            key: "extension",
-            render: (text) => <span>{text}</span>,
-        },
+
         {
             title: content['size'],
             dataIndex: "size",
@@ -413,6 +409,7 @@ const NSSFPage = () => {
                         dataSource={filteredData}
                         rowKey="_id"
                         pagination={false}
+                        components={tableHeaderComponents}
                     />
                 </Card>
                 <hr className="border-0 py-3" />
@@ -469,6 +466,7 @@ const NSSFPage = () => {
                         dataSource={users}
                         rowKey="_id"
                         pagination={false}
+                        components={tableHeaderComponents}
                     />
                 </Card>
             </div>

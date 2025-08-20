@@ -11,19 +11,34 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const DepartmentBarChart = () => {
-  const datasets = [
-    { label: 'HR', data: [18], backgroundColor: '#002060', borderRadius: 3 },
-    { label: 'IT', data: [29], backgroundColor: '#10B981', borderRadius: 3 },
-    { label: 'Finance', data: [12], backgroundColor: '#F59E0B', borderRadius: 3 },
-    { label: 'Marketing', data: [41], backgroundColor: '#EF4444', borderRadius: 3 },
+const DepartmentBarChart = ({ departments }) => {
+  // Assign colors dynamically (can expand this list)
+  const colors = [
+    '#002060', '#10B981', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6',
+    '#F97316', '#14B8A6', '#E11D48', '#6366F1', '#F43F5E', '#0EA5E9',
+    '#A855F7', '#FACC15', '#65A30D', '#F87171', '#22D3EE', '#C026D3',
+    '#EAB308', '#4B5563', '#9333EA', '#F472B6', '#2563EB', '#84CC16',
+    '#FB923C', '#06B6D4', '#DB2777', '#7C3AED', '#FBBF24', '#16A34A',
+    '#EF4444', '#0F172A', '#818CF8', '#F0ABFC', '#2DD4BF', '#FDE68A',
+    '#F43F5E', '#14B8A6', '#A21CAF', '#FCD34D', '#4ADE80', '#D946EF',
+    '#60A5FA', '#F87171', '#22C55E', '#FBBF24', '#3B82F6', '#E879F9',
+    '#EC4899', '#0EA5E9'
   ];
 
-  // Calculate total employees
-  const totalEmployees = datasets.reduce((sum, d) => sum + d.data[0], 0);
+
+  // Convert departments prop to datasets
+  const datasets = departments.map((dept, index) => ({
+    label: dept.departmentName,
+    data: [dept.count],
+    backgroundColor: colors[index % colors.length], // cycle colors if > 6 depts
+    borderRadius: 3,
+  }));
+
+  // Calculate total employees dynamically
+  const totalEmployees = departments.reduce((sum, dept) => sum + dept.count, 0);
 
   const data = {
-    labels: ['Departments'],
+    labels: ['Departments'], // single bar group
     datasets,
   };
 

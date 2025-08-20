@@ -18,6 +18,7 @@ import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { createEpmBookApi, deleteEpmBodyBookApi, deleteEpmBookApi, deleteEpmHealthBookApi, getEmployeeApi, getEpmBodyBooksApi, getEpmBooksApi, getEpmHealthBooksApi } from '../../../services/employeeApi';
 import { DatePicker } from 'antd';
 import moment from 'moment';
+import { tableHeaderComponents } from '../../../components/table/tableHeaderComponents';
 
 const EmployeeBookPage = () => {
     const { content } = useAuth();
@@ -432,6 +433,7 @@ const EmployeeBookPage = () => {
                         dataSource={empHealthBooks}
                         rowKey="_id"
                         pagination={false}
+                        components={tableHeaderComponents}
                     />
                 </Card>
 
@@ -473,6 +475,7 @@ const EmployeeBookPage = () => {
                         dataSource={empBodyBooks}
                         rowKey="_id"
                         pagination={false}
+                        components={tableHeaderComponents}
                     />
                 </Card>
                 {/* Section 3: Work Record Book */}
@@ -529,6 +532,7 @@ const EmployeeBookPage = () => {
                         dataSource={empBooks}
                         rowKey="_id"
                         pagination={false}
+                        components={tableHeaderComponents}
                     />
                 </Card>
             </div>

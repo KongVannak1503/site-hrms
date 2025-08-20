@@ -12,6 +12,7 @@ import { formatDateTime } from '../../../utils/utils';
 import StatusTag from '../../../components/style/StatusTag';
 import uploadUrl, { handleDownload } from '../../../services/uploadApi';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import { tableHeaderComponents } from '../../../components/table/tableHeaderComponents';
 
 const EmployeeDocumentPage = () => {
     const { content } = useAuth();
@@ -203,6 +204,7 @@ const EmployeeDocumentPage = () => {
                         columns={columns}
                         dataSource={filteredData}
                         rowKey="_id"
+                        components={tableHeaderComponents}
                     />
                 </Card>
             </div>
