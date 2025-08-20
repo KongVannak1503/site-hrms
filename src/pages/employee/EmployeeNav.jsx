@@ -19,7 +19,7 @@ const EmployeeNav = () => {
         { key: 'book', label: content['employeeBook'], path: `/employee/book/${id}` },
         { key: 'law', label: content['contract'], path: `/employee/law/${id}` },
         { key: 'nssf', label: content['nssf'], path: `/employee/nssf/${id}` },
-        { key: 'time-line', label: content['timeLine'], path: `/employee/time-line/${id}` },
+        { key: 'time-line', label: content['seniorityPayment'], path: `/employee/time-line/${id}` },
         { key: 'appraisal', label: content['appraisal'], path: `/employee/kpi/appraisal/${id}` },
     ];
 

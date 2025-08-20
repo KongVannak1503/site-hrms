@@ -16,7 +16,7 @@ import uploadUrl from '../../../services/uploadApi';
 const { Option } = Select;
 
 const JobPostingPage = () => {
-  const { isLoading, content } = useAuth();
+  const { isLoading, content, language } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,6 +40,7 @@ const JobPostingPage = () => {
     const fetchJobs = async () => {
       try {
         const res = await getJobPostingsApi();
+
         setJobs(res);
         setFilteredJobs(res);
       } catch (err) {
@@ -111,11 +112,13 @@ const JobPostingPage = () => {
       title: content['department'],
       dataIndex: ['department', 'title'],
       key: 'department',
+      render: (_, text) => <strong>{language == 'khmer' ? text.department?.title_kh : text.department?.title_en}</strong>,
     },
     {
       title: content['position'],
       dataIndex: ['position', 'title'],
       key: 'position',
+      render: (_, text) => <strong>{language == 'khmer' ? text.position?.title_kh : text.position?.title_en}</strong>,
     },
     {
       title: content['pax'],

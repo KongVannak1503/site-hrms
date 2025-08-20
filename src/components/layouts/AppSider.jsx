@@ -270,7 +270,7 @@ const AppSider = ({ collapsed }) => {
                     className='mx-auto'
                     style={{
                         maxWidth: '100%',
-                        height: 90,
+                        maxHeight: 90,
                         objectFit: 'contain',
                         transition: 'all 0.3s ease',
                         cursor: 'pointer',

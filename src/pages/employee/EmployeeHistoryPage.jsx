@@ -68,9 +68,11 @@ const EmployeeHistoryPage = () => {
             {/* Fixed Tabs */}
             <div
                 className="employee-tab-bar !bg-white !border-b !border-gray-200 px-5 !pb-0 !mb-0"
-                style={{ position: 'fixed', top: 56, width: '100%', zIndex: 20 }}
+                style={{ position: 'fixed', top: 56, width: '90%', zIndex: 20 }}
             >
-                <EmployeeNav />
+                <div>
+                    <EmployeeNav />
+                </div>
             </div>
             <Form
                 form={form}
