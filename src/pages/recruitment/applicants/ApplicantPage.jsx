@@ -32,7 +32,7 @@ import { updateInterviewDecisionApi } from '../../../services/interviewApi';
 const { Option } = Select;
 
 const ApplicantPage = () => {
-  const { isLoading, content } = useAuth();
+  const { isLoading, content, language } = useAuth();
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
@@ -299,12 +299,9 @@ const ApplicantPage = () => {
         /> : '-'
     },
     {
-      title: `${content['fullName']} (KH)`,
+      title: `${content['fullName']}`,
       dataIndex: 'full_name_kh',
-    },
-    {
-      title: `${content['fullName']} (EN)`,
-      dataIndex: 'full_name_en',
+      render: (_, text) => <strong>{language == 'khmer' ? text?.full_name_kh : text?.full_name_en}</strong>,
     },
     {
       title: content['gender'],
@@ -402,7 +399,7 @@ const ApplicantPage = () => {
 
       <Content className="border border-gray-200 bg-white p-5 rounded-md mt-4">
         <div className='flex flex-col sm:flex-row justify-between items-center mb-4'>
-          <div className='flex flex-wrap gap-3'>
+          <div className='flex gap-3'>
             <div>
               <Select allowClear placeholder={content['allStatus']} onChange={setStatusFilter} style={{ width: 160 }}>
                 <Option value='applied'>Applied</Option>
@@ -414,13 +411,14 @@ const ApplicantPage = () => {
                 <Option value='rejected'>Rejected</Option>
               </Select>
             </div>
-          </div>
-          <div className='flex gap-3 mt-4 sm:mt-0'>
             <Input
               placeholder={content['searchAction']}
               allowClear
               onChange={(e) => setSearchText(e.target.value)}
             />
+          </div>
+          <div className='flex gap-3 mt-4 sm:mt-0'>
+
             <button onClick={handleCreate} className={Styles.btnCreate}>
               <PlusOutlined /> {`${content['create']} ${content['applicants']}`}
             </button>

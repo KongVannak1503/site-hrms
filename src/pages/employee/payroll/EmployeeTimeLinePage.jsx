@@ -22,7 +22,7 @@ const EmployeeTimeLinePage = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        document.title = content['payroll'];
+        document.title = `${content['seniorityPayment']} | USEA`;
         const fetchData = async () => {
             setLoading(true);
             try {
@@ -50,7 +50,7 @@ const EmployeeTimeLinePage = () => {
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: content['employee'], path: '/employee' },
-        { breadcrumbName: content['timeLine'] },
+        { breadcrumbName: content['seniorityPayment'] },
     ];
 
     return (
@@ -79,7 +79,7 @@ const EmployeeTimeLinePage = () => {
                 </div>
 
                 <Card
-                    title={<p className="text-default text-sm font-bold">{content['timeLine']}</p>}
+                    title={<p className="text-default text-sm font-bold">{content['seniorityPayment']}</p>}
                     className="shadow custom-card"
                 >
                     <Timeline mode="left">

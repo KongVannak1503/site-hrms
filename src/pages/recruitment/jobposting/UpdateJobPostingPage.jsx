@@ -17,7 +17,7 @@ const { Option } = Select;
 
 const UpdateJobPostingPage = () => {
   const { id } = useParams();
-  const { content } = useAuth();
+  const { content, language } = useAuth();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -151,7 +151,7 @@ const UpdateJobPostingPage = () => {
                 >
                   {departments.map(dept => (
                     <Option key={dept._id} value={dept._id}>
-                      {dept.title}
+                      {language == 'khmer' ? dept.title_kh : dept.title_en}
                     </Option>
                   ))}
                 </Select>
@@ -161,7 +161,7 @@ const UpdateJobPostingPage = () => {
                 <Select placeholder="Select Position" allowClear>
                   {positions.map(pos => (
                     <Option key={pos._id} value={pos._id}>
-                      {pos.title}
+                      {language == 'khmer' ? pos.title_kh : pos.title_en}
                     </Option>
                   ))}
                 </Select>

@@ -15,7 +15,7 @@ import { createJobPostingApi } from '../../../services/jobPosting';
 const { Option } = Select;
 
 const CreateJobPostingPage = () => {
-  const { isLoading, content } = useAuth();
+  const { isLoading, content, language } = useAuth();
   const [responsibilities, setResponsibilities] = useState('');
   const [requirements, setRequirements] = useState('');
   const [form] = Form.useForm();
@@ -127,7 +127,7 @@ const CreateJobPostingPage = () => {
                 >
                   {departments.map((dept) => (
                     <Option key={dept._id} value={dept._id}>
-                      {dept.title}
+                      {language == 'khmer' ? dept.title_kh : dept.title_en}
                     </Option>
                   ))}
                 </Select>
@@ -141,7 +141,7 @@ const CreateJobPostingPage = () => {
                 <Select placeholder="Select Position">
                   {positions.map((pos) => (
                     <Option key={pos._id} value={pos._id}>
-                      {pos.title}
+                      {language == 'khmer' ? pos.title_kh : pos.title_en}
                     </Option>
                   ))}
                 </Select>

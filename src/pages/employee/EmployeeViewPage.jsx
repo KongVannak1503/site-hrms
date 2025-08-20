@@ -150,7 +150,8 @@ const EmployeeViewPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['employees'] }
+        { breadcrumbName: content['employee'], path: '/employee' },
+        { breadcrumbName: content['view'], },
     ];
     return (
         <div style={{ margin: 24, }}>

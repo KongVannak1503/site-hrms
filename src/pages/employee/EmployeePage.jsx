@@ -82,11 +82,11 @@ const EmployeePage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['employees'] }
+        { breadcrumbName: `${content['infoStart']}${content['Employee']}${content['infoEnd']}` }
     ];
 
     useEffect(() => {
-        document.title = content['employees'];
+        document.title = `${content['employees']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
@@ -318,7 +318,7 @@ const EmployeePage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />ព័ត៌មានបុគ្គលិក</h1>
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['infoStart']}{content['Employee']}{content['infoEnd']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
@@ -333,16 +333,17 @@ const EmployeePage = () => {
                 <div className='block sm:flex justify-between items-center mb-4'>
                     <div className='mb-3 sm:mb-1'>
                         {/* <h5 className='text-lg font-semibold'>{content['employees']}</h5> */}
+                        <Input
+                            // size="large"
+                            placeholder={content['searchAction']}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
                     </div>
                     <div className='flex items-center gap-3'>
                         <div>
-                            <Input
-                                // size="large"
-                                placeholder={content['searchAction']}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
+
                         </div>
-                        <button onClick={handleCreate} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['employee']}`}</button>
+                        <button onClick={handleCreate} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['Employee']}`}</button>
                     </div>
                 </div>
                 <Table
