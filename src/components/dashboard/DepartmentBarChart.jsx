@@ -13,10 +13,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const DepartmentBarChart = () => {
   const datasets = [
-    { label: 'HR', data: [20], backgroundColor: '#002060', borderRadius: 3 },
-    { label: 'IT', data: [40], backgroundColor: '#10B981', borderRadius: 3 },
-    { label: 'Finance', data: [15], backgroundColor: '#F59E0B', borderRadius: 3 },
-    { label: 'Marketing', data: [25], backgroundColor: '#EF4444', borderRadius: 3 },
+    { label: 'HR', data: [18], backgroundColor: '#002060', borderRadius: 3 },
+    { label: 'IT', data: [29], backgroundColor: '#10B981', borderRadius: 3 },
+    { label: 'Finance', data: [12], backgroundColor: '#F59E0B', borderRadius: 3 },
+    { label: 'Marketing', data: [41], backgroundColor: '#EF4444', borderRadius: 3 },
   ];
 
   // Calculate total employees

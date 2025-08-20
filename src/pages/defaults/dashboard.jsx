@@ -24,10 +24,10 @@ const Dashboard = () => {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard title="Total Employees" count={145} />
-        <MetricCard title="Departments" count={12} />
+        <MetricCard title="Total Employees" count={100} />
+        <MetricCard title="Departments" count={4} />
         <MetricCard title="Positions" count={25} />
-        <MetricCard title="Applicants" count={320} />
+        <MetricCard title="Applicants" count={12} />
       </div>
 
       {/* Charts */}
