@@ -19,7 +19,7 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import RoleUpdatePage from './RoleUpdatePage';
 import { useAuth } from '../../../contexts/AuthContext';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import { deleteRoleApi, getRolesByNameApi } from '../../../services/roleApi';
+import { deleteRoleApi, getRolesApi } from '../../../services/roleApi';
 import { useParams } from 'react-router-dom';
 
 function RolesPage() {
@@ -70,7 +70,7 @@ function RolesPage() {
         document.title = `${content['roles']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getRolesByNameApi(action);
+                const response = await getRolesApi();
                 if (Array.isArray(response)) {
                     setRoles(response);
                     setFilteredRoles(response);

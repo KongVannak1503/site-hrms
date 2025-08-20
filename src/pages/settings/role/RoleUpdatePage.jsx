@@ -6,7 +6,7 @@ import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { getRoleApi, updateRoleApi } from '../../../services/roleApi';
 import { getPermissionsApi } from '../../../services/permissionApi';
 
-const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
+const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
     const { content } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,14 +22,8 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
                     getRoleApi(roleId)
                 ]);
 
-                setCurrentRoleName(roleName);
 
-                // Filter permissions to only those allowed for current role
-                const filteredPermissions = permResponse.filter(perm =>
-                    perm.roles?.includes(roleName)
-                );
-
-                setPermissions(filteredPermissions);
+                setPermissions(permResponse);
 
                 // Prepare initial form values
                 const initialValues = {
@@ -71,7 +65,6 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
                 .filter(Boolean);
 
             const formData = {
-                name: roleName,
                 role: values.role,
                 permissions: permissionsData
             };
@@ -98,11 +91,6 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Form.Item
-                    label={content['role']}
-                >
-                    <Input value={currentRoleName} disabled /> {/* disable editing role name */}
-                </Form.Item>
-                <Form.Item
                     name="role"
                     label={content['name']}
 
@@ -121,7 +109,7 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
                 {permissions.map((perm) => (
                     <div key={perm._id}>
                         <h3 className="text-lg font-semibold capitalize">{perm.name}</h3>
-                        <Form.Item name={`actions-${perm._id}`} label="Actions">
+                        <Form.Item name={`actions-${perm._id}`}>
                             <Checkbox.Group>
                                 {perm.actions.map((action) => (
                                     <Checkbox key={action} value={action}>{action}</Checkbox>
@@ -134,10 +122,10 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated, roleName }) => {
 
             <div className="text-end">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate}>
-                    Update
+                    {content['save']}
                 </button>
             </div>
         </Form>

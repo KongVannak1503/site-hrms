@@ -41,13 +41,13 @@ const UserCreate = ({ onCancel, onUserCreated }) => {
             };
 
             const response = await createUserApi(formData);
-            message.success('User created successfully!');
+            message.success(content['createSuccessFully']);
 
             onUserCreated(response.data);
             form.resetFields();
         } catch (error) {
             console.error('Error creating User:', error);
-            message.error('Failed to create User');
+            message.error(content['failedToCreate']);
         }
     };
 

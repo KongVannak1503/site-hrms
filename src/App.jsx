@@ -341,14 +341,14 @@ function App() {
             <Route
               path="/setting/user/role"
               element={
-                <RolesMainPage />
+                <RolesPage />
               } />
 
-            <Route
+            {/* <Route
               path="/setting/user/role/:action"
               element={
                 <RolesPage />
-              } />
+              } /> */}
             <Route
               path="/setting/categories"
               element={

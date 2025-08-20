@@ -5,7 +5,7 @@ import { createRoleApi, existNameRoleApi } from '../../../services/roleApi'
 import { Styles } from '../../../utils/CsStyle'
 import { useAuth } from '../../../contexts/AuthContext'
 
-const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
+const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
     const { content } = useAuth();
     const [permissions, setPermissions] = useState([]);
     const [roleNameError, setRoleNameError] = useState('');
@@ -17,14 +17,14 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
             try {
                 const response = await getPermissionsApi();
                 const initialValues = {};
-                if (roleName) {
-                    response.forEach((perm) => {
-                        // Only assign actions that this role is allowed to have
-                        // const availableToRole = perm.roles.includes(roleName);
-                        initialValues[`actions-${perm.name}`] = []; // show permission but not checked
+                // if (roleName) {
+                //     response.forEach((perm) => {
+                //         // Only assign actions that this role is allowed to have
+                //         // const availableToRole = perm.roles.includes(roleName);
+                //         initialValues[`actions-${perm.name}`] = []; // show permission but not checked
 
-                    });
-                }
+                //     });
+                // }
 
                 setPermissions(response);
                 form.setFieldsValue(initialValues);
@@ -68,13 +68,12 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
                     return {
                         permissionId: perm._id,
                         actions: selectedActions,
-
                     };
                 })
                 .filter(Boolean); // Remove nulls
 
             const formData = {
-                name: roleName,
+                // name: roleName,
                 role: role,
                 permissions: permissionsData,
                 isActive: true,
@@ -102,16 +101,16 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
             onFinish={handleFinish}
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Form.Item
+                {/* <Form.Item
                     label={content['name']}
                 >
                     <Input value={roleName} disabled />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                     name="role"
                     label={content['role']}
 
-                    validateStatus={roleNameError ? 'error' : ''}
+                    // validateStatus={roleNameError ? 'error' : ''}
                     rules={[{
                         required: true,
                         message: `${content['please']}${content['enter']}${content['role']}`
@@ -125,7 +124,6 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {permissions.length > 0 && permissions
-                    .filter((perm) => perm.roles.includes(roleName)) // only show permissions allowed for this role
                     .map((perm, index) => (
                         <div key={index}>
                             <h3 className='text-lg font-semibold capitalize'>{perm.name}</h3>
@@ -147,10 +145,10 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated, roleName }) => {
 
             <div className="text-end">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate} >
-                    Submit
+                    {content['save']}
                 </button>
             </div>
         </Form>

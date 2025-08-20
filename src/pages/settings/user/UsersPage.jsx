@@ -301,7 +301,7 @@ const UsersPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['new']} ${content['user']}`
+                            ? `${content['create']} ${content['user']}`
                             : `${content['update']} ${content['user']}`
                     }
                 >
