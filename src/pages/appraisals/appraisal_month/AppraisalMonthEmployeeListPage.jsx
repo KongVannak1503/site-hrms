@@ -120,7 +120,7 @@ const AppraisalMonthEmployeeListPage = () => {
             render: (text) => "500"
         },
         {
-            title: content['employee'],
+            title: content['Employee'],
             dataIndex: "employeeScore",
             key: "employeeScore",
             render: (text) => "500"
