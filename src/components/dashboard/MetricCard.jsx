@@ -52,7 +52,7 @@ const MetricCard = ({ title, count }) => {
 
         {/* Main Metric */}
         <div>
-          <p className="text-xl font-semibold text-gray-800">{count.toLocaleString()}</p>
+          <p className="text-xl font-semibold text-gray-800">{count}</p>
           <p className="text-sm text-gray-500">{title}</p>
         </div>
       </div>

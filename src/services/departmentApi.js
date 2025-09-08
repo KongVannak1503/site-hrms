@@ -27,6 +27,10 @@ export const assignDepartmentApi = async (id, formData) => {
     const res = await api.put(`/departments/assignee/${id}`, formData);
     return res.data;
 };
+export const findByEmployeeApi = async (employeeId) => {
+    const res = await api.put(`/departments/employee/${employeeId}`);
+    return res.data;
+};
 // export const existNameRoleApi = async (name) => {
 //     const res = await api.get(`/departments/check/${name}`);
 //     return res;

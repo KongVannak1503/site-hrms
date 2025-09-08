@@ -1,5 +1,5 @@
 export const nationalityOption = [
-    { name_en: "Khmer", name_kh: "ខ្មែរ" },
+    { name_en: "Cambodia", name_kh: "កម្ពុជា" },
     { name_en: "American", name_kh: "អាមេរិក" },
     { name_en: "French", name_kh: "បារាំង" },
     { name_en: "Thai", name_kh: "ថៃ" },

@@ -1,37 +1,31 @@
 import React, { useEffect, useState } from 'react'
 // import UserCreate from './UserCreate'
-import { Avatar, Breadcrumb, Button, Form, Input, message, Space, Table, Tag, Tooltip } from 'antd';
+import { Avatar, Breadcrumb, Button, Form, Input, Space, Table, Tag, Tooltip } from 'antd';
 import { FileTextOutlined, FormOutlined, PlusOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
-import { formatDateTime } from '../../../utils/utils';
-import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
-import { Styles } from '../../../utils/CsStyle';
-import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import { getEmployeeApi } from '../../../services/employeeApi';
-import EmployeeNav from '../../employee/EmployeeNav';
-import AppraisalNav from './AppraisalNav';
-import { getAppraisalActiveMonthsApi } from '../../../services/AppraisalApi';
-import StatusTag from '../../../components/style/StatusTag';
-import TypeTag from '../../../components/style/TypeTag';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { getEmployeeApi } from '../../../../services/employeeApi';
+import { getAppraisalActiveMonthsApi } from '../../../../services/AppraisalApi';
+import { formatDateTime } from '../../../../utils/utils';
+import TypeTag from '../../../../components/style/TypeTag';
+import { Styles } from '../../../../utils/CsStyle';
+import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
+import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
+import StatusTag from '../../../../components/style/StatusTag';
 
-const AppraisalMonthEmployeeListPage = () => {
+const AppraisalMonthManagerListPathPage = () => {
     const { mainId } = useParams();
     const { isLoading, content, language, isEmployee } = useAuth();
     const [users, setUsers] = useState([]);
-    const [open, setOpen] = useState(false);
     const [employee, setEmployee] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
     const navigate = useNavigate();
-    const [selectedUserId, setSelectedUserId] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
         total: 0,
     });
-
 
     const [form] = Form.useForm();
 
@@ -42,7 +36,6 @@ const AppraisalMonthEmployeeListPage = () => {
                 const resEmp = await getEmployeeApi(mainId);
                 setEmployee(resEmp);
                 const response = await getAppraisalActiveMonthsApi(mainId);
-
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -71,12 +64,10 @@ const AppraisalMonthEmployeeListPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['employee'], path: '/appraisal/employee' },
+        { breadcrumbName: content['employee'], path: '/appraisal/employee/path' },
         { breadcrumbName: content['appraisal'] },
         { breadcrumbName: language == 'khmer' ? employee?.name_kh : employee?.name_en },
     ];
-
-
 
     const handleSearch = (value) => {
         const term = value.trim().toLowerCase();
@@ -117,28 +108,28 @@ const AppraisalMonthEmployeeListPage = () => {
             </div>,
         },
         {
-            title: content['manager'],
-            dataIndex: "managerScore",
-            key: "managerScore",
-            render: (_, text) => `${text.managerScoreSum}`
-        },
-        {
             title: content['Employee'],
             dataIndex: "employeeScore",
             key: "employeeScore",
-            render: (_, text) => `${text.employeeScoreSum}`
+            render: (_, text) => <TypeTag value={text?.employeeScoreSum > 0 ? true : false} />
+        },
+        {
+            title: content['score'],
+            dataIndex: "employeeScore",
+            key: "employeeScore",
+            render: (_, text) => `${text.managerScoreSum}`
         },
         {
             title: content['status'],
             dataIndex: "status",
             key: "status",
-            render: (text) => <StatusTag value={text} />
+            render: (_, text) => <StatusTag value={text} />
         },
         {
             title: content['type'],
             dataIndex: "type",
             key: "type",
-            render: (text) => <TypeTag value={text} />
+            render: (_, text) => <TypeTag value={text?.managerScoreSum > 0 ? true : false} />
         },
 
         {
@@ -204,18 +195,8 @@ const AppraisalMonthEmployeeListPage = () => {
     const handleAddCreated = () => {
         navigate('/appraisal/kpi/form');
     };
-    console.log(isEmployee);
-
     const handleUpdate = (mainId, id) => {
-        // if (hasAdminView) {
-        navigate(`/appraisal/month/manager/${mainId}/form/${id}`);
-        // } else {
-        //     if (isEmployee) {
-        //         navigate(`/appraisal/month/manager/path/${mainId}/form/${id}`);
-        //     } else {
-        //         navigate(`/appraisal/month/employee/path${mainId}/form/${id}`);
-        //     }
-        // }
+        navigate(`/appraisal/month/manager/path/${mainId}/form/${id}`);
     };
 
 
@@ -288,4 +269,4 @@ const AppraisalMonthEmployeeListPage = () => {
     )
 }
 
-export default AppraisalMonthEmployeeListPage
+export default AppraisalMonthManagerListPathPage

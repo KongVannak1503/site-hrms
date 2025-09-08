@@ -106,11 +106,11 @@ const CreateApplicantPage = () => {
         applied_date: values.applied_date?.format('YYYY-MM-DD'),
       });
 
-      message.success("Applicant created and applied successfully!");
+      message.success(content['createSuccessFully']);
       navigate('/applicants');
     } catch (err) {
       console.error(err);
-      message.error("Failed to create applicant or apply to job.");
+      message.error(content['failedToCreate']);
     }
   };
 
@@ -118,7 +118,7 @@ const CreateApplicantPage = () => {
     <div>
       <div className="flex justify-between">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          ព័ត៌មាន{content['applicants']}
+          {content['applicants']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

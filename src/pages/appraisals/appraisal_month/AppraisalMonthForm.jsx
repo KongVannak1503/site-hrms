@@ -13,6 +13,15 @@ const AppraisalMonthForm = ({
 }) => {
     return (
         <>
+            <div className="grid">
+                <Form.Item className=''
+                    name="name"
+                    label={content['name']}
+                    rules={[{ required: true, message: 'Please enter name' }]}
+                >
+                    <Input />
+                </Form.Item>
+            </div>
             <div className="grid grid-cols-2 gap-4">
                 <Form.Item
                     name="startDate"

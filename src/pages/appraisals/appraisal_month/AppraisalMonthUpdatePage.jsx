@@ -41,9 +41,10 @@ const AppraisalMonthUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
 
     const handleFinish = async (values) => {
         try {
-            const { startDate, kpiTemplate, announcementDay } = values;
+            const { name, startDate, kpiTemplate, announcementDay } = values;
 
             const formData = {
+                name,
                 kpiTemplate,
                 // department,
                 announcementDay,

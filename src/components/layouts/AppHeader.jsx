@@ -14,6 +14,7 @@ const { Header } = Layout
 
 const AppHeader = ({ collapsed, toggle, isMobile }) => {
     const { language, setLanguage, identity, content } = useAuth();
+
     const navigate = useNavigate()
     const items = [
         {

@@ -1,5 +1,5 @@
 import { Popconfirm, Button, Tooltip } from 'antd'
-import { DeleteOutlined, ReloadOutlined } from '@ant-design/icons'
+import { IoDuplicateOutline } from "react-icons/io5";
 import { Styles } from '../../utils/CsStyle'
 
 export const ConfirmDuplicateButton = ({
@@ -20,7 +20,7 @@ export const ConfirmDuplicateButton = ({
         >
             <Tooltip title={tooltip}>
                 <button className={Styles.btnDownload} >
-                    <ReloadOutlined />
+                    <IoDuplicateOutline />
                 </button>
             </Tooltip>
         </Popconfirm>

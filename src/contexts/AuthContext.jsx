@@ -4,6 +4,7 @@ import dataTranslate from '../data/Data.json'
 import { jwtDecode } from "jwt-decode";
 import { attachTokenToApi } from "../services/api";
 import { getUserApi } from "../services/userApi";
+import { findByEmployeeApi } from "../services/departmentApi";
 
 const getInitialLanguage = () => {
     const saved = localStorage.getItem('appLanguage')
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
     const [identity, setIdentity] = useState(null);
+    const [isEmployee, setIsEmployee] = useState(false);
     const [language, setLanguage] = useState(getInitialLanguage)
     const [content, setContent] = useState(dataTranslate[getInitialLanguage()])
     const [isLoading, setIsLoading] = useState(true)
@@ -77,13 +79,18 @@ export const AuthProvider = ({ children }) => {
         const fetchData = async () => {
             try {
                 const resUser = await getUserApi(user.id);
-                if (isMounted) setIdentity(resUser);
+                const resIsEmp = await findByEmployeeApi(resUser?.employeeId?._id)
+                if (isMounted) {
+                    setIdentity(resUser)
+                    setIsEmployee(resIsEmp.status);
+                };
             } catch (error) {
                 if (error?.response?.status === 401) {
                     console.warn('Unauthorized: Token may be invalid or expired.');
                     setIdentity(null);
                     setToken(null);
                     setUser(null);
+                    setIsEmployee(false);
                     localStorage.removeItem('token');
                 } else {
                     console.error('Error fetching user:', error);
@@ -95,8 +102,8 @@ export const AuthProvider = ({ children }) => {
     }, [user?.id]);
 
     const contextValue = useMemo(() => ({
-        language, setLanguage, content, token, setToken, user, isLoading, identity
-    }), [language, content, token, isLoading, identity]);
+        language, setLanguage, content, token, setToken, user, isLoading, identity, isEmployee
+    }), [language, content, token, isLoading, identity, isEmployee]);
 
     return (
         <AuthContext.Provider value={contextValue}>

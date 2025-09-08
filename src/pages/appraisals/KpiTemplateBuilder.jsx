@@ -19,6 +19,7 @@ import { Content } from 'antd/es/layout/layout';
 import { Styles } from '../../utils/CsStyle';
 import dayjs from 'dayjs';
 import { createKpiApi } from '../../services/KpiApi';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -28,7 +29,7 @@ function KpiTemplateBuilder() {
     const [title, setTitle] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [name, setName] = useState(null);
-
+    const navigate = useNavigate();
     const addMainKpi = () => {
         setKpiItems(prev => [...prev, { title: '', subs: [] }]);
     };
@@ -103,16 +104,17 @@ function KpiTemplateBuilder() {
 
         console.log('KPI Template:', payload);
         const response = await createKpiApi(payload);
-        message.success('Template saved successfully!');
+        message.success(content['createSuccessFully']);
         setTitle('');
         setName(null);
         setKpiItems([]);
+        navigate(`/appraisal/kpi`);
     };
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['kpiYear'], path: '/appraisal/kpi' },
-        { breadcrumbName: content['form'] || 'Form' },
+        { breadcrumbName: content['kpi'], path: '/appraisal/kpi' },
+        { breadcrumbName: content['create'] || 'Form' },
     ];
 
     return (

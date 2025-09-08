@@ -114,11 +114,11 @@ const UpdateJobPostingPage = () => {
       };
 
       await updateJobPostingApi(id, formData);
-      message.success('Job posting updated successfully');
+      message.success(content['updateSuccessFully'] || 'Job posting updated successfully');
       navigate('/job-postings');
     } catch (err) {
       console.error('Update failed:', err);
-      message.error('Failed to update job posting');
+      message.error(content['failedToUpdate'] || 'Failed to update job posting');
     }
   };
 
@@ -130,7 +130,7 @@ const UpdateJobPostingPage = () => {
     <div>
       <div className="flex justify-between">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          ព័ត៌មាន{content['jobPosting']}
+          {content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

@@ -118,22 +118,24 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
                             .replace(/^./, str => str.toUpperCase())
                     }]}
                 >
-                    <Input onChange={handleRoleNameChange} />
+                    <Input />
                 </Form.Item>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-1">
                 {permissions.length > 0 && permissions
                     .map((perm, index) => (
                         <div key={index}>
-                            <h3 className='text-lg font-semibold capitalize'>{perm.name}</h3>
+                            <h3 className='text-lg font-semibold capitalize mb-2'>{perm.name}</h3>
                             <Form.Item
                                 name={`actions-${perm.name}`}
-                                label="Actions"
+                            // label="Actions"
                             >
                                 <Checkbox.Group>
                                     {perm.actions.map((action, i) => (
-                                        <Checkbox key={i} value={action}>{action}</Checkbox>
+                                        <div className="mb-3" key={i}>
+                                            <Checkbox value={action}>{action}</Checkbox>
+                                        </div>
                                     ))}
                                 </Checkbox.Group>
                             </Form.Item>
@@ -151,7 +153,7 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
                     {content['save']}
                 </button>
             </div>
-        </Form>
+        </Form >
     )
 }
 

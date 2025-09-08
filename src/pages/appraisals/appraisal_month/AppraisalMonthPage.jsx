@@ -170,6 +170,12 @@ const AppraisalMonthPage = () => {
             title: content['name'],
             dataIndex: "name",
             key: "name",
+            render: (text) => <p>{text}</p>,
+        },
+        {
+            title: content['kpi'],
+            dataIndex: "kpi",
+            key: "kpi",
             render: (_, text) => <p>{text.kpiTemplate?.name}</p>,
         },
         {

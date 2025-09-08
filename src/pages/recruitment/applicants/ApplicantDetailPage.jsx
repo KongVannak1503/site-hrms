@@ -55,7 +55,7 @@ const ApplicantDetailPage = () => {
     <div>
       <div className="flex justify-between mb-4">
         <h1 className="text-xl font-extrabold text-[#002060]">
-          ព័ត៌មាន{content['applicants']}
+          {content['applicants']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

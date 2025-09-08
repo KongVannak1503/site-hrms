@@ -157,7 +157,7 @@ const DepartmentPage = () => {
         },
 
         {
-            title: content['employee'],
+            title: content['Employee'],
             dataIndex: 'employee',
             key: 'employee',
             align: 'center',
@@ -165,7 +165,9 @@ const DepartmentPage = () => {
                 const employees = record.employee || [];
 
                 if (!employees.length) {
-                    return <span>0</span>;
+                    return <Tag color="blue">
+                        0
+                    </Tag>;
                 }
 
                 return (
@@ -378,7 +380,7 @@ const DepartmentPage = () => {
                 <Table
                     className="custom-pagination custom-checkbox-table"
                     scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredData}
                     rowKey="_id"

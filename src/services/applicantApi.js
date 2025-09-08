@@ -6,6 +6,11 @@ export const getApplicantsApi = async () => {
   return res.data;
 };
 
+export const getFiveApplicantsApi = async () => {
+  const res = await api.get('/applicants/recently');
+  return res.data;
+};
+
 // ✅ Get single applicant by ID
 export const getApplicantApi = async (id) => {
   const res = await api.get(`/applicants/${id}`);

@@ -134,7 +134,7 @@ const EmployeeViewPage = () => {
         },
         {
             key: 'activity',
-            tab: content['timeLine'] || 'Time Line',
+            tab: content['seniorityPayment'] || 'Seniority Payment',
         },
     ];
 

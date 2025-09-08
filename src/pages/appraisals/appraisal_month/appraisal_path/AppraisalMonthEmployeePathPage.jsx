@@ -5,17 +5,16 @@ import { EyeOutlined, FileTextOutlined, FormOutlined, PlusOutlined, RightCircleO
 import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
-import { getAllEmployeesForManagerApi, getAllEmployeesNotManagerApi, getEmployeesApi } from '../../../services/employeeApi';
-import uploadUrl from '../../../services/uploadApi';
-import StatusTag from '../../../components/style/StatusTag';
-import { Styles } from '../../../utils/CsStyle';
-import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
-import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { getAllEmployeesForManagerApi } from '../../../../services/employeeApi';
+import uploadUrl from '../../../../services/uploadApi';
+import { Styles } from '../../../../utils/CsStyle';
+import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
+import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
+import StatusTag from '../../../../components/style/StatusTag';
 
-const AppraisalMonthEmployeePage = () => {
-    const { isLoading, content, language, identity } = useAuth();
+const AppraisalMonthEmployeePathPage = () => {
+    const { isLoading, content, language } = useAuth();
     const [users, setUsers] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -32,6 +31,8 @@ const AppraisalMonthEmployeePage = () => {
         setSelectedRowKeys(newSelectedRowKeys);
     }
 
+
+
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: content['employee'] }
@@ -41,7 +42,7 @@ const AppraisalMonthEmployeePage = () => {
         document.title = `${content['appraisal']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getAllEmployeesNotManagerApi();
+                const response = await getAllEmployeesForManagerApi();
                 console.log(response);
 
                 if (Array.isArray(response)) {
@@ -79,8 +80,7 @@ const AppraisalMonthEmployeePage = () => {
     };
 
     const handleEntrain = (id) => {
-        navigate(`/appraisal/employee/list/${id}`);
-
+        navigate(`/appraisal/employee/list/path-m/${id}`);
     };
 
 
@@ -239,4 +239,4 @@ const AppraisalMonthEmployeePage = () => {
     )
 }
 
-export default AppraisalMonthEmployeePage
+export default AppraisalMonthEmployeePathPage

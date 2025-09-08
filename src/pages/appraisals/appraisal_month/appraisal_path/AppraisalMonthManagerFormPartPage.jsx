@@ -15,21 +15,21 @@ import { FileTextOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
 import { Content } from 'antd/es/layout/layout';
-import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import { useAuth } from '../../../contexts/AuthContext';
-import { Styles } from '../../../utils/CsStyle';
-import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { useParams } from 'react-router-dom';
-import { getEmployeeApi } from '../../../services/employeeApi';
-import AppraisalNav from './AppraisalNav';
-import { getKpiApi } from '../../../services/KpiApi';
-import { createAppraisalIndividualMonthApi, getAppraisalIndividualMonthApi, getAppraisalMonthApi, updateAppraisalIndividualMonthApi } from '../../../services/AppraisalApi';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { createAppraisalIndividualManagerMonthApi, getAppraisalIndividualManagerMonthApi, getAppraisalMonthApi, updateAppraisalIndividualManagerMonthApi } from '../../../../services/AppraisalApi';
+import { getKpiApi } from '../../../../services/KpiApi';
+import { getEmployeeApi } from '../../../../services/employeeApi';
+import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
+import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb';
+import { Styles } from '../../../../utils/CsStyle';
+
 
 const { Title } = Typography;
 
-export default function AppraisalMonthAdminFormPage() {
+export default function AppraisalMonthManagerFormPartPage() {
     const { mainId, id } = useParams();
-    const { content, language } = useAuth();
+    const { content, language, isLoading } = useAuth();
     const [loading, setLoading] = useState(true);
     const [template, setTemplates] = useState(null);
     const [appraisal, setAppraisal] = useState(null);
@@ -40,7 +40,7 @@ export default function AppraisalMonthAdminFormPage() {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        document.title = content['appraisalDay']
+        document.title = `${content['appraisal']} | USEA`
         fetchTemplates();
     }, [content]);
 
@@ -54,7 +54,7 @@ export default function AppraisalMonthAdminFormPage() {
             const resEmp = await getEmployeeApi(mainId);
             setEmployee(resEmp);
             // 2. Get individual scores
-            const resInd = await getAppraisalIndividualMonthApi(mainId, id, resAppraisal.kpiTemplate);
+            const resInd = await getAppraisalIndividualManagerMonthApi(mainId, id, resAppraisal.kpiTemplate);
             if (resInd) {
                 setIndividual(resInd);
 
@@ -106,11 +106,11 @@ export default function AppraisalMonthAdminFormPage() {
 
             if (individual && individual._id) {
                 // 🔁 Update if existing
-                await updateAppraisalIndividualMonthApi(individual._id, payload);
+                await updateAppraisalIndividualManagerMonthApi(individual._id, payload);
                 message.success(content['updateSuccessFully']);
             } else {
                 // 🆕 Create new
-                await createAppraisalIndividualMonthApi(payload);
+                await createAppraisalIndividualManagerMonthApi(payload);
                 message.success(content['createSuccessFully']);
             }
             // form.resetFields();
@@ -132,27 +132,24 @@ export default function AppraisalMonthAdminFormPage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisalDay'], path: "/appraisal/day" },
-        { breadcrumbName: content['kpiDay'], path: `/appraisal/employee/list/${mainId}` },
+        { breadcrumbName: content['employee'], path: "/appraisal/employee/path" },
+        { breadcrumbName: content['appraisal'], path: `/appraisal/employee/list/path-m/${mainId}` },
         { breadcrumbName: language == 'khmer' ? employee?.name_kh : employee?.name_en },
     ];
 
     return (
         <div>
-            <div
+            {/* <div
                 className="employee-tab-bar !bg-white !border-b !border-gray-200 px-5 !pb-0 !mb-0"
                 style={{ position: 'fixed', top: 56, width: '100%', zIndex: 20 }}
             >
                 <AppraisalNav />
-            </div>
+            </div> */}
             <div style={{
-                paddingTop: 70,
-                paddingBottom: 100,
-                paddingLeft: 20,
-                paddingRight: 20,
+                padding: 24
             }}>
                 <div className="flex justify-between mb-6">
-                    <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisalDay']}</h1>
+                    <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
                     <CustomBreadcrumb items={breadcrumbItems} />
 
                 </div>

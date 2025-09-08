@@ -169,11 +169,11 @@ const EditApplicantPage = () => {
         });
       }
 
-      message.success("Applicant updated successfully!");
+      message.success(content['updateSuccessFully'] || "Applicant updated successfully!");
       navigate('/applicants');
     } catch (err) {
       console.error(err);
-      message.error("Failed to update applicant.");
+      message.error(content['failedToUpdate'] || "Failed to update applicant.");
     }
   };
 
@@ -188,7 +188,7 @@ const EditApplicantPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មាន{content['applicants']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'>{content['applicants']}</h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 

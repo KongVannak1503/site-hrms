@@ -105,14 +105,16 @@ const RoleUpdatePage = ({ roleId, onCancel, onUserUpdated }) => {
                 </Form.Item>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-1">
                 {permissions.map((perm) => (
                     <div key={perm._id}>
-                        <h3 className="text-lg font-semibold capitalize">{perm.name}</h3>
+                        <h3 className="text-lg font-semibold capitalize mb-2">{perm.name}</h3>
                         <Form.Item name={`actions-${perm._id}`}>
                             <Checkbox.Group>
                                 {perm.actions.map((action) => (
-                                    <Checkbox key={action} value={action}>{action}</Checkbox>
+                                    <div className='mb-3'>
+                                        <Checkbox key={action} value={action}>{action}</Checkbox>
+                                    </div>
                                 ))}
                             </Checkbox.Group>
                         </Form.Item>

@@ -158,8 +158,7 @@ const EmployeePage = () => {
             key: "first_name",
             render: (text, record) =>
                 <div>
-                    <p>{record.first_name_kh}</p>
-                    <p>{record.first_name_en}</p>
+                    <p>{language == 'kh' ? record.first_name_kh : record.first_name_en}</p>
                 </div>,
         },
         {
@@ -168,8 +167,7 @@ const EmployeePage = () => {
             key: "last_name",
             render: (text, record) =>
                 <div>
-                    <p>{record.last_name_kh}</p>
-                    <p>{record.last_name_en}</p>
+                    <p>{language == 'kh' ? record.last_name_kh : record.last_name_en}</p>
                 </div>,
         },
 
@@ -349,7 +347,7 @@ const EmployeePage = () => {
                 <Table
                     className='custom-pagination custom-checkbox-table'
                     scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredData}
                     rowKey="_id"

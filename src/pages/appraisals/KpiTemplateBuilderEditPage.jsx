@@ -117,9 +117,9 @@ function KpiTemplateBuilderEditPage() {
             };
 
             await updateKpiApi(id, payload);
-            message.success('KPI Template updated successfully.');
+            message.success(content['updateSuccessFully']);
         } catch (error) {
-            message.error('Update failed. Please try again.');
+            message.error(content['failedToUpdate']);
         } finally {
             setSubmitting(false);
         }
@@ -127,8 +127,8 @@ function KpiTemplateBuilderEditPage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['kpiYear'], path: '/appraisal/kpi/year' },
-        { breadcrumbName: content['editKpi'] || 'Edit KPI' },
+        { breadcrumbName: content['kpi'], path: '/appraisal/kpi' },
+        { breadcrumbName: content['edit'] || 'Edit KPI' },
     ];
 
     if (loading) {

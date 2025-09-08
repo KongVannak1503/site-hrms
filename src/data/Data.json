@@ -43,7 +43,8 @@
         "failedToDuplicate": "Failed to Duplicate",
         "failedToCreate": "Failed to Create",
         "failedToUpdate": "Failed to Update",
-
+        "recentlyAppraisal":"Recently Appraisal",
+        "recentlyRecruitment":"Recently Recruitment",
         "position": "Position ",
         "positions": "Positions ",
         "title": "Title",
@@ -215,7 +216,9 @@
         "comment": "Comment",
         "attactFile": "Attach File",
 
+        "editKpi": "Edit KPI",
         "appraisal": "Appraisal",
+        "myAppraisal": "My Appraisal",
 
         "awarding": "Awarding",
         "profile": "Profile",
@@ -346,6 +349,7 @@
         "totalEmployee": "បុគ្គលិកសរុប",
         "male": "ប្រុស",
         "female": "ស្រី",
+        "editKpi": "កែប្រែ KPI",
 
         "appraisalDay": "ការវាយតម្លៃប្រចាំថ្ងៃ",
         "appraisalMonth": "ការវាយតម្លៃប្រចាំខែ",
@@ -384,6 +388,8 @@
         "loginToSystem": "ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស", 
         "addNew": "Add New",
         "searchAction": "ស្វែងរក...",
+        "recentlyAppraisal":"ការវាយតម្លៃថ្មីៗ",
+        "recentlyRecruitment":"ការជ្រើសរើសបុគ្គលិកថ្មីៗ",
 
         "job": "ការងារ",
         "jobType": "ប្រភេទការងារ",
@@ -439,6 +445,7 @@
         "attactFile": "ឯកសារ",
 
         "appraisal": "ការវាយតម្លៃការងារ",
+        "myAppraisal": "ការវាយតម្លៃការងាររបស់ខ្ញុំ",
 
         "awarding": "ការលើកទឹកចិត្ដ",
         "profile": "ប្រវត្តិរូប",

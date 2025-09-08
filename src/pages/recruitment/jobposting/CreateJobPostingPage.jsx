@@ -78,10 +78,10 @@ const CreateJobPostingPage = () => {
 
       await createJobPostingApi(formData);
 
-      message.success('Job posting created successfully!');
+      message.success(content['createSuccessFully'] || 'Job posting created successfully!');
       navigate('/job-postings');
     } catch (error) {
-      console.error('Error creating job posting:', error);
+      console.error(content['failedToCreate'] || 'Error creating job posting:', error);
       message.error('Failed to create job posting. Please try again.');
     }
   };
@@ -98,7 +98,7 @@ const CreateJobPostingPage = () => {
     <div>
       <div className="flex justify-between">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          ព័ត៌មាន{content['jobPosting']}
+          {content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

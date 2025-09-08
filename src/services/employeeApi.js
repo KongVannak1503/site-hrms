@@ -15,6 +15,11 @@ export const getAllEmployeesNotManagerApi = async () => {
     return res.data;
 };
 
+export const getAllEmployeesForManagerApi = async () => {
+    const res = await api.get('/employees/forManager');
+    return res.data;
+};
+
 export const getEmployeesManagerApi = async () => {
     const res = await api.get('/employees/manager');
     return res.data;
