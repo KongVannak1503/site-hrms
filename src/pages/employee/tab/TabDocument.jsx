@@ -93,7 +93,7 @@ const TabDocument = () => {
                 // paddingLeft: 20,
                 // paddingRight: 20,
             }}>
-                <Card title="Documents Uploaded" className="shadow">
+                <Card title={content['documentUploaded']} className="shadow">
 
                     <Table
                         scroll={{ x: 'max-content' }}

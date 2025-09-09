@@ -65,7 +65,7 @@ const TabTimeLine = ({ id }) => {
             >
 
                 <Card
-                    title={<p className="text-default text-sm font-bold">{content['timeLine']}</p>}
+                    title={<p className="text-default text-sm font-bold">{content['seniorityPayment']}</p>}
                     className="shadow custom-card"
                 >
                     <Timeline mode="left">

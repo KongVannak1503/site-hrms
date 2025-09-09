@@ -147,6 +147,7 @@
 
         "employeeInfo": "Employee Information ",
         "education": "Education",
+        "documentUploaded": "Document Uploaded",
         "employmentHistory": "Employment History",
         "employeeBook": "Employment Book",
         "nssf": "NSSF",
@@ -344,7 +345,7 @@
         "skills": "ជំនាញ",
         "skill": "ជំនាញ",
         "relationship": "ទំនាក់ទំនង",
-
+        "documentUploaded": "ឯកសារដែលបានផ្ទុក",
         "organizations": "អង្គភាព",
         "organization": "អង្គភាព",
         "socialMedia": "ប្រព័ន្ធផ្សព្វផ្សាយសង្គម",
