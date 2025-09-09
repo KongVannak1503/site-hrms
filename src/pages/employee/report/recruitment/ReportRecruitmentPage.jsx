@@ -532,7 +532,7 @@ export default function ReportRecruitmentPage() {
     return (
         <div style={{ padding: 20, paddingTop: 0 }}>
             <div className="mb-3 flex justify-between">
-                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['report']}</p>
+                <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['report']}{content['spaceKh']}{content['recruiter']}</p>
                 <CustomBreadcrumb items={breadcrumbItems} />
             </div>
             <div
