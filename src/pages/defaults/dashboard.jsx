@@ -10,6 +10,12 @@ import RecentRecruitmentComp from '../../components/dashboard/RecentRecruitmentC
 import { getDashboardApi, getDashboardDepartmentChartApi, getDashboardRecentlyAppraisalApi } from '../../services/dashboardApi';
 import { useState } from 'react';
 import { getReportEmployeeGenderStatsApi } from '../../services/reportApi';
+import {
+  UserGroupIcon,
+  BuildingOfficeIcon,
+  BriefcaseIcon,
+  UserPlusIcon,
+} from '@heroicons/react/24/outline';
 
 const Dashboard = () => {
   const { isLoading, content } = useAuth();
@@ -50,10 +56,38 @@ const Dashboard = () => {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard title="Total Employees" count={dashStatus.totalEmployees} />
-        <MetricCard title="Departments" count={dashStatus.departments} />
-        <MetricCard title="Positions" count={dashStatus.positions} />
-        <MetricCard title="Applicants" count={dashStatus.applicants} />
+        <MetricCard
+          title={`${content['totalEmployee']}`}
+          iconDep={UserGroupIcon}
+          bg="bg-blue-100"
+          color="text-blue-500"
+          count={dashStatus.totalEmployees}
+        />
+
+        <MetricCard
+          title={content['departments']}
+          iconDep={BuildingOfficeIcon}
+          bg="bg-green-100"
+          color="text-green-500"
+          count={dashStatus.departments}
+        />
+
+        <MetricCard
+          title={content['positions']}
+          iconDep={BriefcaseIcon}
+          bg="bg-purple-100"
+          color="text-purple-500"
+          count={dashStatus.positions}
+        />
+
+        <MetricCard
+          title={content['applicants']}
+          iconDep={UserPlusIcon}
+          bg="bg-pink-100"
+          color="text-pink-500"
+          count={dashStatus.applicants}
+        />
+
       </div>
 
       {/* Charts */}

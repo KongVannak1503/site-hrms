@@ -6,6 +6,7 @@ import {
   UserPlusIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowUpRightIcon, ArrowDownRightIcon } from '@heroicons/react/24/solid';
+import React from 'react';
 
 const iconMap = {
   'Total Employees': {
@@ -30,7 +31,7 @@ const iconMap = {
   },
 };
 
-const MetricCard = ({ title, count }) => {
+const MetricCard = ({ title, count, iconDep, bg = "bg-gray-100", color = "text-gray-500" }) => {
   const iconInfo = iconMap[title] || {};
 
   return (
@@ -45,9 +46,9 @@ const MetricCard = ({ title, count }) => {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className={`rounded-[5px] p-2 ${iconInfo.bg} ${iconInfo.color}`}
+          className={`rounded-[5px] p-2 ${bg} ${color}`}
         >
-          {iconInfo.icon && <iconInfo.icon className="h-6 w-6" />}
+          {iconDep && React.createElement(iconDep, { className: "h-6 w-6" })}
         </motion.div>
 
         {/* Main Metric */}

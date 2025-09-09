@@ -103,6 +103,7 @@
         "permanentAddress": "Permanent Address",
         "seniorityPayment": "Seniority Payment",
 
+        "payDate": "Pay Date",
         "enter": "Enter ",
         "new": "New ",
         "select": "Select ",
@@ -311,6 +312,7 @@
         "employee": "ការគ្រប់គ្រងបុគ្គលិក",
         "employees": "បុគ្គលិក",
         "Employee": "បុគ្គលិក",
+        "payDate": "កាលបរិច្ឆេទបង់ប្រាក់",
 
         "createSuccess": "បានបង្កើតដោយជោគជ័យ",
         "updateSuccess": "បានកែប្រែដោយជោគជ័យ",
@@ -358,7 +360,6 @@
         "editKpi": "កែប្រែ KPI",
         "informationKh": "ព័ត៌មាន",
         "additionalPositions": "មុខតំណែងមន្ថែម",
-
         "appraisalDay": "ការវាយតម្លៃប្រចាំថ្ងៃ",
         "appraisalMonth": "ការវាយតម្លៃប្រចាំខែ",
         "appraisalYear": "ការវាយតម្លៃប្រចាំឆ្នាំ",
@@ -447,7 +448,7 @@
         "startOn": "ចាប់ផ្ដើម",
         "location": "ទីកន្លែង",
         "decision": "ការសម្រេចចិត្ដ",
-
+        "months": "ខែ",
         "interviews": "ការសម្ភាសន៍",
         "interviewSchedule": "កាលវិភាគសម្ភាសន៍",
         "interviewDetail": "ព័ត៌មានសម្ភាសន៍លម្អិត",

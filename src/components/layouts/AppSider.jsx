@@ -117,9 +117,9 @@ const AppSider = ({ collapsed }) => {
         {
             key: '/reports', permission: null, icon: <LuChartNoAxesCombined />, label: content['report'],
             children: [
-                { key: '/report/recruitment', permission: 'reports', label: `${content['report']} ${content['recruiter']}` },
-                { key: '/report/employee', permission: 'reports', label: `${content['report']} ${content['Employee']}` },
-                { key: '/report/appraisal', permission: 'reports', label: `${content['report']} ${content['appraisal']}` },
+                { key: '/report/recruitment', permission: 'reports', label: `${content['recruiter']}` },
+                { key: '/report/employee', permission: 'reports', label: `${content['employee']}` },
+                { key: '/report/appraisal', permission: 'reports', label: `${content['appraisal']}` },
             ]
         },
         {

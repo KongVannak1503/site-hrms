@@ -12,7 +12,7 @@ import { Content } from 'antd/es/layout/layout';
 import { Styles } from '../../../utils/CsStyle';
 import {
   CloudDownloadOutlined,
-  EyeOutlined, FormOutlined, PlusOutlined
+  EyeOutlined, FileTextOutlined, FormOutlined, PlusOutlined
 } from '@ant-design/icons';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import {

@@ -155,7 +155,7 @@ const SubPayrollPage = () => {
             render: (text, record) => <p>{language == 'khmer' ? record?.positionId?.department.title_kh : record?.positionId?.department.title_en}</p>,
         },
         {
-            title: "6 Months",
+            title: `6 ${content['months']}`,
             dataIndex: '6months',
             key: '6months',
             render: (_, record) => {
@@ -166,7 +166,7 @@ const SubPayrollPage = () => {
             }
         },
         {
-            title: "12 Months",
+            title: `12 ${content['months']}`,
             dataIndex: '12months',
             key: '12months',
             render: (_, record) => {
@@ -177,7 +177,7 @@ const SubPayrollPage = () => {
             }
         },
         {
-            title: "Total",
+            title: content['total'],
             dataIndex: 'total',
             key: 'total',
             render: (_, record) => {
@@ -188,7 +188,7 @@ const SubPayrollPage = () => {
             }
         },
         {
-            title: 'Action',
+            title: content['action'],
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
                     <Tooltip title={content['Bonus']}>

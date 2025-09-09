@@ -119,7 +119,7 @@ const PayrollPage = () => {
 
     const columns = [
         {
-            title: "Pay Date",
+            title: content['payDate'],
             dataIndex: "payDate",
             key: "payDate",
             render: (text) => <span>{formatYear(text)}</span>,

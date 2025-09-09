@@ -154,7 +154,7 @@ const EmployeeCreatePage = () => {
     const tabItems = [
         {
             key: 'personal',
-            label: 'Personal Data',
+            label: content['informationData'],
         },
 
     ];
