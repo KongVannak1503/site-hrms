@@ -588,9 +588,10 @@ export default function ReportEmployeePage() {
                                 handleSearch(searchValue, dates); // use current text input
                             }}
                             format="YYYY-MM-DD"
+                            placeholder={[content['startDate'], content['endDate']]}
                         />
                         <Select
-                            placeholder="Select Department"
+                            placeholder={`${content['select']}${content['spaceKh']}${content['department']}`}
                             allowClear
                             style={{ width: 200 }}
                             value={selectedDept || undefined}

@@ -54,11 +54,11 @@ const AppraisalMonthPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisal'] }
+        { breadcrumbName: content['appraisalList'] }
     ];
 
     useEffect(() => {
-        document.title = `${content['appraisal']} | USEA`;
+        document.title = `${content['appraisalList']} | USEA`;
         const fetchData = async () => {
             try {
                 const res = await getDepartmentsApi();
@@ -327,7 +327,7 @@ const AppraisalMonthPage = () => {
 
                     </div>
 
-                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisal']}`}</button>
+                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisalList']}`}</button>
                 </div>
                 <Table
                     className='custom-pagination custom-checkbox-table'
@@ -360,8 +360,8 @@ const AppraisalMonthPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['appraisal']}${content['newEnd']}`
-                            : `${content['update']} ${content['appraisal']}`
+                            ? `${content['create']} ${content['newStart']} ${content['appraisalList']}${content['newEnd']}`
+                            : `${content['update']} ${content['appraisalList']}`
                     }
                 >
                     {actionForm === 'create' ? (

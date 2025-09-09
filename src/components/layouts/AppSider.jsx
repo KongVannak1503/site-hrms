@@ -111,7 +111,7 @@ const AppSider = ({ collapsed }) => {
                     permission: 'appraisals-employee',
                     label: isEmployee ? content['employees'] : content['myAppraisal'],
                 },
-                { key: '/appraisal', permission: 'appraisals', label: content['appraisal'] },
+                { key: '/appraisal', permission: 'appraisals', label: content['appraisalList'] },
             ]
         },
         {

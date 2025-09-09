@@ -176,6 +176,7 @@
         "jobTitle": "Job Title",
         "startDate": "Start Date",
         "endDate": "End Date",
+        "spaceKh": " ",
 
         "createJobPosting": "Create Job Posting",
         "editJobPosting": "Edit Job Posting",
@@ -223,6 +224,7 @@
 
         "editKpi": "Edit KPI",
         "appraisal": "Appraisal",
+        "appraisalList": "Appraisal List",
         "myAppraisal": "My Appraisal",
         "informationKh": "",
         "awarding": "Awarding",
@@ -415,6 +417,7 @@
         "openDate": "កាលបរិច្ឆេទបើក",
         "closeDate": "កាលបរិច្ឆេទបិទ",
         "pax": "ចំនួនរើស",
+        "spaceKh": "",
         "responsibilities": "ទំនួលខុសត្រូវ",
         "requirements": "លក្ខខណ្ឌការងារ",
 
@@ -464,7 +467,7 @@
         "awarding": "ការលើកទឹកចិត្ដ",
         "profile": "ប្រវត្តិរូប",
         "signOut": "ចាកចេញ",
-
+        "appraisalList": "បញ្ជីវាយតម្លៃ ",
         "report": "របាយការណ៍",
         "seniorityPayment": "ការទូទាត់ប្រាក់បំណាច់ឆ្នាំ",
         "employeeID": "អត្តលេខ/ID",

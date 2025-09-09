@@ -550,12 +550,13 @@ export default function ReportAppraisalPage() {
                         <RangePicker
                             onChange={(dates) => {
                                 setDateRange(dates);
-                                handleSearch(searchValue, dates); // use current text input
+                                handleSearch(searchValue, dates);
                             }}
                             format="YYYY-MM-DD"
+                            placeholder={[content['startDate'], content['endDate']]}
                         />
                         <Select
-                            placeholder="Select Department"
+                            placeholder={`${content['select']}${content['spaceKh']}${content['department']}`}
                             allowClear
                             style={{ width: 200 }}
                             value={selectedDept || undefined}
