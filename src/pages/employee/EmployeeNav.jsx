@@ -12,7 +12,7 @@ const EmployeeNav = () => {
 
     const tabs = [
         { key: 'profile', label: content['employeeInfo'], path: `/employee/profile/${id}` },
-        { key: 'position', label: content['position'], path: `/employee/position/${id}` },
+        { key: 'position', label: content['additionalPositions'], path: `/employee/position/${id}` },
         { key: 'education', label: content['education'], path: `/employee/education/${id}` },
         { key: 'history', label: content['employmentHistory'], path: `/employee/history/${id}` },
         { key: 'document', label: content['document'], path: `/employee/document/${id}` },

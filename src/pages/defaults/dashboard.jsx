@@ -7,7 +7,7 @@ import FullScreenLoader from '../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 import RecentAppraisalComp from '../../components/dashboard/RecentAppraisalComp';
 import RecentRecruitmentComp from '../../components/dashboard/RecentRecruitmentComp';
-import { getDashboardApi, getDashboardDepartmentChartApi } from '../../services/dashboardApi';
+import { getDashboardApi, getDashboardDepartmentChartApi, getDashboardRecentlyAppraisalApi } from '../../services/dashboardApi';
 import { useState } from 'react';
 import { getReportEmployeeGenderStatsApi } from '../../services/reportApi';
 
@@ -15,6 +15,7 @@ const Dashboard = () => {
   const { isLoading, content } = useAuth();
   const [dashStatus, setDashStatus] = useState(0);
   const [departments, setDepartments] = useState(0);
+  const [appraisals, setAppraisals] = useState([]);
   const [empGenderStats, setEmpGenderStats] = useState({});
   useEffect(() => {
     document.title = `${content['dashboard']} | USEA`
@@ -25,9 +26,12 @@ const Dashboard = () => {
         setDashStatus(res);
         const depart = await getDashboardDepartmentChartApi();
         setDepartments(depart);
-
         const resGender = await getReportEmployeeGenderStatsApi();
         setEmpGenderStats(resGender);
+
+        const resAppraisal = await getDashboardRecentlyAppraisalApi();
+        setAppraisals(resAppraisal);
+
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -60,7 +64,7 @@ const Dashboard = () => {
           <GenderPieChart genders={empGenderStats} />
         </div>
         <div className="col-span-5">
-          <RecentAppraisalComp />
+          <RecentAppraisalComp appraisals={appraisals} />
           <div className='py-3' />
           <RecentRecruitmentComp />
         </div>

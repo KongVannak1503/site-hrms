@@ -90,6 +90,7 @@ const EmployeePage = () => {
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
+                console.log(response)
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -151,23 +152,31 @@ const EmployeePage = () => {
                     className="w-[70px] h-[80px] rounded object-cover"
                 />
         },
-
         {
-            title: content['firstName'],
-            dataIndex: "first_name",
-            key: "first_name",
-            render: (text, record) =>
+            title: content['employeeID'],
+            dataIndex: "employee_id",
+            key: "employee_id",
+            render: (text) =>
                 <div>
-                    <p>{language == 'kh' ? record.first_name_kh : record.first_name_en}</p>
+                    <p>{text}</p>
                 </div>,
         },
         {
             title: content['lastName'],
+            dataIndex: "first_name",
+            key: "first_name",
+            render: (text, record) =>
+                <div>
+                    <p>{language == 'khmer' ? record.first_name_kh : record.first_name_en}</p>
+                </div>,
+        },
+        {
+            title: content['firstName'],
             dataIndex: "last_name",
             key: "last_name",
             render: (text, record) =>
                 <div>
-                    <p>{language == 'kh' ? record.last_name_kh : record.last_name_en}</p>
+                    <p>{language == 'khmer' ? record.last_name_kh : record.last_name_en}</p>
                 </div>,
         },
 

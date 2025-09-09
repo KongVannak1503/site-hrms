@@ -47,6 +47,7 @@
         "recentlyRecruitment":"Recently Recruitment",
         "position": "Position ",
         "positions": "Positions ",
+        "additionalPositions": "Additional Positions ",
         "title": "Title",
         "description": "Description",
         "items": "Items",
@@ -165,6 +166,7 @@
         "trainingShortCourse": "Training & Short Course",
         "fromDate": "From Date",
         "toDate": "To Date",
+        "ToDate": "To Date",
         "job": "Job",
         "jobType": "Job Type",
         "jobPostings": "Job Postings",
@@ -183,6 +185,7 @@
         "requirements": "Requirements",
 
         "applicants": "Applicants",
+        "applicant": "Applicant",
         "fullName": "Full Name",
         "nameFull": "Full Name",
         "uploadCV": "Upload CV",
@@ -226,6 +229,9 @@
 
         "report": "Reports",
         "timeLine": "Time Line",
+        "applicantDate": "Applicant Date",
+        "work": "Work",
+        "appraisalDate": "Appraisal Date",
 
         "university": "University",
         "majorOfStudy": "Major of Study",
@@ -409,6 +415,10 @@
         "requirements": "លក្ខខណ្ឌការងារ",
 
         "applicants": "បេក្ខជនដាក់ពាក្យ",
+        "applicant": "អ្នកដាក់ពាក្យ",
+        "applicantDate": "ថ្ងៃដាក់ពាក្យ",
+        "work": "ការងារ",
+        "appraisalDate": "ថ្ងៃវាយតម្លៃ",
         "fullName": "គោត្ដនាម-នាម",
         "nameFull": "ឈ្មោះពេញ",
         "uploadCV": "បញ្ចូល CV",
@@ -494,6 +504,7 @@
         "trainingShortCourse": "វគ្គបណ្តុះបណ្តាល និងវគ្គខ្លី",
         "fromDate": "កាលបរិច្ឆេទចាប់ផ្ដើម",
         "toDate": "កាលបរិច្ឆេទបច្ចុប្បន្ន",
+        "ToDate": "ដល់កាលបរិច្ឆេទ",
         "university": "សាកលវិទ្យាល័យ",
         "majorOfStudy": "មុខវិជ្ជាសិក្សា",
         "nameOfSupervisor": "ឈ្មោះម្ចាស់ក្រុមហ៊ុន",

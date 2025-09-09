@@ -21,7 +21,6 @@ const dummyAppraisals = [
 const RecentRecruitmentComp = () => {
     const { content, language } = useAuth();
     const [recruitment, setRecruitment] = useState([]);
-    // getFiveApplicantsApi
 
     useEffect(() => {
         document.title = `${content['applicants']} | USEA`
@@ -36,7 +35,6 @@ const RecentRecruitmentComp = () => {
             message.error('Failed to load applicants');
         }
     };
-
     return (
         <div className="bg-white p-6 rounded-[5px] shadow">
             <p className="text-default text-sm font-bold pb-5">
@@ -48,28 +46,28 @@ const RecentRecruitmentComp = () => {
                     <thead>
                         <tr className="bg-gray-50">
                             <th className="px-4 py-2 text-nowrap text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                អ្នកដាក់ពាក្យ
+                                {content['applicant']}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                ការងារ
+                                {content['work'] || 'Work'}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                ថ្ងៃដាក់ពាក្យ
+                                {content['applicantDate'] || 'Applicant Date'}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                ស្ថានភាព
+                                {content['status']}
                             </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {recruitment.length > 0 ? (
-                            recruitment.map((item) => {
+                            recruitment.map((item, index) => {
                                 const status = getStatusInfo(item.status);
                                 return (
-                                    <tr key={item.id} className="hover:bg-gray-50">
+                                    <tr key={index} className="hover:bg-gray-50">
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700 flex items-center">
                                             <Avatar size={30} src={item?.applicant_id.photo ? `${uploadUrl}/uploads/applicants/${item?.applicant_id.photo}` : undefined} />
-                                            <span className="ml-2">{language == 'khmer' ? item.full_name_kh : item.full_name_en}</span>
+                                            <span className="ml-2">{language == 'khmer' ? item?.applicant_id.full_name_kh : item?.applicant_id.full_name_en}</span>
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                                             {item?.job_id.job_title}

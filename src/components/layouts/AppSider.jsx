@@ -64,6 +64,7 @@ const AppSider = ({ collapsed }) => {
         if (pathname.startsWith('/appraisal/kpi')) return '/appraisal/kpi';
         if (pathname.startsWith('/appraisal/employee')) return '/appraisal/employee';
         if (pathname.startsWith('/appraisal/month')) return '/appraisal/employee';
+        if (pathname.startsWith('/payroll/')) return '/payroll';
         return pathname;
     };
 
@@ -100,7 +101,7 @@ const AppSider = ({ collapsed }) => {
             key: '/appraisals', permission: null, icon: <LuClipboardPen />, label: content['appraisal'],
             children: [
                 { key: '/appraisal/kpi', permission: 'kpi', label: content['kpi'] },
-                { key: '/appraisal/recent', permission: 'kpi', label: content['recentlyAppraisal'] || 'Recently Appraisal' },
+                { key: '/appraisal/recently', permission: 'appraisal-recently', label: content['recentlyAppraisal'] || 'Recently Appraisal' },
                 {
                     key: hasAdminView
                         ? '/appraisal/employee'

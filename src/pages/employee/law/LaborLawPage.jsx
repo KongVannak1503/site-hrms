@@ -11,7 +11,7 @@ import { formatDateTime } from '../../../utils/utils';
 import StatusTag from '../../../components/style/StatusTag';
 import { handleDownload } from '../../../services/uploadApi';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
-import { getPositionsApi } from '../../../services/positionApi';
+import { getPositionsApi, getPositionsViewApi } from '../../../services/positionApi';
 import { typeLaborLawOptions } from '../../../data/Type';
 import { createEpmLaborLawsApi, deleteEpmLaborLawApi, getEpmUploadLaborLawApi } from '../../../services/employeeApi';
 import moment from 'moment';
@@ -38,7 +38,7 @@ const LaborLawPage = () => {
         document.title = `${content['contract']} | USEA`;
         const fetchData = async () => {
             try {
-                const resPositions = await getPositionsApi();
+                const resPositions = await getPositionsViewApi();
                 setPositions(resPositions);
 
                 const laborLawData = await getEpmUploadLaborLawApi(id);

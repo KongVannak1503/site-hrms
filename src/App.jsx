@@ -100,6 +100,7 @@ import AppraisalMonthEmployeeFormPartPage from './pages/appraisals/appraisal_mon
 import AppraisalMonthEmployeeListPathPage from './pages/appraisals/appraisal_month/appraisal_path/AppraisalMonthEmployeeListPathPage'
 import AppraisalMonthManagerListPathPage from './pages/appraisals/appraisal_month/appraisal_path/AppraisalMonthManagerListPathPage'
 import AppraisalMonthEmployeePathPage from './pages/appraisals/appraisal_month/appraisal_path/AppraisalMonthEmployeePathPage'
+import AppraisalRecentlyListPage from './pages/appraisals/appraisal_day/AppraisalRecentlyListPage'
 
 function App() {
   const { isLoading } = useAuth();
@@ -224,6 +225,11 @@ function App() {
                 path="/appraisal/employee/list/:mainId"
                 element={
                   <AppraisalMonthEmployeeListPage />
+                } />
+              <Route
+                path="/appraisal/recently"
+                element={
+                  <AppraisalRecentlyListPage />
                 } />
               <Route
                 path="/appraisal/employee/list/path/:mainId"

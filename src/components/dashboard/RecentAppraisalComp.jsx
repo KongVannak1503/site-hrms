@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import TypeTag from '../style/TypeTag';
 import { formatDate } from '../../utils/utils';
 import { Avatar } from 'antd';
+import uploadUrl from '../../services/uploadApi';
 
 // Example dummy data
 const dummyAppraisals = [
@@ -11,9 +12,8 @@ const dummyAppraisals = [
     { id: 3, name: 'Alice Johnson', date: '2025-08-15', complete: true, image: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pierre-Person.jpg" },
 ];
 
-const RecentAppraisalComp = () => {
-    const { content } = useAuth();
-
+const RecentAppraisalComp = ({ appraisals }) => {
+    const { content, language } = useAuth();
     return (
         <div className="bg-white p-6 rounded-[5px] shadow">
             <p className="text-default text-sm font-bold pb-5">
@@ -25,30 +25,30 @@ const RecentAppraisalComp = () => {
                     <thead>
                         <tr className="bg-gray-50">
                             <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                បុគ្គលិក
+                                {content['Employee']}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                ថ្ងៃវាយតម្លៃការងារ
+                                {content['appraisalDate']}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                ស្ថានភាព
+                                {content['status']}
                             </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {dummyAppraisals.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-50">
+                        {appraisals.map((item, index) => (
+                            <tr key={index} className="hover:bg-gray-50">
                                 <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
-                                    <Avatar size={30} src={item.image} />
-                                    <span className="ml-2">
-                                        {item.name}
-                                    </span>
+                                    <div key={item.employee.id} className="flex items-center mb-1">
+                                        <Avatar size={30} src={`${uploadUrl}/${item?.employee.imagePath}`} />
+                                        <span className="ml-2">{language == 'khmer' ? item.employee.name_kh : item.employee.name_en}</span>
+                                    </div>
                                 </td>
                                 <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
-                                    {formatDate(item.date)}
+                                    {formatDate(item.employee?.createdAt)}
                                 </td>
                                 <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                    <TypeTag value={item.date} />
+                                    <TypeTag value={item.status} />
                                 </td>
                             </tr>
                         ))}

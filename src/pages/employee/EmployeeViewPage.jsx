@@ -23,7 +23,7 @@ import EmployeeNav from './EmployeeNav';
 import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 import CityCreatePage from '../settings/employee/city/CityCreatePage';
 import ModalMdCenter from '../../components/modals/ModalMdCenter';
-import { getPositionsApi } from '../../services/positionApi';
+import { getPositionsApi, getPositionsViewApi } from '../../services/positionApi';
 import { typeEmpStatusOptions } from '../../data/Type';
 import '../../components/style/Tap.css';
 import TabProfile from './tab/TabProfile';
@@ -93,7 +93,7 @@ const EmployeeViewPage = () => {
             try {
                 const resDepartments = await getDepartmentsApi();
                 setDepartments(resDepartments);
-                const resPositions = await getPositionsApi();
+                const resPositions = await getPositionsViewApi();
                 setPositions(resPositions);
 
                 const resCities = await getCitiesViewApi();
@@ -118,7 +118,7 @@ const EmployeeViewPage = () => {
         },
         {
             key: 'position',
-            tab: content['position'] || 'Position',
+            tab: content['additionalPositions'] || 'Position',
         },
         {
             key: 'education',

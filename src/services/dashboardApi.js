@@ -8,3 +8,8 @@ export const getDashboardDepartmentChartApi = async () => {
     const res = await api.get('/dashboard/department-chart');
     return res.data;
 };
+
+export const getDashboardRecentlyAppraisalApi = async () => {
+    const res = await api.get('/dashboard/recently-appraisal');
+    return res.data;
+};

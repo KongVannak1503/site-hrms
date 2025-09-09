@@ -5,6 +5,10 @@ export const getPositionsApi = async () => {
     const res = await api.get('/positions');
     return res.data;
 };
+export const getPositionsViewApi = async () => {
+    const res = await api.get('/positions/view');
+    return res.data;
+};
 export const getPositionApi = async (id) => {
     const res = await api.get(`/positions/${id}`);
     return res.data;
