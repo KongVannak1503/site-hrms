@@ -6,10 +6,10 @@ const LanguagePage = ({ content }) => {
         <div>
             <Form.Item
                 name="name_en"
-                label={content['title']}
+                label={content['titleEn']}
                 rules={[{
                     required: true,
-                    message: `${content['please']}${content['enter']}${content['title']}`
+                    message: `${content['please']}${content['enter']}${content['titleEn']}`
                         .toLowerCase()
                         .replace(/^./, str => str.toUpperCase())
                 }]}
@@ -19,10 +19,10 @@ const LanguagePage = ({ content }) => {
 
             <Form.Item
                 name="name_kh"
-                label={content['title']}
+                label={content['titleKh']}
                 rules={[{
                     required: true,
-                    message: `${content['please']}${content['enter']}${content['title']}`
+                    message: `${content['please']}${content['enter']}${content['titleKh']}`
                         .toLowerCase()
                         .replace(/^./, str => str.toUpperCase())
                 }]}

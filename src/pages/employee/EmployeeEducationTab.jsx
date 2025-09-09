@@ -17,7 +17,7 @@ import ModalMdCenter from '../../components/modals/ModalMdCenter';
 import LanguageUpdatePage from './Education/LanguageUpdatePage';
 
 const EmployeeEducationTab = () => {
-    const { content } = useAuth();
+    const { content, language } = useAuth();
     const [levels, setLevels] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [form] = Form.useForm();
@@ -217,16 +217,34 @@ const EmployeeEducationTab = () => {
                                                                 // ✅ These two lines are required for Form.List to work well
                                                                 value={restField?.value?.name}
                                                                 onChange={(value) => restField?.onChange?.({ ...restField.value, name: value })}
+
+                                                                dropdownRender={(menu) => (
+                                                                    <>
+                                                                        {menu}
+                                                                        <div className="flex justify-center items-center p-2 border-t">
+                                                                            <Button
+                                                                                type="link"
+                                                                                icon={<PlusOutlined />}
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    showCreateDrawer('create');
+                                                                                }}
+                                                                            >
+                                                                                {content['addLanguage']}
+                                                                            </Button>
+                                                                        </div>
+                                                                    </>
+                                                                )}
                                                             >
-                                                                {languages.map((language) => (
-                                                                    <Select.Option key={language._id} value={language._id}>
+                                                                {languages.map((lang) => (
+                                                                    <Select.Option key={lang._id} value={lang._id}>
                                                                         <div className="flex justify-between items-center">
-                                                                            <span>{language.name_kh}</span>
+                                                                            <span>{language == 'khmer' ? lang.name_kh : lang.name_en}</span>
                                                                             <span
                                                                                 className="hover:text-blue-600 ml-2"
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
-                                                                                    showCreateDrawer('update', language._id);
+                                                                                    showCreateDrawer('update', lang._id);
                                                                                 }}
                                                                             >
                                                                                 <FormOutlined />

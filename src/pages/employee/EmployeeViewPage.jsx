@@ -62,6 +62,7 @@ const EmployeeViewPage = () => {
         const fetchInitialData = async () => {
             try {
                 const response = await getEmployeeApi(id);
+                console.log(response)
                 setPosition(response);
                 setEmployee(response);
                 if (response?.image_url?.path) {
@@ -76,6 +77,7 @@ const EmployeeViewPage = () => {
             fetchInitialData();
         }
     }, [id, content]);
+
 
     const managers = employee?.positionId?.department?.manager || [];
     useEffect(() => {
@@ -190,9 +192,9 @@ const EmployeeViewPage = () => {
                                         {language == 'khmer' ? employee?.positionId?.title_kh : employee?.positionId?.title_en}
                                     </p>
                                     <p>
-                                        <span className='px-5 font-semibold text-white rounded text-default bg-default-light'> {language === 'kh'
-                                            ? typeEmpStatusOptions.find(opt => opt.id === employee?.status)?.name_kh
-                                            : typeEmpStatusOptions.find(opt => opt.id === employee?.status)?.name_en}
+                                        <span className='px-5 font-semibold text-white rounded text-default bg-default-light'> {language === 'khmer'
+                                            ? typeEmpStatusOptions.find(opt => opt.id == employee?.status)?.name_kh
+                                            : typeEmpStatusOptions.find(opt => opt.id == employee?.status)?.name_en}
                                         </span>
                                     </p>
                                 </div>
@@ -204,9 +206,9 @@ const EmployeeViewPage = () => {
                                 </div>
                                 <Divider />
                                 <div className='flex flex-col gap-1'>
-                                    <p className='text-gray-400 text-xs flex justify-between items-center'><span>{content['department']}</span><MdKeyboardArrowRight /> </p>
+                                    <p className='text-gray-500 text-xs flex justify-between items-center'><span>{content['department']}</span><MdKeyboardArrowRight /> </p>
                                     <p> {language == 'khmer' ? employee?.positionId?.department?.title_kh : employee?.positionId?.department?.title_en}</p>
-                                    <p className='text-gray-400 text-xs pt-2 flex justify-between items-center mb-1'>{content['manager']} <MdKeyboardArrowRight /></p>
+                                    <p className='text-gray-500 text-xs pt-2 flex justify-between items-center mb-1'>{content['manager']} <MdKeyboardArrowRight /></p>
                                     {managers.map((manager) => {
                                         const imagePath = manager?.image_url?.path;
                                         const fullImageUrl = imagePath ? `${uploadUrl}/${imagePath}` : null;

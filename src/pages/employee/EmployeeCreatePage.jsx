@@ -121,9 +121,11 @@ const EmployeeCreatePage = () => {
             formData.append('village', values.village);
 
             safeAppend('present_city', values.present_city);
+            safeAppend('positionId', values.positionId?._id || values.positionId,);
             formData.append('present_district', values.present_district);
             formData.append('present_commune', values.present_commune);
             formData.append('present_village', values.present_village);
+            formData.append('status', values.status);
 
             formData.append('isActive', values.isActive ?? true);
 

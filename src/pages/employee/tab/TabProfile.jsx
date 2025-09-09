@@ -31,25 +31,25 @@ const TabProfile = ({ employee }) => {
                 <div className="flex gap-10">
                     <div>
                         <div className='grid grid-cols-2 gap-3'>
-                            <p className='text-gray-400'>{content['fullName']}</p>
+                            <p className='text-gray-500'>{content['fullName']}</p>
                             <p>{language == 'khmer' ? employee?.name_kh : employee?.name_en}</p>
 
-                            <p className='text-gray-400'>{content['dateOfBirth']}</p>
+                            <p className='text-gray-500'>{content['dateOfBirth']}</p>
                             <p>{formatDate(employee.date_of_birth)}</p>
 
-                            <p className='text-gray-400'>{content['nationality']}</p>
+                            <p className='text-gray-500'>{content['nationality']}</p>
                             <p>{displayNationality}</p>
 
-                            <p className='text-gray-400'>{content['email']}</p>
+                            <p className='text-gray-500'>{content['email']}</p>
                             <p>{employee?.email}</p>
                         </div>
                     </div>
                     <div>
                         <div className='grid grid-cols-2 gap-3'>
-                            <p className='text-gray-400'>{content['gender']}</p>
+                            <p className='text-gray-500'>{content['gender']}</p>
                             <p>{displayGender || '-'}</p>
 
-                            <p className='text-gray-400'>{content['phone']}</p>
+                            <p className='text-gray-500'>{content['phone']}</p>
                             <p>{employee?.phone || '-'}</p>
                         </div>
                     </div>
@@ -59,17 +59,17 @@ const TabProfile = ({ employee }) => {
             <Card title={<p className='text-default text-sm font-bold'>{content['placeOfBirth']}</p>}>
                 <div className="flex">
                     <div className='grid grid-cols-2 gap-3'>
-                        <p className='text-gray-400'>{content['province']}</p>
-                        <p>{employee?.city?.name}</p>
+                        <p className='text-gray-500'>{content['province']}</p>
+                        <p>{employee?.city?.name} </p>
 
-                        <p className='text-gray-400'>{content['commune']}</p>
+                        <p className='text-gray-500'>{content['commune']}</p>
                         <p>{employee?.commune || '-'}</p>
                     </div>
-                    <div className='grid grid-cols-2 gap-3'>
-                        <p className='text-gray-400'>{content['district']}</p>
+                    <div className='grid grid-cols-2 gap-3 pl-4'>
+                        <p className='text-gray-500'>{content['district']}</p>
                         <p>{employee?.district || "-"}</p>
 
-                        <p className='text-gray-400'>{content['village']}</p>
+                        <p className='text-gray-500'>{content['village']}</p>
                         <p>{employee?.village || "-"}</p>
                     </div>
                 </div>
@@ -79,17 +79,17 @@ const TabProfile = ({ employee }) => {
             <Card title={<p className='text-default text-sm font-bold'>{content['presentAddress']}</p>}>
                 <div className="flex gap-10">
                     <div className='grid grid-cols-2 gap-3'>
-                        <p className='text-gray-400'>{content['province']}</p>
+                        <p className='text-gray-500'>{content['province']}</p>
                         <p>{employee?.present_city?.name}</p>
 
-                        <p className='text-gray-400'>{content['commune']}</p>
+                        <p className='text-gray-500'>{content['commune']}</p>
                         <p>{employee?.present_commune || '-'}</p>
                     </div>
                     <div className='grid grid-cols-2 gap-3'>
-                        <p className='text-gray-400'>{content['district']}</p>
+                        <p className='text-gray-500'>{content['district']}</p>
                         <p>{employee?.present_district || "-"}</p>
 
-                        <p className='text-gray-400'>{content['village']}</p>
+                        <p className='text-gray-500'>{content['village']}</p>
                         <p>{employee?.present_village || "-"}</p>
                     </div>
                 </div>
@@ -104,17 +104,17 @@ const TabProfile = ({ employee }) => {
                     <div>
                         <div className="flex gap-10">
                             <div className='grid grid-cols-2 gap-3'>
-                                <p className='text-gray-400'>{content['name']}</p>
+                                <p className='text-gray-500'>{content['name']}</p>
                                 <p>{member?.name}</p>
 
-                                <p className='text-gray-400'>{content['relationship']}</p>
+                                <p className='text-gray-500'>{content['relationship']}</p>
                                 <p>{member?.relationship || '-'}</p>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
-                                <p className='text-gray-400'>{content['position']}</p>
+                                <p className='text-gray-500'>{content['position']}</p>
                                 <p>{member?.position || "-"}</p>
 
-                                <p className='text-gray-400'>{content['phone']}</p>
+                                <p className='text-gray-500'>{content['phone']}</p>
                                 <p>{member?.phone || "-"}</p>
                             </div>
                         </div>
@@ -133,17 +133,17 @@ const TabProfile = ({ employee }) => {
                     <div>
                         <div className="flex gap-10">
                             <div className='grid grid-cols-2 gap-3'>
-                                <p className='text-gray-400'>{content['name']}</p>
+                                <p className='text-gray-500'>{content['name']}</p>
                                 <p>{member?.name}</p>
 
-                                <p className='text-gray-400'>{content['relationship']}</p>
+                                <p className='text-gray-500'>{content['relationship']}</p>
                                 <p>{member?.relationship || '-'}</p>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
-                                <p className='text-gray-400'>{content['position']}</p>
+                                <p className='text-gray-500'>{content['position']}</p>
                                 <p>{member?.position || "-"}</p>
 
-                                <p className='text-gray-400'>{content['phone']}</p>
+                                <p className='text-gray-500'>{content['phone']}</p>
                                 <p>{member?.phone || "-"}</p>
                             </div>
                         </div>

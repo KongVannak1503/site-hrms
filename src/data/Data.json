@@ -47,7 +47,7 @@
         "recentlyRecruitment":"Recently Recruitment",
         "position": "Position ",
         "positions": "Positions ",
-        "additionalPositions": "Additional Positions ",
+        "additionalPositions": "Additional Positions",
         "title": "Title",
         "description": "Description",
         "items": "Items",
@@ -356,6 +356,7 @@
         "male": "ប្រុស",
         "female": "ស្រី",
         "editKpi": "កែប្រែ KPI",
+        "additionalPositions": "មុខតំណែងមន្ថែម",
 
         "appraisalDay": "ការវាយតម្លៃប្រចាំថ្ងៃ",
         "appraisalMonth": "ការវាយតម្លៃប្រចាំខែ",

@@ -70,8 +70,7 @@ const AppraisalRecentlyListPage = () => {
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: content['employee'], path: '/appraisal/employee' },
-        { breadcrumbName: content['appraisal'] },
-        { breadcrumbName: language == 'khmer' ? employee?.name_kh : employee?.name_en },
+        { breadcrumbName: content['recentlyAppraisal'] },
     ];
 
 
@@ -226,7 +225,7 @@ const AppraisalRecentlyListPage = () => {
 
             }}>
                 <div className="mb-3 flex justify-between">
-                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['appraisal']}</p>
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['recentlyAppraisal']}</p>
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 <Content
