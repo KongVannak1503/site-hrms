@@ -9,6 +9,7 @@ import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { useAuth } from '../../../contexts/AuthContext';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import uploadUrl from '../../../services/uploadApi';
+import { FileTextOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -26,7 +27,7 @@ const JobPostingDetailPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['jobPosting'], path: '/job-postings' },
+        { breadcrumbName: `${content['informationKh']}${content['jobPosting']}`, path: '/job-postings' },
         { breadcrumbName: content['detailInfo'] },
     ];
 
@@ -113,7 +114,7 @@ const JobPostingDetailPage = () => {
         <div>
             <div className="flex justify-between mb-4">
                 <h1 className='text-xl font-extrabold text-[#002060]'>
-                    ព័ត៌មាន{content['jobPosting']}
+                    <FileTextOutlined className='mr-2' />{content['informationKh']}{content['jobPosting']}
                 </h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
             </div>

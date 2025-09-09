@@ -11,6 +11,7 @@ import { getDepartmentsApi } from '../../../services/departmentApi';
 import { getPositionsByDepartmentApi } from '../../../services/positionApi';
 import { getJobTypesApi } from '../../../services/jobType';
 import { createJobPostingApi } from '../../../services/jobPosting';
+import { FileTextOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -27,7 +28,7 @@ const CreateJobPostingPage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['jobPosting'], path: '/job-postings' },
+    { breadcrumbName: `${content['informationKh']}${content['jobPosting']}`, path: '/job-postings' },
     { breadcrumbName: content['createJobPosting'] },
   ];
 
@@ -98,7 +99,7 @@ const CreateJobPostingPage = () => {
     <div>
       <div className="flex justify-between">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          {content['jobPosting']}
+          <FileTextOutlined className='mr-2' />{content['informationKh']}{content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

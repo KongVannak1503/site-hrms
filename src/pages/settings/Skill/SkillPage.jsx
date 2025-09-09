@@ -270,7 +270,7 @@ const SkillPage = () => {
                 </div>
                 <Table
                     scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredData}
                     rowKey="_id"

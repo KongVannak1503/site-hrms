@@ -298,7 +298,7 @@ const PositionPage = () => {
                 <Table
                     scroll={{ x: 'max-content' }}
                     className='custom-pagination'
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredData}
                     rowKey="_id"

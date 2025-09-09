@@ -71,16 +71,17 @@ const EmployeePersonalTab = ({ position, positions, showCreateDrawer, content, f
                             <Form.Item name="employee_id" label={content['employeeID']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['employeeID']}` }]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="first_name_kh" label={content['firstNameKh']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['employeeID']}` }]}>
-                                <Input />
-                            </Form.Item>
                             <Form.Item name="last_name_kh" label={content['lastNameKh']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['lastName']}` }]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="last_name_en" label={content['lastNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['lastName']}` }]}>
+                            <Form.Item name="first_name_kh" label={content['firstNameKh']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['employeeID']}` }]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="first_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
+
+                            <Form.Item name="first_name_en" label={content['lastNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="last_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['lastName']}` }]}>
                                 <Input />
                             </Form.Item>
                             <Form.Item name="gender" label={content['gender']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>

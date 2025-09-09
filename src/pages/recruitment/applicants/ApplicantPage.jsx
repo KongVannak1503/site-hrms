@@ -393,7 +393,7 @@ const ApplicantPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មាន{content['applicants']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['informationKh']}{content['applicants']}</h1>
         <CustomBreadcrumb items={[{ breadcrumbName: content['home'], path: '/' }, { breadcrumbName: content['applicants'] }]} />
       </div>
 

@@ -12,6 +12,7 @@ import 'react-quill/dist/quill.snow.css';
 import { Styles } from '../../../utils/CsStyle';
 import dayjs from 'dayjs';
 import { useAuth } from '../../../contexts/AuthContext';
+import { FileTextOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -33,7 +34,7 @@ const UpdateJobPostingPage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['jobPosting'], path: '/job-postings' },
+    { breadcrumbName: `${content['informationKh']}${content['jobPosting']}`, path: '/job-postings' },
     { breadcrumbName: content['editJobPosting'] }
   ];
 
@@ -130,7 +131,7 @@ const UpdateJobPostingPage = () => {
     <div>
       <div className="flex justify-between">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          {content['jobPosting']}
+          <FileTextOutlined className='mr-2' />{content['informationKh']}{content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

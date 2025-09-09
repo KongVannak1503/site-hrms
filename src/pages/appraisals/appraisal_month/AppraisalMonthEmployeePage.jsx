@@ -210,7 +210,7 @@ const AppraisalMonthEmployeePage = () => {
                 <Table
                     className='custom-pagination custom-checkbox-table'
                     scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredData}
                     rowKey="_id"

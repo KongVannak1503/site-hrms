@@ -7,7 +7,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { EllipsisOutlined, PaperClipOutlined, PlusOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, FileTextOutlined, PaperClipOutlined, PlusOutlined } from '@ant-design/icons';
 import { FaList, FaRegCalendar } from "react-icons/fa6";
 import {
   getAllTestAssignmentsApi,
@@ -66,7 +66,7 @@ const TestSchedulePage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['testSchedule'] }
+    { breadcrumbName: `${content['informationKh']}${content['testSchedule']}` }
   ];
 
   useEffect(() => {
@@ -504,7 +504,7 @@ const TestSchedulePage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មាន{content['testSchedule']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'> <FileTextOutlined className='mr-2' />{content['informationKh']}{content['testSchedule']}</h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 

@@ -247,7 +247,7 @@ function RolesPage() {
                 </div>
                 <Table
                     scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredRoles}
                     rowKey="_id"

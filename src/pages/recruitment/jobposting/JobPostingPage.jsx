@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Tag, Select, Input, Button, Drawer, message, Tooltip, Space, DatePicker } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined, FormOutlined } from '@ant-design/icons';
+import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined, FormOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -235,7 +235,7 @@ const JobPostingPage = () => {
     <div>
       <div className="flex justify-between mb-4">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          ព័ត៌មាន{content['jobPosting']}
+          <FileTextOutlined className='mr-2' /> {content['informationKh']}{content['jobPosting']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { getAllInterviewsApi, updateInterviewDecisionApi } from '../../../services/interviewApi';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { FaList, FaRegCalendar } from 'react-icons/fa6';
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, FileTextOutlined, PlusOutlined } from '@ant-design/icons';
 import uploadUrl from '../../../services/uploadApi';
 import EditInterviewModal from './EditInterviewModal';
 import RescheduleModal from './InterviewRescheduleModal';
@@ -58,7 +58,7 @@ const InterviewPage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['interviewSchedule'] }
+    { breadcrumbName: `${content['informationKh']}${content['interviewSchedule']}` }
   ];
 
   const todayTests = events.filter(ev =>
@@ -178,10 +178,10 @@ const InterviewPage = () => {
               }
             }}
             className={`px-4 py-2 rounded text-white cursor-pointer ${decision === 'hired'
-                ? 'bg-green-600 hover:bg-green-700'
-                : decision === 'reserve'
-                  ? 'bg-yellow-500 hover:bg-yellow-600'
-                  : 'bg-red-600 hover:bg-red-700'
+              ? 'bg-green-600 hover:bg-green-700'
+              : decision === 'reserve'
+                ? 'bg-yellow-500 hover:bg-yellow-600'
+                : 'bg-red-600 hover:bg-red-700'
               }`}
           >
             {content['yes'] || 'Yes'}
@@ -391,7 +391,7 @@ const InterviewPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#002060]'>ព័ត៌មាន{content['interviewSchedule']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'> <FileTextOutlined className='mr-2' />{content['informationKh']}{content['interviewSchedule']}</h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 

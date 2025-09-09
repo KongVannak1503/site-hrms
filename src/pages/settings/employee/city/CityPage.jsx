@@ -242,7 +242,7 @@ const CityPage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['cities']}</h1>
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['province']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
@@ -270,7 +270,7 @@ const CityPage = () => {
                 </div>
                 <Table
                     scroll={{ x: 'max-content' }}
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     columns={columns}
                     dataSource={filteredData}
                     rowKey="_id"
