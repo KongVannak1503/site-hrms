@@ -64,7 +64,6 @@ const PayrollPage = () => {
         const fetchData = async () => {
             try {
                 const response = await getBonusesApi();
-                console.log(response);
 
                 if (Array.isArray(response)) {
                     setUsers(response);

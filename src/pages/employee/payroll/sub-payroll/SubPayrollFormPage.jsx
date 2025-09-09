@@ -10,8 +10,6 @@ import { getEmployeeApi } from '../../../../services/employeeApi';
 
 
 const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
-    console.log(dataId);
-
     const { content } = useAuth();
     const { id } = useParams();
     const [form] = Form.useForm();
@@ -70,7 +68,7 @@ const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
             {/* isSix total input */}
             <Form.Item
                 name="isSixTotal"
-                label={content['total'] + ' (6 months)'}
+                label={content['total'] + `(6 ${content['months']})`}
                 rules={[{
                     required: true,
                     message: `${content['selectA']}${content['total']}`
@@ -81,18 +79,18 @@ const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
                 <Input type='number' />
             </Form.Item>
             <Form.Item name="isSix" valuePropName="checked">
-                <Checkbox>{content['6months'] || '6 Months'}</Checkbox>
+                <Checkbox>{`6 ${content['months']}`}</Checkbox>
             </Form.Item>
 
             {/* isTwelve total input */}
             <Form.Item
                 name="isTwelveTotal"
-                label={content['total'] + ' (12 months)'}
+                label={content['total'] + `(12 ${content['months']})`}
             >
                 <Input type='number' />
             </Form.Item>
             <Form.Item name="isTwelve" valuePropName="checked">
-                <Checkbox>{content['12months'] || '12 Months'}</Checkbox>
+                <Checkbox>{`12 ${content['months']}`}</Checkbox>
             </Form.Item>
 
             <div className="text-end mt-3">

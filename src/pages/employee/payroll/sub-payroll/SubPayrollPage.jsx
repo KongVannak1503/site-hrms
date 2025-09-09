@@ -4,8 +4,8 @@ import CustomBreadcrumb from '../../../../components/breadcrumb/CustomBreadcrumb
 import { Avatar, Button, Checkbox, Form, Input, message, Select, Space, Table, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { deletePayrollApi } from '../../../../services/payrollApi';
-import { formatDateTime } from '../../../../utils/utils';
+import { deletePayrollApi, getBonusApi } from '../../../../services/payrollApi';
+import { formatDateTime, formatYear } from '../../../../utils/utils';
 import { Styles } from '../../../../utils/CsStyle';
 import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
 import { Content } from 'antd/es/layout/layout';
@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom';
 const SubPayrollPage = () => {
     const { content, isLoading, language } = useAuth();
     const [users, setUsers] = useState([]);
+    const [payroll, setPayroll] = useState([]);
     const { id } = useParams();
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -32,11 +33,6 @@ const SubPayrollPage = () => {
         pageSize: 10,
         total: 0,
     });
-    const breadcrumbItems = [
-        { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['seniorityPayment'], path: '/payroll' },
-        { breadcrumbName: content['Employee'] },
-    ];
 
     const [form] = Form.useForm();
     const closeDrawer = () => {
@@ -66,11 +62,11 @@ const SubPayrollPage = () => {
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
-                console.log(response);
 
                 const resDepartments = await getDepartmentsApi();
                 setDepartments(resDepartments);
-
+                const resBonus = await getBonusApi(id);
+                setPayroll(resBonus);
 
                 if (Array.isArray(response)) {
                     setUsers(response);
@@ -161,7 +157,7 @@ const SubPayrollPage = () => {
             render: (_, record) => {
                 const bonusMatch = record?.subBonus?.find(b => b.bonusId?._id === id);
                 return (
-                    <Checkbox checked={bonusMatch?.isSix === true} disabled />
+                    <Checkbox checked={bonusMatch?.isSix === true} />
                 );
             }
         },
@@ -172,7 +168,7 @@ const SubPayrollPage = () => {
             render: (_, record) => {
                 const bonusMatch = record?.subBonus?.find(b => b.bonusId?._id === id);
                 return (
-                    <Checkbox checked={bonusMatch?.isTwelve === true} disabled />
+                    <Checkbox checked={bonusMatch?.isTwelve === true} />
                 );
             }
         },
@@ -305,7 +301,11 @@ const SubPayrollPage = () => {
         setOpen(false);
     };
 
-
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['seniorityPayment'], path: '/payroll' },
+        { breadcrumbName: formatYear(payroll.payDate) },
+    ];
 
     if (isLoading) {
         return <FullScreenLoader />;
