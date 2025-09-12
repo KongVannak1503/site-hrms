@@ -39,7 +39,6 @@ const AppraisalRecentlyListPage = () => {
         const fetchData = async () => {
             try {
                 const response = await getAppraisalRecentlyMonthsApi();
-                console.log(response);
 
                 if (Array.isArray(response)) {
                     setUsers(response);
@@ -69,8 +68,7 @@ const AppraisalRecentlyListPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['employee'], path: '/appraisal/employee' },
-        { breadcrumbName: content['recentlyAppraisal'] },
+        { breadcrumbName: content['appraisalList'] },
     ];
 
 
@@ -194,7 +192,6 @@ const AppraisalRecentlyListPage = () => {
     const handleAddCreated = () => {
         navigate('/appraisal/kpi/form');
     };
-    console.log(isEmployee);
 
     const handleUpdate = (mainId, id) => {
         // if (hasAdminView) {
@@ -225,7 +222,7 @@ const AppraisalRecentlyListPage = () => {
 
             }}>
                 <div className="mb-3 flex justify-between">
-                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['recentlyAppraisal']}</p>
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['appraisalList']}</p>
                     <CustomBreadcrumb items={breadcrumbItems} />
                 </div>
                 <Content

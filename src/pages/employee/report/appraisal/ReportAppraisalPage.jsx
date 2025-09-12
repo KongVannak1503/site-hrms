@@ -28,6 +28,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { getReportRecruitmentApi } from "../../../../services/reportApi";
 import * as XLSX from "xlsx";
+import { getAppraisalRecentlyMonthsApi } from "../../../../services/AppraisalApi";
 
 export default function ReportAppraisalPage() {
     const { content, language } = useAuth()
@@ -53,7 +54,7 @@ export default function ReportAppraisalPage() {
         document.title = `${content['report']}${content['recruiter']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getReportRecruitmentApi();
+                const response = await getAppraisalRecentlyMonthsApi();
                 const res = await getDepartmentsApi();
                 setDepartments(res);
 
@@ -321,15 +322,15 @@ export default function ReportAppraisalPage() {
                 new TableRow({
                     children: [
                         new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: (index + 1).toString(), font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.full_name_kh, font: "Siemreap", size: 24, color: "#002060", })] })] }),
-                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: "ប្រុស", font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.email, font: "Siemreap", size: 24, color: "#002060", })] })] }),
-                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, width: { size: 5000, type: WidthType.DXA }, children: [new Paragraph({ children: [new TextRun({ text: emp?.phone_no, font: "Siemreap", size: 24, color: "#002060", })] })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.employee?.name_kh || emp?.employee?.name_en, font: "Siemreap", size: 24, color: "#002060", })] })] }),
+                        new TableCell({ verticalAlign: "center", children: [new Paragraph({ children: [new TextRun({ text: emp?.employee?.gender, font: "Siemreap", size: 24, color: "#002060", })], alignment: AlignmentType.CENTER })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({ children: [new TextRun({ text: emp?.employee?.email, font: "Siemreap", size: 24, color: "#002060", })] })] }),
+                        new TableCell({ verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, width: { size: 5000, type: WidthType.DXA }, children: [new Paragraph({ children: [new TextRun({ text: emp?.employee?.phone, font: "Siemreap", size: 24, color: "#002060", })] })] }),
 
                         new TableCell({
                             verticalAlign: "center", margins: { top: 100, bottom: 100, left: 50, right: 10 }, children: [new Paragraph({
                                 children: [new TextRun({
-                                    text: "500"
+                                    text: (emp?.employeeScoreSum ?? 0).toString()
                                     , font: "Siemreap", size: 24, color: "#002060",
                                 })],
                                 alignment: AlignmentType.CENTER
@@ -340,7 +341,7 @@ export default function ReportAppraisalPage() {
                             margins: { top: 100, bottom: 100, left: 50, right: 10 },
                             children: [new Paragraph({
                                 children: [new TextRun({
-                                    text: "500"
+                                    text: (emp?.managerScoreSum ?? 0).toString()
                                     , font: "Siemreap", size: 24, color: "#002060",
                                 })], alignment: AlignmentType.CENTER
                             })]

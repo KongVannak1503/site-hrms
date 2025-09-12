@@ -54,11 +54,11 @@ const AppraisalMonthPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['appraisalList'] }
+        { breadcrumbName: content['appraisal'] }
     ];
 
     useEffect(() => {
-        document.title = `${content['appraisalList']} | USEA`;
+        document.title = `${content['appraisal']} | USEA`;
         const fetchData = async () => {
             try {
                 const res = await getDepartmentsApi();
@@ -278,7 +278,7 @@ const AppraisalMonthPage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisalMonth']}</h1>
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
@@ -327,7 +327,7 @@ const AppraisalMonthPage = () => {
 
                     </div>
 
-                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisalList']}`}</button>
+                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisal']}`}</button>
                 </div>
                 <Table
                     className='custom-pagination custom-checkbox-table'
@@ -360,8 +360,8 @@ const AppraisalMonthPage = () => {
                     onCancel={closeDrawer}
                     title={
                         actionForm === 'create'
-                            ? `${content['create']} ${content['newStart']} ${content['appraisalList']}${content['newEnd']}`
-                            : `${content['update']} ${content['appraisalList']}`
+                            ? `${content['create']} ${content['newStart']} ${content['appraisal']}${content['newEnd']}`
+                            : `${content['update']} ${content['appraisal']}`
                     }
                 >
                     {actionForm === 'create' ? (

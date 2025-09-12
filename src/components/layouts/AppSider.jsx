@@ -101,7 +101,7 @@ const AppSider = ({ collapsed }) => {
             key: '/appraisals', permission: null, icon: <LuClipboardPen />, label: content['appraisal'],
             children: [
                 { key: '/appraisal/kpi', permission: 'kpi', label: content['kpi'] },
-                { key: '/appraisal/recently', permission: 'appraisal-recently', label: content['recentlyAppraisal'] || 'Recently Appraisal' },
+                { key: '/appraisal/recently', permission: 'appraisal-recently', label: content['appraisalList'] || 'Recently Appraisal' },
                 {
                     key: hasAdminView
                         ? '/appraisal/employee'
@@ -111,7 +111,7 @@ const AppSider = ({ collapsed }) => {
                     permission: 'appraisals-employee',
                     label: isEmployee ? content['employees'] : content['myAppraisal'],
                 },
-                { key: '/appraisal', permission: 'appraisals', label: content['appraisalList'] },
+                { key: '/appraisal', permission: 'appraisals', label: content['appraisal'] },
             ]
         },
         {

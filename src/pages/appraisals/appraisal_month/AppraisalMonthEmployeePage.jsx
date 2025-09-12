@@ -38,7 +38,7 @@ const AppraisalMonthEmployeePage = () => {
     ];
 
     useEffect(() => {
-        document.title = `${content['appraisal']} | USEA`;
+        document.title = `${content['Employee']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getAllEmployeesNotManagerApi();
@@ -179,7 +179,7 @@ const AppraisalMonthEmployeePage = () => {
     return (
         <div>
             <div className="flex justify-between">
-                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['appraisal']}</h1>
+                <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['Employee']}</h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
 
             </div>
