@@ -10,7 +10,6 @@ const TabProfile = ({ employee }) => {
     const gender = employee?.gender;
     const familyMember = employee?.family_member || [];
     const emergencyContact = employee?.emergency_contact || [];
-    console.log(employee);
 
     const genderObj = genderOptions.find(opt => opt.name_kh === gender);
 

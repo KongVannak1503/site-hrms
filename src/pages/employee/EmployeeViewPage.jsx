@@ -33,6 +33,8 @@ import TabEducation from './tab/TabEducation';
 import TabHistory from './tab/TabHistory';
 import TabDocument from './tab/TabDocument';
 import TabTimeLine from './tab/TabTimeLine';
+import TabBook from './tab/TabBook';
+import TabLaborLaw from './tab/TabLaborLaw';
 
 const EmployeeViewPage = () => {
     const { id } = useParams();
@@ -62,7 +64,6 @@ const EmployeeViewPage = () => {
         const fetchInitialData = async () => {
             try {
                 const response = await getEmployeeApi(id);
-                console.log(response)
                 setPosition(response);
                 setEmployee(response);
                 if (response?.image_url?.path) {
@@ -135,6 +136,14 @@ const EmployeeViewPage = () => {
             tab: content['document'] || 'Documents',
         },
         {
+            key: 'books',
+            tab: content['employmentHistory'] || 'Book',
+        },
+        {
+            key: 'nssf',
+            tab: content['nssf'] || 'NSSF',
+        },
+        {
             key: 'activity',
             tab: content['seniorityPayment'] || 'Seniority Payment',
         },
@@ -147,6 +156,8 @@ const EmployeeViewPage = () => {
         history: <TabHistory id={id} />,
         documents: <TabDocument id={id} />,
         activity: <TabTimeLine id={id} />,
+        books: <TabBook id={id} />,
+        nssf: <TabLaborLaw id={id} />,
     };
 
 

@@ -119,6 +119,10 @@ export const getEpmUploadLaborLawApi = async (employeeId) => {
     const res = await api.get(`/employees/laborLaw/${employeeId}`);
     return res.data;
 };
+export const getEpmUploadLaborLawViewApi = async (employeeId) => {
+    const res = await api.get(`/employees/laborLaw-view/${employeeId}`);
+    return res.data;
+};
 
 export const deleteEpmLaborLawApi = async (id) => {
     const res = await api.delete(`/employees/laborLaw/${id}`);

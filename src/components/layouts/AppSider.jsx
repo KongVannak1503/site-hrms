@@ -65,6 +65,8 @@ const AppSider = ({ collapsed }) => {
         if (pathname.startsWith('/appraisal/employee')) return '/appraisal/employee';
         if (pathname.startsWith('/appraisal/month')) return '/appraisal/employee';
         if (pathname.startsWith('/payroll/')) return '/payroll';
+        if (pathname.startsWith('/applicants/')) return '/applicants';
+        if (pathname.startsWith('/job-postings/')) return '/job-postings';
         return pathname;
     };
 
@@ -136,7 +138,7 @@ const AppSider = ({ collapsed }) => {
                 { key: '/setting/job-types', permission: "setting", label: content['jobType'] },
                 { key: '/setting/departments', permission: "setting", label: content['departments'] },
                 { key: '/setting/test-types', permission: "setting", label: content['testType'] },
-                { key: '/setting/organization', permission: "setting", label: content['organizations'] },
+                // { key: '/setting/organization', permission: "setting", label: content['organizations'] },
             ],
         },
     ];

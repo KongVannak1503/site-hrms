@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Modal, Select, Space, Table, Tooltip } fr
 import React, { useEffect, useState } from 'react';
 import { createTestTypeApi, deleteTestTypeApi, getAllTestTypesApi, updateTestTypeApi } from '../../../services/testTypeService';
 import { createQuestionApi, deleteQuestionApi, getQuestionsByTestTypeApi, updateQuestionApi } from '../../../services/questionService';
-import { PlusOutlined, FormOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, FormOutlined, DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useAuth } from '../../../contexts/AuthContext';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
@@ -27,7 +27,7 @@ const TestTypePage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['testType'] }
+        { breadcrumbName: `${content['informationKh']}${content['testType']}` }
     ];
 
     useEffect(() => {
@@ -141,7 +141,7 @@ const TestTypePage = () => {
         <div>
             <div className="flex justify-between">
                 <h1 className='text-xl font-extrabold text-[#002060]'>
-                    ព័ត៌មាន{content['testType']}
+                    <FileTextOutlined className='mr-2' />{content['informationKh']}{content['testType']}
                 </h1>
                 <CustomBreadcrumb items={breadcrumbItems} />
             </div>
@@ -183,14 +183,22 @@ const TestTypePage = () => {
                 />
 
                 <Modal
-                    title={editingTestType ? 'Edit Test Type' : 'Create Test Type'}
+                    title={editingTestType ? `${content['edit']}${content['testType']}` : `${content['create']}${content['testType']}`}
                     open={isModalOpen}
                     onCancel={() => setIsModalOpen(false)}
                     onOk={handleSave}
-                    okText="Save"
+                    // okText={content['save']}
+                    // cancelText={content['cancel']}
+                    // okButtonProps={{
+                    //     className: Styles.btnCreate
+                    // }}
+                    // cancelButtonProps={{
+                    //     className: Styles.btnCancel
+                    // }}
+                    footer={null}
                     maskClosable={false}
                 >
-                    <Form form={form} layout="vertical" name="testTypeForm">
+                    <Form form={form} onFinish={handleSave} layout="vertical" name="testTypeForm">
                         <Form.Item name="name_kh" label={content['nameKh']} rules={[{ required: true }]}>
                             <Input />
                         </Form.Item>
@@ -199,6 +207,21 @@ const TestTypePage = () => {
                         </Form.Item>
                         <Form.Item name="description" label={content['description']}>
                             <Input.TextArea rows={3} />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Space className="flex justify-end w-full">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    className={Styles.btnCancel}
+                                >
+                                    {content['cancel']}
+                                </button>
+                                <button type="submit" className={editingTestType ? Styles.btnUpdate : Styles.btnCreate}>
+                                    {editingTestType ? content['update'] : content['save']}
+                                </button>
+                            </Space>
                         </Form.Item>
                     </Form>
                 </Modal>

@@ -78,10 +78,10 @@ const EmployeePersonalTab = ({ position, positions, showCreateDrawer, content, f
                                 <Input />
                             </Form.Item>
 
-                            <Form.Item name="first_name_en" label={content['lastNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
+                            <Form.Item name="last_name_en" label={content['lastNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['firstName']}` }]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="last_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['lastName']}` }]}>
+                            <Form.Item name="first_name_en" label={content['firstNameEn']} rules={[{ required: true, message: `${content['please']}${content['enter']}${content['lastName']}` }]}>
                                 <Input />
                             </Form.Item>
                             <Form.Item name="gender" label={content['gender']} rules={[{ required: true, message: `${content['please']}${content['select']}${content['gender']}` }]}>

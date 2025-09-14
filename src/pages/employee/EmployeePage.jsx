@@ -163,20 +163,20 @@ const EmployeePage = () => {
         },
         {
             title: content['lastName'],
-            dataIndex: "first_name",
-            key: "first_name",
-            render: (text, record) =>
-                <div>
-                    <p>{language == 'khmer' ? record.first_name_kh : record.first_name_en}</p>
-                </div>,
-        },
-        {
-            title: content['firstName'],
             dataIndex: "last_name",
             key: "last_name",
             render: (text, record) =>
                 <div>
                     <p>{language == 'khmer' ? record.last_name_kh : record.last_name_en}</p>
+                </div>,
+        },
+        {
+            title: content['firstName'],
+            dataIndex: "first_name",
+            key: "first_name",
+            render: (text, record) =>
+                <div>
+                    <p>{language == 'khmer' ? record.first_name_kh : record.first_name_en}</p>
                 </div>,
         },
 

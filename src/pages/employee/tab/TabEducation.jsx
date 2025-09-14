@@ -10,7 +10,7 @@ import { createEducationApi, getEducationApi, getLanguagesApi } from '../../../s
 import { getEducationLevelViewApi } from '../../../services/educationLevelApi';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 
-const TabEducation = () => {
+const TabEducation = ({ id }) => {
     const { content } = useAuth();
     const [levels, setLevels] = useState([]);
     const [languages, setLanguages] = useState([]);
@@ -43,8 +43,6 @@ const TabEducation = () => {
         }
 
     };
-
-    const { id } = useParams();
     const [educationId, setEducationId] = useState(null);
     useEffect(() => {
         const fetchData = async () => {

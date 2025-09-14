@@ -3,7 +3,7 @@ import {
   Card, Form, Input, DatePicker, Select, Upload,
   Button, Row, Col, message, Spin
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { FileTextOutlined, UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
@@ -75,8 +75,8 @@ const CreateApplicantPage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['applicants'], path: '/applicants' },
-    { breadcrumbName: content['createApplicant'] },
+    { breadcrumbName: `${content['informationKh']}${content['applicants']}`, path: '/applicants' },
+    { breadcrumbName: `${content['createApplicant']}` },
   ];
 
   const normFile = (e) => Array.isArray(e) ? e : e?.fileList;
@@ -118,7 +118,7 @@ const CreateApplicantPage = () => {
     <div>
       <div className="flex justify-between">
         <h1 className='text-xl font-extrabold text-[#002060]'>
-          {content['applicants']}
+          <FileTextOutlined className='mr-2' />{content['informationKh']}{content['applicants']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
@@ -208,7 +208,6 @@ const CreateApplicantPage = () => {
                             <Spin size="small" />
                           ) : (
                             <Select
-                              placeholder="Select an open job posting"
                               showSearch
                               optionFilterProp="children"
                               filterOption={(input, option) =>
@@ -231,7 +230,7 @@ const CreateApplicantPage = () => {
                           name="applied_date"
                           rules={[{ required: true, message: 'Please select applied date' }]}
                         >
-                          <DatePicker style={{ width: '100%' }} />
+                          <DatePicker placeholder='' style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -241,7 +240,7 @@ const CreateApplicantPage = () => {
                   <Col xs={24} md={12}><Form.Item label={`${content['fullName']} (EN)`} name="full_name_en" rules={[{ required: true }]}><Input /></Form.Item></Col>
 
                   <Col xs={24} md={8}><Form.Item label={content['gender']} name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label={content['dateOfBirth']} name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['dateOfBirth']} name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} placeholder='' /></Form.Item></Col>
                   <Col xs={24} md={8}><Form.Item label={content['maritalStatus']} name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
 
                   <Col xs={24} md={12}><Form.Item label={content['phone']} name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
@@ -256,7 +255,7 @@ const CreateApplicantPage = () => {
                       {loadingProvinces ? (
                         <Spin size="small" />
                       ) : (
-                        <Select showSearch placeholder="Select province">
+                        <Select showSearch >
                           {provinces.map((prov) => (
                             <Option key={prov._id || prov.id} value={prov.name || prov.province_name}>
                               {prov.name || prov.province_name}

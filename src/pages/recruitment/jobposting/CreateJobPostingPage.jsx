@@ -114,7 +114,7 @@ const CreateJobPostingPage = () => {
                 rules={[{ required: true, message: 'Please enter job title' }]}
                 className="md:col-span-2"
               >
-                <Input placeholder="e.g. Senior Software Engineer" />
+                <Input />
               </Form.Item>
 
               <Form.Item
@@ -123,7 +123,6 @@ const CreateJobPostingPage = () => {
                 rules={[{ required: true, message: 'Please select department' }]}
               >
                 <Select
-                  placeholder="Select Department"
                   onChange={(value) => setSelectedDepartment(value)}
                 >
                   {departments.map((dept) => (
@@ -139,7 +138,7 @@ const CreateJobPostingPage = () => {
                 name="position"
                 rules={[{ required: true, message: 'Please select position' }]}
               >
-                <Select placeholder="Select Position">
+                <Select>
                   {positions.map((pos) => (
                     <Option key={pos._id} value={pos._id}>
                       {language == 'khmer' ? pos.title_kh : pos.title_en}
@@ -161,7 +160,7 @@ const CreateJobPostingPage = () => {
                 name="job_type"
                 rules={[{ required: true, message: 'Please select job type' }]}
               >
-                <Select placeholder="Select Job Type">
+                <Select>
                   {jobTypes.map((type) => (
                     <Option key={type._id} value={type._id}>
                       {type.title}
@@ -205,7 +204,7 @@ const CreateJobPostingPage = () => {
                 name="open_date"
                 rules={[{ required: true, message: 'Please select open date' }]}
               >
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker placeholder='' style={{ width: '100%' }} />
               </Form.Item>
 
               <Form.Item
@@ -213,7 +212,7 @@ const CreateJobPostingPage = () => {
                 name="close_date"
                 rules={[{ required: true, message: 'Please select close date' }]}
               >
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker placeholder='' style={{ width: '100%' }} />
               </Form.Item>
 
               {/* ✅ Manual status selection */}

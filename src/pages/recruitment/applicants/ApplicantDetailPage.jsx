@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { getApplicantApi } from '../../../services/applicantApi';
 import { handleDownload } from '../../../services/uploadApi';
 import uploadUrl from '../../../services/uploadApi';
-import { ArrowLeftOutlined, CloudDownloadOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CloudDownloadOutlined, FileTextOutlined } from '@ant-design/icons';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -43,7 +43,7 @@ const ApplicantDetailPage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['applicants'], path: '/applicants' },
+    { breadcrumbName: `${content['informationKh']}${content['applicants']}`, path: '/applicants' },
     { breadcrumbName: content['detailInfo'] },
   ];
 
@@ -55,7 +55,7 @@ const ApplicantDetailPage = () => {
     <div>
       <div className="flex justify-between mb-4">
         <h1 className="text-xl font-extrabold text-[#002060]">
-          {content['applicants']}
+          <FileTextOutlined className='mr-2' />{content['informationKh']}{content['applicants']}
         </h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>

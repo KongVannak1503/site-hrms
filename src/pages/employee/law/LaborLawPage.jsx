@@ -228,10 +228,10 @@ const LaborLawPage = () => {
                                     <Select.Option
                                         key={position._id}
                                         value={position._id}
-                                        label={position.title} // ✅ Add label for search
+                                        label={language == 'khmer' ? position.title_kh : position.title_en} // ✅ Add label for search
                                     >
                                         <div className="flex justify-between items-center">
-                                            <span>{position.title}</span>
+                                            <span>{language == 'khmer' ? position.title_kh : position.title_en}</span>
                                         </div>
                                     </Select.Option>
                                 ))}

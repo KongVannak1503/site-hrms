@@ -212,6 +212,8 @@
         "startOn": "Start On",
         "location": "Location",
         "decision": "Decision",
+        "docKh": "",
+        "docEn": "Documents",
         
 
         "interviews": "Interviews",
@@ -235,6 +237,7 @@
         "timeLine": "Time Line",
         "applicantDate": "Applicant Date",
         "work": "Work",
+        "book": "Book",
         "appraisalDate": "Appraisal Date",
 
         "university": "University",
@@ -526,6 +529,8 @@
         "addHistory": "បន្ថែមប្រវត្តិការងារ",
         "save": "រក្សាទុក",
         "size": "ទំហំ",
+        "docKh": "ឯកសារ",
+        "docEn": "",
         "documentName": "ឈ្មោះឯកសារ",
         "download": "ទាញយក",
         "createdBy": "បង្កើតដោយ",

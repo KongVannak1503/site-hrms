@@ -437,7 +437,7 @@ const EmployeeEducationTab = () => {
                                                             className="mb-0"
 
                                                         >
-                                                            <DatePicker className="w-full" />
+                                                            <DatePicker placeholder='' className="w-full" />
                                                         </Form.Item>
                                                     </td>
 
@@ -448,7 +448,7 @@ const EmployeeEducationTab = () => {
                                                             className="mb-0"
 
                                                         >
-                                                            <DatePicker className="w-full" />
+                                                            <DatePicker placeholder='' className="w-full" />
                                                         </Form.Item>
                                                     </td>
                                                     <td className={`px-3 min-w-[150px] ${index === 0 ? 'pt-4' : 'pt-0'}`}>
@@ -689,7 +689,7 @@ const EmployeeEducationTab = () => {
                                                             className="mb-0"
 
                                                         >
-                                                            <DatePicker className="w-full" />
+                                                            <DatePicker placeholder='' className="w-full" />
                                                         </Form.Item>
                                                     </td>
 
@@ -700,7 +700,7 @@ const EmployeeEducationTab = () => {
                                                             className="mb-0"
 
                                                         >
-                                                            <DatePicker className="w-full" />
+                                                            <DatePicker placeholder='' className="w-full" />
                                                         </Form.Item>
                                                     </td>
 
@@ -771,7 +771,6 @@ const EmployeeEducationTab = () => {
 
                 <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                     style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
-                    <button type="button" className={Styles.btnCancel}>Cancel</button>
                     <button type="submit" className={Styles.btnCreate}>Submit</button>
                 </div>
             </Form>

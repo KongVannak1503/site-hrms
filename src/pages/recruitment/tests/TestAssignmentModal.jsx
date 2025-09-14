@@ -10,7 +10,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 const { Option } = Select;
 
 const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
-  const {content} = useAuth();
+  const { content } = useAuth();
   const [form] = Form.useForm();
   const [testTypes, setTestTypes] = useState([]);
   const [applicants, setApplicants] = useState([]);
@@ -101,12 +101,11 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
           </Form.Item>
         ) : (
           <Form.Item
-            label="Select Applicant"
+            label={`${content['select']}${content['spaceKh']}${content['applicant']}`}
             name="applicant_id"
             rules={[{ required: true, message: 'Please select an applicant' }]}
           >
             <Select
-              placeholder="Select an applicant"
               showSearch
               loading={loadingApplicants}
               optionFilterProp="children"
@@ -128,7 +127,7 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
           name="test_type"
           rules={[{ required: true, message: 'Please select at least one test type' }]}
         >
-          <Select mode="multiple" placeholder="Select test type(s)">
+          <Select mode="multiple">
             {testTypes.map(t => (
               <Option key={t._id} value={t._id}>{t.name_en}</Option>
             ))}
@@ -140,15 +139,15 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
           name="start_at"
           rules={[{ required: true, message: 'Please choose a start time' }]}
         >
-          <DatePicker showTime style={{ width: '100%' }} />
+          <DatePicker placeholder='' showTime style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item label={content['duration']} name="duration_min" rules={[{required: true, message: "Please "}]}>
-          <InputNumber min={1} placeholder="e.g. 60" style={{ width: '100%' }} />
+        <Form.Item label={content['duration']} name="duration_min" rules={[{ required: true, message: "Please " }]}>
+          <InputNumber min={1} style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item label={content['location']} name="location">
-          <Input placeholder="Room 101, Lab A, etc." />
+          <Input />
         </Form.Item>
 
         <Form.Item>

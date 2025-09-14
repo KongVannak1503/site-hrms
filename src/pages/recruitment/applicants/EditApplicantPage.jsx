@@ -3,7 +3,7 @@ import {
   Card, Form, Input, DatePicker, Select, Upload,
   Button, Row, Col, message, Spin
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { FileTextOutlined, UploadOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -179,7 +179,7 @@ const EditApplicantPage = () => {
 
   const breadcrumbItems = [
     { breadcrumbName: content['home'], path: '/' },
-    { breadcrumbName: content['applicants'], path: '/applicants' },
+    { breadcrumbName: `${content['informationKh']}${content['applicants']}`, path: '/applicants' },
     { breadcrumbName: content['editApplicant'] },
   ];
 
@@ -188,7 +188,7 @@ const EditApplicantPage = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className='text-xl font-extrabold text-[#002060]'>{content['applicants']}</h1>
+        <h1 className='text-xl font-extrabold text-[#002060]'><FileTextOutlined className='mr-2' />{content['informationKh']}{content['applicants']}</h1>
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
 
