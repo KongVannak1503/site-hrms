@@ -65,6 +65,7 @@ const NSSFPage = () => {
 
     const handleUpload = async () => {
         const formData = new FormData();
+        formData.append('title', title);
         formData.append('claimTitle', claimTitle);
         formData.append('claimType', claimType);
         formData.append('claimDate', claimDate);

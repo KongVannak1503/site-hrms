@@ -35,10 +35,11 @@ import TabDocument from './tab/TabDocument';
 import TabTimeLine from './tab/TabTimeLine';
 import TabBook from './tab/TabBook';
 import TabLaborLaw from './tab/TabLaborLaw';
+import TabNssf from './tab/TabNssf';
 
 const EmployeeViewPage = () => {
     const { id } = useParams();
-    const { content, language } = useAuth();
+    const { content, language, identity } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
     const [fileList, setFileList] = useState([]);
@@ -112,41 +113,28 @@ const EmployeeViewPage = () => {
         };
 
         fetchData();
-    }, [content])
+    }, [content]);
+
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "employees"
+    );
+    const allowedActions = employeePermission?.actions || [];
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
+
 
     const tabList = [
-        {
-            key: 'profile',
-            tab: content['profile'] || 'Profile',
-        },
-        {
-            key: 'position',
-            tab: content['additionalPositions'] || 'Position',
-        },
-        {
-            key: 'education',
-            tab: content['education'] || 'Education',
-        },
-        {
-            key: 'history',
-            tab: content['employmentHistory'] || 'History',
-        },
-        {
-            key: 'documents',
-            tab: content['document'] || 'Documents',
-        },
-        {
-            key: 'books',
-            tab: content['employmentHistory'] || 'Book',
-        },
-        {
-            key: 'nssf',
-            tab: content['nssf'] || 'NSSF',
-        },
-        {
-            key: 'activity',
-            tab: content['seniorityPayment'] || 'Seniority Payment',
-        },
+        { key: 'profile', tab: content['profile'] || 'Profile', permissionKey: 'update' },
+        { key: 'position', tab: content['additionalPositions'] || 'Position', permissionKey: 'additional-position' },
+        { key: 'education', tab: content['education'] || 'Education', permissionKey: 'education' },
+        { key: 'history', tab: content['employmentHistory'] || 'History', permissionKey: 'employee-history' },
+        { key: 'documents', tab: content['document'] || 'Documents', permissionKey: 'document' },
+        { key: 'books', tab: content['employmentHistory'] || 'Book', permissionKey: 'employee-book' },
+        { key: 'contract', tab: content['contract'] || 'Contract', permissionKey: 'contract' },
+        { key: 'nssf', tab: content['nssf'] || 'NSSF', permissionKey: 'nssf' },
+        { key: 'activity', tab: content['seniorityPayment'] || 'Seniority Payment', permissionKey: 'seniority-payment' },
     ];
 
     const contentList = {
@@ -157,8 +145,15 @@ const EmployeeViewPage = () => {
         documents: <TabDocument id={id} />,
         activity: <TabTimeLine id={id} />,
         books: <TabBook id={id} />,
-        nssf: <TabLaborLaw id={id} />,
+        contract: <TabLaborLaw id={id} />,
+        nssf: <TabNssf id={id} />,
     };
+
+    const visibleTabs = tabList.filter(tab => permissionMap[tab.permissionKey]);
+    const visibleContentList = {};
+    visibleTabs.forEach(tab => {
+        visibleContentList[tab.key] = contentList[tab.key];
+    });
 
 
     const breadcrumbItems = [
@@ -166,6 +161,7 @@ const EmployeeViewPage = () => {
         { breadcrumbName: content['employee'], path: '/employee' },
         { breadcrumbName: content['view'], },
     ];
+
     return (
         <div style={{ margin: 24, }}>
             <div className="flex justify-between mb-3">
@@ -220,14 +216,13 @@ const EmployeeViewPage = () => {
                                     <p className='text-gray-500 text-xs flex justify-between items-center'><span>{content['department']}</span><MdKeyboardArrowRight /> </p>
                                     <p> {language == 'khmer' ? employee?.positionId?.department?.title_kh : employee?.positionId?.department?.title_en}</p>
                                     <p className='text-gray-500 text-xs pt-2 flex justify-between items-center mb-1'>{content['manager']} <MdKeyboardArrowRight /></p>
-                                    {managers.map((manager) => {
+                                    {managers.map((manager, index) => {
                                         const imagePath = manager?.image_url?.path;
                                         const fullImageUrl = imagePath ? `${uploadUrl}/${imagePath}` : null;
 
                                         return (
-                                            <div className='flex items-center gap-2'>
+                                            <div key={manager._id || index} className='flex items-center gap-2'>
                                                 <Avatar
-                                                    key={manager._id}
                                                     src={fullImageUrl}
                                                     alt={manager?.name_en}
                                                 >
@@ -244,7 +239,7 @@ const EmployeeViewPage = () => {
                         <div className="flex-1 overflow-x-auto">
                             <Card
                                 className="shadow custom-tabs"
-                                tabList={tabList}
+                                tabList={visibleTabs}
                                 activeTabKey={activeTab}
                                 onTabChange={(key) => setActiveTab(key)}
                             >

@@ -58,6 +58,17 @@ const AppSider = ({ collapsed }) => {
 
     // Determine selected menu key based on current URL
     const getSelectedKey = (pathname) => {
+        if (pathname.startsWith('/appraisal/employee/list/path/')) return pathname;
+        if (pathname.startsWith('/appraisal/month/employee/path/')) {
+            return `/appraisal/employee/list/path/${identity?.employeeId?._id}`;
+        }
+        if (pathname.startsWith('/appraisal/employee/list/path-m/')) {
+            return '/appraisal/employee/path';
+        }
+        if (pathname.startsWith('/appraisal/month/manager/path/')) {
+            return '/appraisal/employee/path';
+        }
+        if (pathname.startsWith('/appraisal/employee/path')) return '/appraisal/employee/path';
         if (pathname.startsWith('/employee')) return '/employee';
         if (pathname.startsWith('/appraisal/day/')) return '/appraisal/day/employee';
         if (pathname.startsWith('/appraisal/day/employee')) return '/appraisal/day';
@@ -67,6 +78,7 @@ const AppSider = ({ collapsed }) => {
         if (pathname.startsWith('/payroll/')) return '/payroll';
         if (pathname.startsWith('/applicants/')) return '/applicants';
         if (pathname.startsWith('/job-postings/')) return '/job-postings';
+
         return pathname;
     };
 

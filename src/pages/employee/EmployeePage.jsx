@@ -24,7 +24,7 @@ import ModalLgRight from '../../components/modals/ModalLgRight';
 import ModalXlRight from '../../components/modals/ModalXlRight';
 
 const EmployeePage = () => {
-    const { isLoading, content, language } = useAuth();
+    const { isLoading, content, language, identity } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -37,6 +37,19 @@ const EmployeePage = () => {
     });
     const [visible, setVisible] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
+
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "employees"
+    );
+
+    // fallback empty array if not found
+    const allowedActions = employeePermission?.actions || [];
+
+    // convert into quick lookup map
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
 
     const handleOpen = (id) => {
         setSelectedId(id);
@@ -224,23 +237,29 @@ const EmployeePage = () => {
                             <EyeOutlined />
                         </button>
                     </Tooltip>
-                    <Tooltip title={content['edit']}>
-                        <button
-                            className={Styles.btnEdit}
-                            shape="circle"
-                            onClick={() => handleUpdateNav(record._id)}
-                        >
-                            <FormOutlined />
-                        </button>
-                    </Tooltip>
-                    {ConfirmDeleteButton({
-                        onConfirm: () => handleDelete(record._id),
-                        tooltip: content['delete'],
-                        title: content['confirmDelete'],
-                        okText: content['yes'],
-                        cancelText: content['no'],
-                        description: `${content['areYouSureToDelete']} ${record.name || 'this item'}?`
-                    })}
+                    {permissionMap.update && (
+                        <Tooltip title={content['edit']}>
+                            <button
+                                className={Styles.btnEdit}
+                                shape="circle"
+                                onClick={() => handleUpdateNav(record._id)}
+                            >
+                                <FormOutlined />
+                            </button>
+                        </Tooltip>
+                    )}
+
+                    {/* ✅ Show Delete only if has delete */}
+                    {permissionMap.delete &&
+                        ConfirmDeleteButton({
+                            onConfirm: () => handleDelete(record._id),
+                            tooltip: content['delete'],
+                            title: content['confirmDelete'],
+                            okText: content['yes'],
+                            cancelText: content['no'],
+                            description: `${content['areYouSureToDelete']} ${record.name || 'this item'
+                                }?`,
+                        })}
                 </Space>
             ),
         },

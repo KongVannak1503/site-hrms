@@ -241,7 +241,7 @@ const LaborLawPage = () => {
                             <p className="mb-3">{content['duration']}</p>
                             <DatePicker
                                 onChange={(date, dateString) => setDuration(dateString)}
-                                className="w-full" placeholder='ជ្រើសរើសកាលបរិច្ឆេទ'
+                                className="w-full" placeholder=''
                                 value={duration ? moment(duration, 'YYYY-MM-DD') : null} />
                         </div>
                     </div>
@@ -257,7 +257,7 @@ const LaborLawPage = () => {
                     </Upload>
                 </Card>
                 <hr className="border-0 py-3" />
-                <Card title={<p className='text-default text-sm font-bold'>ឯកសារ{content['laborLaw']}</p>} className="shadow">
+                <Card title={<p className='text-default text-sm font-bold'>{content['docKh']}{content['laborLaw']} {content['docEn']}</p>} className="shadow">
 
                     <Table
                         scroll={{ x: 'max-content' }}
