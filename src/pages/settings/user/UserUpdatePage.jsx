@@ -50,11 +50,11 @@ const UserUpdatePage = ({ onUserUpdated, onCancel, userId }) => {
             };
 
             const response = await updateUserApi(userId, formData);
-            message.success('User updated successfully!');
+            message.success(content['updateSuccessFully']);
             onUserUpdated(response.data);
         } catch (error) {
             console.error('Error creating User:', error);
-            message.error('Failed to create User');
+            message.error(content['failedToUpdate']);
         }
     };
 

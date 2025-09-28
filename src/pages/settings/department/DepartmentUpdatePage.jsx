@@ -88,10 +88,10 @@ const DepartmentUpdatePage = ({ dataId, onCancel, onUserUpdated }) => {
 
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnUpdate}>
-                    Update
+                    {content['update']}
                 </button>
             </div>
         </Form>

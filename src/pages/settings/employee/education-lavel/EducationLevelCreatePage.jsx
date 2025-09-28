@@ -22,13 +22,13 @@ const EducationLevelCreatePage = ({ form, onCancel, onUserCreated }) => {
             };
 
             const response = await createEducationLevelApi(formData);
-            message.success('Created successfully!');
+            message.success(content['createSuccessFully']);
 
             onUserCreated(response.data);
             form.resetFields();
         } catch (error) {
             console.error('Error creating User:', error);
-            message.error('Failed to create User');
+            message.error(content['failedToCreate']);
         }
     };
 
@@ -60,10 +60,10 @@ const EducationLevelCreatePage = ({ form, onCancel, onUserCreated }) => {
             </Form.Item>
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate} >
-                    Submit
+                    {content['save']}
                 </button>
             </div>
         </Form>

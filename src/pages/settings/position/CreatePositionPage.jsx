@@ -37,12 +37,12 @@ const CreatePositionPage = ({ form, onCancel, onUserCreated }) => {
       };
 
       const response = await createPositionApi(formData);
-      message.success(content['createSuccess'] || 'Created successfully!');
+      message.success(content['createSuccessFully'] || 'Created successfully!');
       onUserCreated(response.data);
       form.resetFields();
     } catch (error) {
       console.error('Error creating Position:', error);
-      message.error(content['createFailed'] || 'Failed to create Position');
+      message.error(content['failedToCreate'] || 'Failed to create Position');
     }
   };
 

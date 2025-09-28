@@ -31,11 +31,11 @@ const UpdateJobTypePage = ({ dataId, onCancel, onUserUpdated }) => {
             };
 
             const response = await updateJobTypeApi(dataId, formData);
-            message.success('Updated successfully!');
+            message.success(content['updateSuccessFully']);
             onUserUpdated(response.data);
         } catch (error) {
             console.error('Error creating:', error);
-            message.error('Failed to create');
+            message.error(content['failedToUpdate']);
         }
     };
 
@@ -70,10 +70,10 @@ const UpdateJobTypePage = ({ dataId, onCancel, onUserUpdated }) => {
             </Form.Item>
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate} >
-                    Submit
+                    {content['update']}
                 </button>
             </div>
         </Form>

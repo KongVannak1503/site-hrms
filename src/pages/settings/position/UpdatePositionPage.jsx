@@ -50,11 +50,11 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
       };
 
       const response = await updatePositionApi(dataId, formData);
-      message.success('Updated successfully!');
+      message.success(content['updateSuccessFully']);
       onUserUpdated(response.data);
     } catch (error) {
       console.error('Error updating position:', error);
-      message.error('Failed to update');
+      message.error(content['failedToUpdate']);
     }
   };
 
@@ -132,10 +132,10 @@ const UpdatePositionPage = ({ dataId, onCancel, onUserUpdated }) => {
 
       <div className="text-end mt-3">
         <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-          Cancel
+          {content['cancel']}
         </button>
         <button type="submit" className={Styles.btnUpdate}>
-          Update
+          {content['update']}
         </button>
       </div>
     </Form>

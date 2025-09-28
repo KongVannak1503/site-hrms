@@ -181,10 +181,10 @@ const UserCreate = ({ onCancel, onUserCreated }) => {
 
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate} >
-                    Submit
+                    {content['save']}
                 </button>
             </div>
         </Form>

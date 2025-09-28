@@ -34,7 +34,7 @@ const TabNssf = ({ id }) => {
     };
 
     useEffect(() => {
-        document.title = `${content['nssf']} | USEA`;
+        // document.title = `${content['nssf']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getEpmUploadNssfDocApi(id);

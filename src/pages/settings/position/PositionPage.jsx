@@ -64,6 +64,8 @@ const PositionPage = () => {
         const fetchData = async () => {
             try {
                 const response = await getPositionsApi();
+                console.log(response);
+
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -137,8 +139,8 @@ const PositionPage = () => {
             dataIndex: "department",
             key: "department",
             render: (department) => (
-                department?.title ? (
-                    <Tag color="gold">{department.title}</Tag>
+                department?.title_kh ? (
+                    <Tag color="gold">{language == 'khmer' ? department.title_kh : department.title_en}</Tag>
                 ) : (
                     <Tag color="default">-</Tag>
                 )

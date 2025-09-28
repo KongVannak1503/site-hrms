@@ -22,7 +22,7 @@ const TabTimeLine = ({ id }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        document.title = content['payroll'];
+        // document.title = content['payroll'];
         const fetchData = async () => {
             setLoading(true);
             try {

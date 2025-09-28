@@ -69,10 +69,10 @@ const TestTypePage = () => {
             const values = await form.validateFields();
             if (editingTestType) {
                 await updateTestTypeApi(editingTestType._id, values);
-                message.success('Test type updated');
+                message.success(content['updateSuccessFully']);
             } else {
                 await createTestTypeApi(values);
-                message.success('Test type created');
+                message.success(content['failedToUpdate']);
             }
             setIsModalOpen(false);
             fetchTestTypes();
