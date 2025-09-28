@@ -30,6 +30,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { getReportEmployeesApi } from "../../../../services/reportApi";
 import * as XLSX from "xlsx";
+import { formatDate } from "../../../../utils/utils";
 
 export default function ReportEmployeePage() {
     const { content, language } = useAuth()
@@ -489,27 +490,65 @@ export default function ReportEmployeePage() {
         pdf.save("employee_report.pdf");
     };
 
+    // ... (rest of the component code above handleDownloadExcel)
+
     const handleDownloadExcel = () => {
         if (!filteredData || filteredData.length === 0) return;
 
-        // Build raw data (including header row)
+        // Helper function for date formatting (assuming it exists elsewhere, 
+        // using a basic version here for compilation safety based on your usage)
+        const formatDate = (dateString) => {
+            if (!dateString) return "";
+            return new Date(dateString).toLocaleDateString("en-GB");
+        };
+
+        // Total columns = 22 (A to V)
+        // Single-column headers are A to N (14 columns, indices 0-13)
+        // Current Address merge is O1:R1 (indices 14-17)
+        // Birth Address merge is S1:V1 (indices 18-21)
+
+
+        // Row 1: Main Headers (22 elements total)
+        const headerRow1 = [
+            "ID",                   // A1 (0)
+            "បុគ្គលិក",             // B1 (1)
+            "ភេទ",                  // C1 (2)
+            "ថ្ងៃ ខែ ឆ្នាំកំណើត",    // D1 (3)
+            "សញ្ជាតិ",              // E1 (4)
+            "លេខអត្តសញ្ញាណប័ណ្ណ", // F1 (5)
+            "លេខលិខិតឆ្លងដែន",    // G1 (6)
+            "នាយកដ្ឋាន",            // H1 (7)
+            "តួនាទី",               // I1 (8)
+            "អ៊ីម៉ែល",              // J1 (9)
+            "លេខទូរស័ព្ទ",          // K1 (10)
+            "ថ្ងៃចូលធ្វើការ",        // L1 (11)
+            "អ្នកគ្រប់គ្រង",         // M1 (12)
+            "ស្ថានភាព",             // N1 (13)
+            "អាសយដ្ឋានបច្ចុប្បន្ន", "", "", "", // O1 (14) - R1 (17) merged
+            "អាសយដ្ឋានកំណើត", "", "", ""     // S1 (18) - V1 (21) merged
+        ];
+
+        // Row 2: Sub-Headers (22 elements total)
+        const headerRow2 = [
+            // Blanks for the 14 single-column headers (A2 to N2)
+            "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+            // Current Address details (O2 to R2)
+            "ទីក្រុង/ខេត្ត", "ស្រុក/ខណ្ឌ", "ឃុំ/សង្កាត់", "ភូមិ",
+            // Birth Address details (S2 to V2)
+            "ទីក្រុង/ខេត្ត", "ស្រុក/ខណ្ឌ", "ឃុំ/សង្កាត់", "ភូមិ"
+        ];
+
         const worksheetData = [
-            [
-                "ID",
-                "បុគ្គលិក",
-                "ភេទ",
-                "នាយកដ្ឋាន",
-                "តួនាទី",
-                "អ៊ីម៉ែល",
-                "លេខទូរស័ព្ទ",
-                "ថ្ងៃចូលធ្វើការ",
-                "អ្នកគ្រប់គ្រង",
-                "ស្ថានភាព"
-            ],
+            headerRow1,
+            headerRow2,
             ...filteredData.map(emp => [
                 emp.employee_id ?? "",
                 emp.name_kh ?? "",
                 emp.gender ?? "",
+                formatDate(emp.date_of_birth) ?? "",
+                emp.nationality ?? "",
+                emp.id_card_no ?? "",
+                emp.passport_no ?? "",
                 emp?.positionId?.department?.title_kh ?? "",
                 emp?.positionId?.title_kh ?? "",
                 emp.email ?? "",
@@ -517,17 +556,52 @@ export default function ReportEmployeePage() {
                 emp.joinDate ? new Date(emp.joinDate).toLocaleDateString("en-GB") : "",
                 emp?.positionId?.department?.manager?.map(m => m.name_kh).join(", ") ?? "",
                 getStatusName(emp.status) ?? "",
+                // Current Address details (starts at column O, index 14)
+                emp?.city?.name ?? "",
+                emp?.district ?? "",
+                emp?.community ?? "",
+                emp?.village ?? "",
+                // Birth Address details (starts at column S, index 18)
+                emp?.present_present_city?.name ?? "",
+                emp?.present_district ?? "",
+                emp?.present_community ?? "",
+                emp?.present_village ?? ""
             ])
         ];
 
         // Create worksheet
         const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
-        // Apply styles to header row (row 1)
+        // --- Merging Logic ---
+
+        // 1. Merge all single-column headers (A1 to N1) to span two rows (A1:A2, B1:B2, etc.)
+        const singleColumnMerges = [];
+        // Columns A (index 0) through N (index 13)
+        for (let c = 0; c <= 13; c++) {
+            singleColumnMerges.push({ s: { r: 0, c: c }, e: { r: 1, c: c } }); // Merge row 0 (1) and row 1 (2)
+        }
+
+        // 2. Merge the two address headers to span four columns (one row each)
+        const addressHeaderMerges = [
+            // Current Address: O1:R1 (indices 14 to 17)
+            { s: { r: 0, c: 14 }, e: { r: 0, c: 17 } },
+            // Birth Address: S1:V1 (indices 18 to 21)
+            { s: { r: 0, c: 18 }, e: { r: 0, c: 21 } }
+        ];
+
+        worksheet["!merges"] = [
+            ...singleColumnMerges,
+            ...addressHeaderMerges
+        ];
+
+        // --- Styling Logic ---
+
+        // Define the style for ALL header cells (both row 1 and row 2)
         const headerStyle = {
-            fill: { fgColor: { rgb: "D9E1F2" } }, // light blue background
+            fill: { fgColor: { rgb: "D9E1F2" } },
             font: { bold: true, color: { rgb: "000000" }, sz: 12 },
-            alignment: { horizontal: "center", vertical: "center" },
+            // Ensures centering, both horizontally and vertically
+            alignment: { horizontal: "center", vertical: "center", wrapText: true },
             border: {
                 top: { style: "thin", color: { rgb: "000000" } },
                 bottom: { style: "thin", color: { rgb: "000000" } },
@@ -536,10 +610,49 @@ export default function ReportEmployeePage() {
             },
         };
 
-        const headerCells = ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1"]; // Include last column
-        headerCells.forEach(cell => {
-            if (worksheet[cell]) worksheet[cell].s = headerStyle;
-        });
+        // Loop up to 21 (index 0 to 21 = 22 columns total)
+        const totalColumns = 21;
+
+        // Apply the style to ALL header cells in both rows (A1 to V2)
+        for (let r = 0; r <= 1; r++) {
+            for (let c = 0; c <= totalColumns; c++) {
+                const cellRef = XLSX.utils.encode_cell({ r: r, c: c });
+                // Ensure the cell object exists before applying style
+                if (!worksheet[cellRef]) {
+                    worksheet[cellRef] = { v: worksheetData[r][c] || "" };
+                }
+                worksheet[cellRef].s = headerStyle;
+            }
+        }
+
+        // Set column widths for a better visual output
+        worksheet["!cols"] = [
+            { wch: 5 },  // A - ID
+            { wch: 15 }, // B - បុគ្គលិក
+            { wch: 5 },  // C - ភេទ
+            { wch: 15 }, // D - ថ្ងៃ ខែ ឆ្នាំកំណើត
+            { wch: 10 }, // E - សញ្ជាតិ
+            { wch: 15 }, // F - លេខអត្តសញ្ញាណប័ណ្ណ
+            { wch: 15 }, // G - លេខលិខិតឆ្លងដែន
+            { wch: 15 }, // H - នាយកដ្ឋាន
+            { wch: 15 }, // I - តួនាទី
+            { wch: 20 }, // J - អ៊ីម៉ែល
+            { wch: 15 }, // K - លេខទូរស័ព្ទ
+            { wch: 12 }, // L - ថ្ងៃចូលធ្វើការ
+            { wch: 15 }, // M - អ្នកគ្រប់គ្រង
+            { wch: 10 }, // N - ស្ថានភាព
+            // Current Address Details (O-R)
+            { wch: 10 }, // O - ទីក្រុង/ខេត្ត
+            { wch: 10 }, // P - ស្រុក/ខណ្ឌ
+            { wch: 10 }, // Q - ឃុំ/សង្កាត់
+            { wch: 10 }, // R - ភូមិ
+            // Birth Address Details (S-V)
+            { wch: 10 }, // S - ទីក្រុង/ខេត្ត
+            { wch: 10 }, // T - ស្រុក/ខណ្ឌ
+            { wch: 10 }, // U - ឃុំ/សង្កាត់
+            { wch: 10 }  // V - ភូមិ
+        ];
+
 
         // Create workbook and append sheet
         const workbook = XLSX.utils.book_new();
@@ -550,6 +663,8 @@ export default function ReportEmployeePage() {
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
         saveAs(blob, "employee_report.xlsx");
     };
+    // ... (rest of the component code below handleDownloadExcel)
+
 
     const handlePrintPDF = async () => {
         if (!previewRef.current) return;
