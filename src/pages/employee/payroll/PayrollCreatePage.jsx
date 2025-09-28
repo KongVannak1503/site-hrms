@@ -24,15 +24,13 @@ const PayrollCreatePage = ({ onCancel, onUserCreated }) => {
             console.log('🟡 Payload sent to backend:', formData); // 👈 log this
 
             const response = await createBonusApi(formData);
-            message.success('Created successfully!');
+            message.success(content['createSuccessFully']);
             onUserCreated(response.data);
         } catch (error) {
             console.error('❌ Error creating User:', error);
-            message.error('Failed to create User');
+            message.error(content['failedToCreate']);
         }
     };
-
-
 
     return (
         <Form
@@ -47,10 +45,10 @@ const PayrollCreatePage = ({ onCancel, onUserCreated }) => {
             <PayrollFormPage Form={Form} form={form} />
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate} >
-                    Submit
+                    {content['save']}
                 </button>
             </div>
         </Form>

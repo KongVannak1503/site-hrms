@@ -49,11 +49,11 @@ const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
 
             const response = await createSubBonusApi(dataId, formData);
 
-            message.success('Updated successfully!');
+            message.success(content['updateSuccessFully']);
             onUserUpdated(response.data);
         } catch (error) {
             console.error('Error creating:', error);
-            message.error('Failed to create');
+            message.error(content['failedToUpdate']);
         }
     };
 
@@ -95,10 +95,10 @@ const SubPayrollFormPage = ({ dataId, onCancel, onUserUpdated }) => {
 
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    Cancel
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnCreate}>
-                    Submit
+                    {content['save']}
                 </button>
             </div>
         </Form>
