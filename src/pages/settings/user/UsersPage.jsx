@@ -122,7 +122,7 @@ const UsersPage = () => {
             title: content['role'],
             dataIndex: "role",
             key: "role",
-            render: (text, record) => <span>{record.role.name}</span>,
+            render: (text, record) => <span>{record.role.role}</span>,
         },
 
         {

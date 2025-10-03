@@ -79,6 +79,7 @@ const AppSider = ({ collapsed }) => {
         if (pathname.startsWith('/applicants/')) return '/applicants';
         if (pathname.startsWith('/job-postings/')) return '/job-postings';
 
+
         return pathname;
     };
 

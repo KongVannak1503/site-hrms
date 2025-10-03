@@ -107,7 +107,7 @@ const EmployeeBookPage = () => {
         try {
             await createEpmBookApi(id, formData);
 
-            message.success('Documents uploaded successfully!');
+            message.success(content['saveSuccessful']);
             setHealthFiles([]);
             setBodyFiles([]);
             setBookFiles([]);
@@ -142,7 +142,7 @@ const EmployeeBookPage = () => {
             }
         } catch (error) {
             console.error('Upload error:', error);
-            message.error('Failed to upload documents.');
+            message.error(content['failedToSave']);
         }
     };
 
@@ -502,7 +502,7 @@ const EmployeeBookPage = () => {
                         </div>
                         <div>
                             <p className="mb-3">
-                                កាលបរិច្ឆេទចាប់បញ្ចប់
+                                កាលបរិច្ឆេទបញ្ចប់
                             </p>
                             <DatePicker
                                 className="mb-3"

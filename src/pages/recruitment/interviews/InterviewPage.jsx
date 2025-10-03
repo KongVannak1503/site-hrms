@@ -23,7 +23,7 @@ import InterviewModal from './InterviewModal';
 import showCustomConfirm from '../../../utils/showCustomConfirm';
 
 const InterviewPage = () => {
-  const { isLoading, content } = useAuth();
+  const { isLoading, content, identity } = useAuth();
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [viewMode, setViewMode] = useState('calendar');
@@ -60,6 +60,19 @@ const InterviewPage = () => {
     { breadcrumbName: content['home'], path: '/' },
     { breadcrumbName: `${content['informationKh']}${content['interviewSchedule']}` }
   ];
+
+  const employeePermission = identity?.role?.permissions?.find(
+    p => p.permissionId?.name === "job-postings"
+  );
+
+  // fallback empty array if not found
+  const allowedActions = employeePermission?.actions || [];
+
+  // convert into quick lookup map
+  const permissionMap = allowedActions.reduce((acc, action) => {
+    acc[action] = true;
+    return acc;
+  }, {});
 
   const todayTests = events.filter(ev =>
     dayjs(ev.start).isSame(dayjs(), 'day')
@@ -361,22 +374,23 @@ const InterviewPage = () => {
                   setResultModalData({ visible: true, interview });
                 }
               },
-              {
+              ...(permissionMap.update ? [{
                 key: 'edit',
                 label: <span>Edit</span>,
                 onClick: () => {
-                  const interview = interviews.find((i) => i._id === record.id);
+                  const interview = interviews.find(i => i._id === record.id);
                   setEditModalData({ visible: true, interview });
                 }
-              },
-              {
+              }] : []),
+              ...(permissionMap.update ? [{
                 key: 'reschedule',
                 label: <span>Reschedule</span>,
                 onClick: () => {
                   const interview = interviews.find(i => i._id === record.id);
                   setRescheduleModalData({ visible: true, interview });
                 }
-              }
+              }] : []),
+
             ]
           }}
         >
@@ -419,7 +433,8 @@ const InterviewPage = () => {
 
             <div className='flex items-center gap-3 mt-4 sm:mt-0'>
               <button
-                className={Styles.btnCreate}
+                className={`${Styles.btnCreate} ${!permissionMap.create ? ' !cursor-not-allowed' : ' '}`}
+                disabled={!permissionMap.create}
                 onClick={() => handleOpenApplicantSelector()}
               >
                 <PlusOutlined /> {`${content['create']} ${content['interviewSchedule']}`}

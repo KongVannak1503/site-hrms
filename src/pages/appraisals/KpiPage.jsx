@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { ConfirmDuplicateButton } from '../../components/button/ConfirmDuplicateButton';
 
 const KpiPage = () => {
-    const { isLoading, content, language } = useAuth();
+    const { isLoading, content, language, identity } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -27,6 +27,19 @@ const KpiPage = () => {
     });
 
     const [form] = Form.useForm();
+
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "kpi"
+    );
+
+    // fallback empty array if not found
+    const allowedActions = employeePermission?.actions || [];
+
+    // convert into quick lookup map
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
 
     useEffect(() => {
         document.title = `${content['kpi']} | USEA`;
@@ -143,7 +156,7 @@ const KpiPage = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
-                    {ConfirmDuplicateButton({
+                    {permissionMap.create && ConfirmDuplicateButton({
                         onConfirm: () => handleDuplicate(record._id),
                         tooltip: content['duplicate'],
                         title: content['Duplicate'],
@@ -151,16 +164,18 @@ const KpiPage = () => {
                         cancelText: content['no'],
                         description: `${'this item'}?`
                     })}
-                    <Tooltip title={content['edit']}>
-                        <button
-                            className={Styles.btnEdit}
-                            shape="circle"
-                            onClick={() => handleUpdate(record._id)}
-                        >
-                            <FormOutlined />
-                        </button>
-                    </Tooltip>
-                    {ConfirmDeleteButton({
+                    {permissionMap.update && (
+                        <Tooltip title={content['edit']}>
+                            <button
+                                className={Styles.btnEdit}
+                                shape="circle"
+                                onClick={() => handleUpdate(record._id)}
+                            >
+                                <FormOutlined />
+                            </button>
+                        </Tooltip>
+                    )}
+                    {permissionMap.delete && ConfirmDeleteButton({
                         onConfirm: () => handleDelete(record._id),
                         tooltip: content['delete'],
                         title: content['confirmDelete'],
@@ -247,7 +262,7 @@ const KpiPage = () => {
                     </div>
                     <div className='flex items-center gap-3'>
 
-                        <button onClick={() => handleAddCreated()} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['kpi']}`}</button>
+                        <button disabled={!permissionMap.create} onClick={() => handleAddCreated()} className={`${Styles.btnCreate} ${!permissionMap.create ? ' !cursor-not-allowed' : ''}`}> <PlusOutlined /> {`${content['create']} ${content['kpi']}`}</button>
                     </div>
                 </div>
                 <Table

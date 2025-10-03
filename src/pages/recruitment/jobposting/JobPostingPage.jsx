@@ -16,7 +16,7 @@ import uploadUrl from '../../../services/uploadApi';
 const { Option } = Select;
 
 const JobPostingPage = () => {
-  const { isLoading, content, language } = useAuth();
+  const { isLoading, content, language, identity } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,6 +34,19 @@ const JobPostingPage = () => {
     { breadcrumbName: content['home'], path: '/' },
     { breadcrumbName: content['jobPosting'] }
   ];
+
+  const employeePermission = identity?.role?.permissions?.find(
+    p => p.permissionId?.name === "job-postings"
+  );
+
+  // fallback empty array if not found
+  const allowedActions = employeePermission?.actions || [];
+
+  // convert into quick lookup map
+  const permissionMap = allowedActions.reduce((acc, action) => {
+    acc[action] = true;
+    return acc;
+  }, {});
 
   useEffect(() => {
     document.title = `${content['jobPosting']} | USEA`
@@ -209,14 +222,14 @@ const JobPostingPage = () => {
               <EyeOutlined />
             </button>
           </Tooltip>
-
-          <Tooltip title={content['edit']}>
-            <button className={Styles.btnEdit} onClick={() => navigate(`/job-postings/edit/${record._id}`)} >
-              <FormOutlined />
-            </button>
-          </Tooltip>
-
-          {ConfirmDeleteButton({
+          {permissionMap.update && (
+            <Tooltip title={content['edit']}>
+              <button className={Styles.btnEdit} onClick={() => navigate(`/job-postings/edit/${record._id}`)} >
+                <FormOutlined />
+              </button>
+            </Tooltip>
+          )}
+          {permissionMap.delete && ConfirmDeleteButton({
             onConfirm: () => handleDelete(record._id),
             tooltip: content['delete'],
             title: content['confirmDelete'],
@@ -313,7 +326,8 @@ const JobPostingPage = () => {
               allowClear
               onChange={(e) => handleSearch(e.target.value)}
             />
-            <button onClick={() => navigate('/job-postings/create')} className={Styles.btnCreate}>
+            <button disabled={!permissionMap.create}
+              onClick={() => navigate('/job-postings/create')} className={`${Styles.btnCreate} ${!permissionMap.create ? ' !cursor-not-allowed' : ''}`}>
               <PlusOutlined /> {`${content['create']} ${content['jobPosting']}`}
             </button>
           </div>

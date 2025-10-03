@@ -20,7 +20,7 @@ import AppraisalMonthCreatePage from './AppraisalMonthCreatePage';
 import AppraisalMonthUpdatePage from './AppraisalMonthUpdatePage';
 
 const AppraisalMonthPage = () => {
-    const { isLoading, content, language } = useAuth();
+    const { isLoading, content, language, identity } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -38,6 +38,19 @@ const AppraisalMonthPage = () => {
         total: 0,
     });
     const navigate = useNavigate();
+
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "appraisals"
+    );
+
+    // fallback empty array if not found
+    const allowedActions = employeePermission?.actions || [];
+
+    // convert into quick lookup map
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const onSelectChange = newSelectedRowKeys => {
@@ -212,16 +225,18 @@ const AppraisalMonthPage = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle" style={{ display: "flex", justifyContent: "center" }}>
-                    <Tooltip title={content['edit']}>
-                        <button
-                            className={Styles.btnEdit}
-                            shape="circle"
-                            onClick={() => showUpdateDrawer(record._id)}
-                        >
-                            <FormOutlined />
-                        </button>
-                    </Tooltip>
-                    {ConfirmDeleteButton({
+                    {permissionMap.update && (
+                        <Tooltip title={content['edit']}>
+                            <button
+                                className={Styles.btnEdit}
+                                shape="circle"
+                                onClick={() => showUpdateDrawer(record._id)}
+                            >
+                                <FormOutlined />
+                            </button>
+                        </Tooltip>
+                    )}
+                    {permissionMap.delete && ConfirmDeleteButton({
                         onConfirm: () => handleDelete(record._id),
                         tooltip: content['delete'],
                         title: content['confirmDelete'],
@@ -326,8 +341,7 @@ const AppraisalMonthPage = () => {
                         </Select> */}
 
                     </div>
-
-                    <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['appraisal']}`}</button>
+                    <button disabled={!permissionMap.create} onClick={showCreateDrawer} className={`${Styles.btnCreate} ${!permissionMap.create ? ' !cursor-not-allowed' : ''} `}> <PlusOutlined /> {`${content['create']} ${content['appraisal']}`}</button>
                 </div>
                 <Table
                     className='custom-pagination custom-checkbox-table'

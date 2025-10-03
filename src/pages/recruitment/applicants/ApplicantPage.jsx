@@ -32,7 +32,7 @@ import { updateInterviewDecisionApi } from '../../../services/interviewApi';
 const { Option } = Select;
 
 const ApplicantPage = () => {
-  const { isLoading, content, language } = useAuth();
+  const { isLoading, content, language, identity } = useAuth();
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
@@ -50,6 +50,19 @@ const ApplicantPage = () => {
     applicant: null,
     jobAppId: null
   });
+
+  const employeePermission = identity?.role?.permissions?.find(
+    p => p.permissionId?.name === "applicants"
+  );
+
+  // fallback empty array if not found
+  const allowedActions = employeePermission?.actions || [];
+
+  // convert into quick lookup map
+  const permissionMap = allowedActions.reduce((acc, action) => {
+    acc[action] = true;
+    return acc;
+  }, {});
 
   useEffect(() => {
     document.title = `${content['applicants']} | USEA`
@@ -370,12 +383,12 @@ const ApplicantPage = () => {
               <EyeOutlined />
             </button>
           </Tooltip>
-
-          <Tooltip title={content['edit']}>
-            <button className={Styles.btnEdit} onClick={() => handleUpdate(record._id)}><FormOutlined /></button>
-          </Tooltip>
-
-          {ConfirmDeleteButton({
+          {permissionMap.update && (
+            <Tooltip title={content['edit']}>
+              <button className={Styles.btnEdit} onClick={() => handleUpdate(record._id)}><FormOutlined /></button>
+            </Tooltip>
+          )}
+          {permissionMap.delete && ConfirmDeleteButton({
             onConfirm: () => handleDelete(record._id),
             tooltip: content['delete'],
             title: 'Confirm Deletion',
@@ -419,7 +432,7 @@ const ApplicantPage = () => {
           </div>
           <div className='flex gap-3 mt-4 sm:mt-0'>
 
-            <button onClick={handleCreate} className={Styles.btnCreate}>
+            <button disabled={!permissionMap.create} onClick={handleCreate} className={`${Styles.btnCreate} ${!permissionMap.create ? ' !cursor-not-allowed' : ' '}`}>
               <PlusOutlined /> {`${content['create']} ${content['applicants']}`}
             </button>
           </div>

@@ -24,7 +24,7 @@ import ModalLgRight from '../../components/modals/ModalLgRight';
 import ModalXlRight from '../../components/modals/ModalXlRight';
 
 const EmployeePage = () => {
-    const { isLoading, content, language, identity } = useAuth();
+    const { isLoading, content, language, identity, isEmployee } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -50,6 +50,21 @@ const EmployeePage = () => {
         acc[action] = true;
         return acc;
     }, {});
+
+    const adminemployeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "admin"
+    );
+    const adminAllowedActions = adminemployeePermission?.actions || [];
+
+    const employeeAllowedActions = employeePermission?.actions || [];
+
+    const handleEdit = (id) => {
+        const canEdit = (!isEmployee && employeeAllowedActions.includes('update')) ||
+            (isEmployee && adminAllowedActions.includes('view')) ||
+            (identity.employeeId._id == id && employeeAllowedActions.includes('update'));
+        return canEdit;
+
+    };
 
     const handleOpen = (id) => {
         setSelectedId(id);
@@ -103,7 +118,6 @@ const EmployeePage = () => {
         const fetchData = async () => {
             try {
                 const response = await getEmployeesApi();
-                console.log(response)
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -152,6 +166,7 @@ const EmployeePage = () => {
             message.error('Failed to delete');
         }
     };
+
 
     const columns = [
         {
@@ -237,7 +252,7 @@ const EmployeePage = () => {
                             <EyeOutlined />
                         </button>
                     </Tooltip>
-                    {permissionMap.update && (
+                    {handleEdit(record._id) && (
                         <Tooltip title={content['edit']}>
                             <button
                                 className={Styles.btnEdit}

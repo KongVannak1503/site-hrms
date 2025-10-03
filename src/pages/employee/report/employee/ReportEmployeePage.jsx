@@ -33,7 +33,7 @@ import * as XLSX from "xlsx";
 import { formatDate } from "../../../../utils/utils";
 
 export default function ReportEmployeePage() {
-    const { content, language } = useAuth()
+    const { content, language, identity } = useAuth()
     const previewRef = useRef(null);
     const [docBlob, setDocBlob] = useState(null);
     const [departments, setDepartments] = useState([]);
@@ -52,6 +52,20 @@ export default function ReportEmployeePage() {
         { breadcrumbName: content['home'], path: '/' },
         { breadcrumbName: `${content['report']}${content['Employee']}` }
     ];
+
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "reports"
+    );
+
+    // fallback empty array if not found
+    const allowedActions = employeePermission?.actions || [];
+
+    // convert into quick lookup map
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
+
     useEffect(() => {
         document.title = `${content['report']}${content['Employee']} | USEA`;
         const fetchData = async () => {
@@ -724,11 +738,11 @@ export default function ReportEmployeePage() {
 
                     </div>
                     <div className='flex items-center gap-3'>
-                        <button onClick={handleDownload} className={`${Styles.btnWord}`}> <FileWordFilled /> {`${content['word'] || 'Word'}`}</button>
-                        <button onClick={handleDownloadExcel} className={`${Styles.btnExcel}`}>
+                        <button disabled={!permissionMap.export} onClick={handleDownload} className={`${Styles.btnWord} ${!permissionMap.export ? ' !cursor-not-allowed' : ''}`}> <FileWordFilled /> {`${content['word'] || 'Word'}`}</button>
+                        <button disabled={!permissionMap.export} onClick={handleDownloadExcel} className={`${Styles.btnExcel} ${!permissionMap.export ? ' !cursor-not-allowed' : ''}`}>
                             <ExceptionOutlined /> {`${content['excel'] || 'Excel'}`}
                         </button>
-                        <button onClick={handlePrintPDF} className={`${Styles.btnPrint}`}> <PrinterOutlined /> {`${content['print'] || 'Print'}`}</button>
+                        <button disabled={!permissionMap.export} onClick={handlePrintPDF} className={`${Styles.btnPrint} ${!permissionMap.export ? ' !cursor-not-allowed' : ''}`}> <PrinterOutlined /> {`${content['print'] || 'Print'}`}</button>
                     </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>

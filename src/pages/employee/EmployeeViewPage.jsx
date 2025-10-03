@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Row, Col, Switch, message, Select, Card, Upload, DatePicker, Tabs, Button, Divider, Avatar } from 'antd';
+import { Form, Input, Row, Col, Switch, message, Select, Card, Upload, DatePicker, Tabs, Button, Divider, Avatar, Tooltip } from 'antd';
 import { Typography } from 'antd';
 import { useState } from 'react';
 import { FaRegImages } from "react-icons/fa";
 import { useAuth } from '../../contexts/AuthContext';
 import { Styles } from '../../utils/CsStyle';
 import { getDepartmentsApi } from '../../services/departmentApi';
-import { FileTextOutlined, IdcardOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FormOutlined, IdcardOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, PlusOutlined } from '@ant-design/icons';
 import { getEmployeeApi, updateEmployeeApi } from '../../services/employeeApi';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import moment from 'moment';
 import uploadUrl from '../../services/uploadApi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { genderOptions } from '../../data/Gender';
 import EmployeePersonalTab from './EmployeePersonalTab ';
 import EmployeeEducationTab from './EmployeeEducationTab';
@@ -39,7 +39,7 @@ import TabNssf from './tab/TabNssf';
 
 const EmployeeViewPage = () => {
     const { id } = useParams();
-    const { content, language, identity } = useAuth();
+    const { content, language, identity, isEmployee } = useAuth();
     const [form] = Form.useForm();
     const { Text } = Typography;
     const [fileList, setFileList] = useState([]);
@@ -59,6 +59,7 @@ const EmployeeViewPage = () => {
     const [open, setOpen] = useState(false);
     const [actionForm, setActionForm] = useState('create');
     const [selectId, setSelectedId] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         document.title = `${content['employeeInfo']} | USEA`;
@@ -115,15 +116,27 @@ const EmployeeViewPage = () => {
         fetchData();
     }, [content]);
 
+
+    const adminemployeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "admin"
+    );
+    const adminAllowedActions = adminemployeePermission?.actions || [];
+
     const employeePermission = identity?.role?.permissions?.find(
         p => p.permissionId?.name === "employees"
     );
+
     const allowedActions = employeePermission?.actions || [];
     const permissionMap = allowedActions.reduce((acc, action) => {
         acc[action] = true;
         return acc;
     }, {});
 
+    const employeeAllowedActions = employeePermission?.actions || [];
+    // Determine if the user can edit
+    const canEdit = (!isEmployee && employeeAllowedActions.includes('update')) ||
+        (isEmployee && adminAllowedActions.includes('view')) ||
+        (identity?.employeeId._id == id && employeeAllowedActions.includes('update'));
 
     const tabList = [
         { key: 'profile', tab: content['profile'] || 'Profile', permissionKey: 'update' },
@@ -162,6 +175,11 @@ const EmployeeViewPage = () => {
         { breadcrumbName: content['view'], },
     ];
 
+    const handleUpdateNav = (id) => {
+        navigate(`/employee/update/${id}`);
+    };
+
+    // const canEdit = (isEmployee && employeeAllowedActions.includes('update')) || isAdmin;
     return (
         <div style={{ margin: 24, }}>
             <div className="flex justify-between mb-3">
@@ -177,7 +195,21 @@ const EmployeeViewPage = () => {
                     marginTop: 10,
                 }}
             >
-                <p className='text-default text-sm font-bold'>{content['detailInfo'] || 'ព័ត៌មានលម្អិត'}</p>
+                <div className="flex justify-between">
+                    <p className='text-default text-sm font-bold'>{content['detailInfo'] || 'ព័ត៌មានលម្អិត'}</p>
+                    {canEdit && (
+                        <Tooltip title={content['edit']}>
+                            <button
+                                className={Styles.btnEdit}
+                                onClick={() => handleUpdateNav(id)}
+                            >
+                                <FormOutlined />
+                            </button>
+                        </Tooltip>
+                    )}
+
+
+                </div>
                 <Divider className='!mt-4 !mb-7' />
                 <div className="flex flex-col">
 

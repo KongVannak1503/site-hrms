@@ -28,7 +28,7 @@ import { getAllInterviewsApi } from '../../../services/interviewApi';
 import DateDisplayBox from '../../../utils/DateDisplayBox';
 
 const TestSchedulePage = () => {
-  const { isLoading, content } = useAuth();
+  const { isLoading, content, identity } = useAuth();
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [editModalData, setEditModalData] = useState({ visible: false, assignment: null });
@@ -68,6 +68,19 @@ const TestSchedulePage = () => {
     { breadcrumbName: content['home'], path: '/' },
     { breadcrumbName: `${content['informationKh']}${content['testSchedule']}` }
   ];
+
+  const employeePermission = identity?.role?.permissions?.find(
+    p => p.permissionId?.name === "test-schedules"
+  );
+
+  // fallback empty array if not found
+  const allowedActions = employeePermission?.actions || [];
+
+  // convert into quick lookup map
+  const permissionMap = allowedActions.reduce((acc, action) => {
+    acc[action] = true;
+    return acc;
+  }, {});
 
   useEffect(() => {
     document.title = `${content['testSchedule']} | USEA`
@@ -472,14 +485,14 @@ const TestSchedulePage = () => {
                       </div>
                     )
                   },
-                  {
+                  ...(permissionMap.update ? [{
                     key: 'edit',
                     label: <div onClick={() => handleEdit(record)}>Edit</div>
-                  },
-                  {
+                  }] : []),
+                  ...(permissionMap.update ? [{
                     key: 'reschedule',
                     label: <div onClick={() => handleReschedule(record)}>Reschedule</div>
-                  },
+                  }] : []),
                   // {
                   //   key: 'reject',
                   //   label: (
@@ -532,7 +545,8 @@ const TestSchedulePage = () => {
 
             <div className='flex items-center gap-3 mt-4 sm:mt-0'>
               <button
-                className={Styles.btnCreate}
+                disabled={!permissionMap.create}
+                className={`${Styles.btnCreate} ${!permissionMap.create ? ' !cursor-not-allowed' : '  '}`}
                 onClick={() => {
                   setSelectedApplicant(null);
                   setCreateModalVisible(true);
