@@ -84,7 +84,7 @@ const DepartmentAssigneePage = ({ dataId, onCancel, onUserUpdated }) => {
 
             <div className="text-end mt-3">
                 <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-                    {content['save']}
+                    {content['cancel']}
                 </button>
                 <button type="submit" className={Styles.btnUpdate}>
                     {content['update']}
