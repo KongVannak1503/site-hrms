@@ -7,7 +7,7 @@ import { createEmployeeApi } from '../../services/employeeApi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Styles } from '../../utils/CsStyle';
 import { getDepartmentsApi } from '../../services/departmentApi';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { FileTextOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { genderOptions } from '../../data/Gender';
 import EmployeePersonalTab from './EmployeePersonalTab ';
 import { getCitiesViewApi } from '../../services/cityApi';
@@ -16,6 +16,7 @@ import { getCommunesViewApi } from '../../services/communeApi';
 import { getVillagesViewApi } from '../../services/villageApi';
 import { useNavigate } from 'react-router-dom';
 import { getPositionsApi } from '../../services/positionApi';
+import CustomBreadcrumb from '../../components/breadcrumb/CustomBreadcrumb';
 
 const EmployeeCreatePage = () => {
     const { content, language } = useAuth();
@@ -158,6 +159,12 @@ const EmployeeCreatePage = () => {
         },
 
     ];
+
+    const breadcrumbItems = [
+        { breadcrumbName: content['home'], path: '/' },
+        { breadcrumbName: content['employee'], path: '/employee' },
+        { breadcrumbName: content['create'] }
+    ];
     return (
         <div className="flex flex-col">
             {/* Fixed Tabs */}
@@ -184,6 +191,10 @@ const EmployeeCreatePage = () => {
                     paddingRight: 20,
                 }}
             >
+                <div className="mb-3 flex justify-between">
+                    <p className='text-default font-extrabold text-xl'><FileTextOutlined className='mr-2' />{content['employeeInfo']}</p>
+                    <CustomBreadcrumb items={breadcrumbItems} />
+                </div>
                 {/* Always render all tab contents, but control visibility via style only */}
                 <div style={{ display: activeTab === 'personal' ? 'block' : 'none' }}>
                     <EmployeePersonalTab
@@ -205,8 +216,7 @@ const EmployeeCreatePage = () => {
                 {/* Submit Button */}
                 <div className="text-end mt-3 !bg-white !border-t !border-gray-200 px-5 py-3"
                     style={{ position: 'fixed', width: '100%', zIndex: 20, bottom: 0, right: 20 }}>
-                    <button type="button" className={Styles.btnCancel}>Cancel</button>
-                    <button type="submit" className={Styles.btnCreate}>Submit</button>
+                    <button type="submit" className={Styles.btnCreate}>{content['save']}</button>
                 </div>
             </Form>
 
