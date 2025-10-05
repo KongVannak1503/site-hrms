@@ -144,7 +144,7 @@ const EmployeeViewPage = () => {
         { key: 'education', tab: content['education'] || 'Education', permissionKey: 'education' },
         { key: 'history', tab: content['employmentHistory'] || 'History', permissionKey: 'employee-history' },
         { key: 'documents', tab: content['document'] || 'Documents', permissionKey: 'document' },
-        { key: 'books', tab: content['employmentHistory'] || 'Book', permissionKey: 'employee-book' },
+        { key: 'books', tab: content['employeeBook'] || 'Book', permissionKey: 'employee-book' },
         { key: 'contract', tab: content['contract'] || 'Contract', permissionKey: 'contract' },
         { key: 'nssf', tab: content['nssf'] || 'NSSF', permissionKey: 'nssf' },
         { key: 'activity', tab: content['seniorityPayment'] || 'Seniority Payment', permissionKey: 'seniority-payment' },

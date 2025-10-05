@@ -6,7 +6,7 @@ import { Content } from 'antd/es/layout/layout';
 import { useEffect } from 'react';
 import EmployeeCreatePage from './EmployeeCreatePage';
 import { useAuth } from '../../contexts/AuthContext';
-import { deleteEmployeeApi, getEmployeesApi } from '../../services/employeeApi';
+import { deleteEmployeeApi, getAllEmployeesForManagerApi, getEmployeesApi } from '../../services/employeeApi';
 import { formatDateTime } from '../../utils/utils';
 import { Styles } from '../../utils/CsStyle';
 import { ConfirmDeleteButton } from '../../components/button/ConfirmDeleteButton ';
@@ -117,7 +117,15 @@ const EmployeePage = () => {
         document.title = `${content['employees']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getEmployeesApi();
+                let response;
+
+                if (isEmployee && !adminAllowedActions.includes('view')) {
+                    response = await getAllEmployeesForManagerApi();
+                } else {
+                    response = await getEmployeesApi();
+                }
+
+
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);
@@ -135,7 +143,7 @@ const EmployeePage = () => {
             }
         };
         fetchData();
-    }, [content]);
+    }, [content, isEmployee]);
 
     const handleSearch = (value) => {
         const term = value.trim().toLowerCase();

@@ -241,7 +241,7 @@ const CreateApplicantPage = () => {
 
                   <Col xs={24} md={8}><Form.Item label={content['gender']} name="gender" rules={[{ required: true }]}><Select><Option value="Male">Male</Option><Option value="Female">Female</Option></Select></Form.Item></Col>
                   <Col xs={24} md={8}><Form.Item label={content['dateOfBirth']} name="dob" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} placeholder='' /></Form.Item></Col>
-                  <Col xs={24} md={8}><Form.Item label={content['maritalStatus']} name="marital_status"><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
+                  <Col xs={24} md={8}><Form.Item label={content['maritalStatus']} name="marital_status" rules={[{ required: true }]}><Select><Option value="Single">Single</Option><Option value="Married">Married</Option><Option value="Other">Other</Option></Select></Form.Item></Col>
 
                   <Col xs={24} md={12}><Form.Item label={content['phone']} name="phone_no" rules={[{ required: true }]}><Input /></Form.Item></Col>
                   <Col xs={24} md={12}><Form.Item label={content['email']} name="email" rules={[{ type: 'email' }]}><Input /></Form.Item></Col>
