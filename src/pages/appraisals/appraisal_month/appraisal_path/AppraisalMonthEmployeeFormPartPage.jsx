@@ -35,6 +35,7 @@ export default function AppraisalMonthEmployeeFormPartPage() {
     const [individual, setIndividual] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [employee, setEmployee] = useState(false);
+    const [isDeadlinePassed, setIsDeadlinePassed] = useState(false);
 
     const [form] = Form.useForm();
 
@@ -52,6 +53,9 @@ export default function AppraisalMonthEmployeeFormPartPage() {
             setTemplates(res);
             const resEmp = await getEmployeeApi(mainId);
             setEmployee(resEmp);
+            const currentDate = new Date();
+            const endDate = new Date(resAppraisal.endDate);
+            setIsDeadlinePassed(currentDate > endDate);
             // 2. Get individual scores
             const resInd = await getAppraisalIndividualEmpMonthApi(mainId, id, resAppraisal.kpiTemplate);
             if (resInd) {
@@ -81,6 +85,10 @@ export default function AppraisalMonthEmployeeFormPartPage() {
     };
 
     const handleSubmit = async () => {
+        if (isDeadlinePassed) {
+            message.error('Cannot save: The deadline for this appraisal has passed.');
+            return;
+        }
         try {
             await form.validateFields();
             setSubmitting(true);
@@ -230,9 +238,9 @@ export default function AppraisalMonthEmployeeFormPartPage() {
                             </Form.Item>
                             <div className="text-end">
                                 <button
-                                    className={Styles.btnCreate}
+                                    className={`${Styles.btnCreate} ${isDeadlinePassed ? ' !cursor-not-allowed' : ''}`}
                                     type="submit"
-                                    disabled={!template}
+                                    disabled={!template || isDeadlinePassed}
                                 >
                                     {content['save']}
                                 </button>

@@ -118,7 +118,7 @@ const AppraisalMonthEmployeeListPathPage = () => {
             title: content['status'],
             dataIndex: "status",
             key: "status",
-            render: (_, text) => <StatusTag value={text} />
+            render: (text) => <StatusTag value={text} />
         },
         {
             title: content['type'],

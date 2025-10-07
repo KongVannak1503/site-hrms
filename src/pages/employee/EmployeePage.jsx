@@ -125,7 +125,6 @@ const EmployeePage = () => {
                     response = await getEmployeesApi();
                 }
 
-
                 if (Array.isArray(response)) {
                     setUsers(response);
                     setFilteredData(response);

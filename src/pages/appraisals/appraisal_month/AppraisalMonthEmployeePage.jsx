@@ -42,7 +42,6 @@ const AppraisalMonthEmployeePage = () => {
         const fetchData = async () => {
             try {
                 const response = await getAllEmployeesNotManagerApi();
-                console.log(response);
 
                 if (Array.isArray(response)) {
                     setUsers(response);
