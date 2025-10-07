@@ -142,7 +142,7 @@ const EmployeeCreatePage = () => {
             const res = await createEmployeeApi(formData);
             console.log(res);
 
-            message.success('Created successfully');
+            message.success(content['saveSuccessful']);
             // form.resetFields();
             navigate(`/employee/update/${res.data?._id}`);
         } catch (error) {

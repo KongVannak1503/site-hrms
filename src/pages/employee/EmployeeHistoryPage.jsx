@@ -51,7 +51,7 @@ const EmployeeHistoryPage = () => {
             const formData = new FormData();
             formData.append('employment_history', JSON.stringify(values.employment_history || []));
             await createHistoryApi(id, formData);
-            message.success('Save successfully!');
+            message.success(content['saveSuccessful']);
         } catch (error) {
             console.error('Error saving Education:', error);
             message.error('Failed to save Education');

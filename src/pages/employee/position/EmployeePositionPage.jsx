@@ -12,7 +12,7 @@ import { Styles } from '../../../utils/CsStyle';
 import EmployeeNav from '../EmployeeNav';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import { typeEmployeePositionOptions } from '../../../data/Type';
-import { getEpmPositionsApi, createEpmPositionApi, updateEpmPositionApi } from '../../../services/employeeApi';
+import { getEpmPositionsApi, createEpmPositionApi, updateEpmPositionApi, deleteEpmPositionApi } from '../../../services/employeeApi';
 import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteButton ';
 import { handleDownload } from '../../../services/uploadApi';
 import { formatDate, formatDateTime } from '../../../utils/utils';
@@ -74,16 +74,16 @@ const EmployeePositionPage = () => {
     };
 
     const handleDelete = async (id) => {
-        // try {
-        //     await deleteEpmPosi(id); // call the API
-        //     const updatedUsers = users.filter(role => role._id !== id);
-        //     setUsers(updatedUsers);
-        //     setFilteredData(updatedUsers);
-        //     message.success('Deleted successfully');
-        // } catch (error) {
-        //     console.error('Delete failed:', error);
-        //     message.error('Failed to delete');
-        // }
+        try {
+            await deleteEpmPositionApi(id); // call the API
+
+            const updatedData = filteredData.filter(item => item._id !== id);
+            setFilteredData(updatedData);
+            message.success(content['deleteSuccessFully']);
+        } catch (error) {
+            console.error('Delete failed:', error);
+            message.error('Failed to delete');
+        }
     };
 
 
@@ -118,7 +118,7 @@ const EmployeePositionPage = () => {
                 // Create new
                 formData.append('employeeId', id);
                 await createEpmPositionApi(id, formData);
-                message.success('Saved successfully!');
+                message.success(content['saveSuccessful']);
             }
 
             handleCancel();

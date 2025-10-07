@@ -112,6 +112,8 @@
         "select": "Select ",
         "selectA": "Select a ",
         "please": "Please ",
+        "institution": "Institution",
+        "subject": "Subject",
         "settings": "Settings",
         "setting": "Setting",
         "delete": "Delete",
@@ -351,6 +353,8 @@
         "cities": "ទីក្រុង",
         "categories": "ប្រភេទ",
         "category": "ប្រភេទ",
+        "institution": "ស្ថាប័ន",
+        "subject": "ប្រធានបទ",
 
         "skills": "ជំនាញ",
         "skill": "ជំនាញ",

@@ -57,7 +57,7 @@ const EmployeeDocumentPage = () => {
 
         try {
             await createEpmUploadApi(id, formData);
-            message.success('Documents uploaded successfully!');
+            message.success(content['saveSuccessful']);
             setTitle('')
             setUploadedFiles(fileList.map(file => file.name));
             setFileList([]);
@@ -85,7 +85,7 @@ const EmployeeDocumentPage = () => {
             const updatedUsers = users.filter(role => role._id !== id);
             setUsers(updatedUsers);
             setFilteredData(updatedUsers);
-            message.success('Deleted successfully');
+            message.success(content['deleteSuccessFully']);
         } catch (error) {
             console.error('Delete failed:', error);
             message.error('Failed to delete');

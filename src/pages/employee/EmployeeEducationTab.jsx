@@ -120,7 +120,7 @@ const EmployeeEducationTab = () => {
             formData.append('vocational_training', JSON.stringify(values.vocational_training || []));
 
             await createEducationApi(id, formData);
-            message.success('Save successfully!');
+            message.success(content['saveSuccessful']);
         } catch (error) {
             console.error('Error saving Education:', error);
             message.error('Failed to save Education');
@@ -649,9 +649,9 @@ const EmployeeEducationTab = () => {
                                         <thead className={Styles.tHead}>
                                             <tr className='pt-3 border-b'>
                                                 <th className={Styles.tHeadL}>
-                                                    Institution
+                                                    {content['institution']}
                                                 </th>
-                                                <th className="px-0 py-2 text-start">Subject</th>
+                                                <th className="px-0 py-2 text-start">{content['subject']}</th>
                                                 <th className="px-0 py-2 text-start text-nowrap">{content['fromDate']}</th>
                                                 <th className="px-0 py-2 text-start text-nowrap">{content['toDate']}</th>
                                                 <th className="px-0 py-2 text-start">Level</th>

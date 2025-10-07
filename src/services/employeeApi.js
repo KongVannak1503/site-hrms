@@ -246,3 +246,7 @@ export const getEpmPositionsApi = async (employeeId) => {
     const res = await api.get(`/employees/position/${employeeId}`);
     return res.data;
 };
+export const deleteEpmPositionApi = async (id) => {
+    const res = await api.delete(`/employees/position/${id}`);
+    return res.data;
+};

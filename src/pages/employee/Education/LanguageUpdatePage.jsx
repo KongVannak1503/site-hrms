@@ -25,7 +25,7 @@ const LanguageUpdatePage = ({ dataId, content, onCancel }) => {
             };
 
             const response = await updateLanguageApi(dataId, formData);
-            message.success('Updated successfully!');
+            message.success(content['saveSuccessful']);
             onCancel();
         } catch (error) {
             console.error('Error creating:', error);

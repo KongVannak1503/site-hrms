@@ -23,7 +23,7 @@ const LanguageCreatePage = ({ onCancel }) => {
             };
 
             await createLanguageApi(formData);
-            message.success('Created successfully!');
+            message.success(content['saveSuccessful']);
 
             form.resetFields();
             onCancel();

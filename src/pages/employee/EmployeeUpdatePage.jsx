@@ -229,7 +229,7 @@ const EmployeeUpdatePage = () => {
             // Call your update API with  and formData
             const response = await updateEmployeeApi(id, formData);
 
-            message.success('User updated successfully!');
+            message.success(content['saveSuccessful']);
             // onUserUpdated(response.data);
 
         } catch (error) {

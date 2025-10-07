@@ -51,7 +51,7 @@ const EmployeeDocumentCreatePage = ({ form, onCancel, onUserCreated }) => {
             // Call your API
             const response = await createEmployeeDocumentApi(formData);
 
-            message.success('Created successfully!');
+            message.success(content['saveSuccessful']);
             onUserCreated(response.data);
 
             form.resetFields();
