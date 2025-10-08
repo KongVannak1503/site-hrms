@@ -293,7 +293,7 @@ const JobPostingPage = () => {
                   const dept = jobs.find(j => j.department?._id === id)?.department;
                   return (
                     <Option key={id} value={id}>
-                      {dept?.title}
+                      {language == 'khmer' ? dept?.title_kh : dept?.title_en}
                     </Option>
                   );
                 })}
