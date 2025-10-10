@@ -32,6 +32,9 @@
         "forYear": "Year",
         "forMonth": "Month",
         "forDay": "Day",
+        "reschedule": "Reschedule",
+        "interview": "Interview",
+        "reject": "Reject",
 
         "createSuccess": "Create Success ",
         "updateSuccess": "Update Success ",
@@ -206,6 +209,7 @@
         "editApplicant": "Edit Applicant",
 
         "tests": "Tests",
+        "test": "Test",
         "testDetail": "Test Detail",
         "testType": "Test types",
         "testSchedule": "Test Schedule",
@@ -390,6 +394,9 @@
         "forYear": "ប្រចាំឆ្នាំ",
         "forMonth": "ប្រចាំខែ",
         "forDay": "ប្រចាំថ្ងៃ",
+        "reschedule": "កំណត់ពេលវេលាថ្មី",
+        "interview": "ការសម្ភាសន៍",
+        "reject": "បដិសេធ",
 
         "enter": "បញ្ចូល",
         "new": "ថ្មី",
@@ -453,6 +460,7 @@
 
         "count": "ចំនួន",
         "tests": "ការតេស្ដ",
+        "test": "តេស្ដ",
         "testDetail": "ព័ត៌មានតេស្ដលម្អិត",
         "testType": "ប្រភេទតេស្ដ",
         "testSchedule": "កាលវិភាគតេស្ដ",

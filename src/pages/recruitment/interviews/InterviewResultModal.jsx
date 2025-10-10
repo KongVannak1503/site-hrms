@@ -74,7 +74,7 @@ const InterviewResultModal = ({ open, interview, onCancel, onSuccess }) => {
       };
 
       await updateInterviewResultApi(interviewData._id, payload);
-      message.success('Interview result saved');
+      message.success(content['saveSuccessful']);
       onSuccess();
     } catch (error) {
       console.error(error);

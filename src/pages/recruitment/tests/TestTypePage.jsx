@@ -85,10 +85,10 @@ const TestTypePage = () => {
     const handleDelete = async (id) => {
         try {
             await deleteTestTypeApi(id);
-            message.success('Test type deleted');
+            message.success(content['deleteSuccessFully']);
             fetchTestTypes();
         } catch (err) {
-            message.error('Failed to delete');
+            message.error(content['failedToDelete']);
         }
     };
 

@@ -368,7 +368,7 @@ const InterviewPage = () => {
             items: [
               {
                 key: 'view',
-                label: <span>View</span>,
+                label: <span>{content['view']}</span>,
                 onClick: () => {
                   const interview = interviews.find(i => i._id === record.id);
                   setResultModalData({ visible: true, interview });
@@ -376,7 +376,7 @@ const InterviewPage = () => {
               },
               ...(permissionMap.update ? [{
                 key: 'edit',
-                label: <span>Edit</span>,
+                label: <span>{content['edit']}</span>,
                 onClick: () => {
                   const interview = interviews.find(i => i._id === record.id);
                   setEditModalData({ visible: true, interview });
@@ -384,7 +384,7 @@ const InterviewPage = () => {
               }] : []),
               ...(permissionMap.update ? [{
                 key: 'reschedule',
-                label: <span>Reschedule</span>,
+                label: <span>{content['reschedule']}</span>,
                 onClick: () => {
                   const interview = interviews.find(i => i._id === record.id);
                   setRescheduleModalData({ visible: true, interview });
@@ -514,7 +514,7 @@ const InterviewPage = () => {
                               items: [
                                 {
                                   key: 'view',
-                                  label: <span>View</span>,
+                                  label: <span>{content['view']}</span>,
                                   onClick: () => {
                                     const interviewId = selectedEvent.extendedProps.interview_id;
                                     const interview = interviews.find(i => i._id === interviewId);
@@ -523,7 +523,7 @@ const InterviewPage = () => {
                                 },
                                 {
                                   key: 'edit',
-                                  label: <span>Edit</span>,
+                                  label: <span>{content['edit']}</span>,
                                   onClick: () => {
                                     const interviewId = selectedEvent.extendedProps.interview_id;
                                     const interview = interviews.find((i) => i._id === interviewId);
@@ -532,7 +532,7 @@ const InterviewPage = () => {
                                 },
                                 {
                                   key: 'reschedule',
-                                  label: <span>Reschedule</span>,
+                                  label: <span>{content['reschedule']}</span>,
                                   onClick: () => {
                                     const interviewId = selectedEvent.extendedProps.interview_id;
                                     const interview = interviews.find(i => i._id === interviewId);

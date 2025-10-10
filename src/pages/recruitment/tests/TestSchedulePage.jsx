@@ -481,17 +481,17 @@ const TestSchedulePage = () => {
                     key: 'view',
                     label: (
                       <div onClick={() => openDetailModal(record._id)} className="flex items-center gap-2 cursor-pointer">
-                        View
+                        {content['view']}
                       </div>
                     )
                   },
                   ...(permissionMap.update ? [{
                     key: 'edit',
-                    label: <div onClick={() => handleEdit(record)}>Edit</div>
+                    label: <div onClick={() => handleEdit(record)}>{content['edit']}</div>
                   }] : []),
                   ...(permissionMap.update ? [{
                     key: 'reschedule',
-                    label: <div onClick={() => handleReschedule(record)}>Reschedule</div>
+                    label: <div onClick={() => handleReschedule(record)}>{content['reschedule']}</div>
                   }] : []),
                   // {
                   //   key: 'reject',
@@ -620,17 +620,17 @@ const TestSchedulePage = () => {
                               items: [
                                 {
                                   key: 'edit',
-                                  label: <span>Edit</span>,
+                                  label: <span>{content['edit']}</span>,
                                   onClick: () => setEditModalData({ visible: true, assignment: selectedEvent })
                                 },
                                 {
                                   key: 'reschedule',
-                                  label: <span>Reschedule</span>,
+                                  label: <span>{content['reschedule']}</span>,
                                   onClick: () => setRescheduleModalData({ visible: true, assignment: selectedEvent })
                                 },
                                 {
                                   key: 'reject',
-                                  label: <span className="text-red-500">Rejected</span>,
+                                  label: <span className="text-red-500">{content['reject']}</span>,
                                   onClick: () => handleReject(selectedEvent.id)
                                 }
                               ]

@@ -6,7 +6,7 @@ import { Styles } from '../../../utils/CsStyle';
 import { useAuth } from '../../../contexts/AuthContext';
 
 const RescheduleTestModal = ({ open, onCancel, assignment, onSuccess }) => {
-  const {content} = useAuth();
+  const { content } = useAuth();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const RescheduleTestModal = ({ open, onCancel, assignment, onSuccess }) => {
   return (
     <Modal
       open={open}
-      title="Reschedule Test"
+      title={`${content['reschedule']}`}
       onCancel={() => {
         form.resetFields();
         onCancel();

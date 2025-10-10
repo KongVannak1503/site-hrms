@@ -72,12 +72,12 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
         'test'
       );
 
-      message.success('Test assignment created successfully');
+      message.success(content['saveSuccessful']);
       form.resetFields();
       onSuccess();
     } catch (error) {
       console.error('Assignment error:', error);
-      message.error('Failed to assign test');
+      message.error(content['saveFailed']);
     }
   };
 

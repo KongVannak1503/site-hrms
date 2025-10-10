@@ -48,18 +48,18 @@ const EditTestAssignmentModal = ({ open, onCancel, testAssignment, onSuccess }) 
       };
 
       await updateTestAssignmentApi(testAssignment.id, payload);
-      message.success('Test assignment updated successfully');
+      message.success(content['saveSuccessful'] || 'Test assignment updated successfully');
       form.resetFields();
       onSuccess();
     } catch (error) {
       console.error('Update error:', error);
-      message.error('Failed to update test assignment');
+      message.error(content['updateFailed'] || 'Failed to update test assignment');
     }
   };
 
   return (
     <Modal
-      title="Edit Test Assignment"
+      title={`${content['edit']} ${content['test']}`}
       open={open}
       onCancel={() => {
         form.resetFields();

@@ -7,7 +7,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import dayjs from 'dayjs';
 
 const EditInterviewModal = ({ open, interview, onCancel, onSuccess }) => {
-  const {content} = useAuth();
+  const { content } = useAuth();
   const [form] = Form.useForm();
   const [employees, setEmployees] = useState([]);
 
@@ -46,7 +46,7 @@ const EditInterviewModal = ({ open, interview, onCancel, onSuccess }) => {
       };
 
       await updateInterviewApi(interview.id || interview._id, payload);
-      message.success('Interview updated successfully');
+      message.success(content['saveSuccessful']);
       onSuccess();
     } catch (err) {
       message.error('Failed to update interview');
@@ -56,7 +56,7 @@ const EditInterviewModal = ({ open, interview, onCancel, onSuccess }) => {
   return (
     <Modal
       open={open}
-      title="Edit Interview"
+      title={`${content['edit']} ${content['interview']}`}
       onCancel={onCancel}
       // onOk={() => form.submit()}
       footer={null}

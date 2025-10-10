@@ -3,9 +3,11 @@ import { Modal, Form, DatePicker, message, Space } from 'antd';
 import dayjs from 'dayjs';
 import { rescheduleInterviewApi } from '../../../services/interviewApi';
 import { Styles } from '../../../utils/CsStyle';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const RescheduleModal = ({ open, interview, onCancel, onSuccess }) => {
   const [form] = Form.useForm();
+  const { content } = useAuth();
 
   useEffect(() => {
     if (open && interview) {
@@ -18,7 +20,7 @@ const RescheduleModal = ({ open, interview, onCancel, onSuccess }) => {
   const handleSubmit = async (values) => {
     try {
       await rescheduleInterviewApi(interview._id, values.start_at);
-      message.success('Interview rescheduled successfully');
+      message.success(content['saveSuccessful']);
       onSuccess();
     } catch (err) {
       message.error('Failed to reschedule interview');
@@ -28,7 +30,7 @@ const RescheduleModal = ({ open, interview, onCancel, onSuccess }) => {
   return (
     <Modal
       open={open}
-      title="Reschedule Interview"
+      title={`${content['reschedule']} ${content['interview']}`}
       onCancel={onCancel}
       footer={null}
       centered
@@ -36,7 +38,7 @@ const RescheduleModal = ({ open, interview, onCancel, onSuccess }) => {
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
-          label="New Start Time"
+          label={content['date']}
           name="start_at"
           rules={[{ required: true, message: 'Please select new start time' }]}
         >
@@ -46,10 +48,10 @@ const RescheduleModal = ({ open, interview, onCancel, onSuccess }) => {
         <Form.Item>
           <Space className="flex justify-end w-full">
             <button type="button" onClick={onCancel} className={Styles.btnCancel}>
-              Cancel
+              {content['cancel']}
             </button>
             <button type="submit" className={Styles.btnUpdate}>
-              Update
+              {content['update']}
             </button>
           </Space>
         </Form.Item>

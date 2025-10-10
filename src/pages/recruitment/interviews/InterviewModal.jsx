@@ -53,12 +53,12 @@ const InterviewModal = ({ open, onCancel, applicant, job, onSuccess, eligibleApp
             };
 
             await createInterviewApi(payload);
-            message.success('Interview scheduled successfully');
+            message.success(content['saveSuccessful']);
             onSuccess();
             form.resetFields();
         } catch (err) {
             console.error(err);
-            message.error('Failed to schedule interview');
+            message.error(content['saveFailed']);
         }
     };
 
@@ -116,11 +116,11 @@ const InterviewModal = ({ open, onCancel, applicant, job, onSuccess, eligibleApp
                     </Select>
                 </Form.Item>
 
-                <Form.Item label={content['startOn']} name="start_at" rules={[{required: true}]}>
+                <Form.Item label={content['startOn']} name="start_at" rules={[{ required: true }]}>
                     <DatePicker showTime style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item label={content['duration']} name="duration_min" rules={[{required: true}]}>
+                <Form.Item label={content['duration']} name="duration_min" rules={[{ required: true }]}>
                     <InputNumber min={15} max={240} style={{ width: '100%' }} />
                 </Form.Item>
 
