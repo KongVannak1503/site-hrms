@@ -68,7 +68,7 @@ const TestDetailPage = ({ open, assignmentId, onClose, refresh }) => {
       }
 
       await updateTestResultApi(assignmentId, formData);
-      message.success('Scores updated successfully');
+      message.success(content['saveSuccessful'] || 'Scores updated successfully');
       if (onClose) onClose();
     } catch (error) {
       message.error('Failed to update scores');

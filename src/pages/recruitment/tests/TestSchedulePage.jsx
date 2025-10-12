@@ -427,7 +427,7 @@ const TestSchedulePage = () => {
         if (record.status === 'rejected') {
           return (
             <Tag color="red">
-              {content['rejected'] || 'Rejected'}
+              { 'Rejected'}
             </Tag>
           );
         }
@@ -435,7 +435,7 @@ const TestSchedulePage = () => {
         if (record.has_interview) {
           return (
             <Tag color="green">
-              {content['interview'] || 'Interview'}
+              {'Interview'}
             </Tag>
           );
         }

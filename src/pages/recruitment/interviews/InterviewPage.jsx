@@ -315,9 +315,9 @@ const InterviewPage = () => {
         };
 
         const labelMap = {
-          hired: content['hired'] || 'Hired',
-          reserve: content['reserve'] || 'Reserve',
-          rejected: content['reject'] || 'Rejected'
+          hired:  'Hired',
+          reserve: 'Reserve',
+          rejected:  'Rejected'
         };
 
         // ✅ Show decision tag if already made

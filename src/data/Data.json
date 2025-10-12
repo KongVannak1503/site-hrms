@@ -35,6 +35,9 @@
         "reschedule": "Reschedule",
         "interview": "Interview",
         "reject": "Reject",
+        "hired": "Hired",
+        "reserve": "Reserve",
+        "assignTest": "Assign Test",
 
         "createSuccess": "Create Success ",
         "updateSuccess": "Update Success ",
@@ -397,6 +400,9 @@
         "reschedule": "កំណត់ពេលវេលាថ្មី",
         "interview": "ការសម្ភាសន៍",
         "reject": "បដិសេធ",
+        "hired": "ជួល",
+        "reserve": "បម្រុង",
+        "assignTest": "កំណត់ការធ្វើតេស្ត",
 
         "enter": "បញ្ចូល",
         "new": "ថ្មី",

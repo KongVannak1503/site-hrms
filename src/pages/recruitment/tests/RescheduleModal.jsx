@@ -25,7 +25,7 @@ const RescheduleTestModal = ({ open, onCancel, assignment, onSuccess }) => {
       };
 
       await updateTestScheduleApi(assignment.id, payload);
-      message.success('Test rescheduled successfully');
+      message.success(content['saveSuccessful'] || 'Reschedule Success');
       form.resetFields();
       onSuccess();
     } catch (err) {

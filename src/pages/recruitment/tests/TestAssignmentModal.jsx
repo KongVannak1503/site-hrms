@@ -83,7 +83,7 @@ const TestAssignmentModal = ({ open, onCancel, applicant, onSuccess }) => {
 
   return (
     <Modal
-      title="Assign Test"
+      title={content['assignTest']}
       open={open}
       onCancel={() => {
         form.resetFields();
