@@ -9,7 +9,7 @@ import { formatDateTime, formatYear } from '../../../../utils/utils';
 import { Styles } from '../../../../utils/CsStyle';
 import FullScreenLoader from '../../../../components/loading/FullScreenLoader';
 import { Content } from 'antd/es/layout/layout';
-import { getEmployeesApi } from '../../../../services/employeeApi';
+import { getAllEmployeesForManagerApi, getEmployeesApi } from '../../../../services/employeeApi';
 import uploadUrl from '../../../../services/uploadApi';
 import { getDepartmentsApi } from '../../../../services/departmentApi';
 import SubPayrollFormPage from './SubPayrollFormPage';
@@ -17,7 +17,7 @@ import ModalMdCenter from '../../../../components/modals/ModalMdCenter';
 import { useParams } from 'react-router-dom';
 
 const SubPayrollPage = () => {
-    const { content, isLoading, language } = useAuth();
+    const { content, isLoading, language, identity, isEmployee } = useAuth();
     const [users, setUsers] = useState([]);
     const [payroll, setPayroll] = useState([]);
     const { id } = useParams();
@@ -57,11 +57,36 @@ const SubPayrollPage = () => {
         setOpen(true);
     };
 
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "employees"
+    );
+
+    // fallback empty array if not found
+    const allowedActions = employeePermission?.actions || [];
+
+    // convert into quick lookup map
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
+
+    const adminemployeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "admin"
+    );
+    const adminAllowedActions = adminemployeePermission?.actions || [];
+
+
     useEffect(() => {
         document.title = content['payroll'];
         const fetchData = async () => {
             try {
-                const response = await getEmployeesApi();
+                let response;
+
+                if (isEmployee && !adminAllowedActions.includes('view')) {
+                    response = await getAllEmployeesForManagerApi();
+                } else {
+                    response = await getEmployeesApi();
+                }
 
                 const resDepartments = await getDepartmentsApi();
                 setDepartments(resDepartments);

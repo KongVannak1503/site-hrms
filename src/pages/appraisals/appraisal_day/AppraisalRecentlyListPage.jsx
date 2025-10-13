@@ -10,7 +10,7 @@ import { ConfirmDeleteButton } from '../../../components/button/ConfirmDeleteBut
 import { Styles } from '../../../utils/CsStyle';
 import CustomBreadcrumb from '../../../components/breadcrumb/CustomBreadcrumb';
 import FullScreenLoader from '../../../components/loading/FullScreenLoader';
-import { getEmployeeApi } from '../../../services/employeeApi';
+import { getAllEmployeesForManagerApi, getEmployeeApi } from '../../../services/employeeApi';
 import EmployeeNav from '../../employee/EmployeeNav';
 import AppraisalNav from './AppraisalNav';
 import { getAppraisalActiveMonthsApi, getAppraisalRecentlyMonthsApi } from '../../../services/AppraisalApi';
@@ -18,7 +18,7 @@ import StatusTag from '../../../components/style/StatusTag';
 import TypeTag from '../../../components/style/TypeTag';
 
 const AppraisalRecentlyListPage = () => {
-    const { isLoading, content, language, isEmployee } = useAuth();
+    const { isLoading, content, language, isEmployee, identity } = useAuth();
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [employee, setEmployee] = useState(false);
@@ -34,18 +34,46 @@ const AppraisalRecentlyListPage = () => {
 
     const [form] = Form.useForm();
 
+    const employeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "appraisal-recently"
+    );
+
+    // fallback empty array if not found
+    const allowedActions = employeePermission?.actions || [];
+
+    // convert into quick lookup map
+    const permissionMap = allowedActions.reduce((acc, action) => {
+        acc[action] = true;
+        return acc;
+    }, {});
+
+    const adminemployeePermission = identity?.role?.permissions?.find(
+        p => p.permissionId?.name === "admin"
+    );
+    const adminAllowedActions = adminemployeePermission?.actions || [];
+
     useEffect(() => {
         document.title = `${content['recentlyAppraisal']} | USEA`;
         const fetchData = async () => {
             try {
-                const response = await getAppraisalRecentlyMonthsApi();
+                let response;
+                response = await getAppraisalRecentlyMonthsApi();
+                let filteredResponse = response;
+                if (isEmployee && !adminAllowedActions.includes('view')) {
+                    const responseEmp = await getAllEmployeesForManagerApi();
+                    const managerEmployeeIds = responseEmp.map(emp => emp._id);
 
-                if (Array.isArray(response)) {
-                    setUsers(response);
-                    setFilteredData(response);
+                    filteredResponse = response.filter(appraisal =>
+                        managerEmployeeIds.includes(appraisal.employee?.id)
+                    );
+                }
+
+                if (Array.isArray(filteredResponse)) {
+                    setUsers(filteredResponse);
+                    setFilteredData(filteredResponse);
                     setPagination(prev => ({
                         ...prev,
-                        total: response.length,
+                        total: filteredResponse.length,
                     }));
                 } else {
                     console.error('Data is not an array:', response);

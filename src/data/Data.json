@@ -210,6 +210,7 @@
         "photo": "Photo",
         "createApplicant": "Create Applicant",
         "editApplicant": "Edit Applicant",
+        "addSubKpi": "Add Sub KPI",
 
         "tests": "Tests",
         "test": "Test",
@@ -388,6 +389,7 @@
 
         "recruiter": "ការជ្រើសរើសបុគ្គលិក",
         "recruit": "ជ្រើសរើសបុគ្គលិក",
+        "addSubKpi": "បន្ថែមលក្ខណៈវិនិច្ឆ័យរង",
 
         "departments": "នាយកដ្ឋាន",
         "department": "នាយកដ្ឋាន",

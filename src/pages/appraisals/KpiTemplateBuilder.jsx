@@ -204,7 +204,7 @@ function KpiTemplateBuilder() {
                                 icon={<PlusOutlined />}
                                 onClick={() => addSubKpi(i)}
                             >
-                                Add Sub KPI
+                                {content['addSubKpi'] || 'Add Sub KPI'}
                             </Button>
                         </Card>
                     ))}

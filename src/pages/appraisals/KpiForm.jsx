@@ -104,7 +104,7 @@ const KpiForm = ({
                         onClick={() => addSubKpi(i)}
                         disabled={submitting}
                     >
-                        Add Sub KPI
+                        {content['addSubKpi'] || 'Add Sub KPI'}
                     </Button>
                 </Card>
             ))}
