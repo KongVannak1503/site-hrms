@@ -139,7 +139,7 @@ const EmployeeViewPage = () => {
         (identity?.employeeId._id == id && employeeAllowedActions.includes('update'));
 
     const tabList = [
-        { key: 'profile', tab: content['profile'] || 'Profile', permissionKey: 'update' },
+        { key: 'profile', tab: content['profile'] || 'Profile', permissionKey: 'view' },
         { key: 'position', tab: content['additionalPositions'] || 'Position', permissionKey: 'additional-position' },
         { key: 'education', tab: content['education'] || 'Education', permissionKey: 'education' },
         { key: 'history', tab: content['employmentHistory'] || 'History', permissionKey: 'employee-history' },

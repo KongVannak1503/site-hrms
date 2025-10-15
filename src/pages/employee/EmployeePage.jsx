@@ -117,6 +117,9 @@ const EmployeePage = () => {
         document.title = `${content['employees']} | USEA`;
         const fetchData = async () => {
             try {
+                if (!isEmployee) {
+                    navigate(`/employee/view/${identity?.employeeId?._id}`)
+                }
                 let response;
 
                 if (isEmployee && !adminAllowedActions.includes('view')) {
@@ -124,6 +127,7 @@ const EmployeePage = () => {
                 } else {
                     response = await getEmployeesApi();
                 }
+
 
                 if (Array.isArray(response)) {
                     setUsers(response);
