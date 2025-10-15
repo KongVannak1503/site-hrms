@@ -24,6 +24,7 @@ const TestDetailPage = ({ open, assignmentId, onClose, refresh }) => {
     setLoading(true);
     try {
       const data = await getTestAssignmentByIdApi(assignmentId);
+
       setAssignment(data);
       const initialScores = {};
       data.test_type_scores.forEach(item => {
@@ -44,16 +45,17 @@ const TestDetailPage = ({ open, assignmentId, onClose, refresh }) => {
   };
 
   const handleSaveScores = async () => {
-    if (assignment.status !== 'completed' && !markCompleted) {
+    const allowedStatuses = ['completed', 'rejected'];
+
+    if (!allowedStatuses.includes(assignment.status) && !markCompleted) {
       message.warning('Please mark the test as completed before saving.');
       return;
     }
-
     try {
       const payload = {
         feedback: assignment.feedback,
         test_type_scores: Object.entries(scores).map(([test_type, score]) => ({ test_type, score })),
-        status: 'completed',
+        status: assignment.status === 'rejected' ? 'rejected' : 'completed',
       };
 
       const formData = new FormData();
@@ -148,7 +150,7 @@ const TestDetailPage = ({ open, assignmentId, onClose, refresh }) => {
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full inline-block ${assignment.status === 'completed' ? 'bg-green-500' : 'bg-yellow-400'}`}></span>
                   <span className={`font-medium ${assignment.status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
-                    {assignment.status === 'completed' ? 'Completed' : 'Scheduled'}
+                    {assignment.status === 'completed' || assignment.status === 'rejected' ? 'Completed' : 'Scheduled'}
                   </span>
                 </div>
               </div>
@@ -156,13 +158,13 @@ const TestDetailPage = ({ open, assignmentId, onClose, refresh }) => {
                 type="primary"
                 className="mt-6 w-full"
                 onClick={() => {
-                  if (assignment.status !== 'completed') {
+                  if (assignment.status !== 'completed' || assignment.status !== 'rejected') {
                     setMarkCompleted(true);
                     setAssignment(prev => ({ ...prev, status: 'completed' }));
                     message.success('Marked as completed. You can now save.');
                   }
                 }}
-                disabled={assignment.status === 'completed'}
+                disabled={assignment.status === 'completed' || assignment.status === 'rejected'}
               >
                 Mark As Completed
               </Button>

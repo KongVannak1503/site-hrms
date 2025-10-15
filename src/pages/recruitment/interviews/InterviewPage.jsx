@@ -167,16 +167,16 @@ const InterviewPage = () => {
       };
 
       showCustomConfirm({
-        title: `Confirm ${decisionText[decision]}`,
-        content: `Are you sure you want to mark this applicant as "${decisionText[decision]}"?`,
+        title: `${content['confirm']} ${decisionText[decision]}`,
+        content: `${content['areYouSureRejectAs']} "${decisionText[decision]}"?`,
         okButton: (
           <button
             onClick={async () => {
               try {
                 await updateInterviewDecisionApi(interviewId, decision);
                 notification.success({
-                  message: 'Decision Updated',
-                  description: `Applicant has been marked as ${decisionText[decision]}.`,
+                  message: content['decisionUpdated'],
+                  description: `${content['applicantAs']} ${decisionText[decision]}.`,
                   placement: 'topRight'
                 });
                 fetchInterviews(); // refresh list
@@ -184,8 +184,8 @@ const InterviewPage = () => {
               } catch (err) {
                 console.error(`Failed to update decision:`, err);
                 notification.error({
-                  message: 'Update Failed',
-                  description: `Failed to mark applicant as ${decisionText[decision]}.`,
+                  message: content['updateFailed'],
+                  description: `${content['failedToMarkAs']} ${decisionText[decision]}.`,
                   placement: 'topRight'
                 });
               }
@@ -315,9 +315,9 @@ const InterviewPage = () => {
         };
 
         const labelMap = {
-          hired:  'Hired',
+          hired: 'Hired',
           reserve: 'Reserve',
-          rejected:  'Rejected'
+          rejected: 'Rejected'
         };
 
         // ✅ Show decision tag if already made

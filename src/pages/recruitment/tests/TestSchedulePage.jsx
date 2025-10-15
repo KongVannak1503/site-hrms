@@ -102,7 +102,6 @@ const TestSchedulePage = () => {
   const fetchEvents = async () => {
     try {
       const data = await getAllTestAssignmentsApi();
-
       const today = new Date();
 
       const formatted = data.map(item => {
@@ -150,6 +149,8 @@ const TestSchedulePage = () => {
 
       const interviewData = await getAllInterviewsApi();
       // console.log("✅ Interviews:", interviewData);
+      console.log(interviewData);
+
 
       const interviewMap = new Map();
       interviewData.forEach(interview => {
@@ -245,24 +246,24 @@ const TestSchedulePage = () => {
 
   const handleReject = async (id) => {
     showCustomConfirm({
-      title: 'Confirm Rejection',
-      content: 'Are you sure you want to reject this applicant?',
+      title: content['confirmRejection'] || 'Confirm Rejection',
+      content: content['areYouSureReject'] || 'Are you sure you want to reject this applicant?',
       okButton: (
         <button
           onClick={async () => {
             try {
               await cancelTestAssignmentApi(id);
               notification.success({
-                message: 'Test Cancelled',
-                description: 'The selected test assignment has been successfully cancelled.',
+                message: content['testCancelled'] || 'Test Cancelled',
+                description: content['cancellationFailedDescription'] || 'The selected test assignment has been successfully cancelled.',
                 placement: 'topRight',
               });
               handleRefreshAll();
               Modal.destroyAll(); // close manually
             } catch {
               notification.error({
-                message: 'Cancellation Failed',
-                description: 'Something went wrong while trying to cancel the test.',
+                message: content['cancellationFailed'] || 'Cancellation Failed',
+                description: content['cancellationFailedDescription'] || 'Something went wrong while trying to cancel the test.',
                 placement: 'topRight',
               });
             }
@@ -427,7 +428,7 @@ const TestSchedulePage = () => {
         if (record.status === 'rejected') {
           return (
             <Tag color="red">
-              { 'Rejected'}
+              {'Rejected'}
             </Tag>
           );
         }
