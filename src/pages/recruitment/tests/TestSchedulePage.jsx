@@ -148,9 +148,6 @@ const TestSchedulePage = () => {
       const testData = await getAllTestAssignmentsApi();
 
       const interviewData = await getAllInterviewsApi();
-      // console.log("✅ Interviews:", interviewData);
-      console.log(interviewData);
-
 
       const interviewMap = new Map();
       interviewData.forEach(interview => {
@@ -413,11 +410,13 @@ const TestSchedulePage = () => {
       render: status => {
         const colorMap = {
           scheduled: 'yellow',
+          Rejected: 'green',
           completed: 'green',
-          rejected: 'red'
+          rejected: 'green'
         };
         const capitalized = status.charAt(0).toUpperCase() + status.slice(1);
-        return <span className={`text-${colorMap[status] || 'gray'}-600 font-semibold`}>{capitalized}</span>
+        const displayText = capitalized === 'Rejected' ? 'Completed' : capitalized;
+        return <span className={`text-${colorMap[status] || 'gray'}-600 font-semibold`}>{displayText}</span>
       }
     },
     {
