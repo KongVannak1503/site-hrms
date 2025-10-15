@@ -95,7 +95,7 @@ const AppSider = ({ collapsed }) => {
                 { key: '/interview-schedules', permission: 'interview-schedules', label: content['interviewSchedule'] },
             ]
         },
-        isEmployee
+        isEmployee || hasAdminView
             ? {
                 key: '/employees',
                 permission: null,

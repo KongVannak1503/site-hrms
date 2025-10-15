@@ -37,6 +37,7 @@ const EmployeePage = () => {
     });
     const [visible, setVisible] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
+    const [dataLoading, setDataLoading] = useState(true);
 
     const employeePermission = identity?.role?.permissions?.find(
         p => p.permissionId?.name === "employees"
@@ -116,18 +117,19 @@ const EmployeePage = () => {
     useEffect(() => {
         document.title = `${content['employees']} | USEA`;
         const fetchData = async () => {
+            setDataLoading(true);
             try {
-                if (!isEmployee) {
-                    navigate(`/employee/view/${identity?.employeeId?._id}`)
-                }
+
                 let response;
 
                 if (isEmployee && !adminAllowedActions.includes('view')) {
                     response = await getAllEmployeesForManagerApi();
                 } else {
                     response = await getEmployeesApi();
+                    if (!isEmployee && !adminAllowedActions.includes('view')) {
+                        navigate(`/employee/view/${identity?.employeeId?._id}`)
+                    }
                 }
-
 
                 if (Array.isArray(response)) {
                     setUsers(response);
@@ -143,6 +145,8 @@ const EmployeePage = () => {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+            } finally {
+                setDataLoading(false);
             }
         };
         fetchData();
@@ -363,7 +367,7 @@ const EmployeePage = () => {
 
 
 
-    if (isLoading) {
+    if (isLoading || dataLoading) {
         return <FullScreenLoader />;
     }
 
