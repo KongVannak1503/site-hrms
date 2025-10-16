@@ -148,8 +148,8 @@ const TestDetailPage = ({ open, assignmentId, onClose, refresh }) => {
                 <div>{location || '—'}</div>
                 <div className="font-medium text-gray-500">{content['status']}</div>
                 <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full inline-block ${assignment.status === 'completed' ? 'bg-green-500' : 'bg-yellow-400'}`}></span>
-                  <span className={`font-medium ${assignment.status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                  <span className={`w-2 h-2 rounded-full inline-block ${assignment.status === 'completed' || assignment.status === 'rejected' ? 'bg-green-500' : 'bg-yellow-400'}`}></span>
+                  <span className={`font-medium ${assignment.status === 'completed' || assignment.status === 'rejected' ? 'text-green-600' : 'text-yellow-600'}`}>
                     {assignment.status === 'completed' || assignment.status === 'rejected' ? 'Completed' : 'Scheduled'}
                   </span>
                 </div>

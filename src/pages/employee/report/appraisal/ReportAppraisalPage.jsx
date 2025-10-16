@@ -48,7 +48,7 @@ export default function ReportAppraisalPage() {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: `${content['report']}${content['recruiter']}` }
+        { breadcrumbName: `${content['report']}${content['appraisal']}` }
     ];
     const employeePermission = identity?.role?.permissions?.find(
         p => p.permissionId?.name === "reports"
@@ -457,30 +457,36 @@ export default function ReportAppraisalPage() {
     const handleDownloadExcel = () => {
         if (!filteredData || filteredData.length === 0) return;
 
-        // 1. Prepare header row
+        // 1. Prepare header row for appraisal data
         const headerRow = [
-            "នាយកដ្ឋាន",       // Department
-            "មុខតំណែងដាក់ពាក្យ", // Job Title
-            "អ្នកដាក់ពាក្យ",     // Applicant Name
-            "ភេទ",             // Gender
-            "ថ្ងៃដាក់ពាក្យ",   // Applied Date
-            "អ៊ីម៉ែល",          // Email
-            "លេខទូរស័ព្ទ",   // Phone
-            "ស្ថានភាព"         // Status
+            "ឈ្មោះបុគ្គលិក",      // Employee Name
+            "នាយកដ្ឋាន",        // Department
+            "តម្លៃរបស់បុគ្គលិក",  // Employee Score
+            "តម្លៃរបស់អ្នកគ្រប់គ្រង", // Manager Score
+            "ថ្ងៃចាប់ផ្តើម",      // Start Date
+            "ថ្ងៃបញ្ចប់",        // End Date
+            "ស្ថានភាព",          // Status
+            "ថ្ងៃបង្កើត"         // Created Date
         ];
 
-        // 2. Build data rows
-        const dataRows = filteredData.map(emp => [
-            emp.department ?? "",
-            emp.job_title ?? "",
-            emp.full_name_kh ?? "",
-            emp.gender ?? "",
-            emp.applied_date
-                ? new Date(emp.applied_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        // 2. Build data rows for appraisal data
+        const dataRows = filteredData.map(item => [
+            language === 'khmer'
+                ? (item.employee?.name_kh || "N/A")
+                : (item.employee?.name_en || "N/A"),
+            item.department?.title_kh || item.department?.title_en || "",
+            item.employeeScoreSum || 0,
+            item.managerScoreSum || 0,
+            item.startDate
+                ? new Date(item.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
                 : "",
-            emp.email ?? "",
-            emp.phone_no ?? "",
-            emp.status ?? ""
+            item.endDate
+                ? new Date(item.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                : "",
+            item.status ? "សកម្ម" : "អសកម្ម", // Active/Inactive
+            item.employee?.createdAt
+                ? new Date(item.employee.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                : ""
         ]);
 
         const worksheetData = [headerRow, ...dataRows];
@@ -489,7 +495,7 @@ export default function ReportAppraisalPage() {
         const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
         // 4. Apply header style (light blue background, bold, centered)
-        const headerCells = Object.keys(worksheet).filter(cell => cell.startsWith("A1") || cell.startsWith("B1") || cell.startsWith("C1") || cell.startsWith("D1") || cell.startsWith("E1") || cell.startsWith("F1") || cell.startsWith("G1") || cell.startsWith("H1"));
+        const headerCells = ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1"];
         headerCells.forEach(cell => {
             if (worksheet[cell]) {
                 worksheet[cell].s = {
@@ -506,26 +512,26 @@ export default function ReportAppraisalPage() {
             }
         });
 
-        // 5. Set column widths for Khmer text
+        // 5. Set column widths for appraisal data
         worksheet['!cols'] = [
+            { wch: 25 }, // Employee Name
             { wch: 20 }, // Department
-            { wch: 25 }, // Job Title
-            { wch: 25 }, // Applicant Name
-            { wch: 10 }, // Gender
-            { wch: 15 }, // Applied Date
-            { wch: 25 }, // Email
-            { wch: 15 }, // Phone
-            { wch: 15 }, // Status
+            { wch: 15 }, // Employee Score
+            { wch: 15 }, // Manager Score
+            { wch: 15 }, // Start Date
+            { wch: 15 }, // End Date
+            { wch: 12 }, // Status
+            { wch: 15 }, // Created Date
         ];
 
         // 6. Create workbook
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Appraisal Report");
 
         // 7. Save file
         const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array", cellStyles: true });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-        saveAs(blob, "employee_report.xlsx");
+        saveAs(blob, "appraisal_report.xlsx");
     };
 
     const handlePrintPDF = async () => {

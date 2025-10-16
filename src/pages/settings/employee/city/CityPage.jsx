@@ -55,11 +55,11 @@ const CityPage = () => {
 
     const breadcrumbItems = [
         { breadcrumbName: content['home'], path: '/' },
-        { breadcrumbName: content['cities'] }
+        { breadcrumbName: content['province'] }
     ];
 
     useEffect(() => {
-        document.title = `${content['cities']} | USEA`;
+        document.title = `${content['province']} | USEA`;
         const fetchData = async () => {
             try {
                 const response = await getCitiesApi();
@@ -265,7 +265,7 @@ const CityPage = () => {
                         <div>
 
                         </div>
-                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['city']}`}</button>
+                        <button onClick={showCreateDrawer} className={`${Styles.btnCreate}`}> <PlusOutlined /> {`${content['create']} ${content['province']}`}</button>
                     </div>
                 </div>
                 <Table
