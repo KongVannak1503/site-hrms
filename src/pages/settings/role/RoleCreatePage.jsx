@@ -17,19 +17,16 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
             try {
                 const response = await getPermissionsApi();
                 const initialValues = {};
-                // if (roleName) {
-                //     response.forEach((perm) => {
-                //         // Only assign actions that this role is allowed to have
-                //         // const availableToRole = perm.roles.includes(roleName);
-                //         initialValues[`actions-${perm.name}`] = []; // show permission but not checked
 
-                //     });
-                // }
+                // Ensure response is an array and contains valid data
+                const permissionsData = Array.isArray(response) ? response : [];
 
-                setPermissions(response);
+                setPermissions(permissionsData);
                 form.setFieldsValue(initialValues);
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setPermissions([]); // Set empty array on error
+                message.error('Failed to load permissions');
             }
         };
 
@@ -123,26 +120,30 @@ const RoleCreatePage = ({ onCancel, form, onUserCreated }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-1">
-                {permissions.length > 0 && permissions
-                    .map((perm, index) => (
-                        <div key={index}>
-                            <h3 className='text-lg font-semibold capitalize mb-2'>{perm.name}</h3>
-                            <Form.Item
-                                name={`actions-${perm.name}`}
-                            // label="Actions"
-                            >
-                                <Checkbox.Group>
-                                    {perm.actions.map((action, i) => (
-                                        <div className="mb-3" key={i}>
-                                            <Checkbox value={action}>{action}</Checkbox>
-                                        </div>
-                                    ))}
-                                </Checkbox.Group>
-                            </Form.Item>
-                        </div>
-                    ))}
-
-
+                {Array.isArray(permissions) && permissions.length > 0 ? (
+                    permissions
+                        .filter(perm => perm && perm.name && Array.isArray(perm.actions))
+                        .map((perm, index) => (
+                            <div key={perm._id || index}>
+                                <h3 className='text-lg font-semibold capitalize mb-2'>{perm.name}</h3>
+                                <Form.Item
+                                    name={`actions-${perm.name}`}
+                                >
+                                    <Checkbox.Group>
+                                        {perm.actions.map((action, i) => (
+                                            <div className="mb-3" key={i}>
+                                                <Checkbox value={action}>{action}</Checkbox>
+                                            </div>
+                                        ))}
+                                    </Checkbox.Group>
+                                </Form.Item>
+                            </div>
+                        ))
+                ) : (
+                    <div className="text-center py-8 text-gray-500">
+                        No permissions available
+                    </div>
+                )}
             </div>
 
             <div className="text-end">
